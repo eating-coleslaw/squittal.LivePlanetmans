@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using squittal.LivePlanetmans.Server.Data.DataConfigurations;
 using squittal.LivePlanetmans.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace squittal.LivePlanetmans.Server.Data
 {
@@ -27,5 +24,24 @@ namespace squittal.LivePlanetmans.Server.Data
         #region Stream Event DbSets
         public DbSet<Death> DeathEvents { get; set; }
         #endregion
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            #region Census Configuration
+            builder.ApplyConfiguration(new CharacterConfiguration());
+            builder.ApplyConfiguration(new CharacterLifetimeStatConfiguration());
+            builder.ApplyConfiguration(new CharacterTimeConfiguration());
+            builder.ApplyConfiguration(new FactionConfiguration());
+            builder.ApplyConfiguration(new OutfitConfiguration());
+            builder.ApplyConfiguration(new OutfitMemberConfiguration());
+            builder.ApplyConfiguration(new WorldConfiguration());
+            #endregion
+
+            #region Stream Configuration
+            builder.ApplyConfiguration(new DeathConfiguration());
+            #endregion
+        }
     }
 }

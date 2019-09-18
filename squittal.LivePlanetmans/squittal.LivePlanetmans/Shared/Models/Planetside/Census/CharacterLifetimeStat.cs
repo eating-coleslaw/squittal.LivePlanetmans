@@ -17,5 +17,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         public int? WeaponHitCount { get; set; }
         public int? WeaponPlayTime { get; set; }
         public int? WeaponScore { get; set; }
+
+        public Character Character { get; set; }
     }
 }
