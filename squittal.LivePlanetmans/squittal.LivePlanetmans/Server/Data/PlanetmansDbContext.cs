@@ -22,7 +22,7 @@ namespace squittal.LivePlanetmans.Server.Data
         #endregion
 
         #region Stream Event DbSets
-        public DbSet<Death> DeathEvents { get; set; }
+        public DbSet<Death> Deaths { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)

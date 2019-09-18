@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
+using squittal.LivePlanetmans.Server.CensusStream;
 using squittal.LivePlanetmans.Server.Data;
 using System.Linq;
 
@@ -33,6 +34,12 @@ namespace squittal.LivePlanetmans.Server
 
             services.AddDbContext<PlanetmansDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("PlanetmansDbContext")));
+
+            services.AddCensusServices();
+
+            services.AddSingleton<IWebsocketMonitor, WebsocketMonitor>();
+
+            services.AddHostedService<WebsocketMonitorHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

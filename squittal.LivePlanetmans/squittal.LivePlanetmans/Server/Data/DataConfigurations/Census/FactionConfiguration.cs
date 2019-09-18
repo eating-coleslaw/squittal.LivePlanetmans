@@ -15,3 +15,4 @@ namespace squittal.LivePlanetmans.Server.Data.DataConfigurations
             builder.Property(e => e.Id).ValueGeneratedNever();
         }
     }
+}
