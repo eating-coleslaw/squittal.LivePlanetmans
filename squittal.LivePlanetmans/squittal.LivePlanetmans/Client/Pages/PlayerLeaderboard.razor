@@ -2,17 +2,15 @@
 @using squittal.LivePlanetmans.Shared.Models
 @inject HttpClient Http
 
-<h3>
+<h2>
     Live Activity
     @if (players != null)
     {
-        <button class="btn btn-light" @onclick="RefreshTable">
-            <span class="oi oi-reload" aria-hidden="true"></span> Refresh
+        <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTable">
+            <!--span class="oi small oi-reload" aria-hidden="true"></span--> Refresh
         </button>
     }
-</h3>
-
-
+</h2>
 
 <table class="table">
     <thead>
@@ -48,15 +46,25 @@
 }
 
 @code {
-    PlayerHourlyStatsData[] players;
+        PlayerHourlyStatsData[] players;
+        bool isLoading = false;
 
     protected override async Task OnInitializedAsync()
     {
-        players = await Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
+        isLoading = true;
+        Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
+        players = await playersTask;
+        isLoading = false;
     }
 
     async void RefreshTable()
     {
-        players = await Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
+        if (isLoading != true)
+        {
+            isLoading = true;
+            Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
+            players = await playersTask;
+            isLoading = false;
+        }
     }
 }

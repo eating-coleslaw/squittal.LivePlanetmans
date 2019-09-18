@@ -29,7 +29,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
         public async Task<ActionResult<IEnumerable<PlayerHourlyStatsData>>> GetPlayerLeaderboardAsync(int rows = 20)
         {
             DateTime nowUTC = DateTime.UtcNow;
-            TimeSpan hourSpan = new TimeSpan(0, 1, 0, 0);
+            TimeSpan hourSpan = new TimeSpan(0, 0, 0, 3600);
             //TimeSpan minuteSpan = new TimeSpan(0, 0, 5, 0);
             DateTime startTime = nowUTC.Subtract(hourSpan);
 
@@ -47,10 +47,15 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     {
                         PlayerId = playerGroup.Key,
                         Kills = (from k in dbContext.Deaths
-                                 where k.AttackerCharacterId == playerGroup.Key && k.AttackerCharacterId != k.CharacterId
+                                 where k.AttackerCharacterId == playerGroup.Key
+                                    && k.AttackerCharacterId != k.CharacterId
+                                    && k.Timestamp >= startTime
+                                    && k.WorldId == 10
                                  select k).Count(),
                         Deaths = (from d in dbContext.Deaths
                                   where d.CharacterId == playerGroup.Key
+                                     && d.Timestamp >= startTime
+                                     && d.WorldId == 10
                                   select d).Count()
                     };
 
