@@ -1,0 +1,62 @@
+﻿@page "/leaderboard"
+@using squittal.LivePlanetmans.Shared.Models
+@inject HttpClient Http
+
+<h3>
+    Live Activity
+    @if (players != null)
+    {
+        <button class="btn btn-light" @onclick="RefreshTable">
+            <span class="oi oi-reload" aria-hidden="true"></span> Refresh
+        </button>
+    }
+</h3>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player ID</th>
+            <th>Kills</th>
+            <th>Deaths</th>
+            <th>KDR</th>
+            <th>KPM</th>
+        </tr>
+    </thead>
+    @if (players != null)
+    {
+        <tbody>
+            @foreach (var player in players)
+            {
+                <tr>
+                    <td>@player.PlayerId</td>
+                    <td>@player.Kills</td>
+                    <td>@player.Deaths</td>
+                    <td>@player.KillDeathRatio</td>
+                    <td>@player.KillsPerMinute</td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>
+
+@if (players == null)
+{
+
+    <p><em>Loading...</em></p>
+}
+
+@code {
+    PlayerHourlyStatsData[] players;
+
+    protected override async Task OnInitializedAsync()
+    {
+        players = await Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
+    }
+
+    async void RefreshTable()
+    {
+        players = await Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
+    }
+}

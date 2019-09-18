@@ -15,7 +15,7 @@ namespace squittal.LivePlanetmans.Server.CensusStream
 {
     public class WebsocketEventHandler : IWebsocketEventHandler
     {
-        private readonly PlanetmansDbContext _context;
+        private readonly IDbContextHelper _dbContextHelper;
         private readonly ILogger<WebsocketEventHandler> _logger;
         private readonly Dictionary<string, MethodInfo> _processMethods;
 
@@ -30,9 +30,10 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                 }
         });
 
-        public WebsocketEventHandler(PlanetmansDbContext context, ILogger<WebsocketEventHandler> logger)
+        public WebsocketEventHandler(IDbContextHelper dbContextHelper, ILogger<WebsocketEventHandler> logger)
         {
-            _context = context;
+            _dbContextHelper = dbContextHelper;
+            _logger = logger;
 
             // Credit to Voidwell @ Lampjaw
             _processMethods = GetType()
@@ -105,14 +106,19 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                 ZoneId = payload.ZoneId.Value
             };
 
-            try
+            using (var factory = _dbContextHelper.GetFactory())
             {
-            _context.Deaths.Add(dataModel);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                //Ignore
+                var dbContext = factory.GetDbContext();
+
+                try
+                {
+                    dbContext.Deaths.Add(dataModel);
+                    await dbContext.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    //Ignore
+                }
             }
         }
 

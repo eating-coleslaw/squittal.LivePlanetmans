@@ -37,6 +37,8 @@ namespace squittal.LivePlanetmans.Server
 
             services.AddCensusServices();
 
+            services.AddSingleton<IDbContextHelper, DbContextHelper>();
+            services.AddSingleton<IWebsocketEventHandler, WebsocketEventHandler>();
             services.AddSingleton<IWebsocketMonitor, WebsocketMonitor>();
 
             services.AddHostedService<WebsocketMonitorHostedService>();

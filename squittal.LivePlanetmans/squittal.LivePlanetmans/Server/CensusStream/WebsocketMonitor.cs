@@ -16,17 +16,18 @@ namespace squittal.LivePlanetmans.Server.CensusStream
         public WebsocketMonitor(ICensusStreamClient censusStreamClient, IWebsocketEventHandler handler, ILogger<WebsocketMonitor> logger)
         {
             _client = censusStreamClient;
+            _handler = handler;
             _logger = logger;
 
             var subscription = new CensusStreamSubscription
             {
                 Characters = new[] { "all" },
                 Worlds = new[] { "all" },
-                EventNames = new[] { "PlayerLogin" }
+                EventNames = new[] { "Death" }
             };
 
             _client.Subscribe(subscription)
-                .OnMessage()
+                .OnMessage(OnMessage)
                 .OnDisconnect(OnDisconnect);
         }
 
