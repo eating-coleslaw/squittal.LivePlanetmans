@@ -1,0 +1,40 @@
+﻿@page "/worlds"
+@using squittal.LivePlanetmans.Shared.Models
+@inject HttpClient Http
+
+<h1>Planetside Servers</h1>
+
+@if (worlds == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Server ID</th>
+                <th>Server</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var world in worlds)
+            {
+                <tr>
+                    <td>@world.Id</td>
+                    <td>@world.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    World[] worlds;
+
+    protected override async Task OnInitializedAsync()
+    {
+        worlds = await Http.GetJsonAsync<World[]>("api/Worlds");
+    }
+
+}

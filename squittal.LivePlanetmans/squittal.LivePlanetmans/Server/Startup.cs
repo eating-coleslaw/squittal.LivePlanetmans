@@ -9,6 +9,7 @@ using Newtonsoft.Json.Serialization;
 using squittal.LivePlanetmans.Server.CensusServices;
 using squittal.LivePlanetmans.Server.CensusStream;
 using squittal.LivePlanetmans.Server.Data;
+using squittal.LivePlanetmans.Server.Services;
 using squittal.LivePlanetmans.Server.Services.Planetside;
 using System.Linq;
 
@@ -28,6 +29,7 @@ namespace squittal.LivePlanetmans.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().AddNewtonsoftJson();
+
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
@@ -37,16 +39,21 @@ namespace squittal.LivePlanetmans.Server
             services.AddDbContext<PlanetmansDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("PlanetmansDbContext")));
 
-            services.AddCensusServices();
+            services.AddCensusServices(options =>
+                options.CensusServiceId = "squittal");
             services.AddCensusHelpers();
 
-            services.AddSingleton<IWorldService, WorldService>();
-
+            //services.AddTransient<IUpdateable, WorldService>();
             services.AddSingleton<IDbContextHelper, DbContextHelper>();
+
+            services.AddSingleton<IWorldService, WorldService>();
+            services.AddSingleton<IDbSeeder, DbSeeder>();
+
             services.AddSingleton<IWebsocketEventHandler, WebsocketEventHandler>();
             services.AddSingleton<IWebsocketMonitor, WebsocketMonitor>();
 
             services.AddHostedService<WebsocketMonitorHostedService>();
+            services.AddHostedService<DbSeederHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -55,7 +55,7 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
 
                     foreach (var censusEntity in censusEntities)
                     {
-                        var storeEntity = storedEntities.FirstOrDefault(storedEntity => storedEntity.Id == censusEntity.Id));
+                        var storeEntity = storedEntities.FirstOrDefault(storedEntity => storedEntity.Id == censusEntity.Id);
                         if (storeEntity == null)
                         {
                             createdEntities.Add(censusEntity);
