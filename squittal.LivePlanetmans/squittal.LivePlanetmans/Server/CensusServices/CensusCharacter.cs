@@ -1,0 +1,50 @@
+﻿using DaybreakGames.Census;
+using squittal.LivePlanetmans.Server.CensusServices.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace squittal.LivePlanetmans.Server.CensusServices
+{
+    public class CensusCharacter
+    {
+        private readonly ICensusQueryFactory _queryFactory;
+
+        public CensusCharacter(ICensusQueryFactory queryFactory)
+        {
+            _queryFactory = queryFactory;
+        }
+
+        public async Task<CensusCharacterModel> GetCharacter(string characterId)
+        {
+            var query = _queryFactory.Create("character");
+            query.AddResolve("world");
+            query.ShowFields("character_id", "name.first", "faction_id", "world_id", "battle_rank.value", "battle_rank.percent_to_next", "certs.earned_points", "title_id", "prestige_level");
+            query.Where("character_id").Equals(characterId);
+
+            return await query.GetAsync<CensusCharacterModel>();
+        }
+
+        public async Task<string> GetCharacterIdByName(string characterName)
+        {
+            var query = _queryFactory.Create("character_name");
+
+            query.Where("name.first_lower").Equals(characterName.ToLower());
+
+            var result = await query.GetAsync<CensusCharacterModel>();
+
+            return result?.CharacterId;
+        }
+
+        public async Task<CensusOutfitMemberModel> GetCharacterOutfitMembership(string characterId)
+        {
+            var query = _queryFactory.Create("outfit_member");
+
+            query.ShowFields("character_id", "outfit_id", "member_since_date", "rank", "rank_ordinal");
+            query.Where("character_id").Equals(characterId);
+
+            return await query.GetAsync<CensusOutfitMemberModel>();
+        }
+    }
+}

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
+using squittal.LivePlanetmans.Server.CensusServices;
 using squittal.LivePlanetmans.Server.CensusStream;
 using squittal.LivePlanetmans.Server.Data;
 using System.Linq;
@@ -36,6 +37,7 @@ namespace squittal.LivePlanetmans.Server
                 options.UseSqlServer(Configuration.GetConnectionString("PlanetmansDbContext")));
 
             services.AddCensusServices();
+            services.AddCensusHelpers();
 
             services.AddSingleton<IDbContextHelper, DbContextHelper>();
             services.AddSingleton<IWebsocketEventHandler, WebsocketEventHandler>();

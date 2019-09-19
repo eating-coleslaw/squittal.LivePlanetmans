@@ -8,7 +8,7 @@
   <ItemGroup>
     <PackageReference Include="DaybreakGames.Census" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="3.0.0-preview9.19457.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview9.19457.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-rc1.19457.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0-rc1.19456.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0-rc1.19456.14">
       <PrivateAssets>all</PrivateAssets>
@@ -21,10 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Client\squittal.LivePlanetmans.Client.csproj" />
     <ProjectReference Include="..\Shared\squittal.LivePlanetmans.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="CensusServices\" />
   </ItemGroup>
 
 </Project>

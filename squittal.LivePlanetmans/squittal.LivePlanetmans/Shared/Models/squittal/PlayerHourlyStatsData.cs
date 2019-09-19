@@ -18,7 +18,14 @@ namespace squittal.LivePlanetmans.Shared.Models
         {
             get
             {
-                return Math.Round((double)((float)Kills / (float)Deaths), 2);
+                if (Deaths < 1 )
+                {
+                    return (double)(Kills / 1.0);
+                }
+                else
+                {
+                    return Math.Round((double)((float)Kills / (float)Deaths), 2);
+                }
             }
         }
         public double KillsPerMinute
