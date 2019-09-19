@@ -1,5 +1,6 @@
 ﻿@page "/leaderboard"
 @using squittal.LivePlanetmans.Shared.Models
+@using System.Timers
 @inject HttpClient Http
 
 <h2>
@@ -11,6 +12,16 @@
         </button>
     }
 </h2>
+
+<p>
+    Last Refresh: @lastRefreshTime.ToLongTimeString()
+    @if (isLoading == true)
+    {
+        <span>(loading)</span>
+    }
+    (@autoRefreshCount auto-refreshes)
+</p>
+<p>Debug: @debugMessage</p>
 
 <table class="table">
     <thead>
@@ -28,7 +39,7 @@
             @foreach (var player in players)
             {
                 <tr>
-                    <td>@player.PlayerId</td>
+                    <td><a href="@GetUrlFromCharacterId(player.PlayerId)" target="_blank">@player.PlayerId</a></td>
                     <td>@player.Kills</td>
                     <td>@player.Deaths</td>
                     <td>@player.KillDeathRatio</td>
@@ -46,25 +57,70 @@
 }
 
 @code {
-        PlayerHourlyStatsData[] players;
-        bool isLoading = false;
+    PlayerHourlyStatsData[] players;
+    bool isLoading = false;
+    DateTime lastRefreshTime;
+
+    Timer autoRefreshTimer;
+    int autoRefreshCount = 0;
+
+    string debugMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
+        debugMessage = "first load";
+        await RefreshTable();
+        /*
         isLoading = true;
         Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
         players = await playersTask;
         isLoading = false;
+
+        GetNewAutoRefreshTimer
+        */
     }
 
-    async void RefreshTable()
+    async Task RefreshTable()
     {
         if (isLoading != true)
         {
             isLoading = true;
+            debugMessage = "refreshing table";
+            if (autoRefreshTimer != null)
+            {
+                debugMessage = "stopping timer";
+                autoRefreshTimer.Stop();
+            }
+
             Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
             players = await playersTask;
+
+            lastRefreshTime = DateTime.Now.ToLocalTime();
+            GetNewAutoRefreshTimer();
             isLoading = false;
         }
+    }
+
+    void GetNewAutoRefreshTimer()
+    {
+        debugMessage = "getting new timer";
+        autoRefreshTimer = new Timer(10000);
+        autoRefreshTimer.Elapsed += async ( sender, e ) => await OnAutoRefreshTimeElapsed();
+        autoRefreshTimer.AutoReset = true; //TODO: should this be false?
+        autoRefreshTimer.Enabled = true;
+    }
+
+    async Task OnAutoRefreshTimeElapsed() //Object source, ElapsedEventArgs e)
+    {
+        debugMessage = "auto-refresh triggered";
+        await RefreshTable();
+        StateHasChanged();
+        autoRefreshCount += 1;
+        debugMessage = "refresh completed";
+    }
+
+    string GetUrlFromCharacterId(string characterId)
+    {
+        return $"https:/www.planetside2.com/players/#!/{characterId}";
     }
 }
