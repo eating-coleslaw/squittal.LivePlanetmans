@@ -19,7 +19,9 @@ namespace squittal.LivePlanetmans.Server.Data
                 context.Database.Migrate();
 
                 // Populate Faction & World tables here
-                
+
+                //Services.WorldService.RefreshStore();
+
                 return;
             }
         }

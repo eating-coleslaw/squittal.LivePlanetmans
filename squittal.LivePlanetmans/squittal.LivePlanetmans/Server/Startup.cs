@@ -9,6 +9,7 @@ using Newtonsoft.Json.Serialization;
 using squittal.LivePlanetmans.Server.CensusServices;
 using squittal.LivePlanetmans.Server.CensusStream;
 using squittal.LivePlanetmans.Server.Data;
+using squittal.LivePlanetmans.Server.Services.Planetside;
 using System.Linq;
 
 namespace squittal.LivePlanetmans.Server
@@ -38,6 +39,8 @@ namespace squittal.LivePlanetmans.Server
 
             services.AddCensusServices();
             services.AddCensusHelpers();
+
+            services.AddSingleton<IWorldService, WorldService>();
 
             services.AddSingleton<IDbContextHelper, DbContextHelper>();
             services.AddSingleton<IWebsocketEventHandler, WebsocketEventHandler>();
