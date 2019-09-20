@@ -10,7 +10,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         //public int? FactionId { get; set; }
         //public string OutfitTag { get; set; }
         //public string OutfitId { get; set; }
-        //public string PlayerName { get; set; }
+        public string PlayerName { get; set; }
         public string PlayerId { get; set; }
         public int Kills { get; set; }
         public int Deaths { get; set; }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace squittal.LivePlanetmans.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
     public class PlayerLeaderboardController : ControllerBase
     {
         private readonly IDbContextHelper _dbContextHelper;
@@ -44,10 +44,17 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                 IQueryable<PlayerHourlyStatsData> query =
                     from death in dbContext.Deaths
+
+                    join character in dbContext.Characters on death.AttackerCharacterId equals character.Id into characterQ
+                    from character in characterQ.DefaultIfEmpty()
+
                     where death.Timestamp >= startTime && death.WorldId == 10
                     group death by death.AttackerCharacterId into playerGroup
                     select new PlayerHourlyStatsData()
                     {
+                        PlayerName = (from c in dbContext.Characters
+                                      where c.Name == playerGroup.Key
+                                      select c.Name).FirstOrDefault(),
                         PlayerId = playerGroup.Key,
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == playerGroup.Key

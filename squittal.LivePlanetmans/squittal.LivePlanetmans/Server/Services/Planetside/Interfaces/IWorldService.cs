@@ -7,7 +7,7 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
     public interface IWorldService // : IUpdateable
     {
         Task<IEnumerable<World>> GetAllWorldsAsync();
-        Task<World> GetWorld(int worldId);
+        Task<World> GetWorldAsync(int worldId);
         Task RefreshStore();
     }
 }

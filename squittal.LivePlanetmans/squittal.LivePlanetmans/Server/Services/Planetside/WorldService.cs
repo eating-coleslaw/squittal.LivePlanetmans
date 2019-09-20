@@ -30,7 +30,7 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
             }
         }
 
-        public async Task<World> GetWorld(int worldId)
+        public async Task<World> GetWorldAsync(int worldId)
         {
             var worlds = await GetAllWorldsAsync();
             return worlds.FirstOrDefault(e => e.Id == worldId);

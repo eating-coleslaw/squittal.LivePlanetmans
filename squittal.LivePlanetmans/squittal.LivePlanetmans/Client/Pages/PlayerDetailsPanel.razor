@@ -1,0 +1,79 @@
+﻿@page "/playerstats"
+@page "/playerstats/{characterId}"
+@using squittal.LivePlanetmans.Shared.Models
+@inject HttpClient Http
+
+<h1>Player Details</h1>
+
+@if (string.IsNullOrWhiteSpace(characterId))
+{
+    <p>select a player</p>
+}
+else
+{
+    <p>Player ID: @characterId</p>
+    @if (player != null)
+    {
+        <h3>@player.Name</h3><span>[@player.Id]</span>
+        <p><b>Faction </b>@player.FactionId</p>
+        <p><b>Rank </b>@player.BattleRank~@player.PrestigeLevel</p>
+    }
+}
+
+
+@*<button class="btn btn-primary" @onclick="OnPlayerIdChange">Fetch Info</button>*@
+<p>Attempts: @fetchTries</p>
+
+@code {
+    Character player;
+
+    int fetchTries = 0;
+
+    [Parameter]
+    public string characterId { get; set; }
+    //public string characterId
+    //{
+    //    get
+    //    {
+    //        return characterId;
+    //    }
+    //    set
+    //    {
+    //        //string oldId = characterId;
+    //        characterId = value;
+    //        //OnPlayerIdChange();
+    //        //if (oldId != value)
+    //        //{
+    //        //OnPlayerIdChange()
+    //        //};
+    //    }
+    //}
+
+    protected override async Task OnInitializedAsync()
+    {
+        await OnPlayerIdChange();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await OnPlayerIdChange();
+    }
+
+    private async Task OnPlayerIdChange()
+    {
+        fetchTries += 1;
+        if (!string.IsNullOrWhiteSpace(characterId))
+        {
+            try
+            {
+                Task<Character> playerTask = Http.GetJsonAsync<Character>($"api/PlayerDetails/{characterId}");
+                player = await playerTask;
+            }
+            catch (Exception)
+            {
+                //Ignore
+            }
+        }
+    }
+
+}

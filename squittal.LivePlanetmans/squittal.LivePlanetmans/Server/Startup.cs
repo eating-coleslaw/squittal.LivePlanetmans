@@ -47,6 +47,7 @@ namespace squittal.LivePlanetmans.Server
             services.AddSingleton<IDbContextHelper, DbContextHelper>();
 
             services.AddSingleton<IWorldService, WorldService>();
+            services.AddSingleton<ICharacterService, CharacterService>();
             services.AddSingleton<IDbSeeder, DbSeeder>();
 
             services.AddSingleton<IWebsocketEventHandler, WebsocketEventHandler>();
