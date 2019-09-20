@@ -7,7 +7,7 @@
     Live Activity
     @if (players != null)
     {
-        <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTable">
+        <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">
             <!--span class="oi small oi-reload" aria-hidden="true"></span--> Refresh
         </button>
     }
@@ -21,55 +21,145 @@
     }
     (@autoRefreshCount auto-refreshes)
 </p>
-<p>Debug: @debugMessage</p>
+<p>@*Debug: @debugMessage*@</p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Player ID</th>
-            <th>Kills</th>
-            <th>Deaths</th>
-            <th>KDR</th>
-            <th>KPM</th>
-        </tr>
-    </thead>
-    @if (players != null)
-    {
-        <tbody>
-            @foreach (var player in players)
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            @if (!string.IsNullOrWhiteSpace(errorMessage))
             {
-                <tr>
-                    <td><a href="@GetUrlFromCharacterId(player.PlayerId)" target="_blank">@player.PlayerId</a></td>
-                    <td>@player.Kills</td>
-                    <td>@player.Deaths</td>
-                    <td>@player.KillDeathRatio</td>
-                    <td>@player.KillsPerMinute</td>
-                </tr>
+                <p><em>@errorMessage</em></p>
             }
-        </tbody>
-    }
-</table>
+            else if (players == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else
+            {
+                <table class="table-striped table">
+                    <thead>
+                        <tr>
+                            <th>Player ID</th>
+                            <th>Kills</th>
+                            <th>Deaths</th>
+                            <th>KDR</th>
+                            <th>KPM</th>
+                        </tr>
+                    </thead>
+                    @if (players != null)
+                    {
+                        <tbody>
+                            @foreach (var player in players)
+                            {
+                                <tr>
+                                    <td><a href="@GetUrlFromCharacterId(player.PlayerId)" target="_blank">@player.PlayerId</a></td>
+                                    <td>@player.Kills</td>
+                                    <td>@player.Deaths</td>
+                                    <td>@player.KillDeathRatio</td>
+                                    <td>@player.KillsPerMinute</td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            }
+        </div>
 
-@if (players == null)
-{
+        <div class="col-md-6">
+            <table class="table-sm">
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <b>Debug Status:</b>
+                        </td>
+                        <td>
+                            @debugMessage
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Auto-Refreshes</b>
+                        </td>
+                        <td>
+                            @autoRefreshCount
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Last Refresh:</b>
+                        </td>
+                        <td>
+                            @lastRefreshTime.ToLongTimeString()
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Query Start:</b>
+                        </td>
+                        <td>
+                            @queryStartTimestamp
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Query End:</b>
+                        </td>
+                        <td>
+                            @queryEndTimestamp
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            @*<table class="table-sm">
+            <thead>
+                <tr>
+                    <th>Debug<br>Status</th>
+                    <th>Auto-<br>Refreshes</th>
+                    <th>Last Refresh</th>
+                    <th>Query Start</th>
+                    <th>Query End</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@debugMessage</td>
+                    <td>@autoRefreshCount</td>
+                    <td>@lastRefreshTime.ToLongTimeString()</td>
+                    <td>@queryStartTimestamp</td>
+                    <td>@queryEndTimestamp</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>*@
+        </div>
+    </div>
+</div>
 
-    <p><em>Loading...</em></p>
-}
 
 @code {
     PlayerHourlyStatsData[] players;
     bool isLoading = false;
     DateTime lastRefreshTime;
+    string errorMessage = "";
 
     Timer autoRefreshTimer;
     int autoRefreshCount = 0;
+    string refreshSource = "";
 
     string debugMessage = "";
+    string queryStartTimestamp = "";
+    string queryEndTimestamp = "";
+
 
     protected override async Task OnInitializedAsync()
     {
         debugMessage = "first load";
+        StateHasChanged();
         await RefreshTable();
+        debugMessage = "initial load complete";
         /*
         isLoading = true;
         Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
@@ -78,6 +168,13 @@
 
         GetNewAutoRefreshTimer
         */
+    }
+
+    async Task RefreshTableManual()
+    {
+        refreshSource = "manual";
+        StateHasChanged();
+        await RefreshTable();
     }
 
     async Task RefreshTable()
@@ -90,14 +187,25 @@
             {
                 debugMessage = "stopping timer";
                 autoRefreshTimer.Stop();
+                StateHasChanged();
             }
 
-            Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
-            players = await playersTask;
+            try
+            {
+                Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>("api/PlayerLeaderboard");
+                UpdateQueryDateTimes();
+                players = await playersTask;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"error: {ex}";
+            }
 
-            lastRefreshTime = DateTime.Now.ToLocalTime();
+            lastRefreshTime = (DateTime.Now.ToUniversalTime() - TimeSpan.FromHours(5));
             GetNewAutoRefreshTimer();
             isLoading = false;
+            debugMessage = "refresh complete";
+            StateHasChanged();
         }
     }
 
@@ -113,14 +221,50 @@
     async Task OnAutoRefreshTimeElapsed() //Object source, ElapsedEventArgs e)
     {
         debugMessage = "auto-refresh triggered";
-        await RefreshTable();
+        refreshSource = "auto";
         StateHasChanged();
+        if (isLoading != true)
+        {
+            try
+            {
+                await RefreshTable();
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                debugMessage = $"error: {ex}";
+            }
+
+        }
         autoRefreshCount += 1;
-        debugMessage = "refresh completed";
+        debugMessage = "auto-refresh completed";
+        StateHasChanged();
     }
 
     string GetUrlFromCharacterId(string characterId)
     {
         return $"https:/www.planetside2.com/players/#!/{characterId}";
+    }
+
+    void UpdateQueryDateTimes()
+    {
+        DateTime nowUtc = DateTime.UtcNow;
+        DateTime startTime = nowUtc - TimeSpan.FromHours(1);
+
+        if (nowUtc.Date == startTime.Date)
+        {
+            queryStartTimestamp = $"{startTime.ToLongTimeString()}";
+            queryEndTimestamp = $"{nowUtc.ToLongTimeString()}";
+        }
+        else
+        {
+            queryStartTimestamp = $"{startTime.ToShortDateString()} {startTime.ToLongTimeString()}";
+            queryEndTimestamp = $"{nowUtc.ToShortDateString()} {nowUtc.ToLongTimeString()}";
+        }
+
+        //queryDateTimes = $"nowUtc: {nowUtc.ToLongTimeString()} | startTime: {startTime.ToLongTimeString()}";
+        StateHasChanged();
+        //Task<string> datesTask = Http.GetJsonAsync<string>("api/PlayerLeaderboard");
+        //queryDateTimes = await datesTask;
     }
 }

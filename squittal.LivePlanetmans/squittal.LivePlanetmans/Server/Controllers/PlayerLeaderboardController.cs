@@ -31,7 +31,10 @@ namespace squittal.LivePlanetmans.Server.Controllers
             DateTime nowUTC = DateTime.UtcNow;
             TimeSpan hourSpan = new TimeSpan(0, 0, 0, 3600);
             //TimeSpan minuteSpan = new TimeSpan(0, 0, 5, 0);
-            DateTime startTime = nowUTC.Subtract(hourSpan);
+            //DateTime startTime = nowUTC.Subtract(hourSpan);
+
+            DateTime nowUtc = DateTime.UtcNow;
+            DateTime startTime = nowUtc - TimeSpan.FromHours(1);
 
             //string testPlayerId = "5428059527803872017";
 

@@ -124,7 +124,7 @@ namespace squittal.LivePlanetmans.Server.CensusStream
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            return;
         }
     }
 }
