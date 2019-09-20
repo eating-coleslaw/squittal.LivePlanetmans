@@ -44,6 +44,7 @@
                             <th>Deaths</th>
                             <th>KDR</th>
                             <th>KPM</th>
+                            <th></th>
                         </tr>
                     </thead>
                     @if (players != null)
@@ -57,6 +58,9 @@
                                     <td>@player.Deaths</td>
                                     <td>@player.KillDeathRatio</td>
                                     <td>@player.KillsPerMinute</td>
+                                    <td>
+                                        <button class="btn btn-outline-secondary" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -66,6 +70,8 @@
         </div>
 
         <div class="col-md-6">
+            <PlayerStatsPanel PlayerId="@selectedPlayer" />
+            <h4>Debug Info</h4>
             <table class="table-sm">
                 <thead>
                     <tr></tr>
@@ -73,7 +79,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <b>Debug Status:</b>
+                            <b>Status:</b>
                         </td>
                         <td>
                             @debugMessage
@@ -113,6 +119,8 @@
                     </tr>
                 </tbody>
             </table>
+            
+            <Worlds />
             @*<table class="table-sm">
             <thead>
                 <tr>
@@ -153,6 +161,7 @@
     string queryStartTimestamp = "";
     string queryEndTimestamp = "";
 
+    string selectedPlayer = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -173,6 +182,7 @@
     async Task RefreshTableManual()
     {
         refreshSource = "manual";
+        errorMessage = string.Empty;
         StateHasChanged();
         await RefreshTable();
     }
@@ -244,6 +254,11 @@
     string GetUrlFromCharacterId(string characterId)
     {
         return $"https:/www.planetside2.com/players/#!/{characterId}";
+    }
+
+    void OnSelectPlayer(string characterId)
+    {
+        selectedPlayer = characterId;
     }
 
     void UpdateQueryDateTimes()
