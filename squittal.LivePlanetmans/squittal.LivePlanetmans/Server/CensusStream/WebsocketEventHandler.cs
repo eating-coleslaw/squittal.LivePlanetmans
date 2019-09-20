@@ -10,12 +10,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using squittal.LivePlanetmans.CensusStream.Models;
 using squittal.LivePlanetmans.Server.Data;
+using squittal.LivePlanetmans.Server.Services.Planetside;
+using squittal.LivePlanetmans.Shared.Models;
 
 namespace squittal.LivePlanetmans.Server.CensusStream
 {
     public class WebsocketEventHandler : IWebsocketEventHandler
     {
         private readonly IDbContextHelper _dbContextHelper;
+        private readonly ICharacterService _characterService;
         private readonly ILogger<WebsocketEventHandler> _logger;
         private readonly Dictionary<string, MethodInfo> _processMethods;
 
@@ -30,9 +33,10 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                 }
         });
 
-        public WebsocketEventHandler(IDbContextHelper dbContextHelper, ILogger<WebsocketEventHandler> logger)
+        public WebsocketEventHandler(IDbContextHelper dbContextHelper, ICharacterService characterService, ILogger<WebsocketEventHandler> logger)
         {
             _dbContextHelper = dbContextHelper;
+            _characterService = characterService;
             _logger = logger;
 
             // Credit to Voidwell @ Lampjaw
@@ -86,8 +90,8 @@ namespace squittal.LivePlanetmans.Server.CensusStream
             }
         }
 
-        [CensusEventHandler("Death", typeof(Death))]
-        private async Task Process(Death payload)
+        [CensusEventHandler("Death", typeof(Shared.Models.Death))]
+        private async Task Process(Shared.Models.Death payload)
         {
             var dataModel = new Shared.Models.Death
             {
@@ -103,7 +107,7 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                 IsHeadshot = payload.IsHeadshot,
                 Timestamp = payload.Timestamp,
                 WorldId = payload.WorldId,
-                ZoneId = payload.ZoneId.Value
+                ZoneId = payload.ZoneId
             };
 
             using (var factory = _dbContextHelper.GetFactory())
@@ -112,8 +116,24 @@ namespace squittal.LivePlanetmans.Server.CensusStream
 
                 try
                 {
+                    var TaskList = new List<Task>();
+                    
                     dbContext.Deaths.Add(dataModel);
-                    await dbContext.SaveChangesAsync();
+                    Task saveDeath = dbContext.SaveChangesAsync();
+                    TaskList.Add(saveDeath);
+
+                    if (payload.AttackerCharacterId != null && payload.AttackerCharacterId.Length > 18)
+                    {
+                        Task<Character> attackerTask = _characterService.GetCharacterAsync(payload.AttackerCharacterId);
+                        TaskList.Add(attackerTask);
+                    }
+                    if (payload.AttackerCharacterId != null && payload.AttackerCharacterId.Length > 18)
+                    {
+                        Task<Character> victimTask = _characterService.GetCharacterAsync(payload.CharacterId);
+                        TaskList.Add(victimTask);
+                    }
+
+                    await Task.WhenAll(TaskList);
                 }
                 catch (Exception)
                 {

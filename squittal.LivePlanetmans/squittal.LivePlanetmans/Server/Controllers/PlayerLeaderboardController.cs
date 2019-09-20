@@ -53,7 +53,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     select new PlayerHourlyStatsData()
                     {
                         PlayerName = (from c in dbContext.Characters
-                                      where c.Name == playerGroup.Key
+                                      where c.Id == playerGroup.Key
                                       select c.Name).FirstOrDefault(),
                         PlayerId = playerGroup.Key,
                         Kills = (from k in dbContext.Deaths

@@ -39,7 +39,7 @@
                 <table class="table-striped table">
                     <thead>
                         <tr>
-                            <th>Player ID</th>
+                            <th>Player</th>
                             <th>Kills</th>
                             <th>Deaths</th>
                             <th>KDR</th>
@@ -52,16 +52,23 @@
                         <tbody>
                             @foreach (var player in players)
                             {
-                                <tr>
+                            <tr>
+                                @if (string.IsNullOrWhiteSpace(player.PlayerName))
+                                {
                                     <td><a href="@GetUrlFromCharacterId(player.PlayerId)" target="_blank">@player.PlayerId</a></td>
-                                    <td>@player.Kills</td>
-                                    <td>@player.Deaths</td>
-                                    <td>@player.KillDeathRatio</td>
-                                    <td>@player.KillsPerMinute</td>
-                                    <td>
-                                        <button class="btn btn-outline-secondary" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
-                                    </td>
-                                </tr>
+                                }
+                                else
+                                {
+                                    <td><a href="@GetUrlFromCharacterName(player.PlayerName)" target="_blank">@player.PlayerName</a></td>
+                                }
+                                <td>@player.Kills</td>
+                                <td>@player.Deaths</td>
+                                <td>@player.KillDeathRatio</td>
+                                <td>@player.KillsPerMinute</td>
+                                <td>
+                                    <button class="btn btn-outline-secondary" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     }
@@ -254,6 +261,11 @@
     string GetUrlFromCharacterId(string characterId)
     {
         return $"https:/www.planetside2.com/players/#!/{characterId}";
+    }
+
+    string GetUrlFromCharacterName(string characterName)
+    {
+        return $"https:/ps2.fisu.pw/player/?name={characterName.ToLower()}";
     }
 
     void OnSelectPlayer(string characterId)

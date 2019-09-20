@@ -3,18 +3,18 @@
 @using squittal.LivePlanetmans.Shared.Models
 @inject HttpClient Http
 
-<h1>Player Details</h1>
 
 @if (string.IsNullOrWhiteSpace(characterId))
 {
-    <p>select a player</p>
+    <h2>Player Details</h2>
+    <p><em>Select a player</em></p>
 }
 else
 {
     <p>Player ID: @characterId</p>
     @if (player != null)
     {
-        <h3>@player.Name</h3><span>[@player.Id]</span>
+        <h2>@player.Name</h2><span>[@player.Id]</span>
         <p><b>Faction </b>@player.FactionId</p>
         <p><b>Rank </b>@player.BattleRank~@player.PrestigeLevel</p>
     }
