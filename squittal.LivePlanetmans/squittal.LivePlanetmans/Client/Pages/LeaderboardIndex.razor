@@ -1,0 +1,18 @@
+﻿@page "/activity"
+@page "/activity/{worldId}"
+
+<PlayerLeaderboard worldId="@(Int32.Parse(worldId))" />
+
+@code
+{
+    [Parameter]
+    public string worldId { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrWhiteSpace(worldId))
+        {
+            worldId = "17";
+        }
+    }
+}

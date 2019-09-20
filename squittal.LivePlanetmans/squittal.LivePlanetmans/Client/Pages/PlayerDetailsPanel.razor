@@ -11,12 +11,54 @@
 }
 else
 {
-    <p>Player ID: @characterId</p>
+    //<p>@*Player ID: @characterId*@</p>
     @if (player != null)
     {
-        <h2>@player.Name</h2><span>[@player.Id]</span>
-        <p><b>Faction </b>@player.FactionId</p>
-        <p><b>Rank </b>@player.BattleRank~@player.PrestigeLevel</p>
+        <h3>
+            <a href="@GetUrlFromCharacterName(player.Name)" target="_blank">@player.Name</a>
+        </h3>
+        <p>
+            <a href="@GetUrlFromCharacterId(player.Id)" target="_blank">@player.Id</a>
+            @*<h2>@player.Name</h2><span>[@player.Id]</span>*@
+            <b>Faction </b>@player.FactionId
+            <b>Rank </b>@player.BattleRank~@player.PrestigeLevel
+        </p>
+    }
+
+    @if (kills == null)
+    {
+        <p><em>Loading killboard...</em></p>
+    }
+    else
+    {
+        <table class="table-sm table table-striped">
+            <tbody>
+                @foreach (var kill in kills)
+                {
+                    <tr style="background-color:@GetRowBgColor(kill.VictimId); color:@GetFactionColorFromId(kill.VictimFactionId);">
+                        <td>
+                                @if (kill.IsHeadshot == true)
+                                {
+                                        <span class="oi small oi-x" aria-hidden="true"></span>
+                                }
+                        </td>
+                        <td>
+                            @if (kill.VictimId == characterId)
+                            {
+                                @kill.AttackerName
+                            }
+                            else
+                            {
+                                @kill.VictimName
+                            }
+                        </td>
+                        <td>
+                            @kill.KillTimestamp.ToLongTimeString()
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
 }
 
@@ -27,27 +69,13 @@ else
 @code {
     Character player;
 
+    PlayerKillboardItem[] kills;
+
     int fetchTries = 0;
 
     [Parameter]
     public string characterId { get; set; }
-    //public string characterId
-    //{
-    //    get
-    //    {
-    //        return characterId;
-    //    }
-    //    set
-    //    {
-    //        //string oldId = characterId;
-    //        characterId = value;
-    //        //OnPlayerIdChange();
-    //        //if (oldId != value)
-    //        //{
-    //        //OnPlayerIdChange()
-    //        //};
-    //    }
-    //}
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,13 +95,64 @@ else
             try
             {
                 Task<Character> playerTask = Http.GetJsonAsync<Character>($"api/PlayerDetails/{characterId}");
+                Task<PlayerKillboardItem[]> killsTask = Http.GetJsonAsync<PlayerKillboardItem[]>($"api/PlayerDetails/kills/{characterId}");
                 player = await playerTask;
+                StateHasChanged();
+                kills = await killsTask;
+                StateHasChanged();
             }
             catch (Exception)
             {
                 //Ignore
             }
         }
+    }
+
+    string GetUrlFromCharacterId(string characterId)
+    {
+        return $"https:/www.planetside2.com/players/#!/{characterId}";
+    }
+
+    string GetUrlFromCharacterName(string characterName)
+    {
+        return $"https:/ps2.fisu.pw/player/?name={characterName.ToLower()}";
+    }
+
+    string GetRowBgColor(string victimId)
+    {
+        if (victimId == characterId)
+        {
+            return "#F9D3D6"; // FFD2E350"; //FFD2D3";
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    string GetFactionColorFromId(int factionId)
+    {
+        string color = "#2F2F2F";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "#6A4CE0";
+                break;
+
+            //NC
+            case 2:
+                color = "#1E99FC";
+                break;
+
+            //TR
+            case 3:
+                color = "#FF6C70";
+                break;
+        }
+
+        return color;
     }
 
 }

@@ -2,7 +2,7 @@
 @using squittal.LivePlanetmans.Shared.Models
 @inject HttpClient Http
 
-<h1>Planetside Servers</h1>
+<h4>Planetside Servers</h4>
 
 @if (worlds == null)
 {
@@ -10,7 +10,7 @@
 }
 else
 {
-    <table class="table">
+    <table class="table-sm">
         <thead>
             <tr>
                 <th>Server ID</th>

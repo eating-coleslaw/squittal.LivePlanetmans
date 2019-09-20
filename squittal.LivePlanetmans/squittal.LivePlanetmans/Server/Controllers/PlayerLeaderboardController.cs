@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace squittal.LivePlanetmans.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     public class PlayerLeaderboardController : ControllerBase
     {
         private readonly IDbContextHelper _dbContextHelper;
@@ -25,9 +25,11 @@ namespace squittal.LivePlanetmans.Server.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PlayerHourlyStatsData>>> GetPlayerLeaderboardAsync(int rows = 20)
+        [HttpGet("{worldId}")]
+        public async Task<ActionResult<IEnumerable<PlayerHourlyStatsData>>> GetPlayerLeaderboardAsync(int worldId) //, int rows = 20)
         {
+            int rows = 20;
+            
             DateTime nowUTC = DateTime.UtcNow;
             TimeSpan hourSpan = new TimeSpan(0, 0, 0, 3600);
             //TimeSpan minuteSpan = new TimeSpan(0, 0, 5, 0);
@@ -48,40 +50,29 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     join character in dbContext.Characters on death.AttackerCharacterId equals character.Id into characterQ
                     from character in characterQ.DefaultIfEmpty()
 
-                    where death.Timestamp >= startTime && death.WorldId == 10
+                    where death.Timestamp >= startTime && death.WorldId == worldId
                     group death by death.AttackerCharacterId into playerGroup
                     select new PlayerHourlyStatsData()
                     {
+                        PlayerId = playerGroup.Key,
                         PlayerName = (from c in dbContext.Characters
                                       where c.Id == playerGroup.Key
                                       select c.Name).FirstOrDefault(),
-                        PlayerId = playerGroup.Key,
+                        FactionId = (from c in dbContext.Characters
+                                     where c.Id == playerGroup.Key
+                                     select c.FactionId).FirstOrDefault(),
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == playerGroup.Key
                                     && k.AttackerCharacterId != k.CharacterId
                                     && k.Timestamp >= startTime
-                                    && k.WorldId == 10
+                                    && k.WorldId == worldId
                                  select k).Count(),
                         Deaths = (from d in dbContext.Deaths
                                   where d.CharacterId == playerGroup.Key
                                      && d.Timestamp >= startTime
-                                     && d.WorldId == 10
+                                     && d.WorldId == worldId
                                   select d).Count()
                     };
-
-                //IQueryable<PlayerHourlyStatsData> query =
-                //    from death in dbContext.Deaths
-                //    //where death.Timestamp >= startTime
-                //    select new PlayerHourlyStatsData()
-                //    {
-                //        PlayerId = testPlayerId,
-                //        Kills = (from k in dbContext.Deaths
-                //                 where k.AttackerCharacterId == testPlayerId && k.AttackerCharacterId != k.CharacterId
-                //                 select k).Count(),
-                //        Deaths = (from d in dbContext.Deaths
-                //                  where d.CharacterId == testPlayerId && d.AttackerCharacterId != d.CharacterId
-                //                  select d).Count()
-                //    };
 
                 return await query
                     .AsNoTracking()
