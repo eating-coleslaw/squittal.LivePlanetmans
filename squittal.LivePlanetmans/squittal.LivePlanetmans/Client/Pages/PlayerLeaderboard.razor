@@ -8,182 +8,146 @@
 
 <div class="container-fluid">
     <div class="row">
+        <div class="col-12">
+            <p class="h1 display-4">Live Activity
+                @if (string.IsNullOrWhiteSpace(selectedWorldName))
+                {
+                    <ServerSelectMenu selectedWorldId="@worldId" />
+                }
+                else
+                {
+                    <ServerSelectMenu />
+                }
+            </p>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <h2>
-                        Live Activity
-                        @if (players != null)
+            <h2>
+                Live Activity
+                @if (players != null)
+                {
+                    <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">
+                        <!--span class="oi small oi-reload" aria-hidden="true"></span--> Refresh
+                    </button>
+                }
+            </h2>
+
+            @if (worlds != null)
+            {
+                <p>
+                    <div class="btn-group" role="group">
+                        @foreach (var world in worlds)
                         {
-                            <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">
-                                <!--span class="oi small oi-reload" aria-hidden="true"></span--> Refresh
-                            </button>
-                        }
-                    </h2>
-
-                    @*@if (worlds == null)
-                    {
-                        <p><em>Loading...</em></p>
-                    }
-                    else
-                    {
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Server ID</th>
-                                    <th>Server</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var world in worlds)
-                                {
-                                    <tr>
-                                        <td>@world.Id</td>
-                                        <td>@world.Name</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }*@
-
-                    @*@if (!string.IsNullOrWhiteSpace(selectedWorldName))
-                    {
-                        <p>@selectedWorldName | @worldId</p>
-                    }
-
-                    <p>World ID: @worldId</p>*@
-
-                    @if (worlds != null) // && !string.IsNullOrWhiteSpace(selectedWorldName))
-                    {
-                        <p>
-                            <div class="btn-group" role="group">
-                                @*<button class="btn btn-secondary dropdown-toggle" type="button" id="btnWorldId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    selectedWorldName
-                                </button>*@
-                                @*<div class="dropdown-menu" aria-labelledby="btnWorldId">*@
-                                @foreach (var world in worlds)
-                                {
-                                    @if (world.Id == worldId)
-                                    {
-                                        <button class="btn-primary btn" type="button">@world.Name</button>
-                                    }
-                                    else
-                                    {
-                                        <button class="btn-secondary btn" type="button" @onclick="@(() => ChangeSelectedWorld(world.Id))">@world.Name</button>
-                                    }
-                                }
-                                @*</div>*@
-                            </div>
-                        </p>
-                    }
-
-                    <p>
-                        Last Refresh: @lastRefreshTime.ToLongTimeString()
-                        @if (isLoading == true)
-                        {
-                            <span>(loading)</span>
-                        }
-                        (@autoRefreshCount auto-refreshes)
-                    </p>
-                    <p>@*Debug: @debugMessage*@</p>
-
-
-                    @if (!string.IsNullOrWhiteSpace(errorMessage))
-                    {
-                        <p><em>@errorMessage</em></p>
-                    }
-                    else if (players == null)
-                    {
-                        <p><em>Loading...</em></p>
-                    }
-                    else
-                    {
-                        <table class="table-striped table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Player</th>
-                                    <th>Kills</th>
-                                    <th>Deaths</th>
-                                    <th>KDR</th>
-                                    <th>KPM</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            @if (players != null)
+                            @if (world.Id == worldId)
                             {
-                                <tbody>
-                                    @foreach (var player in players)
-                                    {
-                                    <tr style="color:@GetFactionColorFromId(player.FactionId)">
-                                        @if (string.IsNullOrWhiteSpace(player.PlayerName))
-                                        {
-                                            @*<td><a href="@GetUrlFromCharacterId(player.PlayerId)" target="_blank">@player.PlayerId</a></td>*@
-                                            <td>@player.PlayerId</td>
-                                        }
-                                        else
-                                        {
-                                            @*<td><a href="@GetUrlFromCharacterName(player.PlayerName)" target="_blank">@player.PlayerName</a></td>*@
-                                            <td>@player.PlayerName</td>
-                                        }
-                                        <td>@player.Kills</td>
-                                        <td>@player.Deaths</td>
-                                        <td>@player.KillDeathRatio</td>
-                                        <td>@player.KillsPerMinute</td>
-                                        <td>
-                                            <button class="btn btn-link" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
-                                        </td>
-                                    </tr>
-                                    }
-                                </tbody>
+                                <button class="btn-primary btn" type="button">@world.Name</button>
                             }
-                        </table>
+                            else
+                            {
+                                <button class="btn-secondary btn" type="button" @onclick="@(() => ChangeSelectedWorld(world.Id))">@world.Name</button>
+                            }
+                        }
+                        @*</div>*@
+                    </div>
+                </p>
+            }
+
+            <p>
+                Last Refresh: @lastRefreshTime.ToLongTimeString()
+                @if (isLoading == true)
+                {
+                    <span>(loading)</span>
+                }
+                (@autoRefreshCount auto-refreshes)
+            </p>
+            <p>@*Debug: @debugMessage*@</p>
+
+
+            @if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                <p><em>@errorMessage</em></p>
+            }
+            else if (players == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else
+            {
+                <table class="table-striped table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Kills</th>
+                            <th>Deaths</th>
+                            <th>KDR</th>
+                            <th>KPM</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    @if (players != null)
+                    {
+                        <tbody>
+                            @foreach (var player in players)
+                            {
+                            <tr style="color:@GetFactionColorFromId(player.FactionId)">
+                                @if (string.IsNullOrWhiteSpace(player.PlayerName))
+                                {
+                                    @*<td><a href="@GetUrlFromCharacterId(player.PlayerId)" target="_blank">@player.PlayerId</a></td>*@
+                                    <td>@player.PlayerId</td>
+                                }
+                                else
+                                {
+                                    @*<td><a href="@GetUrlFromCharacterName(player.PlayerName)" target="_blank">@player.PlayerName</a></td>*@
+                                    <td>@player.PlayerName</td>
+                                }
+                                <td>@player.Kills</td>
+                                <td>@player.Deaths</td>
+                                <td>@player.KillDeathRatio</td>
+                                <td>@player.KillsPerMinute</td>
+                                <td>
+                                    <button class="btn btn-link" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
                     }
-                </div>
-        </div>
-</div>
+                </table>
+            }
+    </div>
 
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <PlayerDetailsPanel characterId="@selectedPlayer" />
-                </div>
-            </div>
-            <p></p>
-            <div class="card">
-                <div class="card-body">
-            <h4>Debug Info</h4>
-            <table class="table-sm tabls">
-                <thead>
-                    <tr></tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><b>Status:</b></td>
-                        <td>@debugMessage</td>
-                    </tr>
-                    <tr>
-                        <td><b>Auto-Refreshes</b></td>
-                        <td>@autoRefreshCount</td>
-                    </tr>
-                    <tr>
-                        <td><b>Last Refresh:</b></td>
-                        <td>@lastRefreshTime.ToLongTimeString()</td>
-                    </tr>
-                    <tr>
-                        <td><b>Query Start:</b></td>
-                        <td>@queryStartTimestamp</td>
-                    </tr>
-                    <tr>
-                        <td><b>Query End:</b></td>
-                        <td>@queryEndTimestamp</td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
+    <div class="col-sm-6 border-light">
+                <PlayerDetailsPanel characterId="@selectedPlayer" />
+        <h4>Debug Info</h4>
+        <table class="table-sm tabls">
+            <thead>
+                <tr></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>Status:</b></td>
+                    <td>@debugMessage</td>
+                </tr>
+                <tr>
+                    <td><b>Auto-Refreshes</b></td>
+                    <td>@autoRefreshCount</td>
+                </tr>
+                <tr>
+                    <td><b>Last Refresh:</b></td>
+                    <td>@lastRefreshTime.ToLongTimeString()</td>
+                </tr>
+                <tr>
+                    <td><b>Query Start:</b></td>
+                    <td>@queryStartTimestamp</td>
+                </tr>
+                <tr>
+                    <td><b>Query End:</b></td>
+                    <td>@queryEndTimestamp</td>
+                </tr>
+            </tbody>
+        </table>
         </div>
 
-            @*<Worlds />*@
-        </div>
     </div>
 </div>
 

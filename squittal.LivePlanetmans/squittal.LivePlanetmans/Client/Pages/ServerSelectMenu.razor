@@ -1,48 +1,54 @@
 ﻿@page "/serverselect"
+@page "/serverselect/{selectedWorldId}"
 @using squittal.LivePlanetmans.Shared.Models
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<h4>Planetside Servers</h4>
-
 @if (worlds == null)
 {
-    <p><em>Loading...</em></p>
+    <em>Loading server list...</em>
 }
 else
 {
-    <p>
-        <select class="btn" style="border-color: var(--gray) !important;" id="worldSelect" @onchange="OnWorldIdChange">
-            @*@if (string.IsNullOrWhiteSpace(selectedWorldId))*@
-            @*{*@
-                <option value="" class="text-muted" style="font-style:italic">- Servers -</option>
-            @*}*@
-            @foreach (var world in worlds)
+    <select class="btn" style="border-color: var(--gray) !important;" id="worldSelect" @onchange="OnWorldIdChange">
+        <option value="" class="text-muted" style="font-style:italic">Server</option>
+        @foreach (var world in worlds)
+        {
+            @if (world.Id != 25) //RIP Briggs
             {
                 <option value="@world.Id.ToString()">@world.Name</option>
             }
-        </select>
-    </p>
+        }
+    </select>
 }
 
 @code {
     World[] worlds;
 
-    //string selectedWorldId = "";
-    //string selectedWorldName = "";
+    [Parameter]
+    public int? selectedWorldId { get; set; }
+
+    string selectedWorldName = "";
+    World selectedWorld = new World();
 
     protected override async Task OnInitializedAsync()
     {
         worlds = await Http.GetJsonAsync<World[]>("api/Worlds");
 
-        //selectedWorld = worlds.Where(w => w.Id == 17).FirstOrDefault();
+        if (selectedWorldId != null && worlds.Any())
+        {
+            //selectedWorldName = worlds.Where(w => w.Id == selectedWorldId).Select(w => w.Name).FirstOrDefault();
+            selectedWorld = worlds.Where(w => w.Id == selectedWorldId).FirstOrDefault();
+        }
     }
 
     void OnWorldIdChange(ChangeEventArgs eventArgs)
     {
-        //selectedWorldId = eventArgs.Value.ToString();
-        //NavigationManager.NavigateTo($"activity/{selectedWorldId}");
-        NavigationManager.NavigateTo($"activity/{eventArgs.Value.ToString()}");
+        var worldId = eventArgs.Value;
+        if (!string.IsNullOrWhiteSpace(worldId.ToString()))
+        {
+            NavigationManager.NavigateTo($"activity/{eventArgs.Value.ToString()}");
+        }
     }
 
 }
