@@ -1,8 +1,11 @@
 ﻿@page "/worlds"
 @using squittal.LivePlanetmans.Shared.Models
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 <h4>Planetside Servers</h4>
+
+<ServerSelectMenu />
 
 @if (worlds == null)
 {
@@ -29,12 +32,102 @@ else
     </table>
 }
 
+@*<div class="row">
+    <div class="col-md-4">
+        <select class="form-control" onchange="@OnWorldChange()">
+            <option value="">-- Select Country --</option>
+            @foreach (var country in countryList)
+            {
+                <option value="@country.CountryId">@country.CountryName</option>
+
+            }
+        </select>
+    </div>
+    <div class="col-md-4">
+        <select class="form-control" onchange="@CityClicked">
+            <option value="">-- Select City --</option>
+            @if (cityList != null)
+            {
+                @foreach (var city in cityList)
+                {
+                    <option value="@city.CityName">@city.CityName</option>
+
+                }
+            }
+        </select>
+    </div>
+</div>*@
+
+
+<EditForm Model="@selectedWorld" OnValidSubmit="@OnWorldChange">
+    <InputText id="name" @bind-Value="@selectedWorld.Name" />
+    <label for="server">Server Select: </label>
+    <InputSelect id="server" @bind-Value="@selectedWorldId" @onchange="@OnWorldChange">  @*@bind-Value:event="onchange">*@ @*@bind-value:event="onchange" bind-value:event="onchange"> onchange="OnWorldChange">*@
+        @if (string.IsNullOrWhiteSpace(selectedWorldId))
+        {
+            <option value="">-- Select a Server --</option>
+        }
+        <option value="10">Miller</option>
+        <option value="1">Connery</option>
+        @*foreach (var world in worlds)
+        {
+            <option value="@world.Id">@world.Name</option>
+        }*
+        @*<option value="">Select classification ...</option>
+        <option value="Exploration">Exploration</option>
+        <option value="Diplomacy">Diplomacy</option>
+        <option value="Defense">Defense</option>*@
+    </InputSelect>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@*<p>@selectedWorld.Id</p>
+<p>@selectedWorld.Name</p>
+<p>@selectedWorldId</p>*@
+
+<p>
+    <select id="worldSelect" @onchange="OnWorldIdChange">
+        @if (string.IsNullOrWhiteSpace(selectedWorldId))
+        {
+            <option value="">- Servers -</option>
+        }
+        @if (worlds != null)
+        {
+            @foreach (var world in worlds)
+            {
+                @*<option value="10">test</option>*@
+                <option value="@world.Id.ToString()">@world.Name</option>
+            }
+        }
+    </select>
+</p>
+
 @code {
     World[] worlds;
+
+    private World selectedWorld = new World();
+
+    string selectedWorldId = "";
+    string selectedWorldName = "";
 
     protected override async Task OnInitializedAsync()
     {
         worlds = await Http.GetJsonAsync<World[]>("api/Worlds");
+
+        //selectedWorld = worlds.Where(w => w.Id == 17).FirstOrDefault();
+    }
+
+    void OnWorldChange()
+    {
+        //selectedWorldId = selectedWorld.Id;
+        StateHasChanged();
+        NavigationManager.NavigateTo($"activity/{selectedWorldId}");
+    }
+
+    void OnWorldIdChange(ChangeEventArgs eventArgs)
+    {
+        selectedWorldId = eventArgs.Value.ToString();
+        NavigationManager.NavigateTo($"activity/{selectedWorldId}");
     }
 
 }

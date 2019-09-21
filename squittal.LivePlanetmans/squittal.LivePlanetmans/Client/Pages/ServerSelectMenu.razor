@@ -1,0 +1,48 @@
+﻿@page "/serverselect"
+@using squittal.LivePlanetmans.Shared.Models
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h4>Planetside Servers</h4>
+
+@if (worlds == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>
+        <select class="btn" style="border-color: var(--gray) !important;" id="worldSelect" @onchange="OnWorldIdChange">
+            @*@if (string.IsNullOrWhiteSpace(selectedWorldId))*@
+            @*{*@
+                <option value="" class="text-muted" style="font-style:italic">- Servers -</option>
+            @*}*@
+            @foreach (var world in worlds)
+            {
+                <option value="@world.Id.ToString()">@world.Name</option>
+            }
+        </select>
+    </p>
+}
+
+@code {
+    World[] worlds;
+
+    //string selectedWorldId = "";
+    //string selectedWorldName = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        worlds = await Http.GetJsonAsync<World[]>("api/Worlds");
+
+        //selectedWorld = worlds.Where(w => w.Id == 17).FirstOrDefault();
+    }
+
+    void OnWorldIdChange(ChangeEventArgs eventArgs)
+    {
+        //selectedWorldId = eventArgs.Value.ToString();
+        //NavigationManager.NavigateTo($"activity/{selectedWorldId}");
+        NavigationManager.NavigateTo($"activity/{eventArgs.Value.ToString()}");
+    }
+
+}

@@ -14,11 +14,11 @@ else
     //<p>@*Player ID: @characterId*@</p>
     @if (player != null)
     {
-        <h3>
+        <p class="h3">
             <a href="@GetUrlFromCharacterName(player.Name)" target="_blank">@player.Name</a>
-        </h3>
+            <a href="@GetUrlFromCharacterId(player.Id)" class="text-muted h6" target="_blank">@player.Id</a>
+        </p>
         <p>
-            <a href="@GetUrlFromCharacterId(player.Id)" target="_blank">@player.Id</a>
             @*<h2>@player.Name</h2><span>[@player.Id]</span>*@
             <b>Faction </b>@player.FactionId
             <b>Rank </b>@player.BattleRank~@player.PrestigeLevel
