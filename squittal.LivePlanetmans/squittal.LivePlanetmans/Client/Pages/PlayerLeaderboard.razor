@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <p class="h1 display-4">Live Activity
+            <p class="h1 display-4" style="color: var(--gray);">Live Activity
                 @if (string.IsNullOrWhiteSpace(selectedWorldName))
                 {
                     <ServerSelectMenu selectedWorldId="@worldId" />
@@ -23,37 +23,24 @@
     </div>
     <div class="row">
         <div class="col-sm-6">
-            <h2>
-                Live Activity
+            <h3>
+                @if  (!string.IsNullOrWhiteSpace(selectedWorldName))
+                {
+                    <span style="color: var(--pink)">@selectedWorldName Top Players</span>
+                }
+                else
+                {
+                    <span>Live Activity</span>
+                }
                 @if (players != null)
                 {
                     <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">
-                        <!--span class="oi small oi-reload" aria-hidden="true"></span--> Refresh
+                        Refresh
                     </button>
                 }
-            </h2>
+            </h3>
 
-            @if (worlds != null)
-            {
-                <p>
-                    <div class="btn-group" role="group">
-                        @foreach (var world in worlds)
-                        {
-                            @if (world.Id == worldId)
-                            {
-                                <button class="btn-primary btn" type="button">@world.Name</button>
-                            }
-                            else
-                            {
-                                <button class="btn-secondary btn" type="button" @onclick="@(() => ChangeSelectedWorld(world.Id))">@world.Name</button>
-                            }
-                        }
-                        @*</div>*@
-                    </div>
-                </p>
-            }
-
-            <p>
+            <p class="text-muted">
                 Last Refresh: @lastRefreshTime.ToLongTimeString()
                 @if (isLoading == true)
                 {
@@ -61,8 +48,6 @@
                 }
                 (@autoRefreshCount auto-refreshes)
             </p>
-            <p>@*Debug: @debugMessage*@</p>
-
 
             @if (!string.IsNullOrWhiteSpace(errorMessage))
             {
@@ -74,7 +59,7 @@
             }
             else
             {
-                <table class="table-striped table table-sm">
+                <table class="table-striped table-sm">
                     <thead>
                         <tr>
                             <th>Player</th>
@@ -93,7 +78,6 @@
                             <tr style="color:@GetFactionColorFromId(player.FactionId)">
                                 @if (string.IsNullOrWhiteSpace(player.PlayerName))
                                 {
-                                    @*<td><a href="@GetUrlFromCharacterId(player.PlayerId)" target="_blank">@player.PlayerId</a></td>*@
                                     <td>@player.PlayerId</td>
                                 }
                                 else

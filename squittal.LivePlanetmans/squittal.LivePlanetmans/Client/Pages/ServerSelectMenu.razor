@@ -37,7 +37,6 @@ else
 
         if (selectedWorldId != null && worlds.Any())
         {
-            //selectedWorldName = worlds.Where(w => w.Id == selectedWorldId).Select(w => w.Name).FirstOrDefault();
             selectedWorld = worlds.Where(w => w.Id == selectedWorldId).FirstOrDefault();
         }
     }
