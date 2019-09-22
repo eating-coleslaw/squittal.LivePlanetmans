@@ -10,7 +10,7 @@
 }
 else
 {
-    <select class="btn" style="border-color: var(--gray) !important;" id="worldSelect" @onchange="OnWorldIdChange">
+    <select class="btn-sm" style="margin-right: 5px" id="worldSelect" @onchange="OnWorldIdChange">
         <option value="" class="text-muted" style="font-style:italic">Server</option>
         @foreach (var world in worlds)
         {
@@ -44,7 +44,7 @@ else
     void OnWorldIdChange(ChangeEventArgs eventArgs)
     {
         var worldId = eventArgs.Value;
-        if (!string.IsNullOrWhiteSpace(worldId.ToString()))
+        if (!string.IsNullOrWhiteSpace(worldId.ToString()) && worldId != "Server")
         {
             NavigationManager.NavigateTo($"activity/{eventArgs.Value.ToString()}");
         }

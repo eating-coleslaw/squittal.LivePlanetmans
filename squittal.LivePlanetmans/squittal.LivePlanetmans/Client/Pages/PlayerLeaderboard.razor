@@ -6,10 +6,34 @@
 @inject HttpClient Http
 
 
-<div class="container-fluid">
+<div class="container">
     <div class="row">
         <div class="col-12">
-            <p class="h1 display-4" style="color: var(--gray);">Live Activity
+            @*<p class="h1 display-4" style="color: var(--gray);">Live Activity
+            @if (string.IsNullOrWhiteSpace(selectedWorldName))
+            {
+                <ServerSelectMenu selectedWorldId="@worldId" />
+            }
+            else
+            {
+                <ServerSelectMenu />
+            }
+        </p>*@
+            <p class="h2 display-4">
+                @if (!string.IsNullOrWhiteSpace(selectedWorldName))
+                {
+                    <span style="color: var(--pink)">@selectedWorldName Top Players</span>
+                }
+                else
+                {
+                    <span>Live Activity</span>
+                }
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6" style="border-left: 1px solid #6c757d !important; border-radius: 0.2rem;">
+            <div>
                 @if (string.IsNullOrWhiteSpace(selectedWorldName))
                 {
                     <ServerSelectMenu selectedWorldId="@worldId" />
@@ -18,36 +42,17 @@
                 {
                     <ServerSelectMenu />
                 }
-            </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <h3>
-                @if  (!string.IsNullOrWhiteSpace(selectedWorldName))
-                {
-                    <span style="color: var(--pink)">@selectedWorldName Top Players</span>
-                }
-                else
-                {
-                    <span>Live Activity</span>
-                }
+
                 @if (players != null)
                 {
-                    <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">
-                        Refresh
-                    </button>
+                    <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">Refresh</button>
+                    <span class="text-muted" style="font-size: 0.8rem; vertical-align: bottom;">Last Refresh: @lastRefreshTime.ToLongTimeString()</span>
                 }
-            </h3>
-
-            <p class="text-muted">
-                Last Refresh: @lastRefreshTime.ToLongTimeString()
                 @if (isLoading == true)
                 {
-                    <span>(loading)</span>
+                    <span class="text-muted" style="font-size: 0.8rem; vertical-align: bottom;">(loading)</span>
                 }
-                (@autoRefreshCount auto-refreshes)
-            </p>
+            </div>
 
             @if (!string.IsNullOrWhiteSpace(errorMessage))
             {
@@ -59,38 +64,38 @@
             }
             else
             {
-                <table class="table-striped table-sm">
+                <table class="table-striped table-responsive-sm">
                     <thead>
                         <tr>
-                            <th>Player</th>
-                            <th>Kills</th>
-                            <th>Deaths</th>
-                            <th>KDR</th>
-                            <th>KPM</th>
-                            <th></th>
+                            <th style="padding-right: 10px;">Player</th>
+                            <th style="padding-right: 10px;">Kills</th>
+                            <th style="padding-right: 10px;">Deaths</th>
+                            <th style="padding-right: 10px;">KDR</th>
+                            <th style="padding-right: 10px;">KPM</th>
+                            <th style="padding-right: 10px;"></th>
                         </tr>
                     </thead>
                     @if (players != null)
                     {
-                        <tbody>
+                        <tbody style="font-size: 0.85rem !important;">
                             @foreach (var player in players)
                             {
                             <tr style="color:@GetFactionColorFromId(player.FactionId)">
                                 @if (string.IsNullOrWhiteSpace(player.PlayerName))
                                 {
-                                    <td>@player.PlayerId</td>
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.PlayerId</td>
                                 }
                                 else
                                 {
                                     @*<td><a href="@GetUrlFromCharacterName(player.PlayerName)" target="_blank">@player.PlayerName</a></td>*@
-                                    <td>@player.PlayerName</td>
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.PlayerName</td>
                                 }
-                                <td>@player.Kills</td>
-                                <td>@player.Deaths</td>
-                                <td>@player.KillDeathRatio</td>
-                                <td>@player.KillsPerMinute</td>
-                                <td>
-                                    <button class="btn btn-link" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
+                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Kills</td>
+                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Deaths</td>
+                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillDeathRatio</td>
+                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillsPerMinute</td>
+                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
+                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
                                 </td>
                             </tr>
                             }
@@ -98,12 +103,18 @@
                     }
                 </table>
             }
+        </div>
+
+        <div class="col-lg-5" style="border: 1px solid #6c757d !important; border-radius: 0.2rem; padding: 10px;">
+            <PlayerDetailsPanel characterId="@selectedPlayer" />
+        </div>
     </div>
 
-    <div class="col-sm-6 border-light">
-                <PlayerDetailsPanel characterId="@selectedPlayer" />
-        <h4>Debug Info</h4>
-        <table class="table-sm tabls">
+    <div class="row">
+        <div class="col-sm-5">
+        <p></p>
+        <p class="h4">Debug Info</p>
+        <table class="table-sm table">
             <thead>
                 <tr></tr>
             </thead>
@@ -179,8 +190,7 @@
 
     async Task SetUpWorlds()
     {
-        //Task<World[]> worldTask = Http.GetJsonAsync<World[]>("api/Worlds");
-        worlds = await Http.GetJsonAsync<World[]>("api/Worlds"); ; // await worldTask;
+        worlds = await Http.GetJsonAsync<World[]>("api/Worlds");
         if (worlds.Any() == true)
         {
             selectedWorldName = worlds.Where(w => w.Id == worldId).Select(w => w.Name).FirstOrDefault(); //"success1"; //= worlds.FirstOrDefault(w => w.Id == worldId).Name;

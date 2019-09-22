@@ -75,7 +75,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 return await query
                     .AsNoTracking()
                     .OrderByDescending(k => k.KillTimestamp)
-                    .Take(rows)
+                    //.Take(rows)
                     .ToArrayAsync();
             }
         }
