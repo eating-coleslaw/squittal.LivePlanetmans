@@ -30,15 +30,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
         {
             int rows = 20;
             
-            DateTime nowUTC = DateTime.UtcNow;
-            TimeSpan hourSpan = new TimeSpan(0, 0, 0, 3600);
-            //TimeSpan minuteSpan = new TimeSpan(0, 0, 5, 0);
-            //DateTime startTime = nowUTC.Subtract(hourSpan);
-
             DateTime nowUtc = DateTime.UtcNow;
             DateTime startTime = nowUtc - TimeSpan.FromHours(1);
 
-            //string testPlayerId = "5428059527803872017";
 
             using (var factory = _dbContextHelper.GetFactory())
             {
@@ -61,9 +55,19 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         PlayerName = (from c in dbContext.Characters
                                       where c.Id == playerGroup.Key
                                       select c.Name).FirstOrDefault(),
+                        OutfitAlias = (from m in dbContext.OutfitMembers
+                                         join o in dbContext.Outfits on m.OutfitId equals o.Id
+                                       where m.CharacterId == playerGroup.Key
+                                       select o.Alias).FirstOrDefault(),
                         FactionId = (from c in dbContext.Characters
                                      where c.Id == playerGroup.Key
                                      select c.FactionId).FirstOrDefault(),
+                        BattleRank = (from c in dbContext.Characters
+                                      where c.Id == playerGroup.Key
+                                      select c.BattleRank).FirstOrDefault(),
+                        PrestigeLevel = (from c in dbContext.Characters
+                                         where c.Id == playerGroup.Key
+                                         select c.PrestigeLevel).FirstOrDefault(),
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == playerGroup.Key
                                     && k.AttackerCharacterId != k.CharacterId

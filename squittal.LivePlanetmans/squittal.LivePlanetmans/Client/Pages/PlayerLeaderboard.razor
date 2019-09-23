@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6" style="border-left: 1px solid #6c757d !important; border-radius: 0.2rem;">
+        <div class="col-lg-6" style="border-left: 1px solid #6c757d !important; border-radius: 0.2rem; margin: 5px; padding: 10px;">
             <div>
                 @if (string.IsNullOrWhiteSpace(selectedWorldName))
                 {
@@ -67,6 +67,7 @@
                 <table class="table-striped table-responsive-sm" style="width: inherit;">
                     <thead>
                         <tr>
+                            <th style="padding-right: 5px;"></th> @*//Outfit*@
                             <th style="padding-right: 10px;">Player</th>
                             <th style="padding-right: 10px;">Kills</th>
                             <th style="padding-right: 10px;">Deaths</th>
@@ -84,6 +85,9 @@
                             @foreach (var player in players)
                             {
                             <tr style="color:@GetFactionColorFromId(player.FactionId)">
+                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 0px;">
+                                    @((string.IsNullOrWhiteSpace(player.OutfitAlias)) ? "" : $"[{player.OutfitAlias}]")
+                                </td>
                                 @if (string.IsNullOrWhiteSpace(player.PlayerName))
                                 {
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.PlayerId</td>
@@ -91,7 +95,11 @@
                                 else
                                 {
                                     @*<td><a href="@GetUrlFromCharacterName(player.PlayerName)" target="_blank">@player.PlayerName</a></td>*@
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.PlayerName</td>
+                                    @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.PlayerName</td>*@
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
+                                        <span>@player.PlayerName <sup> @(player.BattleRank) @((player.PrestigeLevel == 0) ? "" : $"~{player.PrestigeLevel}")</sup></span>
+                                        @*@GetLeaderboardPlayerString(player)*@
+                                    </td>
                                 }
                                 <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Kills</td>
                                 <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Deaths</td>
@@ -99,7 +107,7 @@
                                 <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillsPerMinute</td>
                                 <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.HeadshotRatio</td>
                                 @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.TeamKills</td>
-                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Suicides</td>*@
+        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Suicides</td>*@
                                 <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
                                     <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
                                 </td>
@@ -111,7 +119,7 @@
             }
         </div>
 
-        <div class="col-lg-5" style="border: 1px solid #6c757d !important; border-radius: 0.2rem; padding: 10px;">
+        <div class="col-lg-5" style="border: 1px solid #6c757d !important; border-radius: 0.2rem; padding: 10px; margin: 5px;">
             <PlayerDetailsPanel characterId="@selectedPlayer" />
         </div>
     </div>
@@ -336,7 +344,7 @@
     string GetFactionColorFromId(int factionId)
     {
         string color = "#2F2F2F";
-        
+
         switch (factionId)
         {
             //VS
@@ -356,5 +364,17 @@
         }
 
         return color;
+    }
+
+    string GetLeaderboardPlayerString(PlayerHourlyStatsData player)
+    {
+        string name = (!string.IsNullOrWhiteSpace(player.PlayerName)) ? player.PlayerName : player.PlayerId;
+
+        string outfit = (!string.IsNullOrWhiteSpace(player.OutfitAlias)) ? $"[{player.OutfitAlias}]" : "";
+
+        string br = (player.PrestigeLevel == 0) ? $"[BR {player.BattleRank}]" : $"[BR {player.BattleRank}*1]";
+
+        //return $"{outfit} {name} {br}";
+        return $"{name} {br}";
     }
 }

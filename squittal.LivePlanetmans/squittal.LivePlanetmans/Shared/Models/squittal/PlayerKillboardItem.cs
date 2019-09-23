@@ -13,7 +13,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         public string AttackerId { get; set; }
         public string AttackerName { get; set; }
         public int? AttackerFactionId { get; set; }
-        public string AttackerOutfitName { get; set; }
+        public string AttackerOutfitAlias { get; set; }
         public int? AttackerLoadoutId { get; set; }
         public int? AttackerWeaponId { get; set; }
         public DateTime KillTimestamp { get; set; }
