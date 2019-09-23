@@ -42,11 +42,11 @@ else
     {
         <h5>Kills This Hour</h5>
         <div style="max-height: 400px; overflow: auto;">
-            <table class="table-sm table table-striped" style="font-size: 0.85rem !important;">
+            <table class="table-sm table table" style="font-size: 0.85rem !important;">
                 <tbody>
                     @foreach (var kill in kills)
                     {
-                        <tr style="background-color:@GetRowBgColor(kill.VictimId); color:@GetFactionColorFromId(kill.VictimFactionId);">
+                        <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId);">
                             <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">
                                 @if (kill.IsHeadshot == true)
                                 {
@@ -127,11 +127,15 @@ else
         return $"https:/ps2.fisu.pw/player/?name={characterName.ToLower()}";
     }
 
-    string GetRowBgColor(string victimId)
+    string GetRowBgColor(string victimId, int? victimFactionId)
     {
         if (victimId == characterId)
         {
             return "#F9D3D6"; // FFD2E350"; //FFD2D3";
+        }
+        else if (victimFactionId != null && victimFactionId == player.FactionId)
+        {
+            return "#FEF9BF";
         }
         else
         {
@@ -139,7 +143,14 @@ else
         }
     }
 
-    string GetFactionColorFromId(int factionId)
+    string GetKillboardTextColor(string attackerId, int? attackerFactionId, int? victimFactionId)
+    {
+        int? factionId = (attackerId == player.Id) ? victimFactionId : attackerFactionId;
+
+        return GetFactionColorFromId(factionId);
+    }
+
+    string GetFactionColorFromId(int? factionId)
     {
         string color = "#2F2F2F";
 

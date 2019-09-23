@@ -118,9 +118,9 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                 {
                     var TaskList = new List<Task>();
                     
-                    dbContext.Deaths.Add(dataModel);
-                    Task saveDeath = dbContext.SaveChangesAsync();
-                    TaskList.Add(saveDeath);
+                    //dbContext.Deaths.Add(dataModel);
+                    //Task saveDeath = dbContext.SaveChangesAsync();
+                    //TaskList.Add(saveDeath);
 
                     if (payload.AttackerCharacterId != null && payload.AttackerCharacterId.Length > 18)
                     {
@@ -134,6 +134,15 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                     }
 
                     await Task.WhenAll(TaskList);
+
+                    var AttackerFactionId = dbContext.Characters.Where(c => c.Id == dataModel.AttackerCharacterId).Select(c => c.FactionId).FirstOrDefault();
+                    var CharacterFactionId = dbContext.Characters.Where(c => c.Id == dataModel.CharacterId).Select(c => c.FactionId).FirstOrDefault();
+
+                    dataModel.AttackerFactionId = AttackerFactionId;
+                    dataModel.CharacterFactionId = CharacterFactionId;
+
+                    dbContext.Deaths.Add(dataModel);
+                    await dbContext.SaveChangesAsync();
                 }
                 catch (Exception)
                 {

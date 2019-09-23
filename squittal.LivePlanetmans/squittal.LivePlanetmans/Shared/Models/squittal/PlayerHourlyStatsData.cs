@@ -14,17 +14,20 @@ namespace squittal.LivePlanetmans.Shared.Models
         public string PlayerId { get; set; }
         public int Kills { get; set; }
         public int Deaths { get; set; }
+        public int Headshots { get; set; }
+        public int TeamKills { get; set; }
+        public int Suicides { get; set; }
         public double KillDeathRatio
         {
             get
             {
-                if (Deaths < 1 )
+                if (Deaths == 0 )
                 {
-                    return (double)(Kills / 1.0);
+                    return (Kills / 1.0);
                 }
                 else
                 {
-                    return Math.Round((double)((float)Kills / (float)Deaths), 2);
+                    return Math.Round((double)(Kills / (double)Deaths), 2);
                 }
             }
         }
@@ -33,6 +36,14 @@ namespace squittal.LivePlanetmans.Shared.Models
             get
             {
                 return Math.Round((double)(Kills / 60.0), 2);
+            }
+        }
+
+        public double HeadshotRatio
+        {
+            get
+            {
+                return Math.Round((double)((double)Headshots / (double)Kills) * 100.0, 1);
             }
         }
     }

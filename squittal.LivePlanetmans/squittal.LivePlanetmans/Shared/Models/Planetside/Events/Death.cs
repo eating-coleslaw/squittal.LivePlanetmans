@@ -22,5 +22,9 @@ namespace squittal.LivePlanetmans.Shared.Models
         public int? VehicleId { get; set; }
         public bool IsHeadshot { get; set; }
         public bool IsCritical { get; set; }
+
+        // ToDo: Add AttackerFactionId && CharacterFactionId
+        public int? AttackerFactionId { get; set; }
+        public int? CharacterFactionId { get; set; }
     }
 }

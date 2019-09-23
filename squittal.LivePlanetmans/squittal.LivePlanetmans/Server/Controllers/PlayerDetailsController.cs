@@ -59,14 +59,17 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         VictimName = (from c in dbContext.Characters
                                       where c.Id == death.CharacterId
                                       select c.Name).FirstOrDefault(),
-                        VictimFactionId = (from c in dbContext.Characters
-                                           where c.Id == death.CharacterId
-                                           select c.FactionId).FirstOrDefault(),
+                        VictimFactionId = death.CharacterFactionId,
+                                          //(from c in dbContext.Characters
+                                           //where c.Id == death.CharacterId
+                                           //select c.FactionId).FirstOrDefault(),
                         IsHeadshot = death.IsHeadshot,
                         VictimLoadoutId = death.CharacterLoadoutId,
+                        AttackerId = death.AttackerCharacterId,
                         AttackerName = (from c in dbContext.Characters
                                         where c.Id == death.AttackerCharacterId
                                         select c.Name).FirstOrDefault(),
+                        AttackerFactionId = death.AttackerFactionId,
                         AttackerLoadoutId = death.AttackerLoadoutId,
                         AttackerWeaponId = death.AttackerWeaponId,
                         KillTimestamp = death.Timestamp

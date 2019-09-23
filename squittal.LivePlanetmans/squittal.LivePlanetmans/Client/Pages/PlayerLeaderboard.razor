@@ -6,7 +6,7 @@
 @inject HttpClient Http
 
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-12">
             @*<p class="h1 display-4" style="color: var(--gray);">Live Activity
@@ -72,6 +72,9 @@
                             <th style="padding-right: 10px;">Deaths</th>
                             <th style="padding-right: 10px;">KDR</th>
                             <th style="padding-right: 10px;">KPM</th>
+                            <th style="padding-right: 10px;">HSR</th>
+                            @*<th style="padding-right: 10px;">TKs</th>
+                            <th style="padding-right: 10px;">Suicides</th>*@
                             <th style="padding-right: 10px;"></th>
                         </tr>
                     </thead>
@@ -94,6 +97,9 @@
                                 <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Deaths</td>
                                 <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillDeathRatio</td>
                                 <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillsPerMinute</td>
+                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.HeadshotRatio</td>
+                                @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.TeamKills</td>
+                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Suicides</td>*@
                                 <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
                                     <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
                                 </td>

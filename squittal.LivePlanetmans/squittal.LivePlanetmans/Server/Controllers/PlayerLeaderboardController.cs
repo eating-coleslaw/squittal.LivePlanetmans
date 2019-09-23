@@ -50,6 +50,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     join character in dbContext.Characters on death.AttackerCharacterId equals character.Id into characterQ
                     from character in characterQ.DefaultIfEmpty()
 
+                    join victim in dbContext.Characters on death.CharacterId equals victim.Id into vCharacterQ
+                    from victim in vCharacterQ.DefaultIfEmpty()
+
                     where death.Timestamp >= startTime && death.WorldId == worldId
                     group death by death.AttackerCharacterId into playerGroup
                     select new PlayerHourlyStatsData()
@@ -64,6 +67,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == playerGroup.Key
                                     && k.AttackerCharacterId != k.CharacterId
+                                    && ((k.AttackerFactionId != k.CharacterFactionId) || k.AttackerFactionId == 4 || k.CharacterFactionId == 4) //Nanite Systems
                                     && k.Timestamp >= startTime
                                     && k.WorldId == worldId
                                  select k).Count(),
@@ -71,7 +75,28 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                   where d.CharacterId == playerGroup.Key
                                      && d.Timestamp >= startTime
                                      && d.WorldId == worldId
-                                  select d).Count()
+                                  select d).Count(),
+                        Headshots = (from h in dbContext.Deaths
+                                     where h.IsHeadshot == true
+                                        && h.AttackerCharacterId == playerGroup.Key
+                                        && h.AttackerCharacterId != h.CharacterId
+                                        && ((h.AttackerFactionId != h.CharacterFactionId) || h.AttackerFactionId == 4 || h.CharacterFactionId == 4) //Nanite Systems
+                                        && h.Timestamp >= startTime
+                                        && h.WorldId == worldId
+                                     select h).Count(),
+                        TeamKills = (from tk in dbContext.Deaths
+                                     where tk.AttackerCharacterId == playerGroup.Key
+                                        && tk.AttackerCharacterId != tk.CharacterId
+                                        && tk.AttackerFactionId == tk.CharacterFactionId
+                                        && tk.Timestamp >= startTime
+                                        && tk.WorldId == worldId
+                                     select tk).Count(),
+                        Suicides = (from s in dbContext.Deaths
+                                    where s.CharacterId == playerGroup.Key
+                                       && s.AttackerCharacterId == s.CharacterId
+                                       && s.Timestamp >= startTime
+                                       && s.WorldId == worldId
+                                    select s).Count()
                     };
 
                 return await query
