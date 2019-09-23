@@ -26,7 +26,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
         }
 
         [HttpGet("{worldId}")]
-        public async Task<ActionResult<IEnumerable<PlayerHourlyStatsData>>> GetPlayerLeaderboardAsync(int worldId) //, int rows = 20)
+        public async Task<ActionResult<IEnumerable<PlayerHourlyStatsData>>> GetPlayerLeaderboardAsync(int worldId)
         {
             int rows = 20;
             
@@ -40,12 +40,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                 IQueryable<PlayerHourlyStatsData> query =
                     from death in dbContext.Deaths
-
-                    join character in dbContext.Characters on death.AttackerCharacterId equals character.Id into characterQ
-                    from character in characterQ.DefaultIfEmpty()
-
-                    join victim in dbContext.Characters on death.CharacterId equals victim.Id into vCharacterQ
-                    from victim in vCharacterQ.DefaultIfEmpty()
 
                     where death.Timestamp >= startTime && death.WorldId == worldId
                     group death by death.AttackerCharacterId into playerGroup
