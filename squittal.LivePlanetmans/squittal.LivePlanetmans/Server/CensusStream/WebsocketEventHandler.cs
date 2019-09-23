@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using DaybreakGames.Census;
 using DaybreakGames.Census.JsonConverters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -93,23 +94,6 @@ namespace squittal.LivePlanetmans.Server.CensusStream
         [CensusEventHandler("Death", typeof(Shared.Models.Death))]
         private async Task Process(Shared.Models.Death payload)
         {
-            var dataModel = new Shared.Models.Death
-            {
-                AttackerCharacterId = payload.AttackerCharacterId,
-                AttackerFireModeId = payload.AttackerFireModeId,
-                AttackerLoadoutId = payload.AttackerLoadoutId,
-                AttackerVehicleId = payload.AttackerVehicleId,
-                AttackerWeaponId = payload.AttackerWeaponId,
-                //AttackerOutfitId = AttackerOutfitTask?.Result?.OutfitId,
-                CharacterId = payload.CharacterId,
-                CharacterLoadoutId = payload.CharacterLoadoutId,
-                //CharacterOutfitId = VictimOutfitTask?.Result?.OutfitId,
-                IsHeadshot = payload.IsHeadshot,
-                Timestamp = payload.Timestamp,
-                WorldId = payload.WorldId,
-                ZoneId = payload.ZoneId
-            };
-
             using (var factory = _dbContextHelper.GetFactory())
             {
                 var dbContext = factory.GetDbContext();
@@ -117,29 +101,61 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                 try
                 {
                     var TaskList = new List<Task>();
-                    
+                    Task<OutfitMember> attackerOutfitTask = null;
+                    Task<OutfitMember> victimOutfitTask = null;
+
                     //dbContext.Deaths.Add(dataModel);
                     //Task saveDeath = dbContext.SaveChangesAsync();
                     //TaskList.Add(saveDeath);
 
                     if (payload.AttackerCharacterId != null && payload.AttackerCharacterId.Length > 18)
                     {
-                        Task<Character> attackerTask = _characterService.GetCharacterAsync(payload.AttackerCharacterId);
-                        TaskList.Add(attackerTask);
+                        attackerOutfitTask = _characterService.GetCharactersOutfitAsync(payload.AttackerCharacterId);
+                        //Task<Character> attackerTask = _characterService.GetCharacterAsync(payload.AttackerCharacterId);
+                        TaskList.Add(attackerOutfitTask);
                     }
                     if (payload.AttackerCharacterId != null && payload.AttackerCharacterId.Length > 18)
                     {
-                        Task<Character> victimTask = _characterService.GetCharacterAsync(payload.CharacterId);
-                        TaskList.Add(victimTask);
+                        victimOutfitTask = _characterService.GetCharactersOutfitAsync(payload.CharacterId);
+                        //Task<Character> victimTask = _characterService.GetCharacterAsync(payload.CharacterId);
+                        TaskList.Add(victimOutfitTask);
                     }
 
                     await Task.WhenAll(TaskList);
+                    TaskList.Clear();
 
-                    var AttackerFactionId = dbContext.Characters.Where(c => c.Id == dataModel.AttackerCharacterId).Select(c => c.FactionId).FirstOrDefault();
-                    var CharacterFactionId = dbContext.Characters.Where(c => c.Id == dataModel.CharacterId).Select(c => c.FactionId).FirstOrDefault();
+                    Task<int> attackerFactionTask = dbContext.Characters
+                                                        .AsNoTracking()
+                                                        .Where(c => c.Id == payload.AttackerCharacterId)
+                                                        .Select(c => c.FactionId)
+                                                        .FirstOrDefaultAsync();
+                    TaskList.Add(attackerFactionTask);
 
-                    dataModel.AttackerFactionId = AttackerFactionId;
-                    dataModel.CharacterFactionId = CharacterFactionId;
+                    Task<int> victimFactionTask = dbContext.Characters
+                                                        .AsNoTracking()
+                                                        .Where(c => c.Id == payload.CharacterId)
+                                                        .Select(c => c.FactionId)
+                                                        .FirstOrDefaultAsync();
+                    TaskList.Add(victimFactionTask);
+
+                    var dataModel = new Shared.Models.Death
+                    {
+                        AttackerCharacterId = payload.AttackerCharacterId,
+                        AttackerFireModeId = payload.AttackerFireModeId,
+                        AttackerLoadoutId = payload.AttackerLoadoutId,
+                        AttackerVehicleId = payload.AttackerVehicleId,
+                        AttackerWeaponId = payload.AttackerWeaponId,
+                        AttackerOutfitId = attackerOutfitTask?.Result?.OutfitId,
+                        AttackerFactionId = attackerFactionTask?.Result,
+                        CharacterId = payload.CharacterId,
+                        CharacterLoadoutId = payload.CharacterLoadoutId,
+                        CharacterOutfitId = victimOutfitTask?.Result?.OutfitId,
+                        CharacterFactionId = victimFactionTask?.Result,
+                        IsHeadshot = payload.IsHeadshot,
+                        Timestamp = payload.Timestamp,
+                        WorldId = payload.WorldId,
+                        ZoneId = payload.ZoneId
+                    };
 
                     dbContext.Deaths.Add(dataModel);
                     await dbContext.SaveChangesAsync();

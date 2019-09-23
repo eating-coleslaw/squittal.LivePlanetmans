@@ -13,7 +13,7 @@ namespace squittal.LivePlanetmans.Server.CensusServices
             _queryFactory = queryFactory;
         }
 
-        public async Task<CensusOutfitModel> GetOutfit(string outfitId)
+        public async Task<CensusOutfitModel> GetOutfitAsync(string outfitId)
         {
             var query = _queryFactory.Create("outfit");
 

@@ -11,11 +11,13 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
     public class CharacterService : ICharacterService
     {
         private readonly IDbContextHelper _dbContextHelper;
+        private readonly IOutfitService _outfitService;
         private readonly CensusCharacter _censusCharacter;
 
-        public CharacterService(IDbContextHelper dbContextHelper, CensusCharacter censusCharacter)
+        public CharacterService(IDbContextHelper dbContextHelper, IOutfitService outfitService, CensusCharacter censusCharacter)
         {
             _dbContextHelper = dbContextHelper;
+            _outfitService = outfitService;
             _censusCharacter = censusCharacter;
         }
 
@@ -25,11 +27,11 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
             {
                 var dbContext = factory.GetDbContext();
 
-                IQueryable<Character> characterQuery = dbContext.Characters.Where(e => e.Id == characterId);//.ToListAsync();
+                //IQueryable<Character> characterQuery = dbContext.Characters.Where(e => e.Id == characterId);
 
-                var storeCharacter =  await characterQuery
+                var storeCharacter =  await dbContext.Characters
                                                 .AsNoTracking()
-                                                .FirstOrDefaultAsync();
+                                                .FirstOrDefaultAsync(e => e.Id == characterId);
 
                 if (storeCharacter != null)
                 {
@@ -51,6 +53,17 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
                 return censusEntity;
 
             }
+        }
+
+        public async Task<OutfitMember> GetCharactersOutfitAsync(string characterId)
+        {
+            var character = await GetCharacterAsync(characterId);
+            if (character == null)
+            {
+                return null;
+            }
+
+            return await _outfitService.UpdateCharacterOutfitMembership(character);
         }
 
         public static Character ConvertToDbModel(CensusCharacterModel censusModel)
