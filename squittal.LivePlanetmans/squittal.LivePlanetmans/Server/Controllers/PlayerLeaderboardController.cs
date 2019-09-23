@@ -71,7 +71,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == playerGroup.Key
                                     && k.AttackerCharacterId != k.CharacterId
-                                    && ((k.AttackerFactionId != k.CharacterFactionId) || k.AttackerFactionId == 4 || k.CharacterFactionId == 4) //Nanite Systems
+                                    && ((k.AttackerFactionId != k.CharacterFactionId) || k.AttackerFactionId == 4 || k.CharacterFactionId == 4 || k.CharacterFactionId == null || k.CharacterFactionId == 0) //Nanite Systems
                                     && k.Timestamp >= startTime
                                     && k.WorldId == worldId
                                  select k).Count(),
@@ -84,7 +84,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                      where h.IsHeadshot == true
                                         && h.AttackerCharacterId == playerGroup.Key
                                         && h.AttackerCharacterId != h.CharacterId
-                                        && ((h.AttackerFactionId != h.CharacterFactionId) || h.AttackerFactionId == 4 || h.CharacterFactionId == 4) //Nanite Systems
+                                        && ((h.AttackerFactionId != h.CharacterFactionId) || h.AttackerFactionId == 4 || h.CharacterFactionId == 4 || h.CharacterFactionId == null || h.CharacterFactionId == 0) //Nanite Systems
                                         && h.Timestamp >= startTime
                                         && h.WorldId == worldId
                                      select h).Count(),

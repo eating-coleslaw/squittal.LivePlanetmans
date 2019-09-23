@@ -124,19 +124,32 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                     await Task.WhenAll(TaskList);
                     TaskList.Clear();
 
-                    Task<int> attackerFactionTask = dbContext.Characters
-                                                        .AsNoTracking()
+                    int attackerFactionId = await dbContext.Characters
                                                         .Where(c => c.Id == payload.AttackerCharacterId)
                                                         .Select(c => c.FactionId)
                                                         .FirstOrDefaultAsync();
-                    TaskList.Add(attackerFactionTask);
 
-                    Task<int> victimFactionTask = dbContext.Characters
-                                                        .AsNoTracking()
+                    //Task<int> attackerFactionTask = dbContext.Characters
+                    //                                    .AsNoTracking()
+                    //                                    .Where(c => c.Id == payload.AttackerCharacterId)
+                    //                                    .Select(c => c.FactionId)
+                    //                                    .FirstOrDefaultAsync();
+
+                    //TaskList.Add(attackerFactionTask);
+
+                    int victimFactionId = await dbContext.Characters
                                                         .Where(c => c.Id == payload.CharacterId)
                                                         .Select(c => c.FactionId)
                                                         .FirstOrDefaultAsync();
-                    TaskList.Add(victimFactionTask);
+
+                    //Task<int> victimFactionTask = dbContext.Characters
+                    //                                    .AsNoTracking()
+                    //                                    .Where(c => c.Id == payload.CharacterId)
+                    //                                    .Select(c => c.FactionId)
+                    //                                    .FirstOrDefaultAsync();
+                    //TaskList.Add(victimFactionTask);
+
+                    //await Task.WhenAll(TaskList);
 
                     var dataModel = new Shared.Models.Death
                     {
@@ -146,11 +159,11 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                         AttackerVehicleId = payload.AttackerVehicleId,
                         AttackerWeaponId = payload.AttackerWeaponId,
                         AttackerOutfitId = attackerOutfitTask?.Result?.OutfitId,
-                        AttackerFactionId = attackerFactionTask?.Result,
+                        AttackerFactionId = attackerFactionId, //attackerFactionTask?.Result,
                         CharacterId = payload.CharacterId,
                         CharacterLoadoutId = payload.CharacterLoadoutId,
                         CharacterOutfitId = victimOutfitTask?.Result?.OutfitId,
-                        CharacterFactionId = victimFactionTask?.Result,
+                        CharacterFactionId = victimFactionId, //victimFactionTask?.Result,
                         IsHeadshot = payload.IsHeadshot,
                         Timestamp = payload.Timestamp,
                         WorldId = payload.WorldId,
