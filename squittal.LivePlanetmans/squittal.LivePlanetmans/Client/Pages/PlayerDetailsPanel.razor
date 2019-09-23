@@ -53,14 +53,26 @@ else
                                     <span class="oi small oi-target" aria-hidden="true" style="padding: 0rem !important; padding-left: 5px !important;"></span>
                                 }
                             </td>
-                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">
+                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px;">
                                 @if (kill.VictimId == characterId)
                                 {
-                                    @kill.AttackerName
+                                    @((string.IsNullOrWhiteSpace(kill.AttackerOutfitAlias)) ? "" : $"[{kill.AttackerOutfitAlias}]")
                                 }
                                 else
                                 {
-                                    @kill.VictimName
+                                    @((string.IsNullOrWhiteSpace(kill.VictimOutfitAlias)) ? "" : $"[{kill.VictimOutfitAlias}]")
+                                }
+                            </td>
+                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">
+                                @if (kill.VictimId == characterId)
+                                {
+                                    @*@kill.AttackerName*@
+                                    <span>@kill.AttackerName<sup> @(kill.AttackerBattleRank) @((kill.AttackerPrestigeLevel == 0) ? "" : $"~{kill.AttackerPrestigeLevel}")</sup></span>
+                                }
+                                else
+                                {
+                                    @*@kill.VictimName*@
+                                    <span>@kill.VictimName<sup> @(kill.VictimBattleRank) @((kill.VictimPrestigeLevel == 0) ? "" : $"~{kill.VictimPrestigeLevel}")</sup></span>
                                 }
                             </td>
                             <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">

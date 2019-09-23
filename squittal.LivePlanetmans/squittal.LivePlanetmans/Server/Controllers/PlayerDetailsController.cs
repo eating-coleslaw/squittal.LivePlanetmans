@@ -63,6 +63,15 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                           // where c.Id == death.CharacterId
                                           // select c.FactionId).FirstOrDefault(),
                                           death.CharacterFactionId,
+                        VictimOutfitAlias = (from o in dbContext.Outfits
+                                             where o.Id == death.CharacterOutfitId
+                                             select o.Alias).FirstOrDefault(),
+                        VictimBattleRank = (from c in dbContext.Characters
+                                            where c.Id == death.CharacterId
+                                            select c.BattleRank).FirstOrDefault(),
+                        VictimPrestigeLevel = (from c in dbContext.Characters
+                                               where c.Id == death.CharacterId
+                                               select c.PrestigeLevel).FirstOrDefault(),
                         IsHeadshot = death.IsHeadshot,
                         VictimLoadoutId = death.CharacterLoadoutId,
                         AttackerId = death.AttackerCharacterId,
@@ -73,6 +82,15 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                             // where c.Id == death.CharacterId
                                             // select c.FactionId).FirstOrDefault(),
                                             death.AttackerFactionId,
+                        AttackerOutfitAlias = (from o in dbContext.Outfits
+                                             where o.Id == death.AttackerOutfitId
+                                             select o.Alias).FirstOrDefault(),
+                        AttackerBattleRank = (from c in dbContext.Characters
+                                            where c.Id == death.AttackerCharacterId
+                                            select c.BattleRank).FirstOrDefault(),
+                        AttackerPrestigeLevel = (from c in dbContext.Characters
+                                                 where c.Id == death.AttackerCharacterId
+                                                 select c.PrestigeLevel).FirstOrDefault(),
                         AttackerLoadoutId = death.AttackerLoadoutId,
                         AttackerWeaponId = death.AttackerWeaponId,
                         KillTimestamp = death.Timestamp
