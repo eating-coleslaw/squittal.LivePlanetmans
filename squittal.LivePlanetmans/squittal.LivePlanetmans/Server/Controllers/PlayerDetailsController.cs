@@ -49,9 +49,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 IQueryable<PlayerKillboardItem> query =
                     from death in dbContext.Deaths
 
-                    join character in dbContext.Characters on death.CharacterId equals character.Id into characterQ
-                    from character in characterQ.DefaultIfEmpty()
-
                     where death.Timestamp >= startTime && (death.AttackerCharacterId == characterId || death.CharacterId == characterId)
                     select new PlayerKillboardItem()
                     {
@@ -59,10 +56,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         VictimName = (from c in dbContext.Characters
                                       where c.Id == death.CharacterId
                                       select c.Name).FirstOrDefault(),
-                        VictimFactionId = //(from c in dbContext.Characters
-                                          // where c.Id == death.CharacterId
-                                          // select c.FactionId).FirstOrDefault(),
-                                          death.CharacterFactionId,
+                        VictimFactionId = death.CharacterFactionId,
                         VictimOutfitAlias = (from o in dbContext.Outfits
                                              where o.Id == death.CharacterOutfitId
                                              select o.Alias).FirstOrDefault(),
@@ -78,10 +72,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         AttackerName = (from c in dbContext.Characters
                                         where c.Id == death.AttackerCharacterId
                                         select c.Name).FirstOrDefault(),
-                        AttackerFactionId = //(from c in dbContext.Characters
-                                            // where c.Id == death.CharacterId
-                                            // select c.FactionId).FirstOrDefault(),
-                                            death.AttackerFactionId,
+                        AttackerFactionId = death.AttackerFactionId,
                         AttackerOutfitAlias = (from o in dbContext.Outfits
                                              where o.Id == death.AttackerOutfitId
                                              select o.Alias).FirstOrDefault(),
