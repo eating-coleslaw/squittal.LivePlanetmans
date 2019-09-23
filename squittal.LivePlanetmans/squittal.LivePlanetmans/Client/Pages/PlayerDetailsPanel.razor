@@ -34,13 +34,13 @@ else
         </p>
     }
 
-    @if (kills == null)
+    <h5>Kills This Hour</h5>
+    @if (kills == null || isLoadingKillboard == true)
     {
-        <p><em>Loading killboard...</em></p>
+        <p class="text-muted"><em>Loading killboard...</em></p>
     }
     else
     {
-        <h5>Kills This Hour</h5>
         <div style="max-height: 400px; overflow: auto;">
             <table class="table-sm table" style="font-size: 0.85rem !important;">
                 <tbody>
@@ -50,7 +50,7 @@ else
                             <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">
                                 @if (kill.IsHeadshot == true)
                                 {
-                                    <span class="oi small oi-target" aria-hidden="true" style="padding: 0rem !important;"></span>
+                                    <span class="oi small oi-target" aria-hidden="true" style="padding: 0rem !important; padding-left: 5px !important;"></span>
                                 }
                             </td>
                             <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">
@@ -64,7 +64,7 @@ else
                                 }
                             </td>
                             <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">
-                                @kill.KillTimestamp.ToLongTimeString()
+                                @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
                             </td>
                         </tr>
                     }
@@ -80,6 +80,7 @@ else
     PlayerKillboardItem[] kills;
 
     int fetchTries = 0;
+    bool isLoadingKillboard = false;
 
     [Parameter]
     public string characterId { get; set; }
@@ -98,8 +99,9 @@ else
     private async Task OnPlayerIdChange()
     {
         fetchTries += 1;
-        if (!string.IsNullOrWhiteSpace(characterId))
+        if (!string.IsNullOrWhiteSpace(characterId) && isLoadingKillboard != true)
         {
+            isLoadingKillboard = true;
             try
             {
                 Task<Character> playerTask = Http.GetJsonAsync<Character>($"api/PlayerDetails/{characterId}");
@@ -113,6 +115,7 @@ else
             {
                 //Ignore
             }
+            isLoadingKillboard = false;
         }
     }
 
