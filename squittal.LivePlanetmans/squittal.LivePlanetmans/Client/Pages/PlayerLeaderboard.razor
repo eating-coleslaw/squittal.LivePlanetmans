@@ -6,7 +6,7 @@
 @inject HttpClient Http
 
 
-<div class="container-fluid">
+<div class="container">
     <div class="row">
         <div class="col-12">
             @*<p class="h1 display-4" style="color: var(--gray);">Live Activity
@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 10px; margin: 5px; background-color: #fcf6ff;">
+        <div class="col-lg-7" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 10px; margin: 0px; background-color: #fcf6ff;">
             <div>
                 @if (string.IsNullOrWhiteSpace(selectedWorldName))
                 {
@@ -63,13 +63,13 @@
                 <table class="table-striped table-responsive-sm" style="width: inherit;">
                     <thead>
                         <tr>
-                            <th style="padding-right: 5px;"></th> @*//Outfit*@
+                            <th style="padding-right: 5px; max-width: 55px; width: 1rem;"></th> @*//Outfit*@
                             <th style="padding-right: 10px;">Player</th>
-                            <th style="padding-right: 10px;">Kills</th>
-                            <th style="padding-right: 10px;">Deaths</th>
-                            <th style="padding-right: 10px;">KDR</th>
-                            <th style="padding-right: 10px;">KPM</th>
-                            <th style="padding-right: 10px;">HSR</th>
+                            <th style="padding-right: 10px; max-width: 65px; width: 1rem;">Kills</th>
+                            <th style="padding-right: 10px; max-width: 65px; width: 1rem;">Deaths</th>
+                            <th style="padding-right: 10px; max-width: 65px; width: 1rem;">KDR</th>
+                            <th style="padding-right: 10px; max-width: 65px; width: 1rem;">KPM</th>
+                            <th style="padding-right: 10px; max-width: 65px; width: 1rem;">HSR</th>
                             @*<th style="padding-right: 10px;">TKs</th>
                         <th style="padding-right: 10px;">Suicides</th>*@
                             <th style="padding-right: 10px;"></th>
@@ -121,7 +121,7 @@
 
         </div>
 
-        <div class="col-lg-5" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 10px; margin: 5px; background-color: #fcf6ff;">
+        <div class="col-lg-5" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 10px; margin: 0px; background-color: #fcf6ff;">
             <PlayerDetailsPanel characterId="@selectedPlayer" />
         </div>
     </div>
