@@ -6,91 +6,108 @@
 
 @if (string.IsNullOrWhiteSpace(characterId))
 {
-    <h2>Player Details</h2>
-    <p><em>Select a player</em></p>
+    <div style="padding: 10px;">
+        <h2>Player Details</h2>
+        <p class="textu-muted"><em>Select a player</em></p>
+    </div>
 }
 else
 {
     //<p>@*Player ID: @characterId*@</p>
     @if (stats != null && player != null)
     {
-        <div class="h2" style="margin-bottom: 0px; word-wrap: break-word;">
-            <a href="@GetUrlFromCharacterName(player.Name)" target="_blank" style="color:@GetFactionColorFromId(player.FactionId);">
-                @player.Name
-                <span class="h6 oi oi-external-link"></span>
-            </a>
+        <div id="details-header" style="display: grid; grid-template-columns: 1fr 80px; grid-template-rows: 1fr 1rem; border-top: 2px solid @GetFactionColorFromId(player.FactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
+            <div class="h2" style="margin-bottom: 0px; word-wrap: break-word;">
+                <a href="@GetUrlFromCharacterName(player.Name)" target="_blank" style="color:@GetFactionColorFromId(player.FactionId);">
+                    @player.Name
+                    <span class="h6 oi oi-external-link"></span>
+                </a>
+            </div>
+
+            <div style="text-align: right;">
+                <span class="h6">@stats.BattleRank</span>
+                @if (stats.PrestigeLevel != 0)
+                { 
+                    <span class="oi oi-star small h6" style="color: #F8BA0F; vertical-align: middle; font-size: 0.8rem; margin-bottom: 0.5rem;" aria-hidden="true"></span> 
+                }
+                <div class="text-muted" style="font-size: 0.8rem; font-weight: 300; margin-top: -0.3rem;">Battle Rank</div>
+            </div>
+            
+            <div>
+                <a href="@GetUrlFromCharacterId(player.Id)" class="text-muted h6" style="font-size: 0.8rem; vertical-align: top; padding-left: 0.8rem;"target="_blank">
+                    @player.Id
+                    <span class="h6 oi oi-external-link" style="font-size: 60%;"></span>
+                </a>
+            </div>
             
         </div>
-        <div>
-            <a href="@GetUrlFromCharacterId(player.Id)" class="text-muted h6" target="_blank">
-                @player.Id
-                <span class="h6 oi oi-external-link" style="font-size: 60%;"></span>
-            </a>
-        </div>
-        <p>
-            @*<h2>@player.Name</h2><span>[@player.Id]</span>*@
-            <l>@stats.FactionName [BR @stats.BattleRank~@stats.PrestigeLevel]</l>
-            @if (!string.IsNullOrWhiteSpace(stats.OutfitName))
-            {
-                <l>Outfit: @stats.OutfitRankName of [@stats.OutfitAlias] @stats.OutfitName</l>
-            }
-            <l>KDR: @stats.KillDeathRatio (<sup>@stats.Kills</sup>/<sub>@stats.Deaths</sub>)</l>
-            <l>Teamkills: @stats.TeamKills</l>
-            <l>Suicides: @stats.Suicides</l>
-            <l>HSR: @stats.HeadshotRatio (@stats.Headshots)</l>
-        </p>
-    }
 
-    <h5>Kills This Hour</h5>
-    @if (kills == null || isLoadingKillboard == true)
-    {
-        <p class="text-muted"><em>Loading killboard...</em></p>
-    }
-    else
-    {
-        <div style="max-height: 400px; overflow: auto;">
-            <table class="table-responsive-sm table" style="font-size: 0.85rem !important;">
-                <tbody>
-                    @foreach (var kill in kills)
-                    {
-                        <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId);">
-                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; max-width: 30px;  width: 1rem;">
-                                @if (kill.IsHeadshot == true)
-                                {
-                                    <span class="oi small oi-target" aria-hidden="true" style="padding-left: 0.3125rem; padding-right: 0.3125rem;"></span>
-                                }
-                            </td>
-                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px; max-width: 55px; width: 1rem;">
-                                @if (kill.VictimId == characterId)
-                                {
-                                    @((string.IsNullOrWhiteSpace(kill.AttackerOutfitAlias)) ? "" : $"[{kill.AttackerOutfitAlias}]")
-                                }
-                                else
-                                {
-                                    @((string.IsNullOrWhiteSpace(kill.VictimOutfitAlias)) ? "" : $"[{kill.VictimOutfitAlias}]")
-                                }
-                            </td>
-                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">
-                                @if (kill.VictimId == characterId)
-                                {
-                                    @*@kill.AttackerName*@
-                                    <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.AttackerName</div>
-                                    <div style="display: inline-block;"><sup> @(kill.AttackerBattleRank) @((kill.AttackerPrestigeLevel == 0) ? "" : $"~{kill.AttackerPrestigeLevel}")</sup></div>
-                                }
-                                else
-                                {
-                                    @*@kill.VictimName*@
-                                    <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>
-                                    <div style="display: inline-block;"><sup> @(kill.VictimBattleRank) @((kill.VictimPrestigeLevel == 0) ? "" : $"~{kill.VictimPrestigeLevel}")</sup></div>
-                                }
-                                </td>
-                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem;">
-                                @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div id="details-body" style="padding: 0px 10px;">
+            <p>
+                @*<h2>@player.Name</h2><span>[@player.Id]</span>*@
+                <l>@stats.FactionName [BR @stats.BattleRank~@stats.PrestigeLevel]</l>
+                @if (!string.IsNullOrWhiteSpace(stats.OutfitName))
+                {
+                    <l>Outfit: @stats.OutfitRankName of [@stats.OutfitAlias] @stats.OutfitName</l>
+                }
+                <l>KDR: @stats.KillDeathRatio (<sup>@stats.Kills</sup>/<sub>@stats.Deaths</sub>)</l>
+                <l>Teamkills: @stats.TeamKills</l>
+                <l>Suicides: @stats.Suicides</l>
+                <l>HSR: @stats.HeadshotRatio (@stats.Headshots)</l>
+            </p>
+
+            <h5>Kills This Hour</h5>
+            @if (kills == null || isLoadingKillboard == true)
+            {
+                <p class="text-muted"><em>Loading killboard...</em></p>
+            }
+            else
+            {
+                <div style="max-height: 400px; overflow: auto;">
+                    <table class="table-responsive-sm table" style="font-size: 0.85rem !important;">
+                        <tbody>
+                            @foreach (var kill in kills)
+                            {
+                                <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId);">
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; max-width: 30px;  width: 1rem;">
+                                        @if (kill.IsHeadshot == true)
+                                        {
+                                            <span class="oi small oi-target" aria-hidden="true" style="padding-left: 0.3125rem; padding-right: 0.3125rem;"></span>
+                                        }
+                                    </td>
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px; max-width: 55px; width: 1rem;">
+                                        @if (kill.VictimId == characterId)
+                                        {
+                                            @((string.IsNullOrWhiteSpace(kill.AttackerOutfitAlias)) ? "" : $"[{kill.AttackerOutfitAlias}]")
+                                        }
+                                        else
+                                        {
+                                            @((string.IsNullOrWhiteSpace(kill.VictimOutfitAlias)) ? "" : $"[{kill.VictimOutfitAlias}]")
+                                        }
+                                    </td>
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">
+                                        @if (kill.VictimId == characterId)
+                                        {
+                                            @*@kill.AttackerName*@
+                                            <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.AttackerName</div>
+                                            <div style="display: inline-block;"><sup> @(kill.AttackerBattleRank) @((kill.AttackerPrestigeLevel == 0) ? "" : $"~{kill.AttackerPrestigeLevel}")</sup></div>
+                                        }
+                                        else
+                                        {
+                                            @*@kill.VictimName*@
+                                            <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>
+                                            <div style="display: inline-block;"><sup> @(kill.VictimBattleRank) @((kill.VictimPrestigeLevel == 0) ? "" : $"~{kill.VictimPrestigeLevel}")</sup></div>
+                                        }
+                                        </td>
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem;">
+                                        @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
         </div>
     }
 }
@@ -185,17 +202,17 @@ else
         {
             //VS
             case 1:
-                color = "#6A4CE0";
+                color = "#652fdc"; // 6A4CE0";
                 break;
 
             //NC
             case 2:
-                color = "#1E99FC";
+                color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
                 break;
 
             //TR
             case 3:
-                color = "#FF6C70";
+                color = "#e04c70"; // FF6C70";
                 break;
         }
 

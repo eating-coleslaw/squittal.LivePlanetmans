@@ -72,7 +72,7 @@
                             <th style="padding-right: 10px; max-width: 65px; width: 1rem;">HSR</th>
                             @*<th style="padding-right: 10px;">TKs</th>
                         <th style="padding-right: 10px;">Suicides</th>*@
-                            <th style="padding-right: 10px;"></th>
+                            <th style="padding-right: 10px; max-width: 65px; width: 1rem;"></th>
                         </tr>
                     </thead>
                     @if (players != null && isChangingWorld != true)
@@ -122,45 +122,45 @@
 
         </div>
 
-        <div class="col-lg-5" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 10px; margin: 0px; background-color: #fcf6ff;">
+        <div class="col-lg-5" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; background-color: #fcf6ff;">
             <PlayerDetailsPanel characterId="@selectedPlayer" />
         </div>
     </div>
 
-    <div class="row">
+    @*<div class="row">
         <div class="col-sm-5">
-        <p></p>
-        <p class="h4">Debug Info</p>
-        <table class="table-sm table">
-            <thead>
-                <tr></tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>Status:</b></td>
-                    <td>@debugMessage</td>
-                </tr>
-                <tr>
-                    <td><b>Auto-Refreshes</b></td>
-                    <td>@autoRefreshCount</td>
-                </tr>
-                <tr>
-                    <td><b>Last Refresh:</b></td>
-                    <td>@lastRefreshTime.ToLongTimeString()</td>
-                </tr>
-                <tr>
-                    <td><b>Query Start:</b></td>
-                    <td>@queryStartTimestamp</td>
-                </tr>
-                <tr>
-                    <td><b>Query End:</b></td>
-                    <td>@queryEndTimestamp</td>
-                </tr>
-            </tbody>
-        </table>
+            <p></p>
+            <p class="h4">Debug Info</p>
+            <table class="table-sm table">
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Status:</b></td>
+                        <td>@debugMessage</td>
+                    </tr>
+                    <tr>
+                        <td><b>Auto-Refreshes</b></td>
+                        <td>@autoRefreshCount</td>
+                    </tr>
+                    <tr>
+                        <td><b>Last Refresh:</b></td>
+                        <td>@lastRefreshTime.ToLongTimeString()</td>
+                    </tr>
+                    <tr>
+                        <td><b>Query Start:</b></td>
+                        <td>@queryStartTimestamp</td>
+                    </tr>
+                    <tr>
+                        <td><b>Query End:</b></td>
+                        <td>@queryEndTimestamp</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+    </div>*@
 
-    </div>
 </div>
 
 
@@ -347,17 +347,17 @@
         {
             //VS
             case 1:
-                color = "#6A4CE0";
+                color = "#652fdc"; // 6A4CE0";
                 break;
 
             //NC
             case 2:
-                color = "#1E99FC";
+                color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
                 break;
 
             //TR
             case 3:
-                color = "#FF6C70";
+                color = "#e04c70"; // FF6C70";
                 break;
         }
 
