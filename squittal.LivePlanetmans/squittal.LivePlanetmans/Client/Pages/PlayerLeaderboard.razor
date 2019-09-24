@@ -6,7 +6,7 @@
 @inject HttpClient Http
 
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-12">
             @*<p class="h1 display-4" style="color: var(--gray);">Live Activity
@@ -19,7 +19,7 @@
                 <ServerSelectMenu />
             }
         </p>*@
-            <p class="h2 display-4">
+            <p class="h2 display-4" style="font-size: 2.5rem;">
                 @if (!string.IsNullOrWhiteSpace(selectedWorldName))
                 {
                     <span style="color: var(--pink)">@selectedWorldName Top Players</span>

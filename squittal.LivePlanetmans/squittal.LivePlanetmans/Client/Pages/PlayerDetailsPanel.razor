@@ -75,7 +75,7 @@ else
                                     <span>@kill.VictimName<sup> @(kill.VictimBattleRank) @((kill.VictimPrestigeLevel == 0) ? "" : $"~{kill.VictimPrestigeLevel}")</sup></span>
                                 }
                             </td>
-                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 95px; max-width: 105px; width: 6rem;">
+                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem;">
                                 @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
                             </td>
                         </tr>
