@@ -41,7 +41,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 IQueryable<PlayerHourlyStatsData> query =
                     from death in dbContext.Deaths
 
-                    where death.Timestamp >= startTime && death.WorldId == worldId
+                    where death.Timestamp >= startTime
+                       && death.WorldId == worldId
+                       && death.AttackerCharacterId != "0"
                     group death by death.AttackerCharacterId into playerGroup
                     select new PlayerHourlyStatsData()
                     {
