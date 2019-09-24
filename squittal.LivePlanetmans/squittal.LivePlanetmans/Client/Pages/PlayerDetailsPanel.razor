@@ -67,14 +67,16 @@ else
                                 @if (kill.VictimId == characterId)
                                 {
                                     @*@kill.AttackerName*@
-                                    <span>@kill.AttackerName<sup> @(kill.AttackerBattleRank) @((kill.AttackerPrestigeLevel == 0) ? "" : $"~{kill.AttackerPrestigeLevel}")</sup></span>
+                                    <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.AttackerName</div>
+                                    <div style="display: inline-block;"><sup> @(kill.AttackerBattleRank) @((kill.AttackerPrestigeLevel == 0) ? "" : $"~{kill.AttackerPrestigeLevel}")</sup></div>
                                 }
                                 else
                                 {
                                     @*@kill.VictimName*@
-                                    <span>@kill.VictimName<sup> @(kill.VictimBattleRank) @((kill.VictimPrestigeLevel == 0) ? "" : $"~{kill.VictimPrestigeLevel}")</sup></span>
+                                    <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>
+                                    <div style="display: inline-block;"><sup> @(kill.VictimBattleRank) @((kill.VictimPrestigeLevel == 0) ? "" : $"~{kill.VictimPrestigeLevel}")</sup></div>
                                 }
-                            </td>
+                                </td>
                             <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem;">
                                 @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
                             </td>

@@ -93,7 +93,8 @@
                                         @*<td><a href="@GetUrlFromCharacterName(player.PlayerName)" target="_blank">@player.PlayerName</a></td>*@
                                         @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.PlayerName</td>*@
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
-                                            <span>@player.PlayerName <sup> @(player.BattleRank) @((player.PrestigeLevel == 0) ? "" : $"~{player.PrestigeLevel}")</sup></span>
+                                            <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@player.PlayerName </div>
+                                            <div style="display: inline-block;"><sup> @(player.BattleRank) @((player.PrestigeLevel == 0) ? "" : $"~{player.PrestigeLevel}")</sup></div>
                                             @*@GetLeaderboardPlayerString(player)*@
                                         </td>
                                     }
