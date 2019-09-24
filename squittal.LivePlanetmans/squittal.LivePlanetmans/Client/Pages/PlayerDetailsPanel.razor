@@ -12,7 +12,7 @@
 else
 {
     //<p>@*Player ID: @characterId*@</p>
-    @if (player != null)
+    @if (stats != null && player != null)
     {
         <div class="h2" style="margin-bottom: 0px; word-wrap: break-word;">
             <a href="@GetUrlFromCharacterName(player.Name)" target="_blank" style="color:@GetFactionColorFromId(player.FactionId);">
@@ -29,8 +29,15 @@ else
         </div>
         <p>
             @*<h2>@player.Name</h2><span>[@player.Id]</span>*@
-            <b>Faction </b>@player.FactionId
-            <b>Rank </b>@player.BattleRank~@player.PrestigeLevel
+            <l>@stats.FactionName [BR @stats.BattleRank~@stats.PrestigeLevel]</l>
+            @if (!string.IsNullOrWhiteSpace(stats.OutfitName))
+            {
+                <l>Outfit: @stats.OutfitRankName of [@stats.OutfitAlias] @stats.OutfitName</l>
+            }
+            <l>KDR: @stats.KillDeathRatio (<sup>@stats.Kills</sup>/<sub>@stats.Deaths</sub>)</l>
+            <l>Teamkills: @stats.TeamKills</l>
+            <l>Suicides: @stats.Suicides</l>
+            <l>HSR: @stats.HeadshotRatio (@stats.Headshots)</l>
         </p>
     }
 
@@ -90,6 +97,7 @@ else
 
 @code {
     Character player;
+    PlayerHourlyStatsData stats;
 
     PlayerKillboardItem[] kills;
 
@@ -119,8 +127,10 @@ else
             try
             {
                 Task<Character> playerTask = Http.GetJsonAsync<Character>($"api/PlayerDetails/{characterId}");
+                Task<PlayerHourlyStatsData> statsTask = Http.GetJsonAsync<PlayerHourlyStatsData>($"api/PlayerDetails/stats/{characterId}");
                 Task<PlayerKillboardItem[]> killsTask = Http.GetJsonAsync<PlayerKillboardItem[]>($"api/PlayerDetails/kills/{characterId}");
                 player = await playerTask;
+                stats = await statsTask;
                 StateHasChanged();
                 kills = await killsTask;
                 StateHasChanged();

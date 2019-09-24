@@ -49,7 +49,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 IQueryable<PlayerKillboardItem> query =
                     from death in dbContext.Deaths
 
-                    where death.Timestamp >= startTime && (death.AttackerCharacterId == characterId || death.CharacterId == characterId)
+                    where death.Timestamp >= startTime
+                       && ( death.AttackerCharacterId == characterId
+                            || death.CharacterId == characterId)
                     select new PlayerKillboardItem()
                     {
                         VictimId = death.CharacterId,
@@ -92,6 +94,90 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     .OrderByDescending(k => k.KillTimestamp)
                     //.Take(rows)
                     .ToArrayAsync();
+            }
+        }
+
+        [HttpGet("stats/{characterId}")]
+        public async Task<ActionResult<PlayerHourlyStatsData>> GetHourlyCharacterStats(string characterId)
+        {
+            DateTime nowUtc = DateTime.UtcNow;
+            DateTime startTime = nowUtc - TimeSpan.FromHours(1);
+
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                IQueryable<PlayerHourlyStatsData> query =
+                    //from death in dbContext.Deaths
+                    from character in dbContext.Characters
+
+                      join outfitMember in dbContext.OutfitMembers
+                        on character.Id equals outfitMember.CharacterId into outfitMemberQ
+                      from outfitMember in outfitMemberQ.DefaultIfEmpty()
+
+                      join outfit in dbContext.Outfits
+                        on outfitMember.OutfitId equals outfit.Id into outfitQ
+                      from outfit in outfitQ.DefaultIfEmpty()
+
+                      join faction in dbContext.Factions
+                        on character.FactionId equals faction.Id
+
+                    where character.Id == characterId
+                    //where death.Timestamp >= startTime
+                       //&& ( death.AttackerCharacterId == characterId
+                            //|| death.CharacterId == characterId)
+                    //group death by death.AttackerCharacterId into playerGroup
+                    select new PlayerHourlyStatsData()
+                    {
+                        PlayerId = characterId,
+                        PlayerName = character.Name,
+                        OutfitAlias = outfit.Alias, // ?? string.Empty,
+                        OutfitName = outfit.Name, // ?? string.Empty,
+                        OutfitRankName = outfitMember.Rank, // ?? string.Empty,
+                        FactionId = character.FactionId,
+                        FactionName = faction.Name,
+                        BattleRank = character.BattleRank,
+                        PrestigeLevel = character.PrestigeLevel,
+                        Kills = (from k in dbContext.Deaths
+                                 where k.AttackerCharacterId == characterId
+                                    && k.AttackerCharacterId != k.CharacterId
+                                    && ( (k.AttackerFactionId != k.CharacterFactionId)
+                                         || k.AttackerFactionId == 4 || k.CharacterFactionId == 4
+                                         || k.CharacterFactionId == null || k.CharacterFactionId == 0) //Nanite Systems
+                                    && k.Timestamp >= startTime
+                                    && k.WorldId == character.WorldId
+                                 select k).Count(),
+                        Deaths = (from d in dbContext.Deaths
+                                  where d.CharacterId == characterId
+                                     && d.Timestamp >= startTime
+                                     && d.WorldId == character.WorldId
+                                  select d).Count(),
+                        Headshots = (from h in dbContext.Deaths
+                                     where h.IsHeadshot == true
+                                        && h.AttackerCharacterId == characterId
+                                        && h.AttackerCharacterId != h.CharacterId
+                                        && ( (h.AttackerFactionId != h.CharacterFactionId)
+                                             || h.AttackerFactionId == 4 || h.CharacterFactionId == 4
+                                             || h.CharacterFactionId == null || h.CharacterFactionId == 0) //Nanite Systems
+                                        && h.Timestamp >= startTime
+                                        && h.WorldId == character.WorldId
+                                     select h).Count(),
+                        TeamKills = (from tk in dbContext.Deaths
+                                     where tk.AttackerCharacterId == characterId
+                                        && tk.AttackerCharacterId != tk.CharacterId
+                                        && tk.AttackerFactionId == tk.CharacterFactionId
+                                        && tk.Timestamp >= startTime
+                                        && tk.WorldId == character.WorldId
+                                     select tk).Count(),
+                        Suicides = (from s in dbContext.Deaths
+                                    where s.CharacterId == characterId
+                                       && s.AttackerCharacterId == s.CharacterId
+                                       && s.Timestamp >= startTime
+                                       && s.WorldId == character.WorldId
+                                    select s).Count()
+                    };
+
+                return await query.AsNoTracking().FirstOrDefaultAsync();
             }
         }
     }
