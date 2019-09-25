@@ -46,6 +46,29 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
 
         public async Task RefreshStore()
         {
+            bool refreshStore = true;
+            bool anyItems = false;
+            bool anyCategories = false;
+
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                anyItems = await dbContext.Items.AnyAsync();
+
+                if (anyItems == true)
+                {
+                    anyCategories = await dbContext.ItemCategories.AnyAsync();
+                }
+
+                refreshStore = (anyItems == false || anyCategories == false);
+            }
+            
+            if (refreshStore != true)
+            {
+                return;
+            }
+            
             var itemCategories = await _censusItemCategory.GetAllItemCategories();
 
             if (itemCategories != null)

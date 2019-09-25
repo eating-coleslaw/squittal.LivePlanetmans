@@ -46,7 +46,7 @@ namespace squittal.LivePlanetmans.Server
             //services.AddTransient<IUpdateable, WorldService>();
             services.AddSingleton<IDbContextHelper, DbContextHelper>();
 
-            services.AddSingleton<IFactionService, FactionService>();
+            services.AddTransient<IFactionService, FactionService>();
             services.AddTransient<IItemService, ItemService>();
 
             services.AddSingleton<IWorldService, WorldService>();
