@@ -72,12 +72,7 @@ else
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem; border: inherit;">
                                         @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
                                     </td>
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; max-width: 30px;  width: 1rem; border: inherit;">
-                                        @if (kill.IsHeadshot == true)
-                                        {
-                                            <span class="oi small oi-target" aria-hidden="true" style="padding-left: 0.3125rem; padding-right: 0.3125rem;"></span>
-                                        }
-                                    </td>
+                                    
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px; max-width: 55px; width: 1rem; border: inherit;">
                                         @if (kill.VictimId == characterId)
                                         {
@@ -119,6 +114,12 @@ else
                                                 </sup>
                                             </div>
                                             @*<div style="display: inline-block;"><sup> @(kill.VictimBattleRank) @((kill.VictimPrestigeLevel == 0) ? "" : $"~{kill.VictimPrestigeLevel}")</sup></div>*@
+                                        }
+                                    </td>
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
+                                        @if (kill.IsHeadshot == true)
+                                        {
+                                            <span class="oi small oi-target" aria-hidden="true" style="padding-left: 0.3125rem; padding-right: 0.3125rem;"></span>
                                         }
                                     </td>
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
