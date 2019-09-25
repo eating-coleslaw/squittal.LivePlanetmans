@@ -212,10 +212,10 @@
         debugMessage = "initial load complete";
     }
 
-    //protected override async Task OnParametersSetAsync()
-    //{
-    //    await ChangeSelectedWorld(worldId);
-    //}
+    protected override async Task OnParametersSetAsync()
+    {
+        await ChangeSelectedWorld(worldId);
+    }
 
     async Task SetUpWorlds()
     {
