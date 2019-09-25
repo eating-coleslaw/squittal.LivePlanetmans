@@ -9,11 +9,13 @@ namespace squittal.LivePlanetmans.Server.Data
     {
         private readonly IWorldService _worldService;
         private readonly IFactionService _factionService;
+        private readonly IItemService _itemService;
 
-        public DbSeeder(IWorldService worldService, IFactionService factionService)
+        public DbSeeder(IWorldService worldService, IFactionService factionService, IItemService itemService)
         {
             _worldService = worldService;
             _factionService = factionService;
+            _itemService = itemService;
         }
 
         public async Task OnApplicationStartup(CancellationToken cancellationToken)
@@ -25,6 +27,9 @@ namespace squittal.LivePlanetmans.Server.Data
 
             Task factionsTask = _factionService.RefreshStore();
             TaskList.Add(factionsTask);
+
+            Task itemsTask = _itemService.RefreshStore();
+            TaskList.Add(itemsTask);
 
             await Task.WhenAll(TaskList);
         }

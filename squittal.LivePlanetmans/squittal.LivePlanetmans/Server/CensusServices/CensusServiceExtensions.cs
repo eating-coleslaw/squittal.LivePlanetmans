@@ -8,6 +8,8 @@ namespace squittal.LivePlanetmans.Server.CensusServices
         {
             services.AddSingleton<CensusCharacter>();
             services.AddSingleton<CensusFaction>();
+            services.AddSingleton<CensusItem>();
+            services.AddSingleton<CensusItemCategory>();
             services.AddSingleton<CensusOutfit>();
             services.AddSingleton<CensusWorld>();
 

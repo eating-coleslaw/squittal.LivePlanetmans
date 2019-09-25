@@ -46,10 +46,13 @@ namespace squittal.LivePlanetmans.Server
             //services.AddTransient<IUpdateable, WorldService>();
             services.AddSingleton<IDbContextHelper, DbContextHelper>();
 
-            services.AddSingleton<IWorldService, WorldService>();
             services.AddSingleton<IFactionService, FactionService>();
+            services.AddTransient<IItemService, ItemService>();
+
+            services.AddSingleton<IWorldService, WorldService>();
             services.AddSingleton<ICharacterService, CharacterService>();
             services.AddSingleton<IOutfitService, OutfitService>();
+
             services.AddSingleton<IDbSeeder, DbSeeder>();
 
             services.AddSingleton<IWebsocketEventHandler, WebsocketEventHandler>();
