@@ -63,19 +63,19 @@ else
             }
             else
             {
-                <div style="max-height: 400px; overflow: auto;">
+                <div style="max-height: 400px; overflow: auto; border-top: 1px solid #27273a50; border-top-left-radius: 0.2rem;">
                     <table class="table-responsive-sm table" style="font-size: 0.85rem !important;">
                         <tbody>
                             @foreach (var kill in kills)
                             {
-                                <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId);">
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; max-width: 30px;  width: 1rem;">
+                                <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId); border-top: @GetKillboardBorderStyle(kill.AttackerId);"> @*1px solid #27273a50; border-bottom: 1px solid #27273a50;">*@
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; max-width: 30px;  width: 1rem; border: inherit;">
                                         @if (kill.IsHeadshot == true)
                                         {
                                             <span class="oi small oi-target" aria-hidden="true" style="padding-left: 0.3125rem; padding-right: 0.3125rem;"></span>
                                         }
                                     </td>
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px; max-width: 55px; width: 1rem;">
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px; max-width: 55px; width: 1rem; border: inherit;">
                                         @if (kill.VictimId == characterId)
                                         {
                                             @((string.IsNullOrWhiteSpace(kill.AttackerOutfitAlias)) ? "" : $"[{kill.AttackerOutfitAlias}]")
@@ -85,7 +85,7 @@ else
                                             @((string.IsNullOrWhiteSpace(kill.VictimOutfitAlias)) ? "" : $"[{kill.VictimOutfitAlias}]")
                                         }
                                     </td>
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
                                         @if (kill.VictimId == characterId)
                                         {
                                             @*@kill.AttackerName*@
@@ -98,8 +98,11 @@ else
                                             <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>
                                             <div style="display: inline-block;"><sup> @(kill.VictimBattleRank) @((kill.VictimPrestigeLevel == 0) ? "" : $"~{kill.VictimPrestigeLevel}")</sup></div>
                                         }
-                                        </td>
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem;">
+                                    </td>
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
+                                        @kill.AttackerWeaponName
+                                    </td>
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem; border: inherit;">
                                         @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
                                     </td>
                                 </tr>
@@ -175,7 +178,7 @@ else
     {
         if (victimId == characterId)
         {
-            return "#F9D3D6"; // FFD2E350"; //FFD2D3";
+            return "#F9D3D6a0"; // ffe0f6af"; // F9D3D6"; // FFD2E350"; //FFD2D3";
         }
         else if (victimFactionId != null && victimFactionId == player.FactionId)
         {
@@ -192,6 +195,11 @@ else
         int? factionId = (attackerId == player.Id) ? victimFactionId : attackerFactionId;
 
         return GetFactionColorFromId(factionId);
+    }
+
+    string GetKillboardBorderStyle(string attackerId)
+    {
+        return (attackerId == player.Id) ? "1px solid rgb(222, 226, 230)" : "1px solid #27273a50";
     }
 
     string GetFactionColorFromId(int? factionId)

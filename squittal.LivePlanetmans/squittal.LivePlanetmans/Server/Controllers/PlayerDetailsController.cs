@@ -49,6 +49,10 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 IQueryable<PlayerKillboardItem> query =
                     from death in dbContext.Deaths
 
+                    join weapon in dbContext.Items
+                      on death.AttackerWeaponId equals weapon.Id into weaponsQ
+                    from weapon in weaponsQ.DefaultIfEmpty()
+
                     where death.Timestamp >= startTime
                        && ( death.AttackerCharacterId == characterId
                             || death.CharacterId == characterId)
@@ -86,6 +90,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                  select c.PrestigeLevel).FirstOrDefault(),
                         AttackerLoadoutId = death.AttackerLoadoutId,
                         AttackerWeaponId = death.AttackerWeaponId,
+                        AttackerWeaponName = weapon.Name,
+                        IsAttackerWeaponVehicle = weapon.IsVehicleWeapon,
                         KillTimestamp = death.Timestamp
                     };
 
