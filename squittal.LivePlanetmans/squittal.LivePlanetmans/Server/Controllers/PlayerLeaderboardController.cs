@@ -103,13 +103,13 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         //  select new { ZoneID = g.FirstOrDefault(d => d.AttackerCharacterId == playerGroup.Key).ZoneId, ZoneName = zone.Name, Timestamp = g.Max(t => t.Timestamp) }
                         //).OrderByDescending(t => t.Timestamp).Select(t => t.ZoneName).FirstOrDefault(),
 
-                        Kills = (from k in dbContext.Deaths
-                                 where k.AttackerCharacterId == playerGroup.Key
-                                    && k.AttackerCharacterId != k.CharacterId
-                                    && ((k.AttackerFactionId != k.CharacterFactionId) || k.AttackerFactionId == 4 || k.CharacterFactionId == 4 || k.CharacterFactionId == null || k.CharacterFactionId == 0) //Nanite Systems
-                                    && k.Timestamp >= startTime
-                                    && k.WorldId == worldId
-                                 select k).Count(),
+                        Kills = playerGroup.Count(k => k.AttackerCharacterId == playerGroup.Key
+                                                       && k.AttackerCharacterId != k.CharacterId
+                                                       && ((k.AttackerFactionId != k.CharacterFactionId)
+                                                            || k.AttackerFactionId == 4 || k.CharacterFactionId == 4 //Nanite Systems
+                                                            || k.CharacterFactionId == null || k.CharacterFactionId == 0)
+                                                       && k.Timestamp >= startTime
+                                                       && k.WorldId == worldId),
                         Deaths = (from d in dbContext.Deaths
                                   where d.CharacterId == playerGroup.Key
                                      && d.Timestamp >= startTime
