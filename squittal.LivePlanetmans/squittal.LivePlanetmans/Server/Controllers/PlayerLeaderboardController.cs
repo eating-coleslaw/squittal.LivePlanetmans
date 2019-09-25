@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using squittal.LivePlanetmans.Server.Data;
+using squittal.LivePlanetmans.Server.Services.Planetside;
 using squittal.LivePlanetmans.Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,15 @@ namespace squittal.LivePlanetmans.Server.Controllers
     public class PlayerLeaderboardController : ControllerBase
     {
         private readonly IDbContextHelper _dbContextHelper;
+        private readonly IZoneService _zoneService;
         private readonly ILogger<PlayerLeaderboardController> _logger;
 
         public IList<PlayerHourlyStatsData> Players { get; private set; }
 
-        public PlayerLeaderboardController(IDbContextHelper dbContextHelper, ILogger<PlayerLeaderboardController> logger)
+        public PlayerLeaderboardController(IDbContextHelper dbContextHelper, IZoneService zoneService, ILogger<PlayerLeaderboardController> logger)
         {
             _dbContextHelper = dbContextHelper;
+            _zoneService = zoneService;
             _logger = logger;
         }
 
@@ -33,18 +36,25 @@ namespace squittal.LivePlanetmans.Server.Controllers
             DateTime nowUtc = DateTime.UtcNow;
             DateTime startTime = nowUtc - TimeSpan.FromHours(1);
 
-
             using (var factory = _dbContextHelper.GetFactory())
             {
                 var dbContext = factory.GetDbContext();
 
+                // Get all zone names
+                
+
                 IQueryable<PlayerHourlyStatsData> query =
                     from death in dbContext.Deaths
 
-                    where death.Timestamp >= startTime
-                       && death.WorldId == worldId
-                       && death.AttackerCharacterId != "0"
-                    group death by death.AttackerCharacterId into playerGroup
+                      where death.Timestamp >= startTime
+                         && death.WorldId == worldId
+                         && death.AttackerCharacterId != "0"
+                      
+                      group death by death.AttackerCharacterId into playerGroup
+
+                      //join character in dbContext.Characters on playerGroup.Key equals character.Id into charactersQ
+                      //from character in charactersQ.DefaultIfEmpty()
+
                     select new PlayerHourlyStatsData()
                     {
                         PlayerId = playerGroup.Key,
@@ -73,35 +83,19 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                             select new { ZoneId = g.Key, Timestamp = g.Max(t => t.Timestamp) }
                                         ).OrderByDescending(t => t.Timestamp).Select(t => t.ZoneId).FirstOrDefault(),
 
-                        LatestZoneName = (from zoneIdTimes in
-                                            (from d in dbContext.Deaths
-                                             where d.AttackerCharacterId == playerGroup.Key
-                                                && d.Timestamp >= startTime
-                                                && d.WorldId == worldId
-                                             group d by d.ZoneId into g
-                                             select new { ZoneId = g.Key, Timestamp = g.Max(t => t.Timestamp) })
+                        //LatestZoneName = (from zoneIdTimes in
+                        //                    (from d in dbContext.Deaths
+                        //                     where d.AttackerCharacterId == playerGroup.Key
+                        //                        && d.Timestamp >= startTime
+                        //                        && d.WorldId == worldId
+                        //                     group d by d.ZoneId into g
+                        //                     select new { ZoneId = g.Key, Timestamp = g.Max(t => t.Timestamp) })
 
-                                          join zone in dbContext.Zones on zoneIdTimes.ZoneId equals zone.Id into zonesQ
-                                          from zone in zonesQ.DefaultIfEmpty()
+                        //                  join zone in dbContext.Zones on zoneIdTimes.ZoneId equals zone.Id into zonesQ
+                        //                  from zone in zonesQ.DefaultIfEmpty()
 
-                                          select new { zoneIdTimes.ZoneId, zone.Name, zoneIdTimes.Timestamp }
-                                        ).OrderByDescending(t => t.Timestamp).Select(t => t.Name).FirstOrDefault(),
-                        //  (from d in dbContext.Deaths
-
-                        //      //join zone in dbContext.Zones on d.ZoneId equals zone.Id into zonesQ
-                        //      //from zone in zonesQ.DefaultIfEmpty()
-
-                        //  where d.AttackerCharacterId == playerGroup.Key
-                        //     && d.Timestamp >= startTime
-                        //     && d.WorldId == worldId
-                        //  group d by d.ZoneId into g
-
-                        //  join zone in dbContext.Zones on g.FirstOrDefault(d => d.AttackerCharacterId == playerGroup.Key).ZoneId equals zone.Id into zonesQ
-                        //  //join zone in dbContext.Zones on d.ZoneId equals zone.Id into zonesQ
-                        //  from zone in zonesQ.DefaultIfEmpty()
-
-                        //  select new { ZoneID = g.FirstOrDefault(d => d.AttackerCharacterId == playerGroup.Key).ZoneId, ZoneName = zone.Name, Timestamp = g.Max(t => t.Timestamp) }
-                        //).OrderByDescending(t => t.Timestamp).Select(t => t.ZoneName).FirstOrDefault(),
+                        //                  select new { zoneIdTimes.ZoneId, zone.Name, zoneIdTimes.Timestamp }
+                        //                ).OrderByDescending(t => t.Timestamp).Select(t => t.Name).FirstOrDefault(),
 
                         Kills = (from k in dbContext.Deaths
                                    where k.AttackerCharacterId == playerGroup.Key
@@ -143,11 +137,20 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                     select s).Count()
                     };
 
-                return await query
-                    .AsNoTracking()
-                    .OrderByDescending(p => p.Kills)
-                    .Take(rows)
-                    .ToArrayAsync();
+                var leaderboard = await query
+                                          .AsNoTracking()
+                                          .OrderByDescending(p => p.Kills)
+                                          .Take(rows)
+                                          .ToArrayAsync();
+
+                var zoneList = await _zoneService.GetAllZonesAsync();
+
+                foreach (var player in leaderboard)
+                {
+                    player.LatestZoneName = zoneList.FirstOrDefault(z => z.Id == player.LatestZoneId)?.Name ?? string.Empty;
+                }
+
+                return leaderboard;
             }
         }
     }
