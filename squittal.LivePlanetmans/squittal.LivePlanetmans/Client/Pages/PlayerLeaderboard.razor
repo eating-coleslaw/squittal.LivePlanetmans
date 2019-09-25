@@ -70,6 +70,7 @@
                             <th style="padding-right: 10px; max-width: 65px; width: 1rem;">KDR</th>
                             <th style="padding-right: 10px; max-width: 65px; width: 1rem;">KPM</th>
                             <th style="padding-right: 10px; max-width: 65px; width: 1rem;">HSR</th>
+                            <th style="padding-right: 10px; max-width: 65px; width: 1rem;"></th>
                             @*<th style="padding-right: 10px;">TKs</th>
                         <th style="padding-right: 10px;">Suicides</th>*@
                             <th style="padding-right: 10px; max-width: 65px; width: 1rem;"></th>
@@ -105,6 +106,7 @@
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.HeadshotRatio</td>
                                     @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.TeamKills</td>
                                 <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Suicides</td>*@
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.LatestZoneName</td>
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
                                         <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
                                     </td>
@@ -192,7 +194,7 @@
         debugMessage = "setting up server info";
         StateHasChanged();
         await SetUpWorlds();
-        await ChangeSelectedWorld(worldId);
+        //await ChangeSelectedWorld(worldId);
         StateHasChanged();
 
         debugMessage = "first load";
@@ -201,10 +203,10 @@
         debugMessage = "initial load complete";
     }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        await ChangeSelectedWorld(worldId);
-    }
+    //protected override async Task OnParametersSetAsync()
+    //{
+    //    await ChangeSelectedWorld(worldId);
+    //}
 
     async Task SetUpWorlds()
     {

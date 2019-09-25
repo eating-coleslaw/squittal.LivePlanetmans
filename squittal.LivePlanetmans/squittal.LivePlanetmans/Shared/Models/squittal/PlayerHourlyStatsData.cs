@@ -17,6 +17,8 @@ namespace squittal.LivePlanetmans.Shared.Models
         public string PlayerId { get; set; }
         public int BattleRank { get; set; }
         public int PrestigeLevel { get; set; }
+        public int LatestZoneId { get; set; }
+        public string LatestZoneName { get; set; }
         public int Kills { get; set; }
         public int Deaths { get; set; }
         public int Headshots { get; set; }

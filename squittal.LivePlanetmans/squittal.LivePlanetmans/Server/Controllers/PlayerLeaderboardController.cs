@@ -64,6 +64,45 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         PrestigeLevel = (from c in dbContext.Characters
                                          where c.Id == playerGroup.Key
                                          select c.PrestigeLevel).FirstOrDefault(),
+
+                        LatestZoneId = (from d in dbContext.Deaths
+                                            where d.AttackerCharacterId == playerGroup.Key
+                                               && d.Timestamp >= startTime
+                                               && d.WorldId == worldId
+                                            group d by d.ZoneId into g
+                                            select new { ZoneId = g.Key, Timestamp = g.Max(t => t.Timestamp) }
+                                        ).OrderByDescending(t => t.Timestamp).Select(t => t.ZoneId).FirstOrDefault(),
+
+                        LatestZoneName = (from zoneIdTimes in
+                                            (from d in dbContext.Deaths
+                                             where d.AttackerCharacterId == playerGroup.Key
+                                                && d.Timestamp >= startTime
+                                                && d.WorldId == worldId
+                                             group d by d.ZoneId into g
+                                             select new { ZoneId = g.Key, Timestamp = g.Max(t => t.Timestamp) })
+
+                                          join zone in dbContext.Zones on zoneIdTimes.ZoneId equals zone.Id into zonesQ
+                                          from zone in zonesQ.DefaultIfEmpty()
+
+                                          select new { zoneIdTimes.ZoneId, zone.Name, zoneIdTimes.Timestamp }
+                                        ).OrderByDescending(t => t.Timestamp).Select(t => t.Name).FirstOrDefault(),
+                        //  (from d in dbContext.Deaths
+
+                        //      //join zone in dbContext.Zones on d.ZoneId equals zone.Id into zonesQ
+                        //      //from zone in zonesQ.DefaultIfEmpty()
+
+                        //  where d.AttackerCharacterId == playerGroup.Key
+                        //     && d.Timestamp >= startTime
+                        //     && d.WorldId == worldId
+                        //  group d by d.ZoneId into g
+
+                        //  join zone in dbContext.Zones on g.FirstOrDefault(d => d.AttackerCharacterId == playerGroup.Key).ZoneId equals zone.Id into zonesQ
+                        //  //join zone in dbContext.Zones on d.ZoneId equals zone.Id into zonesQ
+                        //  from zone in zonesQ.DefaultIfEmpty()
+
+                        //  select new { ZoneID = g.FirstOrDefault(d => d.AttackerCharacterId == playerGroup.Key).ZoneId, ZoneName = zone.Name, Timestamp = g.Max(t => t.Timestamp) }
+                        //).OrderByDescending(t => t.Timestamp).Select(t => t.ZoneName).FirstOrDefault(),
+
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == playerGroup.Key
                                     && k.AttackerCharacterId != k.CharacterId
