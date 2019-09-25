@@ -48,6 +48,7 @@ namespace squittal.LivePlanetmans.Server
 
             services.AddTransient<IFactionService, FactionService>();
             services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<IZoneService, ZoneService>();
 
             services.AddSingleton<IWorldService, WorldService>();
             services.AddSingleton<ICharacterService, CharacterService>();

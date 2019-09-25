@@ -12,6 +12,7 @@ namespace squittal.LivePlanetmans.Server.CensusServices
             services.AddSingleton<CensusItemCategory>();
             services.AddSingleton<CensusOutfit>();
             services.AddSingleton<CensusWorld>();
+            services.AddSingleton<CensusZone>();
 
             return services;
         }

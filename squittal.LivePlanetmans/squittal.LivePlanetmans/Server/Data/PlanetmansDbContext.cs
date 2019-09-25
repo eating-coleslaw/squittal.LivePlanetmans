@@ -21,6 +21,7 @@ namespace squittal.LivePlanetmans.Server.Data
         public DbSet<Outfit> Outfits { get; set; }
         public DbSet<OutfitMember> OutfitMembers { get; set; }
         public DbSet<World> Worlds { get; set; }
+        public DbSet<Zone> Zones { get; set; }
         #endregion
 
         #region Stream Event DbSets
@@ -41,6 +42,7 @@ namespace squittal.LivePlanetmans.Server.Data
             builder.ApplyConfiguration(new OutfitConfiguration());
             builder.ApplyConfiguration(new OutfitMemberConfiguration());
             builder.ApplyConfiguration(new WorldConfiguration());
+            builder.ApplyConfiguration(new ZoneConfiguration());
             #endregion
 
             #region Stream Configuration
