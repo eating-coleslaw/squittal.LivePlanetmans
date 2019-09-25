@@ -90,13 +90,32 @@ else
                                         {
                                             @*@kill.AttackerName*@
                                             <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.AttackerName</div>
-                                            <div style="display: inline-block;"><sup> @(kill.AttackerBattleRank) @((kill.AttackerPrestigeLevel == 0) ? "" : $"~{kill.AttackerPrestigeLevel}")</sup></div>
+                                            <div style="display: inline-block;">
+                                                <sup>
+                                                    @(kill.AttackerBattleRank)
+                                                    @if (stats.PrestigeLevel != 0)
+                                                    {
+                                                        <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
+                                                    }
+                                                </sup>
+                                            </div>
+
+                                            @*<div style="display: inline-block;"><sup> @(kill.AttackerBattleRank) @((kill.AttackerPrestigeLevel == 0) ? "" : $"~{kill.AttackerPrestigeLevel}")</sup></div>*@
                                         }
                                         else
                                         {
                                             @*@kill.VictimName*@
                                             <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>
-                                            <div style="display: inline-block;"><sup> @(kill.VictimBattleRank) @((kill.VictimPrestigeLevel == 0) ? "" : $"~{kill.VictimPrestigeLevel}")</sup></div>
+                                            <div style="display: inline-block;">
+                                                <sup>
+                                                    @(kill.VictimBattleRank)
+                                                    @if (kill.VictimPrestigeLevel != 0)
+                                                    {
+                                                        <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
+                                                    }
+                                                </sup>
+                                            </div>
+                                            @*<div style="display: inline-block;"><sup> @(kill.VictimBattleRank) @((kill.VictimPrestigeLevel == 0) ? "" : $"~{kill.VictimPrestigeLevel}")</sup></div>*@
                                         }
                                     </td>
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
