@@ -59,7 +59,7 @@ namespace squittal.LivePlanetmans.Server
             services.AddSingleton<IWebsocketEventHandler, WebsocketEventHandler>();
             services.AddSingleton<IWebsocketMonitor, WebsocketMonitor>();
 
-            services.AddHostedService<WebsocketMonitorHostedService>();
+            //services.AddHostedService<WebsocketMonitorHostedService>();
             services.AddHostedService<DbSeederHostedService>();
         }
 

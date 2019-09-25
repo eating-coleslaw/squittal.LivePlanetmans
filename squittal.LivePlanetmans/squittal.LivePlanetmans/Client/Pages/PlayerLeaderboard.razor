@@ -206,9 +206,9 @@
         //await ChangeSelectedWorld(worldId);
         StateHasChanged();
 
-        debugMessage = "first load";
-        StateHasChanged();
-        await RefreshTable();
+        //debugMessage = "first load";
+        //StateHasChanged();
+        //await RefreshTable();
         debugMessage = "initial load complete";
     }
 
@@ -251,7 +251,7 @@
 
     async Task RefreshTable()
     {
-        if (isLoading != true)
+        if (isLoading != true || isChangingWorld == true)
         {
             isLoading = true;
             debugMessage = "refreshing table";
