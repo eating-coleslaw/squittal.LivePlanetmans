@@ -53,6 +53,10 @@ namespace squittal.LivePlanetmans.Server.Controllers
                       on death.AttackerWeaponId equals weapon.Id into weaponsQ
                     from weapon in weaponsQ.DefaultIfEmpty()
 
+                    join zone in dbContext.Zones
+                      on death.ZoneId equals zone.Id into zonesQ
+                    from zone in zonesQ.DefaultIfEmpty()
+
                     where death.Timestamp >= startTime
                        && ( death.AttackerCharacterId == characterId
                             || death.CharacterId == characterId)
@@ -92,6 +96,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         AttackerWeaponId = death.AttackerWeaponId,
                         AttackerWeaponName = weapon.Name,
                         IsAttackerWeaponVehicle = weapon.IsVehicleWeapon,
+                        ZoneId = zone.Id,
+                        ZoneName = zone.Name,
                         KillTimestamp = death.Timestamp
                     };
 

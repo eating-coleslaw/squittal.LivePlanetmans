@@ -68,7 +68,7 @@ else
                         <tbody>
                             @foreach (var kill in kills)
                             {
-                                <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId); border-top: @GetKillboardBorderStyle(kill.AttackerId);"> @*1px solid #27273a50; border-bottom: 1px solid #27273a50;">*@
+                                <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId); border-top: @GetKillboardBorderStyle(kill.VictimId);"> @*1px solid #27273a50; border-bottom: 1px solid #27273a50;">*@
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; max-width: 30px;  width: 1rem; border: inherit;">
                                         @if (kill.IsHeadshot == true)
                                         {
@@ -104,6 +104,9 @@ else
                                     </td>
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem; border: inherit;">
                                         @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
+                                    </td>
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem;">
+                                        @kill.ZoneName
                                     </td>
                                 </tr>
                             }
@@ -197,9 +200,9 @@ else
         return GetFactionColorFromId(factionId);
     }
 
-    string GetKillboardBorderStyle(string attackerId)
+    string GetKillboardBorderStyle(string victimId)
     {
-        return (attackerId == player.Id) ? "1px solid rgb(222, 226, 230)" : "1px solid #27273a50";
+        return (victimId == player.Id) ? "1px solid #27273a50" : "1px solid rgb(222, 226, 230)";
     }
 
     string GetFactionColorFromId(int? factionId)

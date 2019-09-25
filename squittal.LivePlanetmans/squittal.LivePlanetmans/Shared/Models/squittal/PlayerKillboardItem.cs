@@ -22,6 +22,8 @@ namespace squittal.LivePlanetmans.Shared.Models
         public bool IsAttackerWeaponVehicle { get; set; }
         public int? AttackerBattleRank { get; set; }
         public int? AttackerPrestigeLevel { get; set; }
+        public int? ZoneId { get; set; }
+        public string ZoneName { get; set; }
         public DateTime KillTimestamp { get; set; }
     }
 }
