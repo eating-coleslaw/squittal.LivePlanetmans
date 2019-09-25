@@ -17,15 +17,13 @@ namespace squittal.LivePlanetmans.Server.Data.DataConfigurations
                 e.AttackerCharacterId
             });
 
-            /*
             builder
                 .Ignore(e => e.Character)
                 .Ignore(e => e.AttackerCharacter)
                 .Ignore(e => e.CharacterOutfit)
                 .Ignore(e => e.AttackerOutfit)
-                .Ignore(e => e.AttackerVehicle)
+                //.Ignore(e => e.AttackerVehicle)
                 .Ignore(e => e.AttackerWeapon);
-            */
         }
     }
 }

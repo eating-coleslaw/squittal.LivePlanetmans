@@ -16,6 +16,8 @@ namespace squittal.LivePlanetmans.Server.Data
         public DbSet<CharacterLifetimeStat> CharacterLifetimeStats { get; set; }
         public DbSet<CharacterTime> CharacterTimes { get; set; }
         public DbSet<Faction> Factions { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<ItemCategory> ItemCategories { get; set; }
         public DbSet<Outfit> Outfits { get; set; }
         public DbSet<OutfitMember> OutfitMembers { get; set; }
         public DbSet<World> Worlds { get; set; }
@@ -34,6 +36,8 @@ namespace squittal.LivePlanetmans.Server.Data
             builder.ApplyConfiguration(new CharacterLifetimeStatConfiguration());
             builder.ApplyConfiguration(new CharacterTimeConfiguration());
             builder.ApplyConfiguration(new FactionConfiguration());
+            builder.ApplyConfiguration(new ItemConfiguration());
+            builder.ApplyConfiguration(new ItemCategoryConfiguration());
             builder.ApplyConfiguration(new OutfitConfiguration());
             builder.ApplyConfiguration(new OutfitMemberConfiguration());
             builder.ApplyConfiguration(new WorldConfiguration());
