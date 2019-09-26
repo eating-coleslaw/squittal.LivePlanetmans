@@ -20,7 +20,7 @@ else
             <div class="h2" style="margin-bottom: 0px; word-wrap: break-word;">
                 <a href="@GetUrlFromCharacterName(player.Name)" target="_blank" style="color:@GetFactionColorFromId(player.FactionId);">
                     @player.Name
-                    <span class="h6 oi oi-external-link"></span>
+                    <span class="h6 oi oi-external-link" style="opacity: 0.5;"></span>
                 </a>
             </div>
 
@@ -33,12 +33,6 @@ else
                 <div class="text-muted" style="font-size: 0.8rem; font-weight: 300; margin-top: -0.3rem;">Battle Rank</div>
             </div>
             
-            <div>
-                <a href="@GetUrlFromCharacterId(player.Id)" class="text-muted h6" style="font-size: 0.8rem; vertical-align: top; padding-left: 0.8rem;"target="_blank">
-                    @player.Id
-                    <span class="h6 oi oi-external-link" style="font-size: 60%;"></span>
-                </a>
-            </div>
             <div style="color: @GetFactionColorFromId(stats.FactionId); grid-row: 2; font-size: 0.8rem;">
                 @if (!string.IsNullOrWhiteSpace(stats.TitleName))
                 {
@@ -70,7 +64,7 @@ else
             }
             else
             {
-                <div style="max-height: 400px; overflow: auto; border-top: 1px solid #27273a50; border-top-left-radius: 0.2rem;">
+                <div style="max-height: 400px; overflow: auto; border-top: 1px solid #27273a80; border-bottom: 1px solid #27273a80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem;">
                     <table class="table-responsive-sm table" style="font-size: 0.85rem !important;">
                         <tbody>
                             @foreach (var kill in kills)
@@ -141,6 +135,15 @@ else
                     </table>
                 </div>
             }
+        </div>
+
+        <div id="details-footer" style="display: inline-block; position: absolute; bottom: 0.3125rem; left: 0.3125rem;">
+            <div>
+                <a href="@GetUrlFromCharacterId(player.Id)" class="text-muted h6" style="font-size: 0.8rem; padding-left: 0.8rem; margin-top: 0.1rem;" target="_blank">
+                    @player.Id
+                    <span class="h6 oi oi-external-link" style="font-size: 60%; opacity: 0.5;"></span>
+                </a>
+            </div>
         </div>
     }
 }
