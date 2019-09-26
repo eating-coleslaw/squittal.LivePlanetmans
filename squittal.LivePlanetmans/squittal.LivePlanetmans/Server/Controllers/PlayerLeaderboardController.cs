@@ -244,5 +244,257 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 return topPlayers;
             }
         }
+
+
+        [HttpGet("test/{worldId}")]
+        public async Task<IEnumerable<PlayerHourlyStatsData>> GetWorldKillLeaderboard(int worldId)
+        {
+            int rows = 20;
+
+            DateTime nowUtc = DateTime.UtcNow;
+            DateTime startTime = nowUtc - TimeSpan.FromHours(1);
+
+            var topPlayerKillCounts = await GetTopPlayerKillCounts(worldId, startTime, rows);
+
+            //var topPlayerKillStats = await GetTopPlayerKillStats(topPlayerKillCounts, startTime);
+            //var topPlayerDeathStats = await GetTopPlayerDeathStats(topPlayerKillCounts, startTime);
+            //var topPlayerDetails = await GetTopPlayerDetails(topPlayerKillCounts);
+
+            var playerLeaderboard = new List<PlayerHourlyStatsData>();
+
+            foreach (var player in topPlayerKillCounts)
+            {
+                //var details = topPlayerDetails.FirstOrDefault(character => character.PlayerId == player.PlayerId);
+                //var killStats = topPlayerKillStats.FirstOrDefault(stats => stats.PlayerId == player.PlayerId);
+                //var deathStats = topPlayerDeathStats.FirstOrDefault(stats => stats.PlayerId == player.PlayerId);
+
+                playerLeaderboard.Add(new PlayerHourlyStatsData
+                    {
+                        PlayerId = player.PlayerId, //details.PlayerId,
+                        //PlayerName = details.PlayerName,
+                        //FactionId = details.FactionId,
+                        //BattleRank = details.BattleRank,
+                        //PrestigeLevel = details.PrestigeLevel,
+                        //OutfitAlias = details.OutfitAlias,
+                        Kills = player.Kills //killStats.Kills,
+                        //Headshots = killStats.Headshots,
+                        //TeamKills = killStats.Teamkills,
+                        //LatestZoneId = killStats.LatestZoneId,
+                        //Deaths = deathStats.Deaths,
+                        //Suicides = deathStats.Suicides,
+                    });
+            }
+
+            //playerLeaderboard = await ResolveLatestZoneNames(playerLeaderboard);
+
+            return playerLeaderboard
+                        .OrderByDescending(player => player.Kills)
+                        .ToArray();
+
+        }
+
+        private async Task<IEnumerable<PlayerKillCount>> GetTopPlayerKillCounts(int worldId, DateTime startTime, int rows = 20)
+        {
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                //var topPlayersQuery  =
+
+                    return await (from death in dbContext.Deaths
+                      where death.WorldId == worldId
+                         && death.Timestamp >= startTime
+                         && death.AttackerCharacterId != death.CharacterId
+                         && death.AttackerCharacterId != "0"
+
+                      group death by death.AttackerCharacterId into attackerGroup
+
+                      join kills in dbContext.Deaths on attackerGroup.Key equals kills.AttackerCharacterId
+
+                      //let count = attackerGroup.Key.Count()
+
+                      //where count > 0
+
+                    select new PlayerKillCount()
+                    {
+                        PlayerId = kills.AttackerCharacterId,
+                        Kills = kills.AttackerCharacterId.Count() //count
+                    }).OrderByDescending(p => p.Kills)
+                                .Take(rows)
+                                .ToListAsync(); ;
+
+                //return await topPlayersQuery
+                //                //.AsNoTracking()
+                //                .OrderByDescending(p => p.Kills)
+                //                .Take(rows)
+                //                .ToListAsync();
+            }
+        }
+
+        private async Task<IEnumerable<PlayerKillStats>> GetTopPlayerKillStats(IEnumerable<PlayerKillCount> playerKillCounts, DateTime startTime)
+        {
+            var playerIds = playerKillCounts.Select(p => p.PlayerId).ToList();
+
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                IQueryable<PlayerKillStats> killStatsQuery = 
+
+                    //from playerId in playerIds
+
+                    //join death in dbContext.Deaths on playerId equals death.AttackerCharacterId into playerGroup
+                    //    from death in playerGroup
+                    from death in dbContext.Deaths
+
+                      where playerIds.Contains(death.AttackerCharacterId)
+                         && death.AttackerCharacterId != death.CharacterId
+                         && death.Timestamp >= startTime
+
+                      group death by death.AttackerCharacterId into playerGroup
+
+                    select new PlayerKillStats()
+                    {
+                        PlayerId = playerGroup.Key,
+                        Kills = playerGroup.Count(k => (k.AttackerFactionId != k.CharacterFactionId)
+                                                       || k.AttackerFactionId == 4 || k.CharacterFactionId == 4 //Nanite Systems
+                                                       || k.CharacterFactionId == null || k.CharacterFactionId == 0),
+                        Headshots = playerGroup.Count(h => h.IsHeadshot
+                                                        && ((h.AttackerFactionId != h.CharacterFactionId)
+                                                            || h.AttackerFactionId == 4 || h.CharacterFactionId == 4 //Nanite Systems
+                                                            || h.CharacterFactionId == null || h.CharacterFactionId == 0)),
+                        Teamkills = playerGroup.Count(tk => tk.AttackerFactionId == tk.CharacterFactionId),
+                        LatestZoneId = playerGroup.OrderByDescending(d => d.Timestamp).Select(d => d.ZoneId).FirstOrDefault()
+                        //(from d in playerGroup
+                                          //group d by d.ZoneId into zoneGroup
+                                        //select new { ZoneId = zoneGroup.Key, Timestamp = zoneGroup.Max(t => t.Timestamp) }
+                                       //).OrderByDescending(grp => grp.Timestamp).Select(grp => grp.ZoneId).FirstOrDefault()
+                    };
+
+                return await killStatsQuery
+                                .AsNoTracking()
+                                .OrderByDescending(p => p.Kills)
+                                .ToListAsync();
+            }
+        }
+
+        private async Task<IEnumerable<PlayerDeathStats>> GetTopPlayerDeathStats(IEnumerable<PlayerKillCount> playerKillCounts, DateTime startTime)
+        {
+            var playerIds = playerKillCounts.Select(p => p.PlayerId).ToList();
+
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                IQueryable<PlayerDeathStats> deathStatsQuery =
+
+                    from death in dbContext.Deaths
+
+                    where playerIds.Contains(death.CharacterId)
+                       && death.Timestamp >= startTime
+
+                    group death by death.CharacterId into playerGroup
+
+                    select new PlayerDeathStats()
+                    {
+                        PlayerId = playerGroup.Key,
+                        Deaths = playerGroup.Count(),
+                        Suicides = playerGroup.Count(d => d.AttackerCharacterId == playerGroup.Key
+                                                       || d.AttackerCharacterId == "0")
+                    };
+
+                return await deathStatsQuery
+                                .AsNoTracking()
+                                .ToListAsync();
+            }
+        }
+
+        private async Task<IEnumerable<PlayerLeaderboardDetails>> GetTopPlayerDetails(IEnumerable<PlayerKillCount> playerKillCounts)
+        {
+            var playerIds = playerKillCounts.Select(p => p.PlayerId).ToList();
+
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                IQueryable<PlayerLeaderboardDetails> playerDetailsQuery =
+
+                    from character in dbContext.Characters
+
+                      where playerIds.Contains(character.Id)
+                      
+                      join outfitMember in dbContext.OutfitMembers on character.Id equals outfitMember.CharacterId into outfitMemberQ
+                        from outfitMember in outfitMemberQ.DefaultIfEmpty()
+                      
+                      join outfit in dbContext.Outfits on outfitMember.OutfitId equals outfit.Id into outfitQ
+                        from outfit in outfitQ.DefaultIfEmpty()
+
+                    select new PlayerLeaderboardDetails()
+                    {
+                        PlayerId = character.Id,
+                        PlayerName = character.Name,
+                        FactionId = character.FactionId,
+                        BattleRank = character.BattleRank,
+                        PrestigeLevel = character.PrestigeLevel,
+                        OutfitAlias = outfit.Alias ?? string.Empty
+                    };
+
+                return await playerDetailsQuery
+                                .AsNoTracking()
+                                .ToListAsync();
+            }
+        }
+
+        private async Task<List<PlayerHourlyStatsData>> ResolveLatestZoneNames(List<PlayerHourlyStatsData> players)
+        {
+            var zoneList = await _zoneService.GetAllZonesAsync();
+            foreach (var player in players)
+            {
+                player.LatestZoneName = zoneList.FirstOrDefault(z => z.Id == player.LatestZoneId)?.Name ?? string.Empty;
+            }
+
+            return players;
+        }
+
+
+        private class PlayerKillCount
+        {
+            public string PlayerId { get; set; }
+            public int Kills { get; set; }
+        }
+
+        private class PlayerKillStats
+        {
+            public string PlayerId { get; set; }
+            public int Kills { get; set; }
+            public int Headshots { get; set; }
+            public int Teamkills { get; set; }
+            public int LatestZoneId { get; set; }
+        }
+
+        private class PlayerDeathStats
+        {
+            public string PlayerId { get; set; }
+            public int Deaths { get; set; }
+            public int Suicides { get; set; }
+        }
+
+        private class PlayerLeaderboardDetails
+        {
+            public string PlayerId { get; set; }
+            public string PlayerName { get; set; }
+            public int FactionId { get; set; }
+            public int WorldId { get; set; }
+            public int BattleRank { get; set; }
+            public int PrestigeLevel { get; set; }
+            public string OutfitAlias { get; set; } = string.Empty;
+        }
+
+        private class PlayerLatestKillZone
+        {
+            public string PlayerId { get; set; }
+            public int LatestZoneId { get; set; }
+            public string LatestZoneName { get; set; }
+        }
     }
 }
