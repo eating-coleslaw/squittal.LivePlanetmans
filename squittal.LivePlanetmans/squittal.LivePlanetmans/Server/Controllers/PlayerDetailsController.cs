@@ -134,6 +134,13 @@ namespace squittal.LivePlanetmans.Server.Controllers
                       join faction in dbContext.Factions
                         on character.FactionId equals faction.Id
 
+                      join title in dbContext.Titles
+                        on character.TitleId equals title.Id into titleQ
+                      from title in titleQ.DefaultIfEmpty()
+
+                      join world in dbContext.Worlds
+                        on character.WorldId equals world.Id
+
                     where character.Id == characterId
                     //where death.Timestamp >= startTime
                        //&& ( death.AttackerCharacterId == characterId
@@ -150,6 +157,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         FactionName = faction.Name,
                         BattleRank = character.BattleRank,
                         PrestigeLevel = character.PrestigeLevel,
+                        TitleName = title.Name,
+                        WorldName = world.Name,
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == characterId
                                     && k.AttackerCharacterId != k.CharacterId

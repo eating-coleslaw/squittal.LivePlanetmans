@@ -15,7 +15,7 @@ namespace squittal.LivePlanetmans.Server.Data.DataConfigurations
             builder.Property(e => e.PrestigeLevel).HasDefaultValue(0);
 
             builder
-                //.Ignore(e => e.Title)
+                .Ignore(e => e.Title)
                 .Ignore(e => e.World)
                 .Ignore(e => e.Faction);
         }

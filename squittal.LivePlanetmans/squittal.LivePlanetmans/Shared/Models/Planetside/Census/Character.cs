@@ -17,6 +17,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         public int CertsEarned { get; set; }
         public int PrestigeLevel { get; set; }
 
+        public Title Title { get; set; }
         public World World { get; set; }
         public Faction Faction { get; set; }
 
