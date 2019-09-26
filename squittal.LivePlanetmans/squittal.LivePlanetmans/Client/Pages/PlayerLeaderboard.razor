@@ -264,8 +264,8 @@
 
             try
             {
-                //Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>($"api/PlayerLeaderboard/{worldId}");
-                Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>($"api/PlayerLeaderboard/test/{worldId}");
+                Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>($"api/PlayerLeaderboard/{worldId}");
+                //Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>($"api/PlayerLeaderboard/test/{worldId}");
                 UpdateQueryDateTimes();
                 players = await playersTask;
             }

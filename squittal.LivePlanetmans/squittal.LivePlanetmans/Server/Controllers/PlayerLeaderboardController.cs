@@ -79,8 +79,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                         where d.AttackerCharacterId == playerGroup.Key
                                            && d.Timestamp >= startTime
                                            && d.WorldId == worldId
-                                        group d by d.ZoneId into g
-                                        select new { ZoneId = g.Key, Timestamp = g.Max(t => t.Timestamp) }
+                                        //group d by d.ZoneId into g
+                                        //select new { ZoneId = g.Key, Timestamp = g.Max(t => t.Timestamp) }
+                                        select new { d.ZoneId, d.Timestamp}
                                         ).OrderByDescending(t => t.Timestamp).Select(t => t.ZoneId).FirstOrDefault(),
 
                         //LatestZoneName = (from zoneIdTimes in
@@ -256,7 +257,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
             var topPlayerKillCounts = await GetTopPlayerKillCounts(worldId, startTime, rows);
 
-            //var topPlayerKillStats = await GetTopPlayerKillStats(topPlayerKillCounts, startTime);
+            var topPlayerKillStats = await GetTopPlayerKillStats(topPlayerKillCounts, startTime);
             //var topPlayerDeathStats = await GetTopPlayerDeathStats(topPlayerKillCounts, startTime);
             //var topPlayerDetails = await GetTopPlayerDetails(topPlayerKillCounts);
 
@@ -265,31 +266,48 @@ namespace squittal.LivePlanetmans.Server.Controllers
             foreach (var player in topPlayerKillCounts)
             {
                 //var details = topPlayerDetails.FirstOrDefault(character => character.PlayerId == player.PlayerId);
-                //var killStats = topPlayerKillStats.FirstOrDefault(stats => stats.PlayerId == player.PlayerId);
+                var killStats = topPlayerKillStats.Where(stats => stats.PlayerId == player.PlayerId).FirstOrDefault(); // FirstOrDefault(stats => stats.PlayerId == player.PlayerId);
                 //var deathStats = topPlayerDeathStats.FirstOrDefault(stats => stats.PlayerId == player.PlayerId);
 
-                playerLeaderboard.Add(new PlayerHourlyStatsData
-                    {
-                        PlayerId = player.PlayerId, //details.PlayerId,
-                        //PlayerName = details.PlayerName,
-                        //FactionId = details.FactionId,
-                        //BattleRank = details.BattleRank,
-                        //PrestigeLevel = details.PrestigeLevel,
-                        //OutfitAlias = details.OutfitAlias,
-                        Kills = player.Kills //killStats.Kills,
-                        //Headshots = killStats.Headshots,
-                        //TeamKills = killStats.Teamkills,
-                        //LatestZoneId = killStats.LatestZoneId,
-                        //Deaths = deathStats.Deaths,
-                        //Suicides = deathStats.Suicides,
-                    });
+                var playerData = new PlayerHourlyStatsData
+                {
+                    PlayerId = player.PlayerId, //details.PlayerId,
+                    //PlayerName = details.PlayerName,
+                    //FactionId = details.FactionId,
+                    //BattleRank = details.BattleRank,
+                    //PrestigeLevel = details.PrestigeLevel,
+                    //OutfitAlias = details.OutfitAlias,
+                    Kills = player.Kills, //killStats.Kills,
+                    Headshots = killStats.Headshots,
+                    TeamKills = 5, //killStats.Teamkills,
+                    LatestZoneId = 4, //killStats.LatestZoneId
+                    //Deaths = deathStats.Deaths,
+                    //Suicides = deathStats.Suicides,
+                };
+
+
+                playerLeaderboard.Add(playerData); // new PlayerHourlyStatsData
+                //    {
+                //        PlayerId = player.PlayerId, //details.PlayerId,
+                //        //PlayerName = details.PlayerName,
+                //        //FactionId = details.FactionId,
+                //        //BattleRank = details.BattleRank,
+                //        //PrestigeLevel = details.PrestigeLevel,
+                //        //OutfitAlias = details.OutfitAlias,
+                //        Kills = player.Kills, //killStats.Kills,
+                //        Headshots = killStats.Headshots,
+                //        TeamKills = killStats.Teamkills,
+                //        LatestZoneId = killStats.LatestZoneId
+                //    //Deaths = deathStats.Deaths,
+                //    //Suicides = deathStats.Suicides,
+                //});
             }
 
             //playerLeaderboard = await ResolveLatestZoneNames(playerLeaderboard);
 
-            return playerLeaderboard
-                        .OrderByDescending(player => player.Kills)
-                        .ToArray();
+            return playerLeaderboard.ToArray();
+                        //.OrderByDescending(player => player.Kills)
+                        //.ToArray();
 
         }
 
@@ -299,9 +317,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
             {
                 var dbContext = factory.GetDbContext();
 
-                //var topPlayersQuery  =
+                var topPlayersQuery = (
 
-                    return await (from death in dbContext.Deaths
+                      from death in dbContext.Deaths
                       where death.WorldId == worldId
                          && death.Timestamp >= startTime
                          && death.AttackerCharacterId != death.CharacterId
@@ -309,25 +327,30 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                       group death by death.AttackerCharacterId into attackerGroup
 
-                      join kills in dbContext.Deaths on attackerGroup.Key equals kills.AttackerCharacterId
+                      //join kills in dbContext.Deaths on attackerGroup.Key equals kills.AttackerCharacterId
 
                       //let count = attackerGroup.Key.Count()
 
                       //where count > 0
 
-                    select new PlayerKillCount()
-                    {
-                        PlayerId = kills.AttackerCharacterId,
-                        Kills = kills.AttackerCharacterId.Count() //count
-                    }).OrderByDescending(p => p.Kills)
-                                .Take(rows)
-                                .ToListAsync(); ;
+                      select new PlayerKillCount()
+                      {
+                          PlayerId = attackerGroup.Key,
+                          Kills = (from d in dbContext.Deaths
+                                   where d.AttackerCharacterId == attackerGroup.Key && d.Timestamp > startTime
+                                   select d).Count()
 
-                //return await topPlayersQuery
-                //                //.AsNoTracking()
-                //                .OrderByDescending(p => p.Kills)
-                //                .Take(rows)
-                //                .ToListAsync();
+                          //kills.AttackerCharacterId,
+                          //Kills = kills.AttackerCharacterId.Count() //count 
+                      });//.OrderByDescending(p => p.Kills)
+                      //          .Take(rows)
+                      //          .ToListAsync(); ;
+
+                return await topPlayersQuery
+                                .AsNoTracking()
+                                .OrderByDescending(p => p.Kills)
+                                .Take(rows)
+                                .ToListAsync();
             }
         }
 
@@ -355,20 +378,53 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                     select new PlayerKillStats()
                     {
-                        PlayerId = playerGroup.Key,
-                        Kills = playerGroup.Count(k => (k.AttackerFactionId != k.CharacterFactionId)
-                                                       || k.AttackerFactionId == 4 || k.CharacterFactionId == 4 //Nanite Systems
-                                                       || k.CharacterFactionId == null || k.CharacterFactionId == 0),
-                        Headshots = playerGroup.Count(h => h.IsHeadshot
-                                                        && ((h.AttackerFactionId != h.CharacterFactionId)
-                                                            || h.AttackerFactionId == 4 || h.CharacterFactionId == 4 //Nanite Systems
-                                                            || h.CharacterFactionId == null || h.CharacterFactionId == 0)),
-                        Teamkills = playerGroup.Count(tk => tk.AttackerFactionId == tk.CharacterFactionId),
-                        LatestZoneId = playerGroup.OrderByDescending(d => d.Timestamp).Select(d => d.ZoneId).FirstOrDefault()
+                        Kills = (from k in dbContext.Deaths
+                                 where k.AttackerCharacterId == playerGroup.Key
+                                    && k.AttackerCharacterId != k.CharacterId
+                                    && ((k.AttackerFactionId != k.CharacterFactionId) || k.AttackerFactionId == 4 || k.CharacterFactionId == 4 || k.CharacterFactionId == null || k.CharacterFactionId == 0) //Nanite Systems
+                                    && k.Timestamp >= startTime
+                                 select k).Count(),
+
+                        Headshots = (from h in dbContext.Deaths
+                                     where h.IsHeadshot == true
+                                        && h.AttackerCharacterId == playerGroup.Key
+                                        && h.AttackerCharacterId != h.CharacterId
+                                        && ((h.AttackerFactionId != h.CharacterFactionId)
+                                            || h.AttackerFactionId == 4 || h.CharacterFactionId == 4  //Nanite Systems
+                                            || h.CharacterFactionId == null || h.CharacterFactionId == 0)
+                                        && h.Timestamp >= startTime
+                                     select h).Count(),
+
+                        Teamkills = (from tk in dbContext.Deaths
+                                     where tk.AttackerCharacterId == playerGroup.Key
+                                        && tk.AttackerCharacterId != tk.CharacterId
+                                        && tk.AttackerFactionId == tk.CharacterFactionId
+                                        && tk.Timestamp >= startTime
+                                     select tk).Count(),
+
+                        LatestZoneId = (from d in dbContext.Deaths
+                                        where d.AttackerCharacterId == playerGroup.Key
+                                           && d.Timestamp >= startTime
+                                        //group d by d.ZoneId into g
+                                        //select new { ZoneId = g.Key, Timestamp = g.Max(t => t.Timestamp) }
+                                        select new { d.ZoneId, d.Timestamp}
+                                        ).OrderByDescending(t => t.Timestamp).Select(t => t.ZoneId).FirstOrDefault()
+
+
+                        //PlayerId = playerGroup.Key,
+                        //Kills = playerGroup.Count(k => (k.AttackerFactionId != k.CharacterFactionId)
+                        //                               || k.AttackerFactionId == 4 || k.CharacterFactionId == 4 //Nanite Systems
+                        //                               || k.CharacterFactionId == null || k.CharacterFactionId == 0),
+                        //Headshots = playerGroup.Count(h => h.IsHeadshot
+                        //                                && ((h.AttackerFactionId != h.CharacterFactionId)
+                        //                                    || h.AttackerFactionId == 4 || h.CharacterFactionId == 4 //Nanite Systems
+                        //                                    || h.CharacterFactionId == null || h.CharacterFactionId == 0)),
+                        //Teamkills = playerGroup.Count(tk => tk.AttackerFactionId == tk.CharacterFactionId),
+                        //LatestZoneId = playerGroup.OrderByDescending(d => d.Timestamp).Select(d => d.ZoneId).FirstOrDefault()
                         //(from d in playerGroup
-                                          //group d by d.ZoneId into zoneGroup
-                                        //select new { ZoneId = zoneGroup.Key, Timestamp = zoneGroup.Max(t => t.Timestamp) }
-                                       //).OrderByDescending(grp => grp.Timestamp).Select(grp => grp.ZoneId).FirstOrDefault()
+                        //group d by d.ZoneId into zoneGroup
+                        //select new { ZoneId = zoneGroup.Key, Timestamp = zoneGroup.Max(t => t.Timestamp) }
+                        //).OrderByDescending(grp => grp.Timestamp).Select(grp => grp.ZoneId).FirstOrDefault()
                     };
 
                 return await killStatsQuery
