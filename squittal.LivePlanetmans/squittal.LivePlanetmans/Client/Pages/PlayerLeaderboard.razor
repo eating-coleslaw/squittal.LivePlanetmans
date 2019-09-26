@@ -3,24 +3,25 @@
 @using squittal.LivePlanetmans.Shared.Models
 @using System.Timers
 @using System.Linq
+@using Microsoft.AspNetCore.WebUtilities @*for QueryHelpers*@
 @inject HttpClient Http
-
+@inject NavigationManager NavigationManager
 
 <div class="container-fluid">
     @*<div class="row">
-        <div class="col-12">
-            <p class="h2 display-4" style="font-size: 2.5rem;">
-                @if (!string.IsNullOrWhiteSpace(selectedWorldName))
-                {
-                    <span style="color: var(--pink)">@selectedWorldName Top Players</span>
-                }
-                else
-                {
-                    <span>Live Activity</span>
-                }
-            </p>
-        </div>
-    </div>*@
+            <div class="col-12">
+                <p class="h2 display-4" style="font-size: 2.5rem;">
+                    @if (!string.IsNullOrWhiteSpace(selectedWorldName))
+                    {
+                        <span style="color: var(--pink)">@selectedWorldName Top Players</span>
+                    }
+                    else
+                    {
+                        <span>Live Activity</span>
+                    }
+                </p>
+            </div>
+        </div>*@
     <div class="row">
         <div class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 10px; margin: 0px; background-color: #fcf6ff;">
             <p class="h2 display-4" style="font-size: 2.5rem; color: #e34f8c;">
@@ -73,7 +74,7 @@
                             <th style="padding-right: 10px; max-width: 65px; width: 1rem;">HSR</th>
                             <th style="padding-right: 10px; max-width: 65px; width: 1rem;"></th>
                             @*<th style="padding-right: 10px;">TKs</th>
-                        <th style="padding-right: 10px;">Suicides</th>*@
+                                <th style="padding-right: 10px;">Suicides</th>*@
                             <th style="padding-right: 10px; max-width: 65px; width: 1rem;"></th>
                         </tr>
                     </thead>
@@ -115,7 +116,7 @@
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillsPerMinute</td>
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.HeadshotRatio</td>
                                     @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.TeamKills</td>
-                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Suicides</td>*@
+                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Suicides</td>*@
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.LatestZoneName</td>
                                     <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
                                         <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
@@ -135,43 +136,43 @@
         </div>
 
         <div class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; background-color: #fcf6ff;">
-            <PlayerDetailsPanel characterId="@selectedPlayer" />
+            <PlayerDetailsPanel characterId="@playerId" />
         </div>
     </div>
 
     @*<div class="row">
-        <div class="col-sm-5">
-            <p></p>
-            <p class="h4">Debug Info</p>
-            <table class="table-sm table">
-                <thead>
-                    <tr></tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><b>Status:</b></td>
-                        <td>@debugMessage</td>
-                    </tr>
-                    <tr>
-                        <td><b>Auto-Refreshes</b></td>
-                        <td>@autoRefreshCount</td>
-                    </tr>
-                    <tr>
-                        <td><b>Last Refresh:</b></td>
-                        <td>@lastRefreshTime.ToLongTimeString()</td>
-                    </tr>
-                    <tr>
-                        <td><b>Query Start:</b></td>
-                        <td>@queryStartTimestamp</td>
-                    </tr>
-                    <tr>
-                        <td><b>Query End:</b></td>
-                        <td>@queryEndTimestamp</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>*@
+            <div class="col-sm-5">
+                <p></p>
+                <p class="h4">Debug Info</p>
+                <table class="table-sm table">
+                    <thead>
+                        <tr></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Status:</b></td>
+                            <td>@debugMessage</td>
+                        </tr>
+                        <tr>
+                            <td><b>Auto-Refreshes</b></td>
+                            <td>@autoRefreshCount</td>
+                        </tr>
+                        <tr>
+                            <td><b>Last Refresh:</b></td>
+                            <td>@lastRefreshTime.ToLongTimeString()</td>
+                        </tr>
+                        <tr>
+                            <td><b>Query Start:</b></td>
+                            <td>@queryStartTimestamp</td>
+                        </tr>
+                        <tr>
+                            <td><b>Query End:</b></td>
+                            <td>@queryEndTimestamp</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>*@
 
 </div>
 
@@ -179,6 +180,9 @@
 @code {
     [Parameter]
     public int worldId { get; set; } = 17;
+
+    [Parameter]
+    public string playerId { get; set; } = "";
 
     World[] worlds;
     string selectedWorldName = "";
@@ -201,11 +205,28 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("worldId", out var qWorldId))
+        {
+            worldId = Int32.Parse(qWorldId.First());
+        }
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
+        {
+            playerId = qPlayerId.First(); 
+        }
+
         debugMessage = "setting up server info";
         StateHasChanged();
         await SetUpWorlds();
         //await ChangeSelectedWorld(worldId);
         StateHasChanged();
+
+        if (!string.IsNullOrWhiteSpace(playerId))
+        {
+            OnSelectPlayer(playerId);
+        }
 
         //debugMessage = "first load";
         //StateHasChanged();
@@ -216,6 +237,10 @@
     protected override async Task OnParametersSetAsync()
     {
         await ChangeSelectedWorld(worldId);
+        if (!string.IsNullOrWhiteSpace(playerId))
+        {
+            OnSelectPlayer(playerId);
+        }
     }
 
     async Task SetUpWorlds()
@@ -328,6 +353,7 @@
     void OnSelectPlayer(string characterId)
     {
         selectedPlayer = characterId;
+        playerId = selectedPlayer;
     }
 
     void UpdateQueryDateTimes()
