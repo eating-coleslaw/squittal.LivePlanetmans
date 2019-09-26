@@ -76,6 +76,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         VictimPrestigeLevel = (from c in dbContext.Characters
                                                where c.Id == death.CharacterId
                                                select c.PrestigeLevel).FirstOrDefault(),
+                        VictimWorldId = (from c in dbContext.Characters
+                                         where c.Id == death.CharacterId
+                                         select c.WorldId).FirstOrDefault(),
                         IsHeadshot = death.IsHeadshot,
                         VictimLoadoutId = death.CharacterLoadoutId,
                         AttackerId = death.AttackerCharacterId,
@@ -158,6 +161,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         BattleRank = character.BattleRank,
                         PrestigeLevel = character.PrestigeLevel,
                         TitleName = title.Name,
+                        WorldId = world.Id,
                         WorldName = world.Name,
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == characterId

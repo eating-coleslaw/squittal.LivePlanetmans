@@ -10,6 +10,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         public int? VictimFactionId { get; set; }
         public int? VictimBattleRank { get; set; }
         public int? VictimPrestigeLevel { get; set; }
+        public int VictimWorldId { get; set; }
         public bool IsHeadshot { get; set; }
         public int? VictimLoadoutId { get; set; }
         public string AttackerId { get; set; }
