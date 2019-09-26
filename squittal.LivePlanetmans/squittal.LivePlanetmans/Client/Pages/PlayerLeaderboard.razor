@@ -7,18 +7,8 @@
 
 
 <div class="container-fluid">
-    <div class="row">
+    @*<div class="row">
         <div class="col-12">
-            @*<p class="h1 display-4" style="color: var(--gray);">Live Activity
-            @if (string.IsNullOrWhiteSpace(selectedWorldName))
-            {
-                <ServerSelectMenu selectedWorldId="@worldId" />
-            }
-            else
-            {
-                <ServerSelectMenu />
-            }
-        </p>*@
             <p class="h2 display-4" style="font-size: 2.5rem;">
                 @if (!string.IsNullOrWhiteSpace(selectedWorldName))
                 {
@@ -30,9 +20,20 @@
                 }
             </p>
         </div>
-    </div>
+    </div>*@
     <div class="row">
         <div class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 10px; margin: 0px; background-color: #fcf6ff;">
+            <p class="h2 display-4" style="font-size: 2.5rem; color: #e34f8c;">
+                @if (!string.IsNullOrWhiteSpace(selectedWorldName))
+                {
+                    <span style="color: var(--pink)">@selectedWorldName Top Players</span>
+                }
+                else
+                {
+                    <span>Live Activity</span>
+                }
+            </p>
+
             <div>
                 @if (string.IsNullOrWhiteSpace(selectedWorldName))
                 {
@@ -125,7 +126,7 @@
                     }
                 </table>
             }
-            
+
             @if (players == null || isChangingWorld == true)
             {
                 <p class="text-muted"><em>Loading...</em></p>
