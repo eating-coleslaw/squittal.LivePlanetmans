@@ -1,6 +1,7 @@
 ﻿@page "/serverselect"
-@page "/serverselect/{selectedWorldId}"
+@*@page "/serverselect/{selectedWorldId}"*@
 @using squittal.LivePlanetmans.Shared.Models
+@using Microsoft.AspNetCore.WebUtilities @*for QueryHelpers*@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
@@ -26,28 +27,54 @@ else
     World[] worlds;
 
     [Parameter]
-    public int? selectedWorldId { get; set; }
+    public int worldId { get; set; } = 17;
 
-    string selectedWorldName = "";
-    World selectedWorld = new World();
+    [Parameter]
+    public string playerId { get; set; }
+
+    //string selectedWorldName = "";
+    //World selectedWorld = new World();
 
     protected override async Task OnInitializedAsync()
     {
         worlds = await Http.GetJsonAsync<World[]>("api/Worlds");
 
-        if (selectedWorldId != null && worlds.Any())
+
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("worldId", out var qWorldId))
         {
-            selectedWorld = worlds.Where(w => w.Id == selectedWorldId).FirstOrDefault();
+            worldId = Int32.Parse(qWorldId.First());
         }
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
+        {
+            playerId = qPlayerId.First();
+        }
+
+
+        //if (worldId != null && worlds.Any())
+        //{
+        //    selectedWorld = worlds.Where(w => w.Id == worldId).FirstOrDefault();
+        //}
     }
 
     void OnWorldIdChange(ChangeEventArgs eventArgs)
     {
-        var worldId = eventArgs.Value;
-        if (!string.IsNullOrWhiteSpace(worldId.ToString()) && worldId != "Server")
+        var worldId = Int32.Parse(eventArgs.Value.ToString()); //.ToString();
+
+        //if (!string.IsNullOrWhiteSpace(worldId) && worldId != "Server")
+        //{
+        //NavigationManager.NavigateTo($"activity/{eventArgs.Value.ToString()}");
+        if (!string.IsNullOrWhiteSpace(playerId))
         {
-            NavigationManager.NavigateTo($"activity/{eventArgs.Value.ToString()}");
+            NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
+        }
+        else
+        {
+            NavigationManager.NavigateTo($"/activity?worldId={worldId}");
         }
     }
+}
 
 }

@@ -1,5 +1,5 @@
 ﻿@page "/leaderboard"
-@page "/leaderboard/{worldId}"
+@*@page "/leaderboard/{worldId}"*@
 @using squittal.LivePlanetmans.Shared.Models
 @using System.Timers
 @using System.Linq
@@ -36,14 +36,33 @@
             </p>
 
             <div style="padding: 5px 10px;">
-                @if (string.IsNullOrWhiteSpace(selectedWorldName))
+
+                @if (worlds == null)
                 {
-                    <ServerSelectMenu selectedWorldId="@worldId" />
+                    <em>Loading server list...</em>
                 }
                 else
                 {
-                    <ServerSelectMenu />
+                    <select class="btn-sm" style="margin-right: 5px" id="worldSelect" @onchange="OnWorldIdChange">
+                        <option value="" class="text-muted" style="font-style:italic">Server</option>
+                        @foreach (var world in worlds)
+                        {
+                            @if (world.Id != 25) //RIP Briggs
+                            {
+                                <option value="@world.Id.ToString()">@world.Name</option>
+                            }
+                        }
+                    </select>
                 }
+
+                @*@if (string.IsNullOrWhiteSpace(selectedWorldName))
+        {
+            <ServerSelectMenu worldId="@worldId" playerId="@playerId"/>
+        }
+        else
+        {
+            <ServerSelectMenu />
+        }*@
 
                 @if (players != null)
                 {
@@ -141,9 +160,12 @@
         </div>
     </div>
 
-    @*<div class="row">
+    <div class="row">
             <div class="col-sm-5">
-                <p></p>
+                <p>
+                    ParsedWorldId = @worldId
+                </p>
+                @*<p></p>
                 <p class="h4">Debug Info</p>
                 <table class="table-sm table">
                     <thead>
@@ -171,10 +193,10 @@
                             <td>@queryEndTimestamp</td>
                         </tr>
                     </tbody>
-                </table>
+                </table>*@
             </div>
-        </div>*@
-
+        </div>
+        
 </div>
 
 
@@ -215,7 +237,7 @@
 
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
         {
-            playerId = qPlayerId.First(); 
+            playerId = qPlayerId.First();
         }
 
         debugMessage = "setting up server info";
@@ -262,6 +284,14 @@
         {
             isChangingWorld = true;
             selectedWorldName = worlds.Where(w => w.Id == worldId).Select(w => w.Name).FirstOrDefault(); //worlds.Where(w => w.Id == worldId).FirstOrDefault().Name; // "success2"; // worlds.FirstOrDefault(w => w.Id == worldId).Name;
+            if (!string.IsNullOrWhiteSpace(playerId))
+            {
+                NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
+            }
+            else
+            {
+                NavigationManager.NavigateTo($"/activity?worldId={worldId}");
+            }
             await RefreshTable();
             isChangingWorld = false;
         }
@@ -356,6 +386,32 @@
         selectedPlayer = characterId;
         playerId = selectedPlayer;
         NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
+    }
+
+    async void OnWorldIdChange(ChangeEventArgs eventArgs)
+    {
+        //var worldId = Int32.Parse(eventArgs.Value.ToString()); //.ToString();
+
+        var newWorldId = eventArgs.Value.ToString();
+
+        if (!string.IsNullOrWhiteSpace(newWorldId) && newWorldId != "Server")
+        {
+            worldId = Int32.Parse(newWorldId);
+        }
+        StateHasChanged();
+        //{
+        //NavigationManager.NavigateTo($"activity/{eventArgs.Value.ToString()}");
+
+        await ChangeSelectedWorld(worldId);
+
+        //if (!string.IsNullOrWhiteSpace(playerId))
+        //{
+        //    NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
+        //}
+        //else
+        //{
+        //    NavigationManager.NavigateTo($"/activity?worldId={worldId}");
+        //}
     }
 
     void UpdateQueryDateTimes()
