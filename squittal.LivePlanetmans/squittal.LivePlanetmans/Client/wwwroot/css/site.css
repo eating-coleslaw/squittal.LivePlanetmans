@@ -3,6 +3,7 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: #f6f0ff;
+    color: #27273A;
 }
 
 app {
@@ -163,4 +164,9 @@ app {
 
 .navbar-toggler {
     margin: 0.3125rem;
+}
+
+dt {
+    font-weight: 500;
+    font-size: 0.8rem;
 }
