@@ -5,23 +5,23 @@ using System.Threading.Tasks;
 
 namespace squittal.LivePlanetmans.Server.CensusServices
 {
-    public class CensusFaction
+    public class CensusTitle
     {
         private readonly ICensusQueryFactory _queryFactory;
 
-        public CensusFaction(ICensusQueryFactory queryFactory)
+        public CensusTitle(ICensusQueryFactory queryFactory)
         {
             _queryFactory = queryFactory;
         }
 
-        public async Task<IEnumerable<CensusFactionModel>> GetAllFactions()
+        public async Task<IEnumerable<CensusTitleModel>> GetAllTitles()
         {
-            var query = _queryFactory.Create("faction");
+            var query = _queryFactory.Create("title");
             query.SetLanguage("en");
 
-            query.ShowFields("faction_id", "name", "image_id", "code_tag", "user_selectable");
+            query.ShowFields("title_id", "name");
 
-            return await query.GetBatchAsync<CensusFactionModel>();
+            return await query.GetBatchAsync<CensusTitleModel>();
         }
     }
 }

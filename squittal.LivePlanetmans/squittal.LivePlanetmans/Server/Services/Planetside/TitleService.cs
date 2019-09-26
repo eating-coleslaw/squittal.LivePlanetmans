@@ -9,48 +9,53 @@ using System.Threading.Tasks;
 
 namespace squittal.LivePlanetmans.Server.Services.Planetside
 {
-    public class FactionService : IFactionService
+    public class TitleService : ITitleService
     {
         private readonly IDbContextHelper _dbContextHelper;
-        private readonly CensusFaction _censusFaction;
+        private readonly CensusTitle _censusTitle;
 
-        public FactionService(IDbContextHelper dbContextHelper, CensusFaction censusFaction)
+        public TitleService(IDbContextHelper dbContextHelper, CensusTitle censusTitle)
         {
             _dbContextHelper = dbContextHelper;
-            _censusFaction = censusFaction;
+            _censusTitle = censusTitle;
         }
 
-        public async Task<IEnumerable<Faction>> GetAllFactionsAsync()
+        public async Task<IEnumerable<Title>> GetAllTitlesAsync()
         {
             using (var factory = _dbContextHelper.GetFactory())
             {
                 var dbContext = factory.GetDbContext();
 
-                return await dbContext.Factions.ToListAsync();
+                return await dbContext.Titles.ToListAsync();
             }
         }
 
-        public async Task<Faction> GetFactionAsync(int factionId)
+        public async Task<Title> GetTitleAsync(int titleId)
         {
-            var factions = await GetAllFactionsAsync();
-            return factions.FirstOrDefault(f => f.Id == factionId);
+            var titles = await GetAllTitlesAsync();
+            return titles.FirstOrDefault(t => t.Id == titleId);
         }
 
         public async Task RefreshStore()
         {
-            var createdEntities = new List<Faction>();
+            var createdEntities = new List<Title>();
 
-            var factions = await _censusFaction.GetAllFactions();
+            var titles = await _censusTitle.GetAllTitles();
 
-            if (factions != null)
+            if (titles != null)
             {
-                var censusEntities = factions.Select(ConvertToDbModel);
+                var censusEntities = titles.Select(ConvertToDbModel);
 
                 using (var factory = _dbContextHelper.GetFactory())
                 {
                     var dbContext = factory.GetDbContext();
 
-                    var storedEntities = await dbContext.Factions.ToListAsync();
+                    var storedEntities = await dbContext.Titles.ToListAsync();
+
+                    if (storedEntities.Any() == true)
+                    {
+                        return;
+                    }
 
                     foreach (var censusEntity in censusEntities)
                     {
@@ -62,13 +67,13 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
                         else
                         {
                             storeEntity = censusEntity;
-                            dbContext.Factions.Update(storeEntity);
+                            dbContext.Titles.Update(storeEntity);
                         }
                     }
 
                     if (createdEntities.Any())
                     {
-                        await dbContext.Factions.AddRangeAsync(createdEntities);
+                        await dbContext.Titles.AddRangeAsync(createdEntities);
                     }
 
                     await dbContext.SaveChangesAsync();
@@ -76,15 +81,12 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
             }
         }
 
-        public static Faction ConvertToDbModel(CensusFactionModel censusModel)
+        public static Title ConvertToDbModel(CensusTitleModel censusModel)
         {
-            return new Faction
+            return new Title
             {
-                Id = censusModel.FactionId,
-                Name = censusModel.Name.English,
-                ImageId = censusModel.ImageId,
-                CodeTag = censusModel.CodeTag,
-                UserSelectable = censusModel.UserSelectable
+                Id = censusModel.TitleId,
+                Name = censusModel.Name.English
             };
         }
     }
