@@ -160,11 +160,11 @@
         </div>
     </div>
 
-    <div class="row">
+    @*<div class="row">
             <div class="col-sm-5">
                 <p>
                     ParsedWorldId = @worldId
-                </p>
+                </p>*@
                 @*<p></p>
                 <p class="h4">Debug Info</p>
                 <table class="table-sm table">
@@ -194,8 +194,8 @@
                         </tr>
                     </tbody>
                 </table>*@
-            </div>
-        </div>
+            @*</div>
+        </div>*@
         
 </div>
 
@@ -398,7 +398,7 @@
         {
             worldId = Int32.Parse(newWorldId);
         }
-        StateHasChanged();
+        //StateHasChanged();
         //{
         //NavigationManager.NavigateTo($"activity/{eventArgs.Value.ToString()}");
 
