@@ -1,9 +1,8 @@
 ﻿@page "/activity"
-@*@page "/activity/{worldId}"*@
 @inject NavigationManager NavigationManager
 @using Microsoft.AspNetCore.WebUtilities @*for QueryHelpers*@
 
-<PlayerLeaderboard /> @*worldId="@worldId" playerId="@playerId" />*@
+<PlayerLeaderboard />
 
 @code
 {
@@ -36,10 +35,5 @@
         {
             NavigationManager.NavigateTo($"/activity?worldId={worldId}");
         }
-
-        //if (string.IsNullOrWhiteSpace(worldId))
-        //{
-        //    worldId = "17";
-        //}
     }
 }
