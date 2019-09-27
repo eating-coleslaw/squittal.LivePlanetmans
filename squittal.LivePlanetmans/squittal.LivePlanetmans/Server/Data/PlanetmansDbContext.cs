@@ -27,6 +27,8 @@ namespace squittal.LivePlanetmans.Server.Data
 
         #region Stream Event DbSets
         public DbSet<Death> Deaths { get; set; }
+        public DbSet<PlayerLogin> PlayerLogins { get; set; }
+        public DbSet<PlayerLogout> PlayerLogouts { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -49,6 +51,8 @@ namespace squittal.LivePlanetmans.Server.Data
 
             #region Stream Configuration
             builder.ApplyConfiguration(new DeathConfiguration());
+            builder.ApplyConfiguration(new PlayerLoginConfiguration());
+            builder.ApplyConfiguration(new PlayerLogoutConfiguration());
             #endregion
         }
     }

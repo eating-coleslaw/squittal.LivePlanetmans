@@ -91,8 +91,8 @@ namespace squittal.LivePlanetmans.Server.CensusStream
             }
         }
 
-        [CensusEventHandler("Death", typeof(Shared.Models.Death))]
-        private async Task Process(Shared.Models.Death payload)
+        [CensusEventHandler("Death", typeof(DeathPayload))]
+        private async Task Process(DeathPayload payload)
         {
             using (var factory = _dbContextHelper.GetFactory())
             {
@@ -167,7 +167,7 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                         IsHeadshot = payload.IsHeadshot,
                         Timestamp = payload.Timestamp,
                         WorldId = payload.WorldId,
-                        ZoneId = payload.ZoneId
+                        ZoneId = payload.ZoneId.Value
                     };
 
                     dbContext.Deaths.Add(dataModel);

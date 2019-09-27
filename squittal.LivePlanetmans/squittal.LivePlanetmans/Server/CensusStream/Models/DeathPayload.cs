@@ -1,6 +1,6 @@
 ﻿namespace squittal.LivePlanetmans.CensusStream.Models
 {
-    public class Death : PayloadBase
+    public class DeathPayload : PayloadBase
     {
         public string AttackerCharacterId { get; set; }
         public int? AttackerFireModeId { get; set; }
