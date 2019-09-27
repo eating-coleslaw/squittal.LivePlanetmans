@@ -1,6 +1,6 @@
-﻿namespace squittal.LivePlanetmans.Server.CensusStream.Models
+﻿namespace squittal.LivePlanetmans.CensusStream.Models
 {
-    public class PlayerLogoutPayload
+    public class PlayerLogoutPayload : PayloadBase
     {
         public string CharacterId { get; set; }
     }

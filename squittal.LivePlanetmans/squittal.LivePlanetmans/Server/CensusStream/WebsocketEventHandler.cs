@@ -104,20 +104,14 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                     Task<OutfitMember> attackerOutfitTask = null;
                     Task<OutfitMember> victimOutfitTask = null;
 
-                    //dbContext.Deaths.Add(dataModel);
-                    //Task saveDeath = dbContext.SaveChangesAsync();
-                    //TaskList.Add(saveDeath);
-
                     if (payload.AttackerCharacterId != null && payload.AttackerCharacterId.Length > 18)
                     {
                         attackerOutfitTask = _characterService.GetCharactersOutfitAsync(payload.AttackerCharacterId);
-                        //Task<Character> attackerTask = _characterService.GetCharacterAsync(payload.AttackerCharacterId);
                         TaskList.Add(attackerOutfitTask);
                     }
                     if (payload.AttackerCharacterId != null && payload.AttackerCharacterId.Length > 18)
                     {
                         victimOutfitTask = _characterService.GetCharactersOutfitAsync(payload.CharacterId);
-                        //Task<Character> victimTask = _characterService.GetCharacterAsync(payload.CharacterId);
                         TaskList.Add(victimOutfitTask);
                     }
 
@@ -129,27 +123,10 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                                                         .Select(c => c.FactionId)
                                                         .FirstOrDefaultAsync();
 
-                    //Task<int> attackerFactionTask = dbContext.Characters
-                    //                                    .AsNoTracking()
-                    //                                    .Where(c => c.Id == payload.AttackerCharacterId)
-                    //                                    .Select(c => c.FactionId)
-                    //                                    .FirstOrDefaultAsync();
-
-                    //TaskList.Add(attackerFactionTask);
-
                     int victimFactionId = await dbContext.Characters
                                                         .Where(c => c.Id == payload.CharacterId)
                                                         .Select(c => c.FactionId)
                                                         .FirstOrDefaultAsync();
-
-                    //Task<int> victimFactionTask = dbContext.Characters
-                    //                                    .AsNoTracking()
-                    //                                    .Where(c => c.Id == payload.CharacterId)
-                    //                                    .Select(c => c.FactionId)
-                    //                                    .FirstOrDefaultAsync();
-                    //TaskList.Add(victimFactionTask);
-
-                    //await Task.WhenAll(TaskList);
 
                     var dataModel = new Shared.Models.Death
                     {
@@ -177,6 +154,44 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                 {
                     //Ignore
                 }
+            }
+        }
+
+        [CensusEventHandler("PlayerLogin", typeof(PlayerLoginPayload))]
+        private async Task Process(PlayerLoginPayload payload)
+        {
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                var dataModel = new PlayerLogin
+                {
+                    CharacterId = payload.CharacterId,
+                    Timestamp = payload.Timestamp,
+                    WorldId = payload.WorldId
+                };
+
+                dbContext.PlayerLogins.Add(dataModel);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        [CensusEventHandler("PlayerLogout", typeof(PlayerLogoutPayload))]
+        private async Task Process(PlayerLogoutPayload payload)
+        {
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                var dataModel = new PlayerLogout
+                {
+                    CharacterId = payload.CharacterId,
+                    Timestamp = payload.Timestamp,
+                    WorldId = payload.WorldId
+                };
+
+                dbContext.PlayerLogouts.Add(dataModel);
+                await dbContext.SaveChangesAsync();
             }
         }
 
