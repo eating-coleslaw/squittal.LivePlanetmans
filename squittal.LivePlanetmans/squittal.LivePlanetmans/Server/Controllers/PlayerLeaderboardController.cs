@@ -76,11 +76,14 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                          select c.PrestigeLevel).FirstOrDefault(),
 
                         LatestZoneId = (from d in dbContext.Deaths
-                                        where d.AttackerCharacterId == playerGroup.Key
+                                        where (d.AttackerCharacterId == playerGroup.Key
+                                               || d.CharacterId == playerGroup.Key)
                                            && d.Timestamp >= startTime
                                            && d.WorldId == worldId
-                                        select new { d.ZoneId, d.Timestamp }
-                                        ).OrderByDescending(t => t.Timestamp).Select(t => t.ZoneId).FirstOrDefault(),
+                                        orderby d.Timestamp descending
+                                        select d.ZoneId).FirstOrDefault(),
+                                        //select new { d.ZoneId, d.Timestamp  }
+                                        //).OrderByDescending(t => t.Timestamp).Select(t => t.ZoneId).FirstOrDefault(),
 
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == playerGroup.Key

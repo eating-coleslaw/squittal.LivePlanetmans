@@ -59,6 +59,21 @@ else
         //}
     }
 
+    protected override void OnParametersSet()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("worldId", out var qWorldId))
+        {
+            worldId = Int32.Parse(qWorldId.First());
+        }
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
+        {
+            playerId = qPlayerId.First();
+        }
+    }
+
     void OnWorldIdChange(ChangeEventArgs eventArgs)
     {
         var worldId = Int32.Parse(eventArgs.Value.ToString()); //.ToString();

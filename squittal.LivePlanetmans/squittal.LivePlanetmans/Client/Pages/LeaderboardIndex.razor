@@ -1,18 +1,45 @@
 ﻿@page "/activity"
-@page "/activity/{worldId}"
+@*@page "/activity/{worldId}"*@
+@inject NavigationManager NavigationManager
+@using Microsoft.AspNetCore.WebUtilities @*for QueryHelpers*@
 
-<PlayerLeaderboard worldId="@(Int32.Parse(worldId))" />
+<PlayerLeaderboard /> @*worldId="@worldId" playerId="@playerId" />*@
 
 @code
 {
     [Parameter]
-    public string worldId { get; set; }
+    public int worldId { get; set; } = 17;
+
+    [Parameter]
+    public string playerId { get; set; } = string.Empty;
 
     protected override void OnInitialized()
     {
-        if (string.IsNullOrWhiteSpace(worldId))
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("worldId", out var qWorldId))
         {
-            worldId = "17";
+            worldId = Int32.Parse(qWorldId.First());
         }
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
+        {
+            playerId = qPlayerId.First();
+        }
+
+
+        if (!string.IsNullOrWhiteSpace(playerId))
+        {
+            NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
+        }
+        else
+        {
+            NavigationManager.NavigateTo($"/activity?worldId={worldId}");
+        }
+
+        //if (string.IsNullOrWhiteSpace(worldId))
+        //{
+        //    worldId = "17";
+        //}
     }
 }

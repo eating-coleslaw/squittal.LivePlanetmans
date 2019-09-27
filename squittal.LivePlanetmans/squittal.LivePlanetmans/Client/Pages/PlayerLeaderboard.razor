@@ -56,13 +56,13 @@
                 }
 
                 @*@if (string.IsNullOrWhiteSpace(selectedWorldName))
-        {
-            <ServerSelectMenu worldId="@worldId" playerId="@playerId"/>
-        }
-        else
-        {
-            <ServerSelectMenu />
-        }*@
+            {
+                <ServerSelectMenu worldId="@worldId" playerId="@playerId"/>
+            }
+            else
+            {
+                <ServerSelectMenu />
+            }*@
 
                 @if (players != null)
                 {
@@ -93,7 +93,7 @@
                                 <th style="padding-right: 10px; max-width: 65px; width: 1rem;">HSR</th>
                                 <th style="padding-right: 10px; max-width: 65px; width: 1rem;"></th>
                                 @*<th style="padding-right: 10px;">TKs</th>
-                        <th style="padding-right: 10px;">Suicides</th>*@
+                            <th style="padding-right: 10px;">Suicides</th>*@
                                 <th style="padding-right: 10px; max-width: 65px; width: 1rem;"></th>
                             </tr>
                         </thead>
@@ -135,7 +135,7 @@
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillsPerMinute</td>
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.HeadshotRatio</td>
                                         @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.TeamKills</td>
-                                <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Suicides</td>*@
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Suicides</td>*@
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.LatestZoneName</td>
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
                                             <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
@@ -153,49 +153,69 @@
                     <p class="text-muted"><em>Loading...</em></p>
                 }
             </div>
+
+            <div class="row">
+                <div class="col-sm-5">
+                    <p>
+                        ParsedWorldId: @worldId
+                    </p>
+                    <p>
+                        playerId: @playerId
+                    </p>
+                </div>
+                <div class="col-sm-5">
+                    <p>
+                        Renders: @renderCount
+                    </p>
+                    <p>
+                        OnInits: @initAsyncCount
+                    </p>
+                    <p>
+                        Param Sets: @paramSetAsyncCount
+                    </p>
+                </div>
+            </div>
+
         </div>
 
         <div id="player-details" class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; background-color: #fcf6ff;">
-            <PlayerDetailsPanel characterId="@playerId" />
+            <PlayerDetailsPanel playerId="@playerId" OnCharacterIdChanged="CharacterIdChanged"/> @*worldId="@worldId" OnCharacterIdChanged="CharacterIdChanged"/>*@
         </div>
     </div>
 
-    @*<div class="row">
-            <div class="col-sm-5">
-                <p>
-                    ParsedWorldId = @worldId
-                </p>*@
-                @*<p></p>
-                <p class="h4">Debug Info</p>
-                <table class="table-sm table">
-                    <thead>
-                        <tr></tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><b>Status:</b></td>
-                            <td>@debugMessage</td>
-                        </tr>
-                        <tr>
-                            <td><b>Auto-Refreshes</b></td>
-                            <td>@autoRefreshCount</td>
-                        </tr>
-                        <tr>
-                            <td><b>Last Refresh:</b></td>
-                            <td>@lastRefreshTime.ToLongTimeString()</td>
-                        </tr>
-                        <tr>
-                            <td><b>Query Start:</b></td>
-                            <td>@queryStartTimestamp</td>
-                        </tr>
-                        <tr>
-                            <td><b>Query End:</b></td>
-                            <td>@queryEndTimestamp</td>
-                        </tr>
-                    </tbody>
-                </table>*@
-            @*</div>
-        </div>*@
+    <div class="row">
+        <div class="col-sm-5">
+            @*<p></p>
+            <p class="h4">Debug Info</p>
+            <table class="table-sm table">
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Status:</b></td>
+                        <td>@debugMessage</td>
+                    </tr>
+                    <tr>
+                        <td><b>Auto-Refreshes</b></td>
+                        <td>@autoRefreshCount</td>
+                    </tr>
+                    <tr>
+                        <td><b>Last Refresh:</b></td>
+                        <td>@lastRefreshTime.ToLongTimeString()</td>
+                    </tr>
+                    <tr>
+                        <td><b>Query Start:</b></td>
+                        <td>@queryStartTimestamp</td>
+                    </tr>
+                    <tr>
+                        <td><b>Query End:</b></td>
+                        <td>@queryEndTimestamp</td>
+                    </tr>
+                </tbody>
+            </table>*@
+        </div>
+    </div>
         
 </div>
 
@@ -220,13 +240,19 @@
     int autoRefreshCount = 0;
     string refreshSource = "";
 
+    string selectedPlayer = "";
+
+    // DEBUG
     string debugMessage = "";
     string queryStartTimestamp = "";
     string queryEndTimestamp = "";
 
-    string selectedPlayer = "";
+    int initAsyncCount = 0;
+    int paramSetAsyncCount = 0;
+    int renderCount = 0;
 
-    protected override async Task OnInitializedAsync()
+
+    protected override void OnInitialized()
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
@@ -239,6 +265,24 @@
         {
             playerId = qPlayerId.First();
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        initAsyncCount += 1;
+        StateHasChanged();
+
+        //var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        //if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("worldId", out var qWorldId))
+        //{
+        //    worldId = Int32.Parse(qWorldId.First());
+        //}
+
+        //if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
+        //{
+        //    playerId = qPlayerId.First();
+        //}
 
         debugMessage = "setting up server info";
         StateHasChanged();
@@ -257,8 +301,16 @@
         debugMessage = "initial load complete";
     }
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        renderCount += 1;
+    }
+
     protected override async Task OnParametersSetAsync()
     {
+        paramSetAsyncCount += 1;
+        StateHasChanged();
+
         await ChangeSelectedWorld(worldId);
         if (!string.IsNullOrWhiteSpace(playerId))
         {
@@ -383,8 +435,16 @@
 
     void OnSelectPlayer(string characterId)
     {
+        //var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        //if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
+        //{
+        //    playerId = qPlayerId.First();
+        //}
+
         selectedPlayer = characterId;
         playerId = selectedPlayer;
+
         NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
     }
 
@@ -412,6 +472,12 @@
         //{
         //    NavigationManager.NavigateTo($"/activity?worldId={worldId}");
         //}
+    }
+
+    public void CharacterIdChanged(string characterId)
+    {
+        //playerId = characterId;
+        OnSelectPlayer(characterId);
     }
 
     void UpdateQueryDateTimes()
