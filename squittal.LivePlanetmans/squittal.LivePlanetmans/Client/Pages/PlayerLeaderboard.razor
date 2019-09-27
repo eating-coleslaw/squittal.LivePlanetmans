@@ -179,7 +179,7 @@
         </div>
 
         <div id="player-details" class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; background-color: #fcf6ff;">
-            <PlayerDetailsPanel playerId="@playerId" OnCharacterIdChanged="CharacterIdChanged"/> @*worldId="@worldId" OnCharacterIdChanged="CharacterIdChanged"/>*@
+            <PlayerDetailsPanel playerId="@playerId" OnKillboardPlayerSelected="KillboardPlayerSelected"/> @*worldId="@worldId" OnCharacterIdChanged="KillboardPlayerSelected"/>*@
         </div>
     </div>
 
@@ -474,7 +474,7 @@
         //}
     }
 
-    public void CharacterIdChanged(string characterId)
+    public void KillboardPlayerSelected(string characterId)
     {
         //playerId = characterId;
         OnSelectPlayer(characterId);

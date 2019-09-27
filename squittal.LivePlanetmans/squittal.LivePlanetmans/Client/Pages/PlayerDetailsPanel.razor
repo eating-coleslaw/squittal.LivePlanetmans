@@ -1,5 +1,5 @@
 ﻿@page "/playerstats"
-@*@page "/playerstats/{characterId}"*@
+@*@page "/playerstats/{killboardPlayerId}"*@
 @using squittal.LivePlanetmans.Shared.Models
 @using Microsoft.AspNetCore.WebUtilities @*for QueryHelpers*@
 @inject HttpClient Http
@@ -14,7 +14,7 @@
 }
 else
 {
-    //<p>@*Player ID: @characterId*@</p>
+    //<p>@*Player ID: @killboardPlayerId*@</p>
     @if (stats != null && player != null)
     {
         <div id="details-header" style="display: grid; grid-template-columns: 1fr 80px; grid-template-rows: 1fr 1rem; border-top: 2px solid @GetFactionColorFromId(player.FactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
@@ -190,7 +190,7 @@ else
             playerId: @playerId
         </p>
         <p>
-            characterId: @characterId
+            killboardPlayerId: @killboardPlayerId
         </p>
         <p>
             renderedId: @renderedPlayerId
@@ -229,19 +229,19 @@ else
 
 
     [Parameter]
-    public EventCallback<string> OnCharacterIdChanged { get; set; }
+    public EventCallback<string> OnKillboardPlayerSelected { get; set; }
 
-    private string characterId;
-    public string CharacterId
+    private string killboardPlayerId;
+    public string KillboardPlayerId
     {
-        get => characterId;
+        get => killboardPlayerId;
         set
         {
-            characterId = value;
+            killboardPlayerId = value;
             // Invoke the delegate passing it the changed value
-            if (characterId != renderedPlayerId)
+            if (killboardPlayerId != renderedPlayerId)
             {
-                OnCharacterIdChanged.InvokeAsync(value);
+                OnKillboardPlayerSelected.InvokeAsync(value);
             }
         }
     }
@@ -296,11 +296,11 @@ else
     {
         //StateHasChanged();
 
-        if ((playerId != characterId || playerId != renderedPlayerId) && !string.IsNullOrEmpty(playerId))
+        if ((playerId != killboardPlayerId || playerId != renderedPlayerId) && !string.IsNullOrEmpty(playerId))
         {
             paramSetAsyncCount += 1;
             renderedPlayerId = playerId;
-            characterId = playerId;
+            killboardPlayerId = playerId;
             await OnPlayerIdChange();
         }
     }
@@ -310,8 +310,8 @@ else
         //playerId = newPlayerId;
         //worldId = newWorldId;
 
-        //CharacterId = playerId;
-        CharacterId = newPlayerId;
+        //KillboardPlayerId = playerId;
+        KillboardPlayerId = newPlayerId;
 
         //await OnPlayerIdChange();
 
@@ -339,7 +339,7 @@ else
                 kills = await killsTask;
                 StateHasChanged();
 
-                //CharacterId = playerId;
+                //KillboardPlayerId = playerId;
             }
             catch (Exception)
             {
@@ -351,7 +351,7 @@ else
 
     string GetUrlFromCharacterId(string playerId)
     {
-        //return $"https:/www.planetside2.com/players/#!/{characterId}";
+        //return $"https:/www.planetside2.com/players/#!/{killboardPlayerId}";
         return $"https:/voidwell.com/ps2/player/{playerId}";
     }
 
