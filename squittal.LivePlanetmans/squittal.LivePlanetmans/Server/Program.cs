@@ -21,8 +21,6 @@ namespace squittal.LivePlanetmans.Server
 
                 try
                 {
-                    //var context = services.GetRequiredService<PlanetmansDbContext>();
-                    //context.Database.Migrate();
                     DbInitializer.Initialize(services);
                 }
                 catch (Exception ex)
@@ -41,6 +39,19 @@ namespace squittal.LivePlanetmans.Server
                     .AddCommandLine(args)
                     .Build())
                 .UseStartup<Startup>()
-                .Build();
+            .ConfigureLogging((context, builder) =>
+            {
+                //builder.ClearProviders();
+
+                builder.SetMinimumLevel(LogLevel.Information);
+
+                builder.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
+                builder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
+                builder.AddFilter("Microsoft.EntityFrameworkCore.Update", LogLevel.None);
+                builder.AddFilter("Microsoft.EntityframeworkCore.Database.Command", LogLevel.None);
+
+                builder.AddConsole();
+            })
+            .Build();
     }
 }
