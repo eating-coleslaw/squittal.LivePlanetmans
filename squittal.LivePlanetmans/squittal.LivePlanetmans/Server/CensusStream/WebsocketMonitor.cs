@@ -23,7 +23,7 @@ namespace squittal.LivePlanetmans.Server.CensusStream
             {
                 Characters = new[] { "all" },
                 Worlds = new[] { "all" },
-                EventNames = new[] { "Death" }
+                EventNames = new[] { "Death", "PlayerLogin", "PlayerLogout" }
             };
 
             _client.Subscribe(subscription)
