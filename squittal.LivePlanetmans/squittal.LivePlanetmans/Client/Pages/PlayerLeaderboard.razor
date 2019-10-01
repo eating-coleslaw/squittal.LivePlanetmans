@@ -70,12 +70,13 @@
                                 <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Deaths</th>
                                 <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KDR</th>
                                 <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KPM</th>
-                                <th style="padding-right: 10px; max-width: 70px; width: 1.1rem; word-wrap: normal; vertical-align: bottom;">
-                                    <span style="font-size: 0.6rem; position: relative; top: 0.5rem;">Session</span>
+                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">HSR</th>
+                                <th style="padding-right: 10px; margin-left: 0.3125rem; max-width: 70px; width: 1.1rem; word-wrap: normal; vertical-align: bottom;">
+                                    <span style="font-size: 0.6rem; position: relative; top: 0.5rem;">Playtime</span>
                                     <span style="font-size: 0.8rem;">KPM</span>
                                 </th>
-                                @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">HSR</th>*@
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th> @* Last-Seen Continent *@
+                                <th title="Get"style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Session</th>
+                                @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th>*@ @* Last-Seen Continent *@
                                 @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th>*@
                             </tr>
                         </thead>
@@ -85,30 +86,35 @@
                                 @foreach (var player in players)
                                 {
                                 <tr style="color: @GetFactionColorFromId(player.FactionId);">
-                                    <td style="padding: 0.1rem 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
-                                        @if (player.IsOnline == true)
-                                        {
-                                            <span class="oi oi-bolt small" style="color: #10BF6B !important;"></span>
-                                        }
-                                        else
-                                        {
+                                    @*<td style="padding: 0.1rem 0.5rem 0.1rem 0.25rem; max-width: 30px;  width: 1rem; border: inherit;">*@
+                                    @if (player.IsOnline == true)
+                                    {
+                                        @*<span class="oi oi-bolt small" style="color: #10BF6B !important;"></span>*@
+                                        <td style="padding: 0.1rem 0.5rem 0.1rem 0.3125rem; max-width: 30px;  width: 1rem; border: inherit;">
+                                            <div title="Online: @player.LatestZoneName" style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px; opacity: 0.65;">@GetZoneDisplayEmoji(player.LatestZoneName)</div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td style="padding: 0.1rem 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
                                             <span class="oi oi-moon small" style="color: #b7a8d7 !important;"></span>
-                                        }
-                                    </td>
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px;">
-                                        @((string.IsNullOrWhiteSpace(player.OutfitAlias)) ? "" : $"[{player.OutfitAlias}]")
-                                    </td>
+                                        </td>
+                                    }
+                                        @*</td>*@
+                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px;">
+                                            @((string.IsNullOrWhiteSpace(player.OutfitAlias)) ? "" : $"[{player.OutfitAlias}]")
+                                        </td>
 
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
-                                        <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))">
-                                            @if (string.IsNullOrWhiteSpace(player.PlayerName))
-                                            {
-                                                @player.PlayerId
-                                                @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.PlayerId</td>*@
-                                            }
-                                            else
-                                            {
-                                                @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">*@
+                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
+                                            <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))">
+                                                @if (string.IsNullOrWhiteSpace(player.PlayerName))
+                                                {
+                                                    @player.PlayerId
+                                                    @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.PlayerId</td>*@
+                                                }
+                                                else
+                                                {
+                                                    @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">*@
                                                     <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@player.PlayerName </div>
                                                     <div style="display: inline-block;">
                                                         <sup>
@@ -119,25 +125,25 @@
                                                             }
                                                         </sup>
                                                     </div>
-                                                @*</td>*@
-                                        }
-                                        </button>
-                                    </td>
+                                                    @*</td>*@
+                                                }
+                                            </button>
+                                        </td>
 
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Kills</td>
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Deaths</td>
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillDeathRatio</td>
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillsPerMinute</td>
+                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.HeadshotRatio</td>
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
                                             @((player.SessionKillsPerMinute != null) ? player.SessionKillsPerMinute.ToString() : "-")
                                         </td>
-                                        @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.HeadshotRatio</td>*@
-                                        @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@GetSessionDurationDisplay(player)</td>*@
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.LatestZoneName</td>
+                                        <td title="@GetSessionDisplayTimes(player)" style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@GetSessionDurationDisplay(player)</td>
+                                        @*<td title="@player.LatestZoneName" style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px; opacity: 0.75;">@GetZoneDisplayEmoji(player.LatestZoneName)</td>*@
                                         @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
-                                            <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
-                                        </td>*@
-                                </tr>
+                <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
+            </td>*@
+                                    </tr>
                                 }
                             </tbody>
                         }
@@ -486,7 +492,7 @@
         var duration = (GetSessionEndTime(player) - GetSessionStartTime(player));
 
         var totalMinutes = (int)Math.Round(duration.TotalMinutes, 0);
-        
+
         int hours = (totalMinutes / 60);
 
         var remainder = totalMinutes - (hours * 60);
@@ -496,6 +502,51 @@
         string space = (hours > 0 && remainder > 0) ? " " : string.Empty;
 
         return $"{hoursDisplay}{space}{minutesDisplay}";
+    }
+
+    string GetSessionDisplayTimes(PlayerHourlyStatsData player)
+    {
+        var startTime = GetSessionStartTime(player);
+        var endTime = GetSessionEndTime(player);
+
+        bool endIsNow = (endTime == player.QueryNowUtc);
+        bool sameDates = (startTime.Date == endTime.Date);
+        var fiveHours = TimeSpan.FromHours(5);
+
+        if (sameDates == true)
+        {
+            return endIsNow
+                ? $"{(startTime - fiveHours).ToShortTimeString()} - Now"
+                : $"{(startTime - fiveHours).ToShortTimeString()} - {(endTime - fiveHours).ToShortTimeString()}";
+        }
+        else
+        {
+            return endIsNow
+                ? $"{(startTime - fiveHours).ToString("M")} {(startTime - fiveHours).ToShortTimeString()} - Now"
+                : $"{(startTime - fiveHours).ToString("M")} {(startTime - fiveHours).ToShortTimeString()} - {(endTime - fiveHours).ToString("M")} {(endTime - fiveHours).ToShortTimeString()}";
+        }
+
+    }
+
+    string GetZoneDisplayEmoji(string zoneName)
+    {
+        switch (zoneName)
+        {
+            case "Amerish":
+                return "🗻"; //\u26f0"; //⛰";
+
+            case "Esamir":
+                return "❄️";
+
+            case "Hossin":
+                return "🌳";
+
+            case "Indar":
+                return "☀️";
+
+            default:
+                return "❔";
+        }
     }
 
     string GetFactionColorFromId(int factionId)
