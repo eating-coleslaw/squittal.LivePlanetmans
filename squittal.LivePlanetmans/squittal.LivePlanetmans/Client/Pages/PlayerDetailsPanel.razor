@@ -12,10 +12,10 @@
 }
 else
 {
-    @if (stats != null && player != null)
+    @if (player != null)
     {
-        <div id="details-header" style="display: grid; grid-template-columns: 1fr 80px; grid-template-rows: 1fr 1rem; border-top: 2px solid @GetFactionColorFromId(player.FactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
-            <div class="h2" style="margin-bottom: 0px; word-wrap: break-word;">
+        <div id="details-header" style="display: grid; grid-template-columns: 1fr 1fr 80px; grid-template-rows: 1fr 1rem; border-top: 2px solid @GetFactionColorFromId(player.FactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
+            <div class="h2" style="margin-bottom: 0px; word-wrap: break-word; grid-column: 1 / 3;">
                 <a href="@GetUrlFromCharacterName(player.Name)" target="_blank" style="color:@GetFactionColorFromId(player.FactionId);">
                     @player.Name
                     <span class="h6 oi oi-external-link" style="opacity: 0.5;"></span>
@@ -23,62 +23,100 @@ else
             </div>
 
             <div style="text-align: right;">
-                <span class="h6">@stats.BattleRank</span>
-                @if (stats.PrestigeLevel != 0)
+                <span class="h6">@player.BattleRank</span>
+                @if (player.PrestigeLevel != 0)
                 {
                     <span class="oi oi-star small h6" style="color: #F8BA0F; vertical-align: middle; font-size: 0.8rem; margin-bottom: 0.5rem;" aria-hidden="true"></span>
                 }
-                <div class="text-muted" style="font-size: 0.8rem; font-weight: 300; margin-top: -0.3rem;">Battle Rank</div>
+                <div class="text-muted" style="font-size: 0.75rem; font-weight: 300; margin-top: -0.3rem;">Battle Rank</div>
             </div>
 
-            <div style="color: @GetFactionColorFromId(stats.FactionId); grid-row: 2; font-size: 0.8rem;">
-                @if (!string.IsNullOrWhiteSpace(stats.TitleName))
+            @if (stats != null)
+            {
+                <div style="color: @GetFactionColorFromId(player.FactionId); grid-row: 2; font-size: 0.8rem;">
+                    @if (!string.IsNullOrWhiteSpace(stats.TitleName))
+                    {
+                        <span>@stats.TitleName of the </span>
+                    }
+                    <span>@stats.FactionName on @stats.WorldName</span>
+                </div>
+
+                @if (stats.OutfitName != null)
                 {
-                    <span>@stats.TitleName of the </span>
+                    <div style="color: @GetFactionColorFromId(player.FactionId); grid-row: 2; grid-column: 2 / 4; text-align: right; font-size: 0.8rem;">
+                        <span style="font-size: 0.7rem; font-weight: 400;">[@(stats.OutfitAlias)] </span><span>@(stats.OutfitName) </span>
+                        <span class="oi oi-caret-right small" style="font-size: 0.5rem; top: 0px; padding: 0 0.3125rem;"></span><span> @stats.OutfitRankName</span>
+                    </div>
                 }
-                <span>@stats.FactionName on @stats.WorldName</span>
-            </div>
+
+            }
 
         </div>
 
         <div id="details-body" style="padding: 0px 10px;">
-            <div id="details-stats" style="display: grid; grid-template-columns: 1fr 1fr 1fr 3fr; grid-template-areas: 'left middle blank right'; grid-gap: 2rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+        @if (stats != null)
+        {
+            <div id="details-stats" style="display: grid; grid-template-columns: 1fr 1fr 1fr 3fr; grid-template-areas: 'header header header header' 'left middle blank right'; grid-gap: 0.3125rem 2rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+
+                <div style="grid-column: 1 / 4; margin: 0px; font-size: 0.8rem; grid-area: header;">
+                    <span class="text-muted" style="font-size: 0.8rem;">Session: </span>
+                    <span>@GetSessionDisplayTimes()</span>
+                </div>
+
                 <dl class="row" style="grid-area: left; margin: 0px;">
                     <dt class="col-sm-3 text-muted" style="padding-left: 0px;">KDR</dt>
-                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right;">@stats.KillDeathRatio</dd>
+                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.KillDeathRatio</dd>
 
                     <dt class="col-sm-3 text-muted" style="padding-left: 0px;">KPM</dt>
-                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right;">@stats.KillsPerMinute</dd>
+                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.KillsPerMinute</dd>
 
                     <dt class="col-sm-3 text-muted" style="padding-left: 0px;">HSR</dt>
-                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right;">@(stats.HeadshotRatio)<span style="font-size: 0.75rem;">%</span></dd>
+                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@(stats.HeadshotRatio)<span style="font-size: 0.75rem;">%</span></dd>
                 </dl>
 
                 <dl class="row" style="grid-area: middle; margin: 0px;">
                     <dt class="col-sm-9 text-muted" style="padding-left: 0px;">Kills</dt>
-                    <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right;">@stats.Kills</dd>
+                    <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Kills</dd>
 
                     <dt class="col-sm-9 text-muted" style="padding-left: 0px;">Deaths</dt>
-                    <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right;">@stats.Deaths</dd>
+                    <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Deaths</dd>
 
                     <dt class="col-sm-9 text-muted" style="padding-left: 0px;">Team Kills</dt>
-                    <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right;">@stats.TeamKills</dd>
+                    <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.TeamKills</dd>
 
                     <dt class="col-sm-9 text-muted" style="padding-left: 0px;">Suicides</dt>
-                    <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right;">@stats.Suicides</dd>
+                    <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Suicides</dd>
                 </dl>
 
                 <dl class="row" style="grid-area: right; margin: 0px;">
                     @if (!string.IsNullOrWhiteSpace(stats.OutfitAlias))
                     {
                         <dt class="col-sm-2 text-muted" style="padding-left: 0px; padding-right: 10px;">Outfit</dt>
-                        <dd class="col-sm-10" style="margin-bottom: 0px; padding-left: 0.3125rem; text-align: left;">[@(stats.OutfitAlias)] @stats.OutfitName</dd>
+                        <dd class="col-sm-10" style="margin-bottom: 0px; padding-left: 0.3125rem; text-align: left; font-size: 0.85rem;">[@(stats.OutfitAlias)] @stats.OutfitName</dd>
 
                         <dt class="col-sm-2 text-muted" style="padding-left: 0px; padding-right: 10px;">Rank</dt>
-                        <dd class="col-sm-10" style="margin-bottom: 0px; padding-left: 0.3125rem; text-align: left;">@stats.OutfitRankName</dd>
+                        <dd class="col-sm-10" style="margin-bottom: 0px; padding-left: 0.3125rem; text-align: left; font-size: 0.85rem;">@stats.OutfitRankName</dd>
                     }
+
+                    <dt class="col-sm-3 text-muted" style="padding-left: 0px;">Login</dt>
+                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@(stats.LatestLoginTime - TimeSpan.FromHours(5))</dd>
+
+                    <dt class="col-sm-3 text-muted" style="padding-left: 0px;">Logout</dt>
+                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@(stats.LatestLogoutTime - TimeSpan.FromHours(5))</dd>
+
+                    <dt class="col-sm-3 text-muted" style="padding-left: 0px;">Online?</dt>
+                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.IsOnline.ToString()</dd>
+
+                    <dt class="col-sm-3 text-muted" style="padding-left: 0px;">Kills (s)</dt>
+                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.SessionKills</dd>
+
+                    <dt class="col-sm-3 text-muted" style="padding-left: 0px;">Duration (s)</dt>
+                    <dd class="col-sm-9" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.SessionDurationMinutes</dd>
+
                 </dl>
+
             </div>
+            }
 
             <h5>Kills This Hour</h5>
             @if (kills == null || isLoadingKillboard == true)
@@ -275,13 +313,20 @@ else
             isLoadingKillboard = true;
             try
             {
+                //var TaskList = new List<Task>();
+
                 Task<Character> playerTask = Http.GetJsonAsync<Character>($"api/PlayerDetails/{playerId}");
+                //TaskList.Add(playerTask);
                 Task<PlayerHourlyStatsData> statsTask = Http.GetJsonAsync<PlayerHourlyStatsData>($"api/PlayerDetails/stats/{playerId}");
+                //TaskList.Add(statsTask);
                 Task<PlayerKillboardItem[]> killsTask = Http.GetJsonAsync<PlayerKillboardItem[]>($"api/PlayerDetails/kills/{playerId}");
+                //TaskList.Add(killsTask);
+
                 player = await playerTask;
-                stats = await statsTask;
                 StateHasChanged();
                 kills = await killsTask;
+                StateHasChanged();
+                stats = await statsTask;
                 StateHasChanged();
             }
             catch (Exception)
@@ -290,6 +335,47 @@ else
             }
             isLoadingKillboard = false;
         }
+    }
+
+    string GetSessionDisplayTimes()
+    {
+        var startTime = GetSessionStartTime();
+        var endTime = GetSessionEndTime();
+
+        bool endIsNow = (endTime == stats.QueryNowUtc);
+        bool sameDates = (startTime.Date == endTime.Date);
+        var fiveHours = TimeSpan.FromHours(5);
+
+        if (sameDates == true)
+        {
+            return endIsNow
+                ? $"{(startTime - fiveHours).ToShortTimeString()} - Now"
+                : $"{(startTime - fiveHours).ToShortTimeString()} - {(endTime - fiveHours).ToShortTimeString()}";
+        }
+        else
+        {
+            return endIsNow
+                ? $"{(startTime - fiveHours).ToString("M")} {(startTime - fiveHours).ToShortTimeString()} - Now"
+                : $"{(startTime - fiveHours).ToString("M")} {(startTime - fiveHours).ToShortTimeString()} - {(endTime - fiveHours).ToString("M")} {(endTime - fiveHours).ToShortTimeString()}";
+        }
+
+    }
+
+    DateTime GetSessionStartTime()
+    {
+        return (stats.LatestLoginTime ?? stats.QueryStartTime);
+    }
+
+    DateTime GetSessionEndTime()
+    {
+        var sessionEndTime = (stats.LatestLogoutTime ?? stats.QueryNowUtc); // (playerStats.LatestLogoutTime != null) ? (playerStats.LatestLogoutTime ?? nowUtc) : nowUtc;
+
+        if (sessionEndTime <= GetSessionStartTime())
+        {
+            sessionEndTime = stats.QueryNowUtc;
+        }
+
+        return sessionEndTime;
     }
 
     string GetUrlFromCharacterId(string playerId)
