@@ -85,6 +85,28 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                         //select new { d.ZoneId, d.Timestamp  }
                                         //).OrderByDescending(t => t.Timestamp).Select(t => t.ZoneId).FirstOrDefault(),
 
+                        LatestLoginTime = (from login in dbContext.PlayerLogins
+                                           where login.CharacterId == playerGroup.Key
+                                           orderby login.Timestamp descending
+                                           select login.Timestamp).FirstOrDefault(),
+
+                        LatestLogoutTime = (from logout in dbContext.PlayerLogouts
+                                           where logout.CharacterId == playerGroup.Key
+                                           orderby logout.Timestamp descending
+                                           select logout.Timestamp).FirstOrDefault(),
+
+                        LatestDeathEventTime = (from death in dbContext.Deaths
+                                                where (death.AttackerCharacterId == playerGroup.Key
+                                                      || death.CharacterId == playerGroup.Key)
+                                                   && death.Timestamp >= startTime
+                                                   && death.WorldId == worldId
+                                                orderby death.Timestamp
+                                                select death.Timestamp).FirstOrDefault(),
+
+                        QueryStartTime = startTime,
+
+                        QueryNowUtc = nowUtc,
+
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == playerGroup.Key
                                     && k.AttackerCharacterId != k.CharacterId
@@ -141,6 +163,26 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 foreach (var player in topPlayers)
                 {
                     player.LatestZoneName = zoneList.FirstOrDefault(z => z.Id == player.LatestZoneId)?.Name ?? string.Empty;
+
+                    if (player.LatestLoginTime != null)
+                    {
+
+                        DateTime sessionStartTime = (player.LatestLoginTime ?? startTime); //(playerStats.LatestLoginTime != null) ? (playerStats.LatestLoginTime ?? startTime) : startTime;
+                        DateTime sessionEndTime = (player.LatestLogoutTime ?? nowUtc); // (playerStats.LatestLogoutTime != null) ? (playerStats.LatestLogoutTime ?? nowUtc) : nowUtc;
+
+                        if (sessionEndTime <= sessionStartTime)
+                        {
+                            sessionEndTime = nowUtc;
+                        }
+
+                        player.SessionKills = await dbContext.Deaths.CountAsync(death => death.AttackerCharacterId == player.PlayerId
+                                                                                       && death.CharacterId != player.PlayerId
+                                                                                       && ((death.AttackerFactionId != death.CharacterFactionId)
+                                                                                           || death.AttackerFactionId == 4 || death.CharacterFactionId == 4
+                                                                                           || death.CharacterFactionId == null || death.CharacterFactionId == 0) //Nanite Systems
+                                                                                       && death.Timestamp >= sessionStartTime
+                                                                                       && death.Timestamp <= sessionEndTime);
+                    }
                 }
 
                 return topPlayers;

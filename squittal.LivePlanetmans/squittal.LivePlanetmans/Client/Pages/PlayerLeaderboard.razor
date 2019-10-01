@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; background-color: #fcf6ff;">
-            <p class="h2 display-4" style="font-size: 2.5rem; color: #e34f8c; padding: 5px 10px; border-top: 2px solid var(--pink); border-radius: 0.2rem;">
+            <p class="h2 display-4" style="font-size: 2.5rem; color: #e34f8c; margin-bottom: 0px; padding: 5px 10px; border-top: 2px solid var(--pink); border-radius: 0.2rem;">
                 @if (!string.IsNullOrWhiteSpace(selectedWorldName))
                 {
                     <span style="color: var(--pink)">@selectedWorldName Top Players</span>
@@ -54,22 +54,29 @@
 
                 @if (!string.IsNullOrWhiteSpace(errorMessage))
                 {
-                    <p><em>@errorMessage</em></p>
+                    <span class="oi oi-warning small" style="font-size: 1rem; color: var(--warning); vertical-align: middle;" title="#@errorCount @errorMessage"></span>
+                    @*<em>@errorMessage</em></span>*@
                 }
-                else
-                {
+
+                @*else
+                {*@
                     <table class="table-striped table-responsive-sm" style="width: 100%;">
-                        <thead>
+                        <thead style="line-height: 1.1rem;">
                             <tr>
-                                <th style="padding-right: 5px; max-width: 55px; width: 1rem;"></th>
-                                <th style="padding-right: 10px;">Player</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem;">Kills</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem;">Deaths</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem;">KDR</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem;">KPM</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem;">HSR</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem;"></th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem;"></th>
+                                <th style="padding: 0.1rem 0.5rem; max-width: 30px;  width: 1rem; border: inherit; font-size: 0.8rem;"></th>
+                                <th style="padding-right: 5px; max-width: 55px; width: 1rem; font-size: 0.8rem;"></th> @* outfit alias*@
+                                <th style="padding-right: 10px; vertical-align: bottom; font-size: 0.8rem;">Player</th>
+                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Kills</th>
+                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Deaths</th>
+                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KDR</th>
+                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KPM</th>
+                                <th style="padding-right: 10px; max-width: 70px; width: 1.1rem; word-wrap: normal; vertical-align: bottom;">
+                                    <span style="font-size: 0.6rem; position: relative; top: 0.5rem;">Session</span>
+                                    <span style="font-size: 0.8rem;">KPM</span>
+                                </th>
+                                @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">HSR</th>*@
+                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th> @* Last-Seen Continent *@
+                                @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th>*@
                             </tr>
                         </thead>
                         @if (players != null && isChangingWorld != true)
@@ -77,44 +84,65 @@
                             <tbody style="font-size: 0.85rem !important;">
                                 @foreach (var player in players)
                                 {
-                                    <tr style="color:@GetFactionColorFromId(player.FactionId)">
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px;">
-                                            @((string.IsNullOrWhiteSpace(player.OutfitAlias)) ? "" : $"[{player.OutfitAlias}]")
-                                        </td>
-                                        @if (string.IsNullOrWhiteSpace(player.PlayerName))
+                                <tr style="color: @GetFactionColorFromId(player.FactionId);">
+                                    <td style="padding: 0.1rem 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
+                                        @if (player.IsOnline == true)
                                         {
-                                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.PlayerId</td>
+                                            <span class="oi oi-bolt small" style="color: #10BF6B !important;"></span>
                                         }
                                         else
                                         {
-                                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
-                                                <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@player.PlayerName </div>
-                                                <div style="display: inline-block;">
-                                                    <sup>
-                                                        @(player.BattleRank)
-                                                        @if (player.PrestigeLevel != 0)
-                                                        {
-                                                            <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
-                                                        }
-                                                    </sup>
-                                                </div>
-                                            </td>
+                                            <span class="oi oi-moon small" style="color: #b7a8d7 !important;"></span>
                                         }
+                                    </td>
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px;">
+                                        @((string.IsNullOrWhiteSpace(player.OutfitAlias)) ? "" : $"[{player.OutfitAlias}]")
+                                    </td>
+
+                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
+                                        <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))">
+                                            @if (string.IsNullOrWhiteSpace(player.PlayerName))
+                                            {
+                                                @player.PlayerId
+                                                @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.PlayerId</td>*@
+                                            }
+                                            else
+                                            {
+                                                @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">*@
+                                                    <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@player.PlayerName </div>
+                                                    <div style="display: inline-block;">
+                                                        <sup>
+                                                            @(player.BattleRank)
+                                                            @if (player.PrestigeLevel != 0)
+                                                            {
+                                                                <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
+                                                            }
+                                                        </sup>
+                                                    </div>
+                                                @*</td>*@
+                                        }
+                                        </button>
+                                    </td>
+
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Kills</td>
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Deaths</td>
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillDeathRatio</td>
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillsPerMinute</td>
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.HeadshotRatio</td>
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.LatestZoneName</td>
                                         <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
-                                            <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
+                                            @((player.SessionKillsPerMinute != null) ? player.SessionKillsPerMinute.ToString() : "-")
                                         </td>
-                                    </tr>
+                                        @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.HeadshotRatio</td>*@
+                                        @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@GetSessionDurationDisplay(player)</td>*@
+                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.LatestZoneName</td>
+                                        @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
+                                            <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
+                                        </td>*@
+                                </tr>
                                 }
                             </tbody>
                         }
                     </table>
-                }
+                @*}*@
 
 
                 @if (players == null || isChangingWorld == true)
@@ -219,6 +247,7 @@
     int initAsyncCount = 0;
     int paramSetAsyncCount = 0;
     int renderCount = 0;
+    int errorCount = 0;
 
 
     protected override void OnInitialized()
@@ -337,6 +366,7 @@
             catch (Exception ex)
             {
                 errorMessage = $"error: {ex}";
+                errorCount += 1;
             }
 
             lastRefreshTime = (DateTime.Now.ToUniversalTime() - TimeSpan.FromHours(5));
@@ -432,6 +462,40 @@
         }
 
         StateHasChanged();
+    }
+
+    DateTime GetSessionStartTime(PlayerHourlyStatsData player)
+    {
+        return (player.LatestLoginTime ?? player.QueryStartTime);
+    }
+
+    DateTime GetSessionEndTime(PlayerHourlyStatsData player)
+    {
+        var sessionEndTime = (player.LatestLogoutTime ?? player.QueryNowUtc); // (playerStats.LatestLogoutTime != null) ? (playerStats.LatestLogoutTime ?? nowUtc) : nowUtc;
+
+        if (sessionEndTime <= GetSessionStartTime(player))
+        {
+            sessionEndTime = player.QueryNowUtc;
+        }
+
+        return sessionEndTime;
+    }
+
+    string GetSessionDurationDisplay(PlayerHourlyStatsData player)
+    {
+        var duration = (GetSessionEndTime(player) - GetSessionStartTime(player));
+
+        var totalMinutes = (int)Math.Round(duration.TotalMinutes, 0);
+        
+        int hours = (totalMinutes / 60);
+
+        var remainder = totalMinutes - (hours * 60);
+
+        string hoursDisplay = (hours > 0) ? $"{hours}h" : string.Empty;
+        string minutesDisplay = (remainder > 0) ? $"{remainder}m" : string.Empty;
+        string space = (hours > 0 && remainder > 0) ? " " : string.Empty;
+
+        return $"{hoursDisplay}{space}{minutesDisplay}";
     }
 
     string GetFactionColorFromId(int factionId)
