@@ -11,6 +11,7 @@ using squittal.LivePlanetmans.Server.CensusStream;
 using squittal.LivePlanetmans.Server.Data;
 using squittal.LivePlanetmans.Server.Services;
 using squittal.LivePlanetmans.Server.Services.Planetside;
+using System;
 using System.Linq;
 
 namespace squittal.LivePlanetmans.Server
@@ -40,7 +41,7 @@ namespace squittal.LivePlanetmans.Server
                 options.UseSqlServer(Configuration.GetConnectionString("PlanetmansDbContext")));
 
             services.AddCensusServices(options =>
-                options.CensusServiceId = "squittal");
+                options.CensusServiceId = Environment.GetEnvironmentVariable("DaybreakGamesServiceKey", EnvironmentVariableTarget.User));
             services.AddCensusHelpers();
 
             //services.AddTransient<IUpdateable, WorldService>();
