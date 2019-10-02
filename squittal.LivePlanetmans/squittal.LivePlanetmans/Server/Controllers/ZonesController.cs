@@ -9,22 +9,25 @@ namespace squittal.LivePlanetmans.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class WorldsController : ControllerBase
+    public class ZonesController : ControllerBase
     {
-        private readonly IWorldService _worldService;
+        private readonly IZoneService _zoneService;
 
-        public WorldsController(IWorldService worldService)
+        public ZonesController(IZoneService zoneService)
         {
-            _worldService = worldService;
+            _zoneService = zoneService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<World>>> GetAllWorlds()
+        public async Task<ActionResult<IEnumerable<Zone>>> GetAllWorlds()
         {
-            await _worldService.RefreshStore();
-            IEnumerable<World> result = await _worldService.GetAllWorldsAsync();
+            await _zoneService.RefreshStore();
+            IEnumerable<Zone> result = await _zoneService.GetAllZonesAsync();
 
             return result.ToArray();
         }
+    }
+}
+    {
     }
 }
