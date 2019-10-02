@@ -6,15 +6,23 @@
 @if (string.IsNullOrWhiteSpace(playerId))
 {
     <div style="padding: 10px;">
-        <h2>Player Details</h2>
-        <p class="textu-muted"><em>Select a player</em></p>
+
+        <div class="text-muted" style="margin: 25%; font-size: 1.5rem; text-align: center; display: grid; grid-template-columns: 2rem 1fr; align-items: center; line-height: 1.5rem;">
+            <div style="display: inline block;" class="oi oi-arrow-thick-left large"></div>
+            <div style="display: inline-block;">
+                <em>Select a player to see hourly stats & session details</em>
+            </div>
+        </div>
+
+        @*<h2>Player Details</h2>*@
+        @*<p class="text-muted" style="font-size: 1.5rem; margin: 25%; text-align: center;"><em>Select a player to see hourly stats & session details</em></p>*@
     </div>
 }
 else
 {
     @if (player != null)
     {
-        <div id="details-header" style="display: grid; grid-template-columns: 1fr 1fr 80px; grid-template-rows: 1fr; border-top: 2px solid @GetFactionColorFromId(player.FactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
+        <div id="details-header" style="font-family: 'Roboto Mono'; display: grid; grid-template-columns: 1fr 1fr 80px; grid-template-rows: 1fr; border-top: 2px solid @GetFactionColorFromId(player.FactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
             <div class="h2" style="margin-bottom: 0px; word-wrap: break-word; grid-column: 1 / 3;">
                 <a href="@GetUrlFromCharacterName(player.Name)" target="_blank" style="color:@GetFactionColorFromId(player.FactionId);">
                     @player.Name
@@ -57,7 +65,7 @@ else
 
         </div>
 
-        <div id="details-body" style="padding: 0px 10px;">
+        <div id="details-body" style="padding: 0px 10px; font-family: 'Roboto Mono';">
         @if (stats != null)
         {
             <div class="row" style="margin: initial;">
@@ -142,7 +150,7 @@ else
             {
                 <div style="max-height: 400px; overflow: auto; border-top: 1px solid #27273a80; border-bottom: 1px solid #27273a80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem;">
                     <table class="table-responsive-sm table" style="font-size: 0.85rem !important;">
-                        <tbody>
+                        <tbody style="font-size: small;">
                             @foreach (var kill in kills)
                             {
                                 <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; border-top: @GetKillboardBorderStyle(kill.VictimId);">
@@ -150,7 +158,7 @@ else
                                         @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
                                     </td>
 
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px; max-width: 55px; width: 1rem; border: inherit;">
+                                    <td style="padding: 0.1rem 0.3125rem 0.1rem 0; max-width: 55px; width: 1rem; border: inherit;">
                                         @if (kill.VictimId == playerId)
                                         {
                                             @((string.IsNullOrWhiteSpace(kill.AttackerOutfitAlias)) ? "" : $"[{kill.AttackerOutfitAlias}]")
@@ -160,12 +168,12 @@ else
                                             @((string.IsNullOrWhiteSpace(kill.VictimOutfitAlias)) ? "" : $"[{kill.VictimOutfitAlias}]")
                                         }
                                     </td>
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
+                                    <td style="padding: 0.1rem 0.75rem 0.1rem 0; border: inherit;">
                                         @if (kill.VictimId == playerId)
                                         {
                                             <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))">
-                                                <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.AttackerName</div>
-                                                <div style="display: inline-block;">
+                                                <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis;">@kill.AttackerName</div>
+                                                <div style="display: inline-block; vertical-align: super;">
                                                     <sup>
                                                         @(kill.AttackerBattleRank)
                                                         @if (stats.PrestigeLevel != 0)
@@ -214,7 +222,7 @@ else
             }
         </div>
 
-        <div id="details-footer" style="display: contents;">
+        <div id="details-footer" style="font-family: 'Roboto Mono'; display: contents;">
             <div style="margin: 0.3125rem 0rem;">
                 <a href="@GetUrlFromCharacterId(player.Id)" class="text-muted h6" style="font-size: 0.8rem; padding-left: 0.8rem; margin-top: 0.1rem;" target="_blank">
                     @player.Id
