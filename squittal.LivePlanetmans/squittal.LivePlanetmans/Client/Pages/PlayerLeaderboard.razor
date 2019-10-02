@@ -82,7 +82,7 @@
                         </thead>
                         @if (players != null && isChangingWorld != true)
                         {
-                            <tbody style="font-size: 0.85rem !important;">
+                            <tbody style="font-size: 0.85rem !important; font-family: 'Roboto Mono'; font-size: small;">
                                 @foreach (var player in players)
                                 {
                                 <tr style="color: @GetFactionColorFromId(player.FactionId);">
@@ -181,7 +181,7 @@
 
         </div>
 
-        <div id="player-details" class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; background-color: #fcf6ff;">
+        <div id="player-details" class="col-lg-6" style="border: 2px solid @GetPlayerDetailsBorderColor() !important; border-radius: 0.2rem; padding: 0px; margin: 0px; background-color: @GetPlayerDetailsBackgroundColor();">
             <PlayerDetailsPanel playerId="@playerId" OnKillboardPlayerSelected="KillboardPlayerSelected"/> @*worldId="@worldId" OnCharacterIdChanged="KillboardPlayerSelected"/>*@
         </div>
     </div>
@@ -526,6 +526,16 @@
                 : $"{(startTime - fiveHours).ToString("M")} {(startTime - fiveHours).ToShortTimeString()} - {(endTime - fiveHours).ToString("M")} {(endTime - fiveHours).ToShortTimeString()}";
         }
 
+    }
+
+    string GetPlayerDetailsBorderColor()
+    {
+        return (!string.IsNullOrWhiteSpace(playerId)) ? "#d4d4ff5a" : "transparent";
+    }
+
+    string GetPlayerDetailsBackgroundColor()
+    {
+        return (!string.IsNullOrWhiteSpace(playerId)) ? "#fcf6ff" : "transparent;";
     }
 
     string GetZoneDisplayEmoji(string zoneName)
