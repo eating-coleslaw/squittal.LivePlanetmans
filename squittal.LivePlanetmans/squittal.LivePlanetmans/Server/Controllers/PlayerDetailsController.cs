@@ -19,7 +19,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         private readonly IDbContextHelper _dbContextHelper;
         private readonly ILogger<PlayerDetailsController> _logger;
 
-
         public PlayerDetailsController(ICharacterService characterService, IDbContextHelper dbContextHelper, ILogger<PlayerDetailsController> logger)
         {
             _characterService = characterService;
@@ -195,10 +194,11 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == characterId
-                                    && k.AttackerCharacterId != k.CharacterId
-                                    && ((k.AttackerFactionId != k.CharacterFactionId)
-                                         || k.AttackerFactionId == 4 || k.CharacterFactionId == 4
-                                         || k.CharacterFactionId == null || k.CharacterFactionId == 0) //Nanite Systems
+                                    && k.DeathEventType == DeathEventType.Kill
+                                    //&& k.AttackerCharacterId != k.CharacterId
+                                    //&& ((k.AttackerFactionId != k.CharacterFactionId)
+                                    //     || k.AttackerFactionId == 4 || k.CharacterFactionId == 4
+                                    //     || k.CharacterFactionId == null || k.CharacterFactionId == 0) //Nanite Systems
                                     && k.Timestamp >= startTime
                                     && k.WorldId == character.WorldId
                                  select k).Count(),
@@ -210,23 +210,26 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         Headshots = (from h in dbContext.Deaths
                                      where h.IsHeadshot == true
                                         && h.AttackerCharacterId == characterId
-                                        && h.AttackerCharacterId != h.CharacterId
-                                        && ( (h.AttackerFactionId != h.CharacterFactionId)
-                                             || h.AttackerFactionId == 4 || h.CharacterFactionId == 4
-                                             || h.CharacterFactionId == null || h.CharacterFactionId == 0) //Nanite Systems
+                                        && h.DeathEventType == DeathEventType.Kill
+                                        //&& h.AttackerCharacterId != h.CharacterId
+                                        //&& ( (h.AttackerFactionId != h.CharacterFactionId)
+                                        //     || h.AttackerFactionId == 4 || h.CharacterFactionId == 4
+                                        //     || h.CharacterFactionId == null || h.CharacterFactionId == 0) //Nanite Systems
                                         && h.Timestamp >= startTime
                                         && h.WorldId == character.WorldId
                                      select h).Count(),
                         TeamKills = (from tk in dbContext.Deaths
                                      where tk.AttackerCharacterId == characterId
-                                        && tk.AttackerCharacterId != tk.CharacterId
-                                        && tk.AttackerFactionId == tk.CharacterFactionId
+                                        && tk.DeathEventType == DeathEventType.Teamkill
+                                        //&& tk.AttackerCharacterId != tk.CharacterId
+                                        //&& tk.AttackerFactionId == tk.CharacterFactionId
                                         && tk.Timestamp >= startTime
                                         && tk.WorldId == character.WorldId
                                      select tk).Count(),
                         Suicides = (from s in dbContext.Deaths
                                     where s.CharacterId == characterId
-                                       && s.AttackerCharacterId == s.CharacterId
+                                       && s.DeathEventType == DeathEventType.Suicide
+                                       //&& s.AttackerCharacterId == s.CharacterId
                                        && s.Timestamp >= startTime
                                        && s.WorldId == character.WorldId
                                     select s).Count()
@@ -295,10 +298,11 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
 
                     playerStats.SessionKills = await dbContext.Deaths.CountAsync(death => death.AttackerCharacterId == characterId
-                                                                                       && death.CharacterId != characterId
-                                                                                       && ((death.AttackerFactionId != death.CharacterFactionId)
-                                                                                           || death.AttackerFactionId == 4 || death.CharacterFactionId == 4
-                                                                                           || death.CharacterFactionId == null || death.CharacterFactionId == 0) //Nanite Systems
+                                                                                       && death.DeathEventType == DeathEventType.Kill
+                                                                                       //&& death.CharacterId != characterId
+                                                                                       //&& ((death.AttackerFactionId != death.CharacterFactionId)
+                                                                                       //    || death.AttackerFactionId == 4 || death.CharacterFactionId == 4
+                                                                                       //    || death.CharacterFactionId == null || death.CharacterFactionId == 0) //Nanite Systems
                                                                                        && death.Timestamp >= sessionStartTime
                                                                                        && death.Timestamp <= sessionEndTime);
                 }

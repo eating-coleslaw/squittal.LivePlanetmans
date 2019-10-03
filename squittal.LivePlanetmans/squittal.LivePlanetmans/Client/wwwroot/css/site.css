@@ -170,3 +170,58 @@ dt {
     font-weight: 500;
     font-size: 0.8rem;
 }
+
+@media (min-width: 992px) {
+    
+    .col-lg-6 {
+        flex-basis: calc(50% - 5px);
+    }
+
+}
+
+.styled-select {
+    width: 120px;
+    /*overflow: hidden;*/
+    border: 1px solid #007bff; /*#6c757d50;*/ /*#d4d4ffa0;*/
+    height: 34px;
+    background: url('https://api.iconify.design/oi:caret-bottom.svg?color=%23007bff') no-repeat right 0.5rem center / 10%;
+    /*background-color: #f6f0ff;*/
+    color: #007bff; /*#6c757d;*/ /* #27273A; */
+    border-radius: 0.2rem;
+    margin-left: auto;
+    margin-top: 0.15rem;
+    font-family: 'Roboto Mono';
+}
+
+.styled-select:hover, .styled-select:active {
+    border-color: #007bff; /*#27273A50;*/
+    color: #FFF; /*#27273A;*/
+    background: url('https://api.iconify.design/oi:caret-bottom.svg?color=%23FFF') no-repeat right 0.5rem center / 10%;
+    background-color: #007bff; /*#fcf6ff;*/
+}
+
+.styled-select select {
+    outline: 0;
+    background: transparent;
+    line-height: 1;
+    border: 0;
+    border-radius: 0.2rem;
+    -webkit-appearance: none;
+    height: 33px;
+    width: 119px;
+    display: block;
+    padding: 0px;
+    outline: 0;
+    color: #007bff; /*#6c757d;*/
+    font-family: 'Roboto Mono';
+}
+
+.styled-select select:hover, .styled-select select:active {
+    color: #FFF; /*#27273A;*/
+    outline: 0;
+}
+
+.styled-select select:focus{
+    outline: 0 !important;
+    box-shadow: 0 0 0 .2rem #007bff80;
+}

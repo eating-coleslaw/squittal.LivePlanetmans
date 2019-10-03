@@ -1,29 +1,95 @@
-﻿@page "/leaderboard"
+﻿@page "/"
+@page "/leaderboard"
+@page "/activity"
 @*@page "/leaderboard/{worldId}"*@
 @using squittal.LivePlanetmans.Shared.Models
 @using System.Timers
 @using System.Linq
+@using System.Threading
 @using Microsoft.AspNetCore.WebUtilities @*for QueryHelpers*@
+@using System.Diagnostics
+@using Newtonsoft.Json
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; background-color: #fcf6ff;">
-            <p class="h2 display-4" style="font-size: 2.5rem; color: #e34f8c; margin-bottom: 0px; padding: 5px 10px; border-top: 2px solid var(--pink); border-radius: 0.2rem;">
+        <div class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; margin-right: 5px; background-color: #fcf6ff;">
+            <div class="h2" style="font-size: 2rem; font-family: 'Roboto Mono'; color: #e34f8c; margin-bottom: 0px; padding: 5px 10px; border-top: 2px solid var(--pink); border-radius: 0.2rem; display: grid; grid-template-columns: 1fr 100px 150px; align-content: center;">
+
+                @* Leaderboard Title *@
                 @if (!string.IsNullOrWhiteSpace(selectedWorldName))
                 {
-                    <span style="color: var(--pink)">@selectedWorldName Top Players</span>
+                    <div style="color: var(--pink)">@selectedWorldName Top Players</div>
                 }
                 else
                 {
-                    <span>Live Activity</span>
+                    <div>Live Activity</div>
                 }
-            </p>
+
+
+                @* Refresh Button *@
+                @if (players != null)
+                {
+                    <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual" style="margin-left: auto; height: 34px; margin-top: 0.15rem;">Refresh</button>
+                }
+                else
+                {
+                    <button class="btn btn-outline-primary btn-sm" style="margin-left: auto; height: 34px; margin-top: 0.15rem; color: transparent; background-color: #007bff10; border-color: #007bff0a; width: 77px;"></button>
+                }
+
+                @* Server Select Menu *@
+                @if (worlds == null)
+                {
+                    @*<div class="text-muted" style="font-size: 1rem;"><em>Loading server list...</em></div>*@
+
+                    <div class="styled-select" style="color: transparent; background-color: #007bff10; border-color: #007bff0a;">Server</div>
+                }
+                else
+                {
+                    <div class="styled-select">
+                        <select id="worldSelect" @onchange="OnWorldIdChange" class="btn-sm">
+                            <option value="" class="text-muted" style="font-style:italic">Server</option>
+                            @foreach (var world in worlds)
+                            {
+                                @if (world.Id != 25) //RIP Briggs
+                                {
+                                    <option value="@world.Id.ToString()" style="font-family: 'Roboto Mono'; font-size: small;">@world.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    @*<select class="btn-sm" style="margin-left: auto; width: 75%;" id="worldSelect" @onchange="OnWorldIdChange">
+                <option value="" class="text-muted" style="font-style:italic">Server</option>
+                @foreach (var world in worlds)
+                {
+                    @if (world.Id != 25) //RIP Briggs
+                    {
+                        <option value="@world.Id.ToString()">@world.Name</option>
+                    }
+                }
+            </select>*@
+                }
+
+                @if (players != null)
+                {
+                    @*<button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">Refresh</button>*@
+                    <span class="text-muted" style="font-size: 0.8rem; font-weight: 400; padding-left: 0.1rem;">
+                        Last Refresh: @lastRefreshTime.ToLongTimeString()
+                        
+                        @if (isLoading == true)
+                        {
+                            <span class="text-muted" style="font-size: 0.75rem; font-weight: 400; vertical-align: bottom;">[loading...]</span>
+                        }
+                    </span>
+                }
+
+            </div>
 
             <div style="padding: 5px 10px;">
 
-                @if (worlds == null)
+                @*@if (worlds == null)
                 {
                     <em>Loading server list...</em>
                 }
@@ -39,17 +105,17 @@
                             }
                         }
                     </select>
-                }
+                }*@
 
-                @if (players != null)
+                @*@if (players != null)
                 {
                     <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">Refresh</button>
                     <span class="text-muted" style="font-size: 0.8rem; vertical-align: bottom;">Last Refresh: @lastRefreshTime.ToLongTimeString()</span>
-                }
-                @if (isLoading == true)
+                }*@
+                @*@if (isLoading == true)
                 {
                     <span class="text-muted" style="font-size: 0.8rem; vertical-align: bottom;">(loading)</span>
-                }
+                }*@
 
 
                 @if (!string.IsNullOrWhiteSpace(errorMessage))
@@ -66,23 +132,23 @@
                                 <th style="padding: 0.1rem 0.5rem; max-width: 30px;  width: 1rem; border: inherit; font-size: 0.8rem;"></th>
                                 <th style="padding-right: 5px; max-width: 55px; width: 1rem; font-size: 0.8rem;"></th> @* outfit alias*@
                                 <th style="padding-right: 10px; vertical-align: bottom; font-size: 0.8rem;">Player</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Kills</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Deaths</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KDR</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KPM</th>
-                                <th style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">HSR</th>
-                                <th style="padding-right: 10px; margin-left: 0.3125rem; max-width: 70px; width: 1.1rem; word-wrap: normal; vertical-align: bottom;">
+                                <th style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Kills</th>
+                                <th style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Deaths</th>
+                                <th style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KDR</th>
+                                <th style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KPM</th>
+                                <th style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">HSR</th>
+                                <th style="padding-right: 10px; padding-left: 10px;  margin-left: 0.3125rem; max-width: 70px; width: 1.1rem; word-wrap: normal; vertical-align: bottom;">
                                     <span style="font-size: 0.6rem; position: relative; top: 0.5rem;">Session</span>
                                     <span style="font-size: 0.8rem;">KPM</span>
                                 </th>
-                                <th title="Get"style="padding-right: 10px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Playtime</th>
+                                <th title="Get"style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Playtime</th>
                                 @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th>*@ @* Last-Seen Continent *@
                                 @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th>*@
                             </tr>
                         </thead>
-                        @if (players != null && isChangingWorld != true)
+                        @if (players != null && isChangingWorld != true) @*&& requestCount == 0)*@ @*(isChangingWorld != true || (isChangingWorld == true && isLeaderboardReady == true && isFetchingLeaderboard != true)))*@
                         {
-                            <tbody style="font-size: 0.85rem !important; font-family: 'Roboto Mono'; font-size: small;">
+                            <tbody style="font-family: 'Roboto Mono'; font-size: small;">
                                 @foreach (var player in players)
                                 {
                                 <tr style="color: @GetFactionColorFromId(player.FactionId);">
@@ -130,15 +196,15 @@
                                             </button>
                                         </td>
 
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Kills</td>
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.Deaths</td>
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillDeathRatio</td>
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.KillsPerMinute</td>
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@player.HeadshotRatio</td>
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
+                                        <td style="padding: 0.1rem 10px 0.1rem 5px;">@player.Kills</td>
+                                        <td style="padding: 0.1rem 10px 0.1rem 5px;">@player.Deaths</td>
+                                        <td style="padding: 0.1rem 10px 0.1rem 5px;">@player.KillDeathRatio</td>
+                                        <td style="padding: 0.1rem 10px 0.1rem 5px;">@player.KillsPerMinute</td>
+                                        <td style="padding: 0.1rem 10px 0.1rem 5px;">@player.HeadshotRatio</td>
+                                        <td style="padding: 0.1rem 10px 0.1rem 10px;">
                                             @((player.SessionKillsPerMinute != null) ? player.SessionKillsPerMinute.ToString() : "-")
                                         </td>
-                                        <td title="@GetSessionDisplayTimes(player)" style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">@GetSessionDurationDisplay(player)</td>
+                                        <td title="@GetSessionDisplayTimes(player)" style="padding: 0.1rem 10px 0.1rem 5px;">@GetSessionDurationDisplay(player)</td>
                                         @*<td title="@player.LatestZoneName" style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px; opacity: 0.75;">@GetZoneDisplayEmoji(player.LatestZoneName)</td>*@
                                         @*<td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
                 <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectPlayer(player.PlayerId))">Select</button>
@@ -151,7 +217,7 @@
                 @*}*@
 
 
-                @if (players == null || isChangingWorld == true)
+                @if (players == null || isChangingWorld == true) @*|| requestCount > 0)*@
                 {
                     <p class="text-muted"><em>Loading...</em></p>
                 }
@@ -181,7 +247,7 @@
 
         </div>
 
-        <div id="player-details" class="col-lg-6" style="border: 2px solid @GetPlayerDetailsBorderColor() !important; border-radius: 0.2rem; padding: 0px; margin: 0px; background-color: @GetPlayerDetailsBackgroundColor();">
+        <div id="player-details" class="col-lg-6" style="border: 2px solid @GetPlayerDetailsBorderColor() !important; border-radius: 0.2rem; padding: 0px; margin: 0px; margin-left: 5px; background-color: @GetPlayerDetailsBackgroundColor();">
             <PlayerDetailsPanel playerId="@playerId" OnKillboardPlayerSelected="KillboardPlayerSelected"/> @*worldId="@worldId" OnCharacterIdChanged="KillboardPlayerSelected"/>*@
         </div>
     </div>
@@ -230,16 +296,27 @@
     [Parameter]
     public string playerId { get; set; } = "";
 
+    Zone[] zones;
     World[] worlds;
     string selectedWorldName = "";
+    int prevWorldId;
+
+    int requestCount = 0;
+    CancellationTokenSource cts;
+
 
     PlayerHourlyStatsData[] players;
     bool isLoading = false;
     bool isChangingWorld = false;
+    bool isFetchingLeaderboard = false;
+    bool isLeaderboardReady = false;
+    bool isInitialized = false;
+    bool isInitializedAsync = false;
+
     DateTime lastRefreshTime;
     string errorMessage = "";
 
-    Timer autoRefreshTimer;
+    System.Timers.Timer autoRefreshTimer;
     int autoRefreshCount = 0;
     string refreshSource = "";
 
@@ -258,6 +335,11 @@
 
     protected override void OnInitialized()
     {
+        Debug.WriteLine($"IsInitialized={isInitialized}");
+
+        if (isInitialized == true) { return; }
+        isInitialized = true;
+
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("worldId", out var qWorldId))
@@ -269,23 +351,56 @@
         {
             playerId = qPlayerId.First();
         }
+
+        prevWorldId = worldId;
+
     }
 
     protected override async Task OnInitializedAsync()
     {
         //initAsyncCount += 1;
         //StateHasChanged();
+        Debug.WriteLine($"IsInitialized Async={isInitializedAsync}");
 
+        if (isInitializedAsync == true) { return; }
+        isInitializedAsync = true;
 
         //debugMessage = "setting up server info";
         //StateHasChanged();
-        await SetUpWorlds();
-        StateHasChanged();
 
-        if (!string.IsNullOrWhiteSpace(playerId))
-        {
-            OnSelectPlayer(playerId);
-        }
+        Debug.WriteLine($"=== Start Initializing: {worldId}");
+
+
+        //var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        //if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("worldId", out var qWorldId))
+        //{
+        //    worldId = Int32.Parse(qWorldId.First());
+        //}
+
+        //if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
+        //{
+        //    playerId = qPlayerId.First();
+        //}
+
+
+        var InitTaskList = new List<Task>();
+
+        Task worldsTask = SetUpWorlds();
+        InitTaskList.Add(worldsTask);
+        Task zonesTask = SetUpZones();
+        InitTaskList.Add(zonesTask);
+
+        await Task.WhenAll(InitTaskList);
+
+        Debug.WriteLine($" = End Initialization: {worldId} =");
+
+        //StateHasChanged();
+
+        //if (!string.IsNullOrWhiteSpace(playerId))
+        //{
+        //    OnSelectPlayer(playerId);
+        //}
 
         //debugMessage = "first load";
         //StateHasChanged();
@@ -293,21 +408,26 @@
         //debugMessage = "initial load complete";
     }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        //renderCount += 1;
-    }
-
     protected override async Task OnParametersSetAsync()
     {
         //paramSetAsyncCount += 1;
         //StateHasChanged();
+
+        Debug.WriteLine($" == Start Parameters Set: {worldId} ==");
 
         await ChangeSelectedWorld(worldId);
         if (!string.IsNullOrWhiteSpace(playerId))
         {
             OnSelectPlayer(playerId);
         }
+
+        Debug.WriteLine($" == End Parameters Set: {worldId} ==");
+        StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Debug.WriteLine($"* Render Complete *");
     }
 
     async Task SetUpWorlds()
@@ -316,8 +436,13 @@
         if (worlds.Any() == true)
         {
             selectedWorldName = worlds.Where(w => w.Id == worldId).Select(w => w.Name).FirstOrDefault(); //"success1"; //= worlds.FirstOrDefault(w => w.Id == worldId).Name;
-            await ChangeSelectedWorld(worldId);
+            //await ChangeSelectedWorld(worldId);
         }
+    }
+
+    async Task SetUpZones()
+    {
+        zones = await Http.GetJsonAsync<Zone[]>("api/Zones");
     }
 
     async Task ChangeSelectedWorld(int newWorldId)
@@ -327,6 +452,11 @@
         if (worlds.Any() == true)
         {
             isChangingWorld = true;
+            isLeaderboardReady = false;
+            if (autoRefreshTimer != null)
+            {
+                autoRefreshTimer.Stop(); // Dispose(); // Close(); Stop();
+            }
             selectedWorldName = worlds.Where(w => w.Id == worldId).Select(w => w.Name).FirstOrDefault(); //worlds.Where(w => w.Id == worldId).FirstOrDefault().Name; // "success2"; // worlds.FirstOrDefault(w => w.Id == worldId).Name;
             if (!string.IsNullOrWhiteSpace(playerId))
             {
@@ -336,81 +466,164 @@
             {
                 NavigationManager.NavigateTo($"/activity?worldId={worldId}");
             }
-            await RefreshTable();
+            requestCount += 1;
+            await RefreshTable("ChangedSelectedWorld");
             isChangingWorld = false;
+            requestCount -= 1;
         }
 
     }
 
     async Task RefreshTableManual()
     {
-        refreshSource = "manual";
-        errorMessage = string.Empty;
-        StateHasChanged();
-        await RefreshTable();
+        //refreshSource = "manual";
+        //errorMessage = string.Empty;
+        //StateHasChanged();
+        requestCount += 1;
+        await RefreshTable("Manual");
+        requestCount -= 1;
     }
 
-    async Task RefreshTable()
+    async Task RefreshTable(string source) //, CancellationToken cancellationToken)
     {
         if (isLoading != true || isChangingWorld == true)
         {
             isLoading = true;
+            Debug.WriteLine($"Table Refresh requested by {source} with worldId={worldId} & playerId={playerId}");
             //debugMessage = "refreshing table";
             if (autoRefreshTimer != null)
             {
                 //debugMessage = "stopping timer";
-                autoRefreshTimer.Stop();
-                StateHasChanged();
+                autoRefreshTimer.Stop(); // Dispose(); //Stop();
+                Debug.WriteLine("Stopped AutoRefresh Timer");
+                //StateHasChanged();
             }
+
+            // If a process is already underway, cancel it
+            if (cts != null)
+            {
+                cts.Cancel();
+            }
+
+            // Set cts to cancel the current process if another table refresh is requested
+            CancellationTokenSource newCTS = new CancellationTokenSource();
+            cts = newCTS;
 
             try
             {
-                Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>($"api/PlayerLeaderboard/{worldId}");
+
+                isFetchingLeaderboard = true;
+                //Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>($"api/PlayerLeaderboard/{worldId}");
+
                 UpdateQueryDateTimes();
-                players = await playersTask;
+                DateTime start = DateTime.UtcNow;
+                Debug.WriteLine($"Fetching leaderboard data ({prevWorldId} => {worldId}) (rqst {requestCount})");
+
+                HttpResponseMessage response = await Http.GetAsync($"api/PlayerLeaderboard/{worldId}", cts.Token);
+
+                if (response != null)
+                {
+                    DateTime end1 = DateTime.UtcNow;
+                    var elapsed1 = (int)(end1 - start).TotalMilliseconds;
+
+                    Debug.WriteLine($"Elapsed1 = {elapsed1}ms");
+
+                    var jsonString = await response.Content.ReadAsStringAsync();
+                    cts.Token.ThrowIfCancellationRequested();
+                    Debug.WriteLine($"Deserializing players object");
+                    players = JsonConvert.DeserializeObject<PlayerHourlyStatsData[]>(jsonString);
+
+                    ResolveLatestZoneNames();
+                }
+
+                //players = await playersTask;
+
+                DateTime end = DateTime.UtcNow;
+                var elapsed = (int)(end - start).TotalMilliseconds;
+                Debug.WriteLine($"Finished fetching leaderboard data ({prevWorldId} => {worldId}) (rqst {requestCount}): {elapsed}ms ");
+                //requestCount -= 1;
+                isFetchingLeaderboard = false;
+                isLeaderboardReady = true;
+
+                lastRefreshTime = (DateTime.Now.ToUniversalTime() - TimeSpan.FromHours(5));
+                isLoading = false;
+                isChangingWorld = false;
+                StateHasChanged();
+                Debug.WriteLine("Refreshed Table StateHasChanged!");
+                GetNewAutoRefreshTimer();
+                //debugMessage = "refresh complete";
+
+                //StateHasChanged();
             }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine($"Operation cancelled ({worldId})");
+            }
+
             catch (Exception ex)
             {
                 errorMessage = $"error: {ex}";
                 errorCount += 1;
             }
 
-            lastRefreshTime = (DateTime.Now.ToUniversalTime() - TimeSpan.FromHours(5));
-            GetNewAutoRefreshTimer();
-            isLoading = false;
-            //debugMessage = "refresh complete";
-            StateHasChanged();
+            // When the process is complete, signal that another process can proceed
+            if (cts == newCTS)
+            {
+                cts = null;
+            }
+
+            //lastRefreshTime = (DateTime.Now.ToUniversalTime() - TimeSpan.FromHours(5));
+            //GetNewAutoRefreshTimer();
+            //isLoading = false;
+            ////debugMessage = "refresh complete";
+            //StateHasChanged();
+        }
+    }
+
+    void ResolveLatestZoneNames()
+    {
+        if (players.Any() == true)
+        {
+            foreach (var player in players)
+            {
+                player.LatestZoneName = zones.FirstOrDefault(z => z.Id == player.LatestZoneId)?.Name ?? string.Empty;
+            }
         }
     }
 
     void GetNewAutoRefreshTimer()
     {
-        debugMessage = "getting new timer";
-        autoRefreshTimer = new Timer(10000);
-        autoRefreshTimer.Elapsed += async (sender, e) => await OnAutoRefreshTimeElapsed();
+        Debug.WriteLine($"Getting new AutoRefresh Timer (isLoading={isLoading}, isChangingWorld={isChangingWorld})");
+        autoRefreshTimer = new System.Timers.Timer(10000);
+        autoRefreshTimer.Elapsed += async (sender, e) => await OnAutoRefreshTimeElapsed(worldId);
         autoRefreshTimer.AutoReset = true; //TODO: should this be false?
         autoRefreshTimer.Enabled = true;
+        Debug.WriteLine($"Finished getting new AutoRefresh Timer (isLoading={isLoading}, isChangingWorld={isChangingWorld})");
     }
 
-    async Task OnAutoRefreshTimeElapsed()
+    async Task OnAutoRefreshTimeElapsed(int initWorldId)
     {
         //debugMessage = "auto-refresh triggered";
         //refreshSource = "auto";
         //StateHasChanged();
-        if (isLoading != true)
+
+        Debug.WriteLine($"AutoRefreshTimerElapsed ({initWorldId} / {worldId})");
+
+        if (isLoading != true && isChangingWorld != true && (autoRefreshTimer != null && autoRefreshTimer.Enabled == true))
         {
             try
             {
                 debugMessage = string.Empty;
-                await RefreshTable();
-                StateHasChanged();
+                await RefreshTable($"AutoRefreshTimerElapsed ({initWorldId} / {worldId})");
+                //StateHasChanged();
             }
             catch (Exception ex)
             {
                 debugMessage = $"error: {ex}";
-                StateHasChanged();
+                //StateHasChanged();
             }
         }
+        StateHasChanged();
         //autoRefreshCount += 1;
         //debugMessage = "auto-refresh completed";
         //StateHasChanged();
@@ -437,6 +650,10 @@
     async void OnWorldIdChange(ChangeEventArgs eventArgs)
     {
         var newWorldId = eventArgs.Value.ToString();
+
+        Debug.WriteLine($"ChangedSelectedWorld: {worldId} => {newWorldId}");
+
+        prevWorldId = worldId;
 
         if (!string.IsNullOrWhiteSpace(newWorldId) && newWorldId != "Server")
         {

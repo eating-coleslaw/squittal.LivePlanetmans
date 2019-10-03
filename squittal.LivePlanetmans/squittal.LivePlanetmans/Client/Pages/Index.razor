@@ -1,9 +1,29 @@
-﻿@page "/"
+﻿@page "/Index"
+@*@page "/activity"*@
+@inject NavigationManager NavigationManager
+@using System.Diagnostics
 
-<LeaderboardIndex />
+<PlayerLeaderboard />
+
+@*<LeaderboardIndex />*@
 
 @*<h1>Hello, world!</h1>
 
-Welcome to your new app.
+    Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />*@
+    <SurveyPrompt Title="How is Blazor working for you?" />*@
+
+@code
+{
+    //[Parameter]
+    //public int worldId { get; set; } = 17;
+
+    //[Parameter]
+    //public string playerId { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Debug.WriteLine($"*** Index Initialized ***");
+    }
+}
+

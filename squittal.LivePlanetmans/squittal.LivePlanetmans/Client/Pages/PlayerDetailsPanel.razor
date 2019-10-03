@@ -22,7 +22,7 @@ else
 {
     @if (player != null)
     {
-        <div id="details-header" style="font-family: 'Roboto Mono'; display: grid; grid-template-columns: 1fr 1fr 80px; grid-template-rows: 1fr; border-top: 2px solid @GetFactionColorFromId(player.FactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
+        <div id="details-header" style="font-family: 'Roboto Mono'; display: grid; grid-template-columns: 1.5fr 1fr 80px; grid-template-rows: 1fr; border-top: 2px solid @GetFactionColorFromId(player.FactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
             <div class="h2" style="margin-bottom: 0px; word-wrap: break-word; grid-column: 1 / 3;">
                 <a href="@GetUrlFromCharacterName(player.Name)" target="_blank" style="color:@GetFactionColorFromId(player.FactionId);">
                     @player.Name
@@ -69,13 +69,13 @@ else
         @if (stats != null)
         {
             <div class="row" style="margin: initial;">
-                <div id="details-hourly-stats" class="col-sm-8" style="display: grid; grid-template-columns: 1fr 1fr 1fr 0.5fr 2fr; grid-template-rows: 1rem 1fr; grid-template-areas: 'header header header header header' 'badge1 badge2 badge3 blank right' 'footer footer footer footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+                <div id="details-hourly-stats" class="col-sm-9" style="flex-basis: 70%; display: grid; grid-template-columns: 1fr 1fr 1fr 0.3125fr 2fr; grid-template-rows: 1rem 1fr; grid-template-areas: 'header header header header header' 'badge1 badge2 badge3 blank right' 'footer footer footer footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
 
                     <div style="margin: 0px; font-size: 1rem; grid-area: header;">
                         Hourly Stats
                     </div>
 
-                    <div title="Kills Per Minute" style="grid-area: badge1; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 4.5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
+                    <div title="Kills Per Minute" style="grid-area: badge1; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
                         @*background: radial-gradient(farthest-corner at 1rem 1rem, @(GetFactionLightColorFromId(player.FactionId))40 10%, @(GetFactionLightColorFromId(player.FactionId))30 60%, @GetFactionColorFromId(player.FactionId)30 100%);">*@
                         <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
                             @stats.KillsPerMinute
@@ -83,7 +83,7 @@ else
                         </div>
                     </div>
 
-                    <div title="Kill Death Ratio" style="grid-area: badge2; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 4.5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
+                    <div title="Kill Death Ratio" style="grid-area: badge2; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
                         @*background: radial-gradient(farthest-corner at 1rem 1rem, @(GetFactionLightColorFromId(player.FactionId))40 10%, @(GetFactionLightColorFromId(player.FactionId))30 60%, @GetFactionColorFromId(player.FactionId)30 100%);">*@
                         <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
                             @stats.KillDeathRatio
@@ -100,21 +100,21 @@ else
                     </div>
 
                     <dl class="row" style="grid-area: right; margin: 0px;">
-                        <dt class="col-sm-7 text-muted" style="padding-left: 0px;">Kills</dt>
+                        <dt class="col-sm-7 text-muted" style="padding: 0px;">Kills</dt>
                         <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Kills</dd>
 
-                        <dt class="col-sm-7 text-muted" style="padding-left: 0px;">Deaths</dt>
+                        <dt class="col-sm-7 text-muted" style="padding: 0px;">Deaths</dt>
                         <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Deaths</dd>
 
-                        <dt class="col-sm-7 text-muted" style="padding-left: 0px;">Team Kills</dt>
+                        <dt class="col-sm-7 text-muted" style="padding: 0px;">Team Kills</dt>
                         <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.TeamKills</dd>
 
-                        <dt class="col-sm-7 text-muted" style="padding-left: 0px;">Suicides</dt>
+                        <dt class="col-sm-7 text-muted" style="padding: 0px;">Suicides</dt>
                         <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Suicides</dd>
                     </dl>
                 </div>
 
-                <div id="details-session-stats" class="col-sm-8" style="margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+                <div id="details-session-stats" class="col-sm-8" style="flex-basis: calc(30% - 1rem); margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
                     <div style="margin: 0px; font-size: 1rem; grid-area: header;">
                         Play Session
                     </div>

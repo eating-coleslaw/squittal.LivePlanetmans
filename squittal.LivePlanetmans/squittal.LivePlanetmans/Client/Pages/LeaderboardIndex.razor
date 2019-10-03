@@ -1,4 +1,4 @@
-﻿@page "/activity"
+﻿@page "/activityIndex"
 @inject NavigationManager NavigationManager
 @using Microsoft.AspNetCore.WebUtilities @*for QueryHelpers*@
 
@@ -12,28 +12,28 @@
     [Parameter]
     public string playerId { get; set; } = string.Empty;
 
-    protected override void OnInitialized()
-    {
-        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+    //protected override void OnInitialized()
+    //{
+    //    var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
-        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("worldId", out var qWorldId))
-        {
-            worldId = Int32.Parse(qWorldId.First());
-        }
+    //    if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("worldId", out var qWorldId))
+    //    {
+    //        worldId = Int32.Parse(qWorldId.First());
+    //    }
 
-        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
-        {
-            playerId = qPlayerId.First();
-        }
+    //    if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
+    //    {
+    //        playerId = qPlayerId.First();
+    //    }
 
 
-        if (!string.IsNullOrWhiteSpace(playerId))
-        {
-            NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
-        }
-        else
-        {
-            NavigationManager.NavigateTo($"/activity?worldId={worldId}");
-        }
-    }
+    //    if (!string.IsNullOrWhiteSpace(playerId))
+    //    {
+    //        NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
+    //    }
+    //    else
+    //    {
+    //        NavigationManager.NavigateTo($"/activity?worldId={worldId}");
+    //    }
+    //}
 }

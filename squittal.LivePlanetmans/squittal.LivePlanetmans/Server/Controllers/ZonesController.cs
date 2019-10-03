@@ -28,6 +28,3 @@ namespace squittal.LivePlanetmans.Server.Controllers
         }
     }
 }
-    {
-    }
-}
