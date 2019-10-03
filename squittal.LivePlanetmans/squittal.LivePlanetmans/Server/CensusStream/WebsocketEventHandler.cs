@@ -109,7 +109,7 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                         attackerOutfitTask = _characterService.GetCharactersOutfitAsync(payload.AttackerCharacterId);
                         TaskList.Add(attackerOutfitTask);
                     }
-                    if (payload.AttackerCharacterId != null && payload.AttackerCharacterId.Length > 18)
+                    if (payload.CharacterId != null && payload.CharacterId.Length > 18)
                     {
                         victimOutfitTask = _characterService.GetCharactersOutfitAsync(payload.CharacterId);
                         TaskList.Add(victimOutfitTask);
