@@ -98,18 +98,21 @@ namespace squittal.LivePlanetmans.Server.CensusStream
             {
                 var dbContext = factory.GetDbContext();
 
+                bool isValidAttackerId = (payload.AttackerCharacterId != null && payload.AttackerCharacterId.Length > 18);
+                bool isValidVictimId = (payload.CharacterId != null && payload.CharacterId.Length > 18);
+
                 try
                 {
                     var TaskList = new List<Task>();
                     Task<OutfitMember> attackerOutfitTask = null;
                     Task<OutfitMember> victimOutfitTask = null;
 
-                    if (payload.AttackerCharacterId != null && payload.AttackerCharacterId.Length > 18)
+                    if (isValidAttackerId == true)
                     {
                         attackerOutfitTask = _characterService.GetCharactersOutfitAsync(payload.AttackerCharacterId);
                         TaskList.Add(attackerOutfitTask);
                     }
-                    if (payload.CharacterId != null && payload.CharacterId.Length > 18)
+                    if (isValidVictimId == true)
                     {
                         victimOutfitTask = _characterService.GetCharactersOutfitAsync(payload.CharacterId);
                         TaskList.Add(victimOutfitTask);
@@ -128,6 +131,28 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                                                         .Select(c => c.FactionId)
                                                         .FirstOrDefaultAsync();
 
+                    DeathEventType deathEventType;
+
+                    if (isValidAttackerId == true)
+                    {
+                        if (payload.AttackerCharacterId == payload.CharacterId)
+                        {
+                            deathEventType = DeathEventType.Suicide;
+                        }
+                        else if (attackerFactionId == victimFactionId)
+                        {
+                            deathEventType = DeathEventType.Teamkill;
+                        }
+                        else
+                        {
+                            deathEventType = DeathEventType.Kill;
+                        }
+                    }
+                    else
+                    {
+                        deathEventType = DeathEventType.Suicide;
+                    }
+
                     var dataModel = new Shared.Models.Death
                     {
                         AttackerCharacterId = payload.AttackerCharacterId,
@@ -142,6 +167,7 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                         CharacterOutfitId = victimOutfitTask?.Result?.OutfitId,
                         CharacterFactionId = victimFactionId, //victimFactionTask?.Result,
                         IsHeadshot = payload.IsHeadshot,
+                        DeathEventType = deathEventType,
                         Timestamp = payload.Timestamp,
                         WorldId = payload.WorldId,
                         ZoneId = payload.ZoneId.Value

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using squittal.LivePlanetmans.Server.Data;
 
 namespace squittal.LivePlanetmans.Server.Migrations
 {
     [DbContext(typeof(PlanetmansDbContext))]
-    partial class PlanetmansDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191003144413_AddDeathEventTypeToModel")]
+    partial class AddDeathEventTypeToModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,10 +201,6 @@ namespace squittal.LivePlanetmans.Server.Migrations
                     b.HasIndex("AttackerFactionId");
 
                     b.HasIndex("CharacterFactionId");
-
-                    b.HasIndex("Timestamp", "AttackerCharacterId", "DeathEventType");
-
-                    b.HasIndex("Timestamp", "CharacterId", "DeathEventType");
 
                     b.ToTable("DeathEvent");
                 });

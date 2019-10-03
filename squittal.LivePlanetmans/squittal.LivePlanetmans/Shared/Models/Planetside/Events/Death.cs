@@ -28,6 +28,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         public string CharacterOutfitId { get; set; }
         public int? AttackerFactionId { get; set; }
         public string AttackerOutfitId { get; set; }
+        public DeathEventType DeathEventType { get; set; }
 
         // Navigation Properties
         public Character Character { get; set; }

@@ -17,6 +17,20 @@ namespace squittal.LivePlanetmans.Server.Data.DataConfigurations
                 e.AttackerCharacterId
             });
 
+            builder.HasIndex(e => new
+            {
+                e.Timestamp,
+                e.AttackerCharacterId,
+                e.DeathEventType
+            });
+
+            builder.HasIndex(e => new
+            {
+                e.Timestamp,
+                e.CharacterId,
+                e.DeathEventType
+            });
+
             builder
                 .Ignore(e => e.Character)
                 .Ignore(e => e.AttackerCharacter)
