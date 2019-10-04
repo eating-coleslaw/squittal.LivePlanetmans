@@ -31,11 +31,11 @@
                 @* Refresh Button *@
                 @if (players != null)
                 {
-                    <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual" style="margin-left: auto; height: 34px; margin-top: 0.15rem;">Refresh</button>
+                    <button class="btn btn-outline-primary btn-sm refresh" @onclick="RefreshTableManual">Refresh</button>
                 }
                 else
                 {
-                    <button class="btn btn-outline-primary btn-sm" style="margin-left: auto; height: 34px; margin-top: 0.15rem; color: transparent; background-color: #007bff10; border-color: #007bff0a; width: 77px;"></button>
+                    <button class="btn btn-outline-primary btn-sm refresh placeholder"></button>
                 }
 
                 @* Server Select Menu *@
@@ -62,17 +62,17 @@
                 @* Last Refresh*@
                 @if (players != null && isChangingWorld == false)
                 {
-                    <span class="text-muted" style="font-size: 0.8rem; font-weight: 400; padding-left: 0.1rem;">
+                    <span class="sub-header muted" >
                         Last Refresh: @lastRefreshTime.ToLongTimeString()
 
                         @if (isLoading == true)
                         {
-                            <span class="text-muted" style="font-size: 0.75rem; font-weight: 400; vertical-align: bottom;">[loading...]</span>
+                            <span class="temp">[loading...]</span>
                         }
 
                         @if (!string.IsNullOrWhiteSpace(errorMessage))
                         {
-                            <span class="oi oi-warning small" style="font-size: 0.8rem; color: var(--warning); vertical-align: middle;" title="#@errorCount @errorMessage"></span>
+                            <span class="oi oi-warning small" title="#@errorCount @errorMessage"></span>
                         }
 
                     </span>

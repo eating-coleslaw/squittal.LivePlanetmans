@@ -378,5 +378,42 @@ td .inline-player-br .oi {
     margin-left: -0.1rem;
 }
 
+.sub-header {
+    font-size: 0.8rem;
+    font-weight: 400;
+    padding-left: 0.1rem;
+}
+
+    .sub-header.muted {
+        color: var(--bs-gray);
+        font-weight: 400;
+    }
+
+    .sub-header .temp {
+        font-size: 0.75rem;
+        font-weight: 400;
+        vertical-align: bottom;
+    }
+
+    .sub-header .oi-warning {
+        font-size: 0.8rem;
+        color: var(--warning);
+        vertical-align: middle;
+    }
 
 
+button.refresh {
+    margin-left: auto;
+    height: 34px;
+    margin-top: 0.15rem;
+}
+
+    button.refresh.placeholder {
+        /*margin-left: auto;*/
+        /*height: 34px;*/
+        /*margin-top: 0.15rem;*/
+        color: transparent;
+        background-color: #007bff10;
+        border-color: #007bff0a;
+        width: 77px;
+    }
