@@ -240,46 +240,39 @@ dt {
     }
 
     .leaderboard-table th {
-        /*padding-right: 10px;*/
         padding-left: 5px;
         max-width: 65px;
-        width: 1rem;
+        /*width: 1rem;*/
         vertical-align: bottom;
         font-size: 0.8rem;
     }
         
         .leaderboard-table th.med {
-            width: 80px;
+            /*width: 80px;*/
+            min-width: 60px;
         }
 
         .leaderboard-table th.p-name {
-            /*padding-right: 10px;*/
-            vertical-align: bottom;
-            font-size: 0.8rem;
+            /*vertical-align: bottom;*/
         }
 
         .leaderboard-table th.icon {
             padding: 0.1rem 0.5rem;
             max-width: 30px;
-            width: 1rem;
-            border: inherit;
-            font-size: 0.8rem;
+            /*border: inherit;*/
         }
 
         .leaderboard-table th.alias {
-            padding-right: 5px;
-            max-width: 55px;
-            width: 1rem;
-            font-size: 0.8rem;
+            /*padding-right: 5px;*/
+            width: 40px;
         }
 
-        .leaderboard-table th.pad-left {
-            /*padding-right: 10px;*/
+        .leaderboard-table th.gap-left {
             padding-left: 10px;
             margin-left: 0.3125rem;
             max-width: 70px;
             width: 1.1rem;
-            word-wrap: normal;
+            /*word-wrap: normal;*/
             vertical-align: bottom;
         }
 
@@ -294,5 +287,4 @@ dt {
         }
 
         .leaderboard-table th.stacked-label span:nth-child(2) {
-            font-size: 0.8rem;
         }

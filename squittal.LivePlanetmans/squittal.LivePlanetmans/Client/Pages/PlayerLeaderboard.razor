@@ -41,8 +41,6 @@
                 @* Server Select Menu *@
                 @if (worlds == null)
                 {
-                    @*<div class="text-muted" style="font-size: 1rem;"><em>Loading server list...</em></div>*@
-
                     <div class="styled-select" style="color: transparent; background-color: #007bff10; border-color: #007bff05;">Server</div>
                 }
                 else
@@ -59,24 +57,13 @@
                             }
                         </select>
                     </div>
-
-                    @*<select class="btn-sm" style="margin-left: auto; width: 75%;" id="worldSelect" @onchange="OnWorldIdChange">
-                <option value="" class="text-muted" style="font-style:italic">Server</option>
-                @foreach (var world in worlds)
-                {
-                    @if (world.Id != 25) //RIP Briggs
-                    {
-                        <option value="@world.Id.ToString()">@world.Name</option>
-                    }
-                }
-            </select>*@
                 }
 
+                @* Last Refresh*@
                 @if (players != null && isChangingWorld == false)
                 {
-                    @*<button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">Refresh</button>*@
                     <span class="text-muted" style="font-size: 0.8rem; font-weight: 400; padding-left: 0.1rem;">
-                        Last Refresh: @lastRefreshTime.ToLongTimeString()
+                        Last Refresh @@ @lastRefreshTime.ToLongTimeString()
 
                         @if (isLoading == true)
                         {
@@ -85,8 +72,7 @@
 
                         @if (!string.IsNullOrWhiteSpace(errorMessage))
                         {
-                            <span class="oi oi-warning small" style="font-size: 2rem; color: var(--warning); vertical-align: middle;" title="#@errorCount @errorMessage"></span>
-                            @*<em>@errorMessage</em></span>*@
+                            <span class="oi oi-warning small" style="font-size: 0.8rem; color: var(--warning); vertical-align: middle;" title="#@errorCount @errorMessage"></span>
                         }
 
                     </span>
@@ -102,65 +88,25 @@
             </div>
 
             <div style="padding: 5px 10px;">
-
-                @*@if (worlds == null)
-                {
-                    <em>Loading server list...</em>
-                }
-                else
-                {
-                    <select class="btn-sm" style="margin-right: 5px" id="worldSelect" @onchange="OnWorldIdChange">
-                        <option value="" class="text-muted" style="font-style:italic">Server</option>
-                        @foreach (var world in worlds)
-                        {
-                            @if (world.Id != 25) //RIP Briggs
-                            {
-                                <option value="@world.Id.ToString()">@world.Name</option>
-                            }
-                        }
-                    </select>
-                }*@
-
-                @*@if (players != null)
-                {
-                    <button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">Refresh</button>
-                    <span class="text-muted" style="font-size: 0.8rem; vertical-align: bottom;">Last Refresh: @lastRefreshTime.ToLongTimeString()</span>
-                }*@
-                @*@if (isLoading == true)
-                {
-                    <span class="text-muted" style="font-size: 0.8rem; vertical-align: bottom;">(loading)</span>
-                }*@
-
-
-                @*@if (!string.IsNullOrWhiteSpace(errorMessage))
-                {
-                    <span class="oi oi-warning small" style="font-size: 1rem; color: var(--warning); vertical-align: middle;" title="#@errorCount @errorMessage"></span>
-                    @*<em>@errorMessage</em></span>
-                }*@
-
-                @*else
-                {*@
                     <table class="table-striped table-responsive-sm leaderboard-table">
-                        <thead> @*style="line-height: 1.1rem;">*@
+                        <thead>
                             <tr>
-                                <th class="icon"></th> @*style="padding: 0.1rem 0.5rem; max-width: 30px;  width: 1rem; border: inherit; font-size: 0.8rem;"></th>*@
-                                <th clas="alias"></th> @*style="padding-right: 5px; max-width: 55px; width: 1rem; font-size: 0.8rem;"></th>*@ @* outfit alias*@
-                                <th class="p-name">Player</th> @*style="padding-right: 10px; vertical-align: bottom; font-size: 0.8rem;">Player</th>*@
-                                <th>Kills</th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Kills</th>*@
-                                <th>Deaths</th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Deaths</th>*@
-                                <th>KDR</th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KDR</th>*@
-                                <th>KPM</th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KPM</th>*@
-                                <th>HSR</th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">HSR</th>*@
-                                <th class="pad-left stacked-label"> @*style="padding-right: 10px; padding-left: 10px;  margin-left: 0.3125rem; max-width: 70px; width: 1.1rem; word-wrap: normal; vertical-align: bottom;">*@
-                                    <span class="small">Session</span> @*style="font-size: 0.6rem; position: relative; top: 0.5rem;">Session</span>*@
-                                    <span>KPM</span> @*style="font-size: 0.8rem;">KPM</span>*@
+                                <th class="icon"></th> 
+                                <th class="alias"></th>
+                                <th class="p-name">Player</th>
+                                <th>Kills</th>
+                                <th>Deaths</th>
+                                <th>KDR</th>
+                                <th>KPM</th>
+                                <th>HSR</th>
+                                <th class="gap-left stacked-label">
+                                    <span class="small">Session</span>
+                                    <span>KPM</span>
                                 </th>
                                 <th class="stacked-label med">
                                     <span class="small">Play<br></span>
                                     <span>Time</span>    
-                                </th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Playtime</th>*@
-                                @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th>*@ @* Last-Seen Continent *@
-                                @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th>*@
+                                </th>
                             </tr>
                         </thead>
                         @if (players != null && isChangingWorld != true) @*&& requestCount == 0)*@ @*(isChangingWorld != true || (isChangingWorld == true && isLeaderboardReady == true && isFetchingLeaderboard != true)))*@
