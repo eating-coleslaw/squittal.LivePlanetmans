@@ -14,7 +14,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; margin-right: 5px; background-color: #fcf6ff;">
+        <div class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; margin-right: 5px; margin-bottom: 10px; background-color: #fcf6ff;">
             <div class="h2" style="font-size: 2rem; font-family: 'Roboto Mono'; color: #e34f8c; margin-bottom: 0px; padding: 5px 10px; border-top: 2px solid var(--pink); border-radius: 0.2rem; display: grid; grid-template-columns: 1fr 100px 150px; align-content: center;">
 
                 @* Leaderboard Title *@
@@ -63,7 +63,7 @@
                 @if (players != null && isChangingWorld == false)
                 {
                     <span class="text-muted" style="font-size: 0.8rem; font-weight: 400; padding-left: 0.1rem;">
-                        Last Refresh @@ @lastRefreshTime.ToLongTimeString()
+                        Last Refresh: @lastRefreshTime.ToLongTimeString()
 
                         @if (isLoading == true)
                         {
@@ -111,41 +111,41 @@
                         </thead>
                         @if (players != null && isChangingWorld != true)
                         {
-                            <tbody style="font-family: 'Roboto Mono'; font-size: small;">
+                            <tbody style="font-family: 'Roboto Mono'; font-size: small !important;">
                                 @foreach (var player in players)
                                 {
                                 <tr style="color: @GetFactionColorFromId(player.FactionId);">
                                     @if (player.IsOnline == true)
                                     {
-                                        <td style="padding: 0.1rem 0.5rem 0.1rem 0.3125rem; max-width: 30px;  width: 1rem; border: inherit;">
-                                            <div title="Online: @player.LatestZoneName" style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px; opacity: 0.65;">@GetZoneDisplayEmoji(player.LatestZoneName)</div>
+                                        <td class="emoji-container">
+                                            <div title="Online: @player.LatestZoneName" class="emoji">@GetZoneDisplayEmoji(player.LatestZoneName)</div>
                                         </td>
                                     }
                                     else
                                     {
-                                        <td style="padding: 0.1rem 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
-                                            <span class="oi oi-moon small" style="color: #b7a8d7 !important;"></span>
+                                        <td class="icon-container">
+                                            <span class="oi oi-moon small"></span>
                                         </td>
                                     }
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 5px;">
+                                        <td class="alias">
                                             @((string.IsNullOrWhiteSpace(player.OutfitAlias)) ? "" : $"[{player.OutfitAlias}]")
                                         </td>
 
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-right: 10px;">
-                                            <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))">
+                                        <td>
+                                            <button class="btn btn-link inline-player-br" style="color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))">
                                                 @if (string.IsNullOrWhiteSpace(player.PlayerName))
                                                 {
                                                     @player.PlayerId
                                                 }
                                                 else
                                                 {
-                                                    <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@player.PlayerName </div>
-                                                    <div style="display: inline-block;">
+                                                    <div class="player-name">@player.PlayerName </div>
+                                                    <div>
                                                         <sup>
                                                             @(player.BattleRank)
                                                             @if (player.PrestigeLevel != 0)
                                                             {
-                                                                <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
+                                                                <span class="oi oi-star small" aria-hidden="true"></span>
                                                             }
                                                         </sup>
                                                     </div>
@@ -154,15 +154,15 @@
                                             </button>
                                         </td>
 
-                                        <td style="padding: 0.1rem 10px 0.1rem 5px;">@player.Kills</td>
-                                        <td style="padding: 0.1rem 10px 0.1rem 5px;">@player.Deaths</td>
-                                        <td style="padding: 0.1rem 10px 0.1rem 5px;">@player.KillDeathRatio</td>
-                                        <td style="padding: 0.1rem 10px 0.1rem 5px;">@player.KillsPerMinute</td>
-                                        <td style="padding: 0.1rem 10px 0.1rem 5px;">@player.HeadshotRatio</td>
-                                        <td style="padding: 0.1rem 10px 0.1rem 10px;">
+                                        <td>@player.Kills</td>
+                                        <td >@player.Deaths</td>
+                                        <td >@player.KillDeathRatio</td>
+                                        <td >@player.KillsPerMinute</td>
+                                        <td >@player.HeadshotRatio</td>
+                                        <td class="med">
                                             @((player.SessionKillsPerMinute != null) ? player.SessionKillsPerMinute.ToString() : "-")
                                         </td>
-                                        <td title="@GetSessionDisplayTimes(player)" style="padding: 0.1rem 10px 0.1rem 5px;">@GetSessionDurationDisplay(player)</td>
+                                        <td title="@GetSessionDisplayTimes(player)">@GetSessionDurationDisplay(player)</td>
                                     </tr>
                                 }
                             </tbody>
@@ -211,19 +211,12 @@
 
     DateTime lastRefreshTime;
     string errorMessage = "";
+    int errorCount = 0;
 
     System.Timers.Timer autoRefreshTimer;
 
     string selectedPlayer = "";
 
-    // DEBUG
-    string queryStartTimestamp = "";
-    string queryEndTimestamp = "";
-
-    int initAsyncCount = 0;
-    int paramSetAsyncCount = 0;
-    int renderCount = 0;
-    int errorCount = 0;
 
 
     protected override void OnInitialized()
@@ -384,7 +377,6 @@
                 isFetchingLeaderboard = true;
                 //Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>($"api/PlayerLeaderboard/{worldId}");
 
-                UpdateQueryDateTimes();
                 DateTime start = DateTime.UtcNow;
                 Debug.WriteLine($"Fetching leaderboard data for world {worldId}");
 
@@ -476,7 +468,7 @@
             {
                 await RefreshTable($"AutoRefreshTimerElapsed ({initWorldId} / {worldId})");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Ignore
             }
@@ -612,7 +604,7 @@
 
     string GetFactionColorFromId(int factionId)
     {
-        string color = "#2F2F2F";
+        string color = "#27273A";
 
         switch (factionId)
         {
@@ -629,6 +621,11 @@
             //TR
             case 3:
                 color = "#e04c70"; // FF6C70";
+                break;
+
+            //NS
+            case 4:
+                color = "var(--sq-ns-primary)";
                 break;
         }
 

@@ -1,5 +1,22 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+:root {
+    --sq-light-blue-gray: #d4d4ff;
+    --sq-light-blue-gray-alpha: #d4d4ff5a;
+    --sq-bg-white-lit: #fcf6ff;
+    --sq-bg-white-unlit: #f6f0ff;
+    --sq-black: #27273A;
+    --sq-ps2-vs-primary: #652fdc;
+    --sq-ps2-nc-primary: #1e62fc;
+    --sq-ps2-tr-primary: #e04c70;
+    --sq-ps2-ns-primary: #27273A;
+    --sq-pale-purple: #b7a8d7;
+    --bs-blue: #007bff;
+    --bs-blue-alpha: #007bff10;
+    --bs-gray: #6c757d;
+    --bs-gray-alpha: #6c757d15;
+}
+
 html, body {
     font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: #f6f0ff;
@@ -288,3 +305,78 @@ dt {
 
         .leaderboard-table th.stacked-label span:nth-child(2) {
         }
+
+    .leaderboard-table tbody {
+        font-size: small !important;
+    }
+
+    .leaderboard-table td {
+        padding: 0.2rem 10px 0.2rem 5px;
+    }
+
+        .leaderboard-table td.med {
+            padding-left: 10px;
+        }
+
+        .leaderboard-table td.alias {
+            padding-right: 5px;
+            padding-left: 0;
+        }
+
+        /*.leaderboard-table td button.inline-player-br {
+            font-size: 0.8rem;
+            padding: 0rem !important;
+        }*/
+
+        .leaderboard-table td.emoji-container {
+            padding: 0.1rem 0.5rem 0.1rem 0.3125rem;
+            max-width: 30px;
+            width: 1rem;
+            /*border: inherit;*/
+        }
+
+            .leaderboard-table td.emoji-container .emoji {
+                padding-top: 0.1rem;
+                padding-bottom: 0.1rem;
+                padding-right: 10px;
+                opacity: 0.65;
+            }
+
+        .leaderboard-table td.icon-container {
+            padding: 0.1rem 0.5rem;
+            max-width: 30px;
+            width: 1rem;
+            /*border: inherit;*/
+        }
+
+        .leaderboard-table .oi-moon {
+            color: var(--sq-pale-purple) !important;
+        }
+
+
+    td .inline-player-br {
+        font-size: small;
+        line-height: 1.1;
+        padding: 0 0 0.1rem 0;
+    }
+
+.inline-player-br > div {
+    display: inline-block;
+}
+
+    .inline-player-br .player-name{
+        /*display: inline-block;*/
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: bottom;
+        
+    }
+
+td .inline-player-br .oi {
+    top: -1px;
+    margin-left: -0.1rem;
+}
+
+
+
