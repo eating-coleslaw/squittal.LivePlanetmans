@@ -47,12 +47,12 @@
                 {
                     <div class="styled-select">
                         <select id="worldSelect" @onchange="OnWorldIdChange" class="btn-sm">
-                            <option value="" class="text-muted" style="font-style:italic">Server</option>
+                            <option value="" class="pre-text">Server</option>
                             @foreach (var world in worlds)
                             {
                                 @if (world.Id != 25) //RIP Briggs
                                 {
-                                    <option value="@world.Id.ToString()" style="font-family: 'Roboto Mono'; font-size: small;">@world.Name</option>
+                                    <option value="@world.Id.ToString()">@world.Name</option>
                                 }
                             }
                         </select>

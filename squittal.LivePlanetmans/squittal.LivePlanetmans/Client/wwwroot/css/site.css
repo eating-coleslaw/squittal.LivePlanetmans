@@ -210,6 +210,17 @@ dt {
     font-family: 'Roboto Mono';
 }
 
+    .styled-select option {
+        font-family: 'Roboto Mono';
+        font-size: small;
+    }
+
+    .styled-select option.pre-text {
+        color: var(--bs-gray);
+        font-weight: 400;
+        font-style: italic;
+    }
+
     .styled-select:hover, .styled-select:active {
         border-color: #007bff; /*#27273A50;*/
         color: #FFF; /*#27273A;*/
@@ -217,7 +228,7 @@ dt {
         background-color: #007bff; /*#fcf6ff;*/
     }
 
-    .styled-select select, style-select.placeholder select {
+    .styled-select select {
         outline: 0;
         background: transparent;
         line-height: 1;
@@ -243,6 +254,7 @@ dt {
             box-shadow: 0 0 0 .2rem #007bff80;
         }
 
+
 .styled-select.placeholder {
     color: transparent;
     background: url('https://api.iconify.design/oi:caret-bottom.svg?color=%23007ba0') no-repeat right 0.5rem center / 10%;
@@ -250,9 +262,12 @@ dt {
     border-color: #007bff05;
 }
 
-styled-select.placeholder select {
-    color: transparent;
-}
+    .styled-select.placeholder select {
+        color: transparent;
+    }
+
+
+
 
 /*
     Leaderboard Styles
