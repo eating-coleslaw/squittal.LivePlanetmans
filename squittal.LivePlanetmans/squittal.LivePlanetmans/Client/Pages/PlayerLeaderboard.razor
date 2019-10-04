@@ -29,19 +29,19 @@
 
 
                 @* Refresh Button *@
-                @if (players != null)
+                @if (players == null)
                 {
-                    <button class="btn btn-outline-primary btn-sm refresh" @onclick="RefreshTableManual">Refresh</button>
+                    <button class="btn btn-outline-primary btn-sm refresh placeholder"></button>
                 }
                 else
                 {
-                    <button class="btn btn-outline-primary btn-sm refresh placeholder"></button>
+                    <button class="btn btn-outline-primary btn-sm refresh" @onclick="RefreshTableManual">Refresh</button>
                 }
 
                 @* Server Select Menu *@
                 @if (worlds == null)
                 {
-                    <div class="styled-select" style="color: transparent; background-color: #007bff10; border-color: #007bff05;">Server</div>
+                    <div class="styled-select placeholder">Server</div>
                 }
                 else
                 {

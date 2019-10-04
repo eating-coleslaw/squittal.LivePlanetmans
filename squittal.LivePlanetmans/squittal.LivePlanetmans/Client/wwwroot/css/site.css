@@ -210,37 +210,48 @@ dt {
     font-family: 'Roboto Mono';
 }
 
-.styled-select:hover, .styled-select:active {
-    border-color: #007bff; /*#27273A50;*/
-    color: #FFF; /*#27273A;*/
-    background: url('https://api.iconify.design/oi:caret-bottom.svg?color=%23FFF') no-repeat right 0.5rem center / 10%;
-    background-color: #007bff; /*#fcf6ff;*/
+    .styled-select:hover, .styled-select:active {
+        border-color: #007bff; /*#27273A50;*/
+        color: #FFF; /*#27273A;*/
+        background: url('https://api.iconify.design/oi:caret-bottom.svg?color=%23FFF') no-repeat right 0.5rem center / 10%;
+        background-color: #007bff; /*#fcf6ff;*/
+    }
+
+    .styled-select select, style-select.placeholder select {
+        outline: 0;
+        background: transparent;
+        line-height: 1;
+        border: 0;
+        border-radius: 0.2rem;
+        -webkit-appearance: none;
+        height: 33px;
+        width: 119px;
+        display: block;
+        padding: 0px;
+        outline: 0;
+        color: #007bff; /*#6c757d;*/
+        font-family: 'Roboto Mono';
+    }
+
+        .styled-select select:hover, .styled-select select:active {
+            color: #FFF; /*#27273A;*/
+            outline: 0;
+        }
+
+        .styled-select select:focus {
+            outline: 0 !important;
+            box-shadow: 0 0 0 .2rem #007bff80;
+        }
+
+.styled-select.placeholder {
+    color: transparent;
+    background: url('https://api.iconify.design/oi:caret-bottom.svg?color=%23007ba0') no-repeat right 0.5rem center / 10%;
+    background-color: #007bff10;
+    border-color: #007bff05;
 }
 
-.styled-select select {
-    outline: 0;
-    background: transparent;
-    line-height: 1;
-    border: 0;
-    border-radius: 0.2rem;
-    -webkit-appearance: none;
-    height: 33px;
-    width: 119px;
-    display: block;
-    padding: 0px;
-    outline: 0;
-    color: #007bff; /*#6c757d;*/
-    font-family: 'Roboto Mono';
-}
-
-.styled-select select:hover, .styled-select select:active {
-    color: #FFF; /*#27273A;*/
-    outline: 0;
-}
-
-.styled-select select:focus{
-    outline: 0 !important;
-    box-shadow: 0 0 0 .2rem #007bff80;
+styled-select.placeholder select {
+    color: transparent;
 }
 
 /*
