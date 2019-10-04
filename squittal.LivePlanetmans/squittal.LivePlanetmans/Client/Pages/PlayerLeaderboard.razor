@@ -43,7 +43,7 @@
                 {
                     @*<div class="text-muted" style="font-size: 1rem;"><em>Loading server list...</em></div>*@
 
-                    <div class="styled-select" style="color: transparent; background-color: #007bff10; border-color: #007bff0a;">Server</div>
+                    <div class="styled-select" style="color: transparent; background-color: #007bff10; border-color: #007bff05;">Server</div>
                 }
                 else
                 {
@@ -72,17 +72,31 @@
             </select>*@
                 }
 
-                @if (players != null)
+                @if (players != null && isChangingWorld == false)
                 {
                     @*<button class="btn btn-outline-primary btn-sm" @onclick="RefreshTableManual">Refresh</button>*@
                     <span class="text-muted" style="font-size: 0.8rem; font-weight: 400; padding-left: 0.1rem;">
                         Last Refresh: @lastRefreshTime.ToLongTimeString()
-                        
+
                         @if (isLoading == true)
                         {
                             <span class="text-muted" style="font-size: 0.75rem; font-weight: 400; vertical-align: bottom;">[loading...]</span>
                         }
+
+                        @if (!string.IsNullOrWhiteSpace(errorMessage))
+                        {
+                            <span class="oi oi-warning small" style="font-size: 2rem; color: var(--warning); vertical-align: middle;" title="#@errorCount @errorMessage"></span>
+                            @*<em>@errorMessage</em></span>*@
+                        }
+
                     </span>
+                }
+                else
+                {
+                    <div style="font-size: 0.8rem;">
+                        <span style="background-color: #6c757d15; width: 95px; border-radius: 0.2rem;  height: 0.8rem; display: inline-block; color: transparent; vertical-align: bottom;"></span>
+                        <span style="background-color: #6c757d15; width: 75px; border-radius: 0.2rem;  height: 0.8rem; margin-left: 0.5rem; vertical-align: middle; display: inline-block;"></span>
+                    </div>
                 }
 
             </div>
@@ -118,30 +132,33 @@
                 }*@
 
 
-                @if (!string.IsNullOrWhiteSpace(errorMessage))
+                @*@if (!string.IsNullOrWhiteSpace(errorMessage))
                 {
                     <span class="oi oi-warning small" style="font-size: 1rem; color: var(--warning); vertical-align: middle;" title="#@errorCount @errorMessage"></span>
-                    @*<em>@errorMessage</em></span>*@
-                }
+                    @*<em>@errorMessage</em></span>
+                }*@
 
                 @*else
                 {*@
-                    <table class="table-striped table-responsive-sm" style="width: 100%;">
-                        <thead style="line-height: 1.1rem;">
+                    <table class="table-striped table-responsive-sm leaderboard-table">
+                        <thead> @*style="line-height: 1.1rem;">*@
                             <tr>
-                                <th style="padding: 0.1rem 0.5rem; max-width: 30px;  width: 1rem; border: inherit; font-size: 0.8rem;"></th>
-                                <th style="padding-right: 5px; max-width: 55px; width: 1rem; font-size: 0.8rem;"></th> @* outfit alias*@
-                                <th style="padding-right: 10px; vertical-align: bottom; font-size: 0.8rem;">Player</th>
-                                <th style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Kills</th>
-                                <th style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Deaths</th>
-                                <th style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KDR</th>
-                                <th style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KPM</th>
-                                <th style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">HSR</th>
-                                <th style="padding-right: 10px; padding-left: 10px;  margin-left: 0.3125rem; max-width: 70px; width: 1.1rem; word-wrap: normal; vertical-align: bottom;">
-                                    <span style="font-size: 0.6rem; position: relative; top: 0.5rem;">Session</span>
-                                    <span style="font-size: 0.8rem;">KPM</span>
+                                <th class="icon"></th> @*style="padding: 0.1rem 0.5rem; max-width: 30px;  width: 1rem; border: inherit; font-size: 0.8rem;"></th>*@
+                                <th clas="alias"></th> @*style="padding-right: 5px; max-width: 55px; width: 1rem; font-size: 0.8rem;"></th>*@ @* outfit alias*@
+                                <th class="p-name">Player</th> @*style="padding-right: 10px; vertical-align: bottom; font-size: 0.8rem;">Player</th>*@
+                                <th>Kills</th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Kills</th>*@
+                                <th>Deaths</th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Deaths</th>*@
+                                <th>KDR</th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KDR</th>*@
+                                <th>KPM</th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">KPM</th>*@
+                                <th>HSR</th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">HSR</th>*@
+                                <th class="pad-left stacked-label"> @*style="padding-right: 10px; padding-left: 10px;  margin-left: 0.3125rem; max-width: 70px; width: 1.1rem; word-wrap: normal; vertical-align: bottom;">*@
+                                    <span class="small">Session</span> @*style="font-size: 0.6rem; position: relative; top: 0.5rem;">Session</span>*@
+                                    <span>KPM</span> @*style="font-size: 0.8rem;">KPM</span>*@
                                 </th>
-                                <th title="Get"style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Playtime</th>
+                                <th class="stacked-label med">
+                                    <span class="small">Play<br></span>
+                                    <span>Time</span>    
+                                </th> @*style="padding-right: 10px; padding-left: 5px; max-width: 65px; width: 1rem; vertical-align: bottom; font-size: 0.8rem;">Playtime</th>*@
                                 @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th>*@ @* Last-Seen Continent *@
                                 @*<th style="padding-right: 10px; max-width: 65px; width: 1rem; font-size: 0.8rem;"></th>*@
                             </tr>
@@ -219,7 +236,7 @@
 
                 @if (players == null || isChangingWorld == true) @*|| requestCount > 0)*@
                 {
-                    <p class="text-muted"><em>Loading...</em></p>
+                    <p class="text-muted" style="margin-left: 1rem; font-weight: 400;"><em>Loading...</em></p>
                 }
             </div>
 
