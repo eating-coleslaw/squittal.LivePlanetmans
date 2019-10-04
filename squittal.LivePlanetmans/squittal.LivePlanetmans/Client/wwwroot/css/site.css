@@ -15,6 +15,7 @@
     --bs-blue-alpha: #007bff10;
     --bs-gray: #6c757d;
     --bs-gray-alpha: #6c757d15;
+    --bs-pink-alpha: #e83e8c25;
 }
 
 html, body {
@@ -195,6 +196,29 @@ dt {
     }
 
 }
+
+.leaderboard-card {
+    border: 2px solid var(--sq-light-blue-gray-alpha) !important;
+    border-radius: 0.2rem;
+    padding: 0px;
+    margin: 0px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    background-color: var(--sq-bg-white-lit);
+}
+
+    .leaderboard-card .header-container {
+        font-family: 'Roboto Mono';
+        font-size: 2rem;
+        color: var(--pink); /*#e34f8c;*/
+        margin-bottom: 0px;
+        padding: 5px 10px;
+        border-top: 2px solid var(--pink);
+        border-radius: 0.2rem;
+        display: grid;
+        grid-template-columns: 1fr 100px 150px;
+        align-content: center;
+    }
 
 .styled-select {
     width: 120px;
@@ -404,6 +428,37 @@ td .inline-player-br .oi {
     margin-left: -0.1rem;
 }
 
+
+.sq-header {
+    font-size: 2rem;
+}
+
+    .sq-header .placeholder {
+        background-color: var(--bs-pink-alpha);
+        border-radius: 0.2rem;
+        /*height: calc(100% - 10px);*/
+        height: 100%;
+        /*padding: 5px 0 5px 0;*/
+        display: inline-block;
+        color: transparent;
+        vertical-align: bottom;
+    }
+
+        .sq-header .placeholder:nth-child(1) {
+            width: 120px;
+        }    
+
+        .sq-header .placeholder:nth-child(2) {
+            width: 60px;
+            margin-left: 0.2rem;
+        }
+
+        .sq-header .placeholder:nth-child(3) {
+            width: 100px;
+            margin-left: 0.2rem;
+        }
+
+
 .sub-header {
     font-size: 0.8rem;
     font-weight: 400;
@@ -427,12 +482,32 @@ td .inline-player-br .oi {
         vertical-align: middle;
     }
 
+    /*.sub-header.placeholder-container {
+        font-size: 0.8rem;
+    }*/
 
-button.refresh {
-    margin-left: auto;
-    height: 34px;
-    margin-top: 0.15rem;
-}
+        .sub-header .placeholder {
+            background-color: var(--bs-gray-alpha);
+            width: 95px;
+            border-radius: 0.2rem;
+            height: 0.8rem;
+            display: inline-block;
+            color: transparent;
+            vertical-align: bottom;
+        }
+
+        .sub-header .placeholder:nth-child(2) {
+            width: 75px;
+            margin-left: 0.25rem;
+        }
+
+
+
+        button.refresh {
+            margin-left: auto;
+            height: 34px;
+            margin-top: 0.15rem;
+        }
 
     button.refresh.placeholder {
         /*margin-left: auto;*/

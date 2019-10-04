@@ -14,17 +14,21 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-6" style="border: 2px solid #d4d4ff5a !important; border-radius: 0.2rem; padding: 0px; margin: 0px; margin-right: 5px; margin-bottom: 10px; background-color: #fcf6ff;">
-            <div class="h2" style="font-size: 2rem; font-family: 'Roboto Mono'; color: #e34f8c; margin-bottom: 0px; padding: 5px 10px; border-top: 2px solid var(--pink); border-radius: 0.2rem; display: grid; grid-template-columns: 1fr 100px 150px; align-content: center;">
+        <div class="col-lg-6 leaderboard-card">
+            <div class="h2 header-container">
 
                 @* Leaderboard Title *@
                 @if (!string.IsNullOrWhiteSpace(selectedWorldName))
                 {
-                    <div style="color: var(--pink)">@selectedWorldName Top Players</div>
+                    <div class="sq-header">@selectedWorldName Top Players</div>
                 }
                 else
                 {
-                    <div>Live Activity</div>
+                    <div class="sq-header">
+                        <div class="placeholder"></div>
+                        <div class="placeholder"></div>
+                        <div class="placeholder"></div>
+                    </div>
                 }
 
 
@@ -79,9 +83,9 @@
                 }
                 else
                 {
-                    <div style="font-size: 0.8rem;">
-                        <span style="background-color: #6c757d15; width: 95px; border-radius: 0.2rem;  height: 0.8rem; display: inline-block; color: transparent; vertical-align: bottom;"></span>
-                        <span style="background-color: #6c757d15; width: 75px; border-radius: 0.2rem;  height: 0.8rem; margin-left: 0.5rem; vertical-align: middle; display: inline-block;"></span>
+                    <div class="sub-header">
+                        <span class="placeholder"></span>
+                        <span class="placeholder"></span>
                     </div>
                 }
 
