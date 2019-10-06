@@ -115,7 +115,7 @@
                         </thead>
                         @if (players != null && isChangingWorld != true)
                         {
-                            <tbody style="font-family: 'Roboto Mono'; font-size: small !important;">
+                            <tbody>
                                 @foreach (var player in players)
                                 {
                                 <tr style="color: @GetFactionColorFromId(player.FactionId);">
@@ -128,7 +128,7 @@
                                     else
                                     {
                                         <td class="icon-container">
-                                            <span class="oi oi-moon small"></span>
+                                            <span title="Offline" class="oi oi-moon small"></span>
                                         </td>
                                     }
                                         <td class="alias">
@@ -177,7 +177,14 @@
 
                 @if (players == null || isChangingWorld == true)
                 {
-                    <p class="text-muted" style="margin-left: 1rem; font-weight: 400;"><em>Loading...</em></p>
+                    @*<p class="loading-table-text">Loading...</p>*@
+
+                    <div class="spinner-ellipsis">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
                 }
             </div>
 
