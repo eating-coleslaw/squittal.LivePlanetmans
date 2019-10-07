@@ -1,5 +1,6 @@
 ﻿@page "/playerstats"
 @using squittal.LivePlanetmans.Shared.Models
+@using System.Diagnostics
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
@@ -14,8 +15,6 @@
             </div>
         </div>
 
-        @*<h2>Player Details</h2>*@
-        @*<p class="text-muted" style="font-size: 1.5rem; margin: 25%; text-align: center;"><em>Select a player to see hourly stats & session details</em></p>*@
     </div>
 }
 else
@@ -24,7 +23,7 @@ else
     {
         <div id="details-header" style="font-family: 'Roboto Mono'; display: grid; grid-template-columns: 1.5fr 1fr 80px; grid-template-rows: 1fr; border-top: 2px solid @GetFactionColorFromId(player.FactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
             <div class="h2" style="margin-bottom: 0px; word-wrap: break-word; grid-column: 1 / 3;">
-                <a href="@GetUrlFromCharacterName(player.Name)" target="_blank" style="color:@GetFactionColorFromId(player.FactionId);">
+                <a href="@GetUrlFromCharacterName(player.Name)" title="Open fisu player profile" target="_blank" style="color:@GetFactionColorFromId(player.FactionId);">
                     @player.Name
                     <span class="h6 oi oi-external-link" style="opacity: 0.5;"></span>
                 </a>
@@ -76,7 +75,6 @@ else
                     </div>
 
                     <div title="Kills Per Minute" style="grid-area: badge1; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
-                        @*background: radial-gradient(farthest-corner at 1rem 1rem, @(GetFactionLightColorFromId(player.FactionId))40 10%, @(GetFactionLightColorFromId(player.FactionId))30 60%, @GetFactionColorFromId(player.FactionId)30 100%);">*@
                         <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
                             @stats.KillsPerMinute
                             <div style="text-align: right; font-size: 0.8rem;">KPM</div>
@@ -84,7 +82,6 @@ else
                     </div>
 
                     <div title="Kill Death Ratio" style="grid-area: badge2; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
-                        @*background: radial-gradient(farthest-corner at 1rem 1rem, @(GetFactionLightColorFromId(player.FactionId))40 10%, @(GetFactionLightColorFromId(player.FactionId))30 60%, @GetFactionColorFromId(player.FactionId)30 100%);">*@
                         <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
                             @stats.KillDeathRatio
                             <div style="text-align: right; font-size: 0.8rem;">KDR</div>
@@ -92,7 +89,6 @@ else
                     </div>
 
                     <div title="Head Shot Ratio" style="grid-area: badge3; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
-                        @*background: radial-gradient(farthest-corner at 1rem 1rem, @(GetFactionLightColorFromId(player.FactionId))40 10%, @(GetFactionLightColorFromId(player.FactionId))30 60%, @GetFactionColorFromId(player.FactionId)30 100%);">*@
                         <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
                             @stats.HeadshotRatio<span style="font-size: 0.75rem;">%</span>
                             <div style="text-align: right; font-size: 0.8rem; margin-top: -0.25rem;">HSR</div>
@@ -123,17 +119,32 @@ else
                         <div style="margin-bottom: 0.3125rem; padding-left: 15px;">@GetSessionDisplayTimes()</div>
 
                         <dl class="row" style="margin: 0px;">
-                            <dt class="col-sm-5 text-muted">Duration</dt>
-                            <dd class="col-sm-4" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@GetSessionDurationDisplay()</dd>
-                            <dd class="col-sm-3"></dd>
+                            <dt class="col-sm-7 text-muted">Duration</dt>
+                            <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@GetSessionDurationDisplay()</dd>
 
-                            <dt class="col-sm-5 text-muted">Kills</dt>
-                            <dd class="col-sm-4" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.SessionKills</dd>
-                            <dd class="col-sm-3"></dd>
+                            <dt class="col-sm-7 text-muted">Kills</dt>
+                            <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
+                                @if (stats.SessionKills == null)
+                                {
+                                   <span>-</span>
+                                }
+                                else
+                                {
+                                    <span>@stats.SessionKills</span>
+                                }
+                            </dd>
 
-                            <dt class="col-sm-5 text-muted">KPM</dt>
-                            <dd class="col-sm-4" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.SessionKillsPerMinute</dd>
-                            <dd class="col-sm-3"></dd>
+                            <dt class="col-sm-7 text-muted">KPM</dt>
+                            <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
+                                @if (stats.SessionKills == null)
+                                {
+                                    <span>-</span>
+                                }
+                                else
+                                {
+                                    <span>@stats.SessionKillsPerMinute</span>
+                                }
+                            </dd>
                         </dl>
                     </div>
                 </div>
@@ -141,90 +152,122 @@ else
             </div>
         }
 
-            <h5>Kills This Hour</h5>
-            @if (kills == null || isLoadingKillboard == true)
-            {
-                <p class="text-muted"><em>Loading killboard...</em></p>
-            }
-            else
-            {
-                <div style="max-height: 400px; overflow: auto; border-top: 1px solid #27273a80; border-bottom: 1px solid #27273a80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem;">
-                    <table class="table-responsive-sm table" style="font-size: 0.85rem !important;">
-                        <tbody style="font-size: small;">
-                            @foreach (var kill in kills)
-                            {
-                                <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; border-top: @GetKillboardBorderStyle(kill.VictimId);">
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem; border: inherit;">
-                                        @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
-                                    </td>
+            <div style="margin-top: 0.5rem;">
+                <h5 style="font-size: 1rem; padding-left: 0.75rem;">Kills This Hour</h5>
+                @if (kills == null || isLoadingKillboard == true)
+                {
+                    <p class="text-muted"><em>Loading killboard...</em></p>
+                }
+                else
+                {
+                    <div style="max-height: 400px; overflow: auto; border-top: 1px solid #27273a80; border-bottom: 1px solid #27273a80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem;">
+                        <table class="table-responsive-sm table" style="font-size: 0.85rem !important;">
+                            <tbody style="font-size: small;">
+                                @foreach (var kill in kills)
+                                {
+                                    <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; border-top: @GetKillboardBorderStyle(kill.VictimId);">
+                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem; border: inherit;">
+                                            @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
+                                        </td>
 
-                                    <td style="padding: 0.1rem 0.3125rem 0.1rem 0; max-width: 55px; width: 1rem; border: inherit;">
-                                        @if (kill.VictimId == playerId)
-                                        {
-                                            @((string.IsNullOrWhiteSpace(kill.AttackerOutfitAlias)) ? "" : $"[{kill.AttackerOutfitAlias}]")
-                                        }
-                                        else
-                                        {
-                                            @((string.IsNullOrWhiteSpace(kill.VictimOutfitAlias)) ? "" : $"[{kill.VictimOutfitAlias}]")
-                                        }
-                                    </td>
-                                    <td style="padding: 0.1rem 0.75rem 0.1rem 0; border: inherit;">
-                                        @if (kill.VictimId == playerId)
-                                        {
-                                            <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))">
-                                                <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis;">@kill.AttackerName</div>
-                                                <div style="display: inline-block; vertical-align: super;">
-                                                    <sup>
-                                                        @(kill.AttackerBattleRank)
-                                                        @if (stats.PrestigeLevel != 0)
-                                                        {
-                                                            <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
-                                                        }
-                                                    </sup>
-                                                </div>
-                                                @*</a>*@
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;" @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))">
-                                                <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>
-                                                <div style="display: inline-block;">
-                                                    <sup>
-                                                        @(kill.VictimBattleRank)
-                                                        @if (kill.VictimPrestigeLevel != 0)
-                                                        {
-                                                            <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
-                                                        }
-                                                    </sup>
-                                                </div>
-                                                @*</a>*@
-                                            </button>
-                                        }
-                                    </td>
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
-                                        @if (kill.IsHeadshot == true)
-                                        {
-                                            <span class="oi small oi-target" aria-hidden="true" style="padding-left: 0.3125rem; padding-right: 0.3125rem;"></span>
-                                        }
-                                    </td>
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
-                                        @kill.AttackerWeaponName
-                                    </td>
-                                    <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
-                                        @kill.ZoneName
-                                    </td>
-                                </tr>
-                            }
+                                        <td style="padding: 0.1rem 0.3125rem 0.1rem 0; max-width: 55px; width: 1rem; border: inherit;">
+                                            @if (kill.VictimId == playerId)
+                                            {
+                                                @((string.IsNullOrWhiteSpace(kill.AttackerOutfitAlias)) ? "" : $"[{kill.AttackerOutfitAlias}]")
+                                            }
+                                            else
+                                            {
+                                                @((string.IsNullOrWhiteSpace(kill.VictimOutfitAlias)) ? "" : $"[{kill.VictimOutfitAlias}]")
+                                            }
+                                        </td>
+                                        <td style="padding: 0.1rem 0.75rem 0.1rem 0; border: inherit;">
+                                            @if (kill.VictimId == playerId)
+                                            {
+                                                <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))">
+                                                    <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis;">@kill.AttackerName</div>
+                                                    <div style="display: inline-block; vertical-align: super;">
+                                                        <sup>
+                                                            @(kill.AttackerBattleRank)
+                                                            @if (stats.PrestigeLevel != 0)
+                                                            {
+                                                                <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
+                                                            }
+                                                        </sup>
+                                                    </div>
+                                                    @*</a>*@
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;" @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))">
+                                                    <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>
+                                                    <div style="display: inline-block;">
+                                                        <sup>
+                                                            @(kill.VictimBattleRank)
+                                                            @if (kill.VictimPrestigeLevel != 0)
+                                                            {
+                                                                <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
+                                                            }
+                                                        </sup>
+                                                    </div>
+                                                    @*</a>*@
+                                                </button>
+                                            }
+                                        </td>
+                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
+                                            @if (kill.IsHeadshot == true)
+                                            {
+                                                <span class="oi small oi-target" aria-hidden="true" style="padding-left: 0.3125rem; padding-right: 0.3125rem;"></span>
+                                            }
+                                        </td>
+                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
+                                            @kill.AttackerWeaponName
+                                        </td>
+                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
+                                            @kill.ZoneName
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+                @if (weaponsSummary != null && isLoadingWeapons != true)
+                {
+
+                    <table class="table-responseive-sm leaderboard-table">
+                        <thead>
+                            <tr>
+                                @*<th>Weapon ID</th>*@
+                                <th class="p-name">Weapon</th>
+                                <th>Kills</th>
+                                <th>HSR</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        @foreach (var weapon in weaponsSummary)
+                        {
+                            <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
+                                @*<td>@weapon.WeaponId</td>*@
+                                <td>@weapon.WeaponName</td>
+                                <td>@weapon.Kills</td>
+                                <td>@weapon.HeadshotRatio</td>
+                            </tr>
+                        }
                         </tbody>
                     </table>
-                </div>
-            }
+                }
+
+
+            </div>
+
         </div>
 
         <div id="details-footer" style="font-family: 'Roboto Mono'; display: contents;">
             <div style="margin: 0.3125rem 0rem;">
-                <a href="@GetUrlFromCharacterId(player.Id)" class="text-muted h6" style="font-size: 0.8rem; padding-left: 0.8rem; margin-top: 0.1rem;" target="_blank">
+                <a href="@GetUrlFromCharacterId(player.Id)" title="Open Voidwell player profile" class="text-muted" style="font-size: 0.8rem; padding-left: 0.8rem; margin-top: 0.1rem; font-weight: 400;" target="_blank">
                     @player.Id
                     <span class="h6 oi oi-external-link" style="font-size: 60%; opacity: 0.5;"></span>
                 </a>
@@ -240,10 +283,14 @@ else
 
     PlayerKillboardItem[] kills;
 
+    HourlyWeaponSummaryRow[] weaponsSummary;
+
+
     int fetchTries = 0;
     bool isLoadingKillboard = false;
     bool isLoadingCharacter = false;
     bool isLoadingStats = false;
+    bool isLoadingWeapons = false;
 
     [Parameter]
     public string playerId { get; set; }
@@ -295,6 +342,7 @@ else
         if (!string.IsNullOrWhiteSpace(playerId) && isLoadingKillboard != true)
         {
             isLoadingKillboard = true;
+            isLoadingWeapons = true;
 
             var oldPlayer = player;
             var oldKills = kills;
@@ -306,12 +354,23 @@ else
                 Task<PlayerHourlyStatsData> statsTask = Http.GetJsonAsync<PlayerHourlyStatsData>($"api/PlayerDetails/stats/{playerId}");
                 Task<PlayerKillboardItem[]> killsTask = Http.GetJsonAsync<PlayerKillboardItem[]>($"api/PlayerDetails/kills/{playerId}");
 
+                //Task<HourlyWeaponSummaryRow[]> weaponKillsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weaponKills/{playerId}");
+
                 player = await playerTask;
+                //isLoadingCharacter = false;
                 StateHasChanged();
+
                 kills = await killsTask;
+                //isLoadingKillboard = false;
                 StateHasChanged();
+
                 stats = await statsTask;
+                //isLoadingStats = false;
                 StateHasChanged();
+
+                //weaponsSummary = await weaponKillsTask;
+                //isLoadingWeapons = false;
+                //StateHasChanged();
             }
             catch (Exception)
             {
@@ -321,6 +380,20 @@ else
                 stats = oldStats;
             }
             isLoadingKillboard = false;
+
+            try
+            {
+                Task<HourlyWeaponSummaryRow[]> weaponKillsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weaponKills/{playerId}");
+                weaponsSummary = await weaponKillsTask;
+                //isLoadingWeapons = false;
+                StateHasChanged();
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+
+            isLoadingWeapons = false;
         }
     }
 
