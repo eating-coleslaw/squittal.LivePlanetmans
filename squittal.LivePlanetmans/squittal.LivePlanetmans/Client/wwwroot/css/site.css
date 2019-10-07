@@ -2,7 +2,7 @@
 
 :root {
     --sq-light-blue-gray: #d4d4ff;
-    --sq-light-blue-gray-alpha: #d4d4ff5a;
+    --sq-light-blue-gray-alpha: #d4d4ff50;
     --sq-bg-white-lit: #fcf6ff;
     --sq-bg-white-unlit: #f6f0ff;
     --sq-black: #27273A;
@@ -300,27 +300,31 @@ dt {
 .leaderboard-table {
     width: 100%;
     margin-top: -1rem;
+    font-family: 'Roboto Mono';
 }
 
     .leaderboard-table thead {
         line-height: 1.1rem;
+        font-size: 0.75rem;
     }
 
     .leaderboard-table th {
         padding-left: 5px;
-        max-width: 65px;
+        width: 55px;
+        /*max-width: 65px;*/
         /*width: 1rem;*/
         vertical-align: bottom;
-        font-size: 0.8rem;
     }
         
         .leaderboard-table th.med {
             /*width: 80px;*/
-            min-width: 60px;
+            /*min-width: 60px;*/
+            width: 75px;
         }
 
         .leaderboard-table th.p-name {
             /*vertical-align: bottom;*/
+            width: auto;
         }
 
         .leaderboard-table th.icon {
@@ -336,7 +340,7 @@ dt {
 
         .leaderboard-table th.gap-left {
             padding-left: 10px;
-            margin-left: 0.3125rem;
+            /*margin-left: 0.3125rem;*/
             max-width: 70px;
             width: 1.1rem;
             /*word-wrap: normal;*/
@@ -360,6 +364,17 @@ dt {
         font-family: 'Roboto Mono';
         font-size: small !important;
     }
+
+        .leaderboard-table tbody tr:nth-of-type(2n+1) {
+            /*border-bottom: 1px solid #d4d4ff70;*/
+            background-color: var(--sq-light-blue-gray-alpha);
+        }
+
+
+
+        /*.leaderboard-table tbody tr:nth-of-type(5n) {
+            border-bottom: 1px solid #d4d4ff !important;
+        }*/
 
     .leaderboard-table td {
         padding: 0.2rem 10px 0.2rem 5px;
