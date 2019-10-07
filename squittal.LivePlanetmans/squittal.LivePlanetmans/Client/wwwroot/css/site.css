@@ -370,12 +370,6 @@ dt {
             background-color: var(--sq-light-blue-gray-alpha);
         }
 
-
-
-        /*.leaderboard-table tbody tr:nth-of-type(5n) {
-            border-bottom: 1px solid #d4d4ff !important;
-        }*/
-
     .leaderboard-table td {
         padding: 0.2rem 10px 0.2rem 5px;
     }
