@@ -232,36 +232,83 @@ else
                         </table>
                     </div>
                 }
-
-                @if (weaponsSummary != null && isLoadingWeapons != true)
-                {
-
-                    <table class="table-responseive-sm leaderboard-table">
-                        <thead>
-                            <tr>
-                                @*<th>Weapon ID</th>*@
-                                <th class="p-name">Weapon</th>
-                                <th>Kills</th>
-                                <th>HSR</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                        @foreach (var weapon in weaponsSummary)
-                        {
-                            <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
-                                @*<td>@weapon.WeaponId</td>*@
-                                <td>@weapon.WeaponName</td>
-                                <td>@weapon.Kills</td>
-                                <td>@weapon.HeadshotRatio</td>
-                            </tr>
-                        }
-                        </tbody>
-                    </table>
-                }
-
-
             </div>
+
+            @if (stats != null)
+            {
+            <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem;">
+                <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
+                    <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Weapons By Kills</h5>
+                    @if (topWeaponsByKills != null && isLoadingWeapons != true)
+                    {
+
+                        <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                            <thead>
+                                <tr>
+                                    @*<th>Weapon ID</th>*@
+                                    <th class="p-name">Weapon</th>
+                                    <th>Kills</th>
+                                    <th>HSR</th>
+                                </tr>
+                            </thead>
+                            </table>
+
+                        <div style="max-height: 250px; overflow: auto;">
+                            <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                <tbody sstyle="max-height: 150px; ">
+                                    @foreach (var weapon in topWeaponsByKills)
+                                    {
+                                        <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
+                                            @*<td>@weapon.WeaponId</td>*@
+                                            <td>@weapon.WeaponName</td>
+                                            <td>@weapon.Kills</td>
+                                            <td>@weapon.HeadshotRatio</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+                    <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Weapons By Deaths</h5>
+                    @if (topWeaponsByDeaths != null && isLoadingWeapons != true)
+                    {
+
+                        <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                            <thead>
+                                <tr>
+                                    @*<th>Weapon ID</th>*@
+                                    <th class="p-name">Weapon</th>
+                                    <th>Kills</th>
+                                    <th>HSR</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <div style="max-height: 250px; overflow: auto;">
+                            <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                <tbody>
+                                    @foreach (var weapon in topWeaponsByDeaths)
+                                    {
+                                        <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
+                                            @*<td>@weapon.WeaponId</td>*@
+                                            <td>@weapon.WeaponName</td>
+                                            <td>@weapon.Kills</td>
+                                            <td>@weapon.HeadshotRatio</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+            }
+
+
+
 
         </div>
 
@@ -283,7 +330,8 @@ else
 
     PlayerKillboardItem[] kills;
 
-    HourlyWeaponSummaryRow[] weaponsSummary;
+    HourlyWeaponSummaryRow[] topWeaponsByKills;
+    HourlyWeaponSummaryRow[] topWeaponsByDeaths;
 
 
     int fetchTries = 0;
@@ -368,7 +416,7 @@ else
                 //isLoadingStats = false;
                 StateHasChanged();
 
-                //weaponsSummary = await weaponKillsTask;
+                //topWeaponsByKills = await weaponKillsTask;
                 //isLoadingWeapons = false;
                 //StateHasChanged();
             }
@@ -383,8 +431,11 @@ else
 
             try
             {
-                Task<HourlyWeaponSummaryRow[]> weaponKillsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weaponKills/{playerId}");
-                weaponsSummary = await weaponKillsTask;
+                Task<HourlyWeaponSummaryRow[]> weaponKillsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/kills/{playerId}");
+                Task<HourlyWeaponSummaryRow[]> weaponDeathsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/deaths/{playerId}");
+
+                topWeaponsByKills = await weaponKillsTask;
+                topWeaponsByDeaths = await weaponDeathsTask;
                 //isLoadingWeapons = false;
                 StateHasChanged();
             }
