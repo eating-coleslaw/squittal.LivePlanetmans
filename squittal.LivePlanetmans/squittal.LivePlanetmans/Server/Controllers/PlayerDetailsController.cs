@@ -34,7 +34,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
         }
 
         [HttpGet("kills/{characterId}")]
-        public async Task<ActionResult<IEnumerable<PlayerKillboardItem>>> GetPlayerDeaths(string characterId) //, int rows = 20)
+        public async Task<ActionResult<IEnumerable<PlayerKillboardItem>>> GetPlayerDeaths(string characterId)
         {
             int rows = 50;
 
@@ -122,7 +122,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 var dbContext = factory.GetDbContext();
 
                 IQueryable<PlayerHourlyStatsData> query =
-                    //from death in dbContext.Deaths
+
                     from character in dbContext.Characters
 
                       join outfitMember in dbContext.OutfitMembers
@@ -143,26 +143,15 @@ namespace squittal.LivePlanetmans.Server.Controllers
                       join world in dbContext.Worlds
                         on character.WorldId equals world.Id
 
-                      //join login in dbContext.PlayerLogins
-                      //  on character.Id equals login.CharacterId into loginQ
-                      //from login in loginQ.DefaultIfEmpty()
-
-                      //join logout in dbContext.PlayerLogouts
-                      //  on character.Id equals logout.CharacterId into logoutQ
-                      //from logout in logoutQ.DefaultIfEmpty()
-
                     where character.Id == characterId
-                    //where death.Timestamp >= startTime
-                       //&& ( death.AttackerCharacterId == characterId
-                            //|| death.CharacterId == characterId)
-                    //group death by death.AttackerCharacterId into playerGroup
+                    
                     select new PlayerHourlyStatsData()
                     {
                         PlayerId = characterId,
                         PlayerName = character.Name,
-                        OutfitAlias = outfit.Alias, // ?? string.Empty,
-                        OutfitName = outfit.Name, // ?? string.Empty,
-                        OutfitRankName = outfitMember.Rank, // ?? string.Empty,
+                        OutfitAlias = outfit.Alias,
+                        OutfitName = outfit.Name,
+                        OutfitRankName = outfitMember.Rank,
                         FactionId = character.FactionId,
                         FactionName = faction.Name,
                         BattleRank = character.BattleRank,
@@ -195,10 +184,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == characterId
                                     && k.DeathEventType == DeathEventType.Kill
-                                    //&& k.AttackerCharacterId != k.CharacterId
-                                    //&& ((k.AttackerFactionId != k.CharacterFactionId)
-                                    //     || k.AttackerFactionId == 4 || k.CharacterFactionId == 4
-                                    //     || k.CharacterFactionId == null || k.CharacterFactionId == 0) //Nanite Systems
                                     && k.Timestamp >= startTime
                                     && k.WorldId == character.WorldId
                                  select k).Count(),
@@ -211,25 +196,18 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                      where h.IsHeadshot == true
                                         && h.AttackerCharacterId == characterId
                                         && h.DeathEventType == DeathEventType.Kill
-                                        //&& h.AttackerCharacterId != h.CharacterId
-                                        //&& ( (h.AttackerFactionId != h.CharacterFactionId)
-                                        //     || h.AttackerFactionId == 4 || h.CharacterFactionId == 4
-                                        //     || h.CharacterFactionId == null || h.CharacterFactionId == 0) //Nanite Systems
                                         && h.Timestamp >= startTime
                                         && h.WorldId == character.WorldId
                                      select h).Count(),
                         TeamKills = (from tk in dbContext.Deaths
                                      where tk.AttackerCharacterId == characterId
                                         && tk.DeathEventType == DeathEventType.Teamkill
-                                        //&& tk.AttackerCharacterId != tk.CharacterId
-                                        //&& tk.AttackerFactionId == tk.CharacterFactionId
                                         && tk.Timestamp >= startTime
                                         && tk.WorldId == character.WorldId
                                      select tk).Count(),
                         Suicides = (from s in dbContext.Deaths
                                     where s.CharacterId == characterId
                                        && s.DeathEventType == DeathEventType.Suicide
-                                       //&& s.AttackerCharacterId == s.CharacterId
                                        && s.Timestamp >= startTime
                                        && s.WorldId == character.WorldId
                                     select s).Count()
@@ -240,82 +218,23 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 if (playerStats.LatestLoginTime != null)
                 {
 
-                    //IQueryable<SessionKillCount> sessionKillsQuery = //(from k in dbContext.Deaths
-                    ////                                     where k.AttackerCharacterId == characterId
-                    ////                                        && k.AttackerCharacterId != k.CharacterId
-                    ////                                        && ((k.AttackerFactionId != k.CharacterFactionId)
-                    ////                                             || k.AttackerFactionId == 4 || k.CharacterFactionId == 4
-                    ////                                             || k.CharacterFactionId == null || k.CharacterFactionId == 0) //Nanite Systems
-                    ////                                        && k.Timestamp >= playerStats.LatestLoginTime
-                    ////                                     select k).Count();
-
-                    //from death in dbContext.Deaths
-                    //where death.AttackerCharacterId == characterId
-                    //select new SessionKillCount()
-                    //{
-                    //    SessionKills = (from k in dbContext.Deaths
-                    //                    where k.AttackerCharacterId == characterId
-                    //                       && k.AttackerCharacterId != k.CharacterId
-                    //                       && ((k.AttackerFactionId != k.CharacterFactionId)
-                    //                            || k.AttackerFactionId == 4 || k.CharacterFactionId == 4
-                    //                            || k.CharacterFactionId == null || k.CharacterFactionId == 0) //Nanite Systems
-                    //                       && k.Timestamp >= playerStats.LatestLoginTime
-                    //                    select k).Count()
-                    //};
-
-                    //playerStats.SessionKills = await sessionKillsQuery.AsNotTracking().FirstOrDefaultAsync();
-
-                    DateTime sessionStartTime = (playerStats.LatestLoginTime ?? startTime); //(playerStats.LatestLoginTime != null) ? (playerStats.LatestLoginTime ?? startTime) : startTime;
-                    DateTime sessionEndTime = (playerStats.LatestLogoutTime ?? nowUtc); // (playerStats.LatestLogoutTime != null) ? (playerStats.LatestLogoutTime ?? nowUtc) : nowUtc;
+                    DateTime sessionStartTime = (playerStats.LatestLoginTime ?? startTime);
+                    DateTime sessionEndTime = (playerStats.LatestLogoutTime ?? nowUtc);
 
                     if (sessionEndTime <= sessionStartTime)
                     {
                         sessionEndTime = nowUtc;
                     }
 
-
-                    //if (playerStats.IsOnline == true)
-                    //{
-                    //    sessionEndTime = nowUtc;
-                    //    sessionStartTime = playerStats.LatestLoginTime ?? startTime;
-                    //}
-                    //else
-                    //{
-                    //    if (playerStats.LatestLogoutTime >= playerStats.LatestLoginTime && playerStats.LatestLogoutTime != null)
-                    //    {
-                    //        sessionEndTime = playerStats.LatestLogoutTime ?? nowUtc;
-                    //        sessionStartTime = playerStats.LatestLoginTime ?? startTime;
-
-                    //    }
-                    //    else
-                    //    {
-                    //        sessionEndTime = 
-                    //    }
-
-                    //    sessionStartTime 
-                    //}
-
-
-
                     playerStats.SessionKills = await dbContext.Deaths.CountAsync(death => death.AttackerCharacterId == characterId
                                                                                        && death.DeathEventType == DeathEventType.Kill
-                                                                                       //&& death.CharacterId != characterId
-                                                                                       //&& ((death.AttackerFactionId != death.CharacterFactionId)
-                                                                                       //    || death.AttackerFactionId == 4 || death.CharacterFactionId == 4
-                                                                                       //    || death.CharacterFactionId == null || death.CharacterFactionId == 0) //Nanite Systems
                                                                                        && death.Timestamp >= sessionStartTime
                                                                                        && death.Timestamp <= sessionEndTime);
                 }
 
-                //return await query.AsNoTracking().FirstOrDefaultAsync();
                 return playerStats;
             }
 
-        }
-
-        private class SessionKillCount
-        {
-            public int SessionKills { get; set; }
         }
     }
 }
