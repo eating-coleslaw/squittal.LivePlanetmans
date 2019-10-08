@@ -61,7 +61,7 @@ namespace squittal.LivePlanetmans.Shared.Models
 
         private double GetKillDeathRatio(int kills, int deaths)
         {
-            if (kills == 0)
+            if (deaths == 0)
             {
                 return (kills / 1.0);
             }

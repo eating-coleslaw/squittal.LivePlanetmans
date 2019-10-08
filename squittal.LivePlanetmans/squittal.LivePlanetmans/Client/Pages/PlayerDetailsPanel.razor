@@ -154,20 +154,38 @@ else
 
         <div style="margin-top: 0.5rem;">
 
-            <button title="Open killboard view" class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.kills))">Killboard</button>
-            <button title="Open weapons view" class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.weapons))">Weapons</button>
-            <button title="Open player head-to-head view" class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.players))">Players</button>
+            @if (stats != null)
+            {
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; border-top-left-radius: 0.2rem; border-bottom: 2px solid @GetFactionColorFromId(stats.FactionId)80;">
+                    <button title="Open killboard view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.kills) padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.kills))">Kills this Hour</button>
+                    <button title="Open weapons view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.weapons)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.weapons))">Weapons Breakdown</button>
+                    <button title="Open player head-to-head view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.players)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.players))">Head-to-Head</button>
+                </div>
+            }
+
+            @if ((isLoadingKillboard == true && view == viewTranslator[PlayerDetailsView.kills])
+                      || (isLoadingWeapons == true && view == viewTranslator[PlayerDetailsView.weapons])
+                      || (isLoadingHeadToHead == true && view == viewTranslator[PlayerDetailsView.players]))
+            {
+                <div class="spinner-ellipsis">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            }
+
 
             @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.kills])
             {
-                <h5 style="font-size: 1rem; padding-left: 0.75rem;">Kills This Hour</h5>
+                @*<h5 style="font-size: 1rem; padding-left: 0.75rem;">Kills This Hour</h5>*@
                 @if (kills == null || isLoadingKillboard == true)
                 {
                     <p class="text-muted"><em>Loading killboard...</em></p>
                 }
                 else
                 {
-                    <div style="max-height: 400px; overflow: auto; border-top: 1px solid #27273a80; border-bottom: 1px solid #27273a80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem;">
+                    <div style="max-height: 400px; overflow: auto; border-top: 0px solid @GetFactionColorFromId(stats.FactionId)80; border-bottom: 1px solid @GetFactionColorFromId(stats.FactionId)80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem;">
                         <table class="table-responsive-sm table" style="font-size: 0.85rem !important;">
                             <tbody style="font-size: small;">
                                 @foreach (var kill in kills)
@@ -245,7 +263,7 @@ else
         </div>
 
 
-            @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.weapons])
+            @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.weapons] && isLoadingWeapons != true)
             {
                 <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem;">
                     <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
@@ -253,20 +271,20 @@ else
                         @if (topWeaponsByKills != null && isLoadingWeapons != true)
                         {
 
-                            <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                                <thead>
-                                    <tr>
-                                        @*<th>Weapon ID</th>*@
-                                        <th class="p-name">Weapon</th>
-                                        <th>Kills</th>
-                                        <th>HSR</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <div style="max-height: 350px; overflow: auto;">
+                                <table class="table-responseive-sm table-striped-light" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; margin-left: 0.75rem;">
+                                    <thead style="vertical-align: bottom;">
+                                        <tr>
+                                            @*<th>Weapon ID</th>*@
+                                            <th class="p-name"></th>
+                                            <th>Kills</th>
+                                            <th>HSR</th>
+                                        </tr>
+                                    </thead>
+                                @*</table>*@
 
-                            <div style="max-height: 250px; overflow: auto;">
-                                <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                                    <tbody sstyle="max-height: 150px; ">
+                                @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
+                                    <tbody>
                                         @foreach (var weapon in topWeaponsByKills)
                                         {
                                             <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
@@ -287,19 +305,19 @@ else
                         @if (topWeaponsByDeaths != null && isLoadingWeapons != true)
                         {
 
-                            <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                                <thead>
-                                    <tr>
-                                        @*<th>Weapon ID</th>*@
-                                        <th class="p-name">Weapon</th>
-                                        <th>Kills</th>
-                                        <th>HSR</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <div style="max-height: 350px; overflow: auto;">
+                                <table class="table-responseive-sm table-striped-light" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; margin-left: 0.75rem;">
+                                    <thead style="vertical-align: bottom;">
+                                        <tr>
+                                            @*<th>Weapon ID</th>*@
+                                            <th class="p-name"></th>
+                                            <th>Deaths</th>
+                                            <th>HSR</th>
+                                        </tr>
+                                    </thead>
+                                @*</table>*@
 
-                            <div style="max-height: 250px; overflow: auto;">
-                                <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
                                     <tbody>
                                         @foreach (var weapon in topWeaponsByDeaths)
                                         {
@@ -318,7 +336,7 @@ else
                 </div>
             }
 
-            @if (!string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.players])
+            @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.players] && isLoadingHeadToHead != true)
             {
                 <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem;">
                     <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
@@ -326,12 +344,12 @@ else
                         @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByKills.Any() == true && isLoadingHeadToHead != true)
                         {
 
-                            <div style="max-height: 250px; overflow: auto;">
-                                <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                                    <thead>
+                            <div style="max-height: 350px; overflow: auto; margin-top: -1rem;">
+                                <table class="table-responseive-sm table-striped-light" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; margin-left: 0.75rem;">
+                                    <thead style="vertical-align: bottom;">
                                         <tr>
                                             @*<th>Weapon ID</th>*@
-                                            <th class="p-name">Victim</th>
+                                            <th class="p-name"></th>
                                             <th>Kills</th>
                                             <th>Deaths</th>
                                             <th class="stacked-label" title="Head-to-Head Kill-Death Ratio">
@@ -347,7 +365,7 @@ else
                                 @*</table>*@
 
                                 @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
-                                    <tbody sstyle="max-height: 150px; ">
+                                    <tbody>
                                         @foreach (var player in headToHeadSummary.TopPlayersByKills)
                                         {
                                             <tr style="color: @GetFactionColorFromId(player.VictimFactionId)">
@@ -370,12 +388,12 @@ else
                         @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByDeaths.Any() == true && isLoadingHeadToHead != true)
                         {
 
-                            <div style="max-height: 250px; overflow: auto;">
-                                <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                                    <thead>
+                            <div style="max-height: 350px; overflow: auto; margin-top: -1rem;">
+                                <table class="table-responseive-sm table-striped-light" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; margin-left: 0.75rem;">
+                                    <thead style="vertical-align: bottom;">
                                         <tr>
                                             @*<th>Weapon ID</th>*@
-                                            <th class="p-name">Nemesis</th>
+                                            <th class="p-name"></th>
                                             <th>Kills</th>
                                             <th>Deaths</th>
                                             <th class="stacked-label" title="Head-to-Head Kill-Death Ratio">
@@ -397,10 +415,10 @@ else
                                             <tr style="color: @GetFactionColorFromId(player.AttackerFactionId)">
                                                 @*<td>@weapon.WeaponId</td>*@
                                                 <td>@player.AttackerName</td>
-                                                <td>@player.AttackerKills</td>
                                                 <td>@player.VictimKills</td>
-                                                <td>@player.AttackerKillDeathRatio</td>
-                                                <td>@player.AttackerHeadshotRatio</td>
+                                                <td>@player.AttackerKills</td>
+                                                <td>@player.VictimKillDeathRatio</td>
+                                                <td>@player.VictimHeadshotRatio</td>
                                             </tr>
                                         }
                                     </tbody>
@@ -733,6 +751,32 @@ else
         }
 
         return color;
+    }
+
+    string GetViewTabStyle(PlayerDetailsView thisView)
+    {
+        if (viewTranslator[thisView] == view)
+        {
+            return $"grid-row: 1; background-color: {GetFactionLightColorFromId(stats.FactionId)}; color: var(--sq-black) !important; font-size: 1rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0; text-decoration: none;"; // grid-column: 1; ";
+        }
+        else
+        {
+            int gridColumn = (thisView == PlayerDetailsView.kills || (view == viewTranslator[PlayerDetailsView.kills] && thisView == PlayerDetailsView.weapons)) ? 2 : 3;
+
+
+
+
+            //switch (thisView)
+            //{
+            //    case PlayerDetailsView.kills:
+            //        gridColumn = 2;
+            //        break;
+
+            //    case PlayerDetails.
+            //}
+
+            return $"grid-row: 1; background-color: transparent; color: var(--blue); font-weight: 400; font-size: 1rem;"; // grid-column: {gridColumn}; ";
+        }
     }
 
     public void OnSelectNewView(PlayerDetailsView newView)
