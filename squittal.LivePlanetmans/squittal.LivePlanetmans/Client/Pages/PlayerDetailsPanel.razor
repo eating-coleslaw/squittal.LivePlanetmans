@@ -152,7 +152,14 @@ else
                 </div>
             }
 
-            <div style="margin-top: 0.5rem;">
+        <div style="margin-top: 0.5rem;">
+
+            <button title="Open killboard view" class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.kills))">Killboard</button>
+            <button title="Open weapons view" class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.weapons))">Weapons</button>
+            <button title="Open player head-to-head view" class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.players))">Players</button>
+
+            @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.kills])
+            {
                 <h5 style="font-size: 1rem; padding-left: 0.75rem;">Kills This Hour</h5>
                 @if (kills == null || isLoadingKillboard == true)
                 {
@@ -232,9 +239,13 @@ else
                         </table>
                     </div>
                 }
-            </div>
+            }
 
-            @if (stats != null)
+
+        </div>
+
+
+            @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.weapons])
             {
                 <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem;">
                     <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
@@ -307,7 +318,7 @@ else
                 </div>
             }
 
-            @if (stats != null)
+            @if (!string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.players])
             {
                 <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem;">
                     <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
@@ -315,19 +326,27 @@ else
                         @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByKills.Any() == true && isLoadingHeadToHead != true)
                         {
 
-                            <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                                <thead>
-                                    <tr>
-                                        @*<th>Weapon ID</th>*@
-                                        <th class="p-name">Victim</th>
-                                        <th>Kills</th>
-                                        <th>Deaths</th>
-                                    </tr>
-                                </thead>
-                            </table>
-
                             <div style="max-height: 250px; overflow: auto;">
                                 <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                    <thead>
+                                        <tr>
+                                            @*<th>Weapon ID</th>*@
+                                            <th class="p-name">Victim</th>
+                                            <th>Kills</th>
+                                            <th>Deaths</th>
+                                            <th class="stacked-label" title="Head-to-Head Kill-Death Ratio">
+                                                <span class="small">H2H</span>
+                                                <span>KDR</span>
+                                            </th>
+                                            <th class="stacked-label" title="Head-to-Head Headshot Ratio">
+                                                <span class="small">H2H</span>
+                                                <span>HSR</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                @*</table>*@
+
+                                @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
                                     <tbody sstyle="max-height: 150px; ">
                                         @foreach (var player in headToHeadSummary.TopPlayersByKills)
                                         {
@@ -336,6 +355,8 @@ else
                                                 <td>@player.VictimName</td>
                                                 <td>@player.AttackerKills</td>
                                                 <td>@player.VictimKills</td>
+                                                <td>@player.AttackerKillDeathRatio</td>
+                                                <td>@player.AttackerHeadshotRatio</td>
                                             </tr>
                                         }
                                     </tbody>
@@ -349,19 +370,27 @@ else
                         @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByDeaths.Any() == true && isLoadingHeadToHead != true)
                         {
 
-                            <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                                <thead>
-                                    <tr>
-                                        @*<th>Weapon ID</th>*@
-                                        <th class="p-name">Nemesis</th>
-                                        <th>Kills</th>
-                                        <th>Deaths</th>
-                                    </tr>
-                                </thead>
-                            </table>
-
                             <div style="max-height: 250px; overflow: auto;">
                                 <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                    <thead>
+                                        <tr>
+                                            @*<th>Weapon ID</th>*@
+                                            <th class="p-name">Nemesis</th>
+                                            <th>Kills</th>
+                                            <th>Deaths</th>
+                                            <th class="stacked-label" title="Head-to-Head Kill-Death Ratio">
+                                                <span class="small">H2H</span>
+                                                <span>KDR</span>
+                                            </th>
+                                            <th class="stacked-label" title="Head-to-Head Headshot Ratio">
+                                                <span class="small">H2H</span>
+                                                <span>HSR</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                @*</table>*@
+
+                                @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
                                     <tbody>
                                         @foreach (var player in headToHeadSummary.TopPlayersByDeaths)
                                         {
@@ -370,6 +399,8 @@ else
                                                 <td>@player.AttackerName</td>
                                                 <td>@player.AttackerKills</td>
                                                 <td>@player.VictimKills</td>
+                                                <td>@player.AttackerKillDeathRatio</td>
+                                                <td>@player.AttackerHeadshotRatio</td>
                                             </tr>
                                         }
                                     </tbody>
@@ -417,6 +448,12 @@ else
     [Parameter]
     public string playerId { get; set; }
 
+    [Parameter]
+    public string view { get; set; } = "kills";
+
+    public Dictionary<PlayerDetailsView, string> viewTranslator = GetViewTranslator();
+
+
     string renderedPlayerId;
 
     [Parameter]
@@ -437,6 +474,15 @@ else
         }
     }
 
+
+    protected override void OnInitialized()
+    {
+        //InitializeViewTranslator();
+        if (string.IsNullOrWhiteSpace(view))
+        {
+            view = viewTranslator[PlayerDetailsView.kills];
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -687,5 +733,28 @@ else
         }
 
         return color;
+    }
+
+    public void OnSelectNewView(PlayerDetailsView newView)
+    {
+        view = viewTranslator[newView];
+        //StateHasChanged();
+    }
+
+    private static Dictionary<PlayerDetailsView, string> GetViewTranslator()
+    {
+        var views = new Dictionary<PlayerDetailsView, string>();
+        views.Add(PlayerDetailsView.kills, "kills");
+        views.Add(PlayerDetailsView.weapons, "weapons");
+        views.Add(PlayerDetailsView.players, "players");
+
+        return views;
+    }
+
+    public enum PlayerDetailsView
+    {
+        kills,
+        weapons,
+        players
     }
 }

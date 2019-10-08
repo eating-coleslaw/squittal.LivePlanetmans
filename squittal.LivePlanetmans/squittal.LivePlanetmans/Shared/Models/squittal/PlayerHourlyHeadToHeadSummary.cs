@@ -27,22 +27,15 @@ namespace squittal.LivePlanetmans.Shared.Models
         public int VictimKills { get; set; }
         public int VictimHeadshots { get; set; }
 
-        public double KillDeathRatio
+        public double AttackerKillDeathRatio
         {
             get
             {
-                if (VictimKills == 0)
-                {
-                    return (AttackerKills / 1.0);
-                }
-                else
-                {
-                    return Math.Round((double)(AttackerKills / (double)VictimKills), 2);
-                }
+                return GetKillDeathRatio(AttackerKills, VictimKills);
             }
         }
 
-        public double KillHeadshotRatio
+        public double AttackerHeadshotRatio
         {
             get
             {
@@ -50,11 +43,31 @@ namespace squittal.LivePlanetmans.Shared.Models
             }
         }
 
-        public double DeathHeadshotRatio
+        public double VictimKillDeathRatio
+        {
+            get
+            {
+                return GetKillDeathRatio(VictimKills, AttackerKills);
+            }
+        }
+
+        public double VictimHeadshotRatio
         {
             get
             {
                 return GetHeadshotRatio(VictimKills, VictimHeadshots);
+            }
+        }
+
+        private double GetKillDeathRatio(int kills, int deaths)
+        {
+            if (kills == 0)
+            {
+                return (kills / 1.0);
+            }
+            else
+            {
+                return Math.Round((double)(kills / (double)deaths), 2);
             }
         }
 
