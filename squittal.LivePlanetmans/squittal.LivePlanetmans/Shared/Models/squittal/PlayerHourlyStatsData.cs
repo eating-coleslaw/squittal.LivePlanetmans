@@ -51,7 +51,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         {
             get
             {
-                if (LatestLoginTime != null && LatestLoginTime > QueryStartTime)
+                if (LatestLoginTime != null && LatestLoginTime > QueryStartTime && LatestLogoutTime < QueryStartTime)
                 {
                     return Math.Round((double)(Kills / (QueryNowUtc - (LatestLoginTime ?? QueryStartTime)).TotalMinutes), 2);
                 }
