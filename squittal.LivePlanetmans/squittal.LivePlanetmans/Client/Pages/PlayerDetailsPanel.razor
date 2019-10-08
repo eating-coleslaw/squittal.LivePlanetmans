@@ -65,92 +65,92 @@ else
         </div>
 
         <div id="details-body" style="padding: 0px 10px; font-family: 'Roboto Mono';">
-        @if (stats != null)
-        {
-            <div class="row" style="margin: initial;">
-                <div id="details-hourly-stats" class="col-sm-9" style="flex-basis: 70%; display: grid; grid-template-columns: 1fr 1fr 1fr 0.3125fr 2fr; grid-template-rows: 1rem 1fr; grid-template-areas: 'header header header header header' 'badge1 badge2 badge3 blank right' 'footer footer footer footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+            @if (stats != null)
+            {
+                <div class="row" style="margin: initial;">
+                    <div id="details-hourly-stats" class="col-sm-9" style="flex-basis: 70%; display: grid; grid-template-columns: 1fr 1fr 1fr 0.3125fr 2fr; grid-template-rows: 1rem 1fr; grid-template-areas: 'header header header header header' 'badge1 badge2 badge3 blank right' 'footer footer footer footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
 
-                    <div style="margin: 0px; font-size: 1rem; grid-area: header;">
-                        Hourly Stats
-                    </div>
-
-                    <div title="Kills Per Minute" style="grid-area: badge1; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
-                        <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
-                            @stats.KillsPerMinute
-                            <div style="text-align: right; font-size: 0.8rem;">KPM</div>
+                        <div style="margin: 0px; font-size: 1rem; grid-area: header;">
+                            Hourly Stats
                         </div>
-                    </div>
 
-                    <div title="Kill Death Ratio" style="grid-area: badge2; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
-                        <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
-                            @stats.KillDeathRatio
-                            <div style="text-align: right; font-size: 0.8rem;">KDR</div>
+                        <div title="Kills Per Minute" style="grid-area: badge1; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
+                            <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
+                                @stats.KillsPerMinute
+                                <div style="text-align: right; font-size: 0.8rem;">KPM</div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div title="Head Shot Ratio" style="grid-area: badge3; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
-                        <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
-                            @stats.HeadshotRatio<span style="font-size: 0.75rem;">%</span>
-                            <div style="text-align: right; font-size: 0.8rem; margin-top: -0.25rem;">HSR</div>
+                        <div title="Kill Death Ratio" style="grid-area: badge2; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
+                            <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
+                                @stats.KillDeathRatio
+                                <div style="text-align: right; font-size: 0.8rem;">KDR</div>
+                            </div>
                         </div>
-                    </div>
 
-                    <dl class="row" style="grid-area: right; margin: 0px;">
-                        <dt class="col-sm-7 text-muted" style="padding: 0px;">Kills</dt>
-                        <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Kills</dd>
+                        <div title="Head Shot Ratio" style="grid-area: badge3; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
+                            <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
+                                @stats.HeadshotRatio<span style="font-size: 0.75rem;">%</span>
+                                <div style="text-align: right; font-size: 0.8rem; margin-top: -0.25rem;">HSR</div>
+                            </div>
+                        </div>
 
-                        <dt class="col-sm-7 text-muted" style="padding: 0px;">Deaths</dt>
-                        <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Deaths</dd>
+                        <dl class="row" style="grid-area: right; margin: 0px;">
+                            <dt class="col-sm-7 text-muted" style="padding: 0px;">Kills</dt>
+                            <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Kills</dd>
 
-                        <dt class="col-sm-7 text-muted" style="padding: 0px;">Team Kills</dt>
-                        <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.TeamKills</dd>
+                            <dt class="col-sm-7 text-muted" style="padding: 0px;">Deaths</dt>
+                            <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Deaths</dd>
 
-                        <dt class="col-sm-7 text-muted" style="padding: 0px;">Suicides</dt>
-                        <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Suicides</dd>
-                    </dl>
-                </div>
+                            <dt class="col-sm-7 text-muted" style="padding: 0px;">Team Kills</dt>
+                            <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.TeamKills</dd>
 
-                <div id="details-session-stats" class="col-sm-8" style="flex-basis: calc(30% - 1rem); margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
-                    <div style="margin: 0px; font-size: 1rem; grid-area: header;">
-                        Play Session
-                    </div>
-
-                    <div style="margin: 0px; font-size: 0.8rem; grid-column: 1 / 3; grid-row: 2;">
-                        <div style="margin-bottom: 0.3125rem; padding-left: 15px;">@GetSessionDisplayTimes()</div>
-
-                        <dl class="row" style="margin: 0px;">
-                            <dt class="col-sm-7 text-muted">Duration</dt>
-                            <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@GetSessionDurationDisplay()</dd>
-
-                            <dt class="col-sm-7 text-muted">Kills</dt>
-                            <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
-                                @if (stats.SessionKills == null)
-                                {
-                                   <span>-</span>
-                                }
-                                else
-                                {
-                                    <span>@stats.SessionKills</span>
-                                }
-                            </dd>
-
-                            <dt class="col-sm-7 text-muted">KPM</dt>
-                            <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
-                                @if (stats.SessionKills == null)
-                                {
-                                    <span>-</span>
-                                }
-                                else
-                                {
-                                    <span>@stats.SessionKillsPerMinute</span>
-                                }
-                            </dd>
+                            <dt class="col-sm-7 text-muted" style="padding: 0px;">Suicides</dt>
+                            <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Suicides</dd>
                         </dl>
                     </div>
+
+                    <div id="details-session-stats" class="col-sm-8" style="flex-basis: calc(30% - 1rem); margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+                        <div style="margin: 0px; font-size: 1rem; grid-area: header;">
+                            Play Session
+                        </div>
+
+                        <div style="margin: 0px; font-size: 0.8rem; grid-column: 1 / 3; grid-row: 2;">
+                            <div style="margin-bottom: 0.3125rem; padding-left: 15px;">@GetSessionDisplayTimes()</div>
+
+                            <dl class="row" style="margin: 0px;">
+                                <dt class="col-sm-7 text-muted">Duration</dt>
+                                <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@GetSessionDurationDisplay()</dd>
+
+                                <dt class="col-sm-7 text-muted">Kills</dt>
+                                <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
+                                    @if (stats.SessionKills == null)
+                                    {
+                                        <span>-</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@stats.SessionKills</span>
+                                    }
+                                </dd>
+
+                                <dt class="col-sm-7 text-muted">KPM</dt>
+                                <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
+                                    @if (stats.SessionKills == null)
+                                    {
+                                        <span>-</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@stats.SessionKillsPerMinute</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
                 </div>
-            
-            </div>
-        }
+            }
 
             <div style="margin-top: 0.5rem;">
                 <h5 style="font-size: 1rem; padding-left: 0.75rem;">Kills This Hour</h5>
@@ -236,78 +236,149 @@ else
 
             @if (stats != null)
             {
-            <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem;">
-                <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
-                    <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Weapons By Kills</h5>
-                    @if (topWeaponsByKills != null && isLoadingWeapons != true)
-                    {
+                <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem;">
+                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
+                        <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Weapons By Kills</h5>
+                        @if (topWeaponsByKills != null && isLoadingWeapons != true)
+                        {
 
-                        <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                            <thead>
-                                <tr>
-                                    @*<th>Weapon ID</th>*@
-                                    <th class="p-name">Weapon</th>
-                                    <th>Kills</th>
-                                    <th>HSR</th>
-                                </tr>
-                            </thead>
-                            </table>
-
-                        <div style="max-height: 250px; overflow: auto;">
                             <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                                <tbody sstyle="max-height: 150px; ">
-                                    @foreach (var weapon in topWeaponsByKills)
-                                    {
-                                        <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
-                                            @*<td>@weapon.WeaponId</td>*@
-                                            <td>@weapon.WeaponName</td>
-                                            <td>@weapon.Kills</td>
-                                            <td>@weapon.HeadshotRatio</td>
-                                        </tr>
-                                    }
-                                </tbody>
+                                <thead>
+                                    <tr>
+                                        @*<th>Weapon ID</th>*@
+                                        <th class="p-name">Weapon</th>
+                                        <th>Kills</th>
+                                        <th>HSR</th>
+                                    </tr>
+                                </thead>
                             </table>
-                        </div>
-                    }
-                </div>
 
-                <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
-                    <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Weapons By Deaths</h5>
-                    @if (topWeaponsByDeaths != null && isLoadingWeapons != true)
-                    {
+                            <div style="max-height: 250px; overflow: auto;">
+                                <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                    <tbody sstyle="max-height: 150px; ">
+                                        @foreach (var weapon in topWeaponsByKills)
+                                        {
+                                            <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
+                                                @*<td>@weapon.WeaponId</td>*@
+                                                <td>@weapon.WeaponName</td>
+                                                <td>@weapon.Kills</td>
+                                                <td>@weapon.HeadshotRatio</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
 
-                        <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                            <thead>
-                                <tr>
-                                    @*<th>Weapon ID</th>*@
-                                    <th class="p-name">Weapon</th>
-                                    <th>Kills</th>
-                                    <th>HSR</th>
-                                </tr>
-                            </thead>
-                        </table>
+                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+                        <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Weapons By Deaths</h5>
+                        @if (topWeaponsByDeaths != null && isLoadingWeapons != true)
+                        {
 
-                        <div style="max-height: 250px; overflow: auto;">
                             <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
-                                <tbody>
-                                    @foreach (var weapon in topWeaponsByDeaths)
-                                    {
-                                        <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
-                                            @*<td>@weapon.WeaponId</td>*@
-                                            <td>@weapon.WeaponName</td>
-                                            <td>@weapon.Kills</td>
-                                            <td>@weapon.HeadshotRatio</td>
-                                        </tr>
-                                    }
-                                </tbody>
+                                <thead>
+                                    <tr>
+                                        @*<th>Weapon ID</th>*@
+                                        <th class="p-name">Weapon</th>
+                                        <th>Kills</th>
+                                        <th>HSR</th>
+                                    </tr>
+                                </thead>
                             </table>
-                        </div>
-                    }
+
+                            <div style="max-height: 250px; overflow: auto;">
+                                <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                    <tbody>
+                                        @foreach (var weapon in topWeaponsByDeaths)
+                                        {
+                                            <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
+                                                @*<td>@weapon.WeaponId</td>*@
+                                                <td>@weapon.WeaponName</td>
+                                                <td>@weapon.Kills</td>
+                                                <td>@weapon.HeadshotRatio</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
             }
 
+            @if (stats != null)
+            {
+                <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem;">
+                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
+                        <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Victims</h5>
+                        @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByKills.Any() == true && isLoadingHeadToHead != true)
+                        {
 
+                            <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                <thead>
+                                    <tr>
+                                        @*<th>Weapon ID</th>*@
+                                        <th class="p-name">Victim</th>
+                                        <th>Kills</th>
+                                        <th>Deaths</th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                            <div style="max-height: 250px; overflow: auto;">
+                                <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                    <tbody sstyle="max-height: 150px; ">
+                                        @foreach (var player in headToHeadSummary.TopPlayersByKills)
+                                        {
+                                            <tr style="color: @GetFactionColorFromId(player.VictimFactionId)">
+                                                @*<td>@weapon.WeaponId</td>*@
+                                                <td>@player.VictimName</td>
+                                                <td>@player.AttackerKills</td>
+                                                <td>@player.VictimKills</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+                        <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Nemeses</h5>
+                        @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByDeaths.Any() == true && isLoadingHeadToHead != true)
+                        {
+
+                            <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                <thead>
+                                    <tr>
+                                        @*<th>Weapon ID</th>*@
+                                        <th class="p-name">Nemesis</th>
+                                        <th>Kills</th>
+                                        <th>Deaths</th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                            <div style="max-height: 250px; overflow: auto;">
+                                <table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">
+                                    <tbody>
+                                        @foreach (var player in headToHeadSummary.TopPlayersByDeaths)
+                                        {
+                                            <tr style="color: @GetFactionColorFromId(player.AttackerFactionId)">
+                                                @*<td>@weapon.WeaponId</td>*@
+                                                <td>@player.AttackerName</td>
+                                                <td>@player.AttackerKills</td>
+                                                <td>@player.VictimKills</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
 
 
         </div>
@@ -333,12 +404,15 @@ else
     HourlyWeaponSummaryRow[] topWeaponsByKills;
     HourlyWeaponSummaryRow[] topWeaponsByDeaths;
 
+    PlayerHourlyHeadToHeadSummary headToHeadSummary;
+
 
     int fetchTries = 0;
     bool isLoadingKillboard = false;
     bool isLoadingCharacter = false;
     bool isLoadingStats = false;
     bool isLoadingWeapons = false;
+    bool isLoadingHeadToHead = false;
 
     [Parameter]
     public string playerId { get; set; }
@@ -391,11 +465,14 @@ else
         {
             isLoadingKillboard = true;
             isLoadingWeapons = true;
+            isLoadingHeadToHead = true;
 
             var oldPlayer = player;
             var oldKills = kills;
             var oldStats = stats;
 
+
+            /* DETAILS & KILLBOARD */
             try
             {
                 Task<Character> playerTask = Http.GetJsonAsync<Character>($"api/PlayerDetails/{playerId}");
@@ -429,6 +506,8 @@ else
             }
             isLoadingKillboard = false;
 
+
+            /* WEAPONS */
             try
             {
                 Task<HourlyWeaponSummaryRow[]> weaponKillsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/kills/{playerId}");
@@ -443,8 +522,23 @@ else
             {
                 //ignore
             }
-
             isLoadingWeapons = false;
+
+
+            /* Player Head-To-Head */
+            try
+            {
+                Task<PlayerHourlyHeadToHeadSummary> headToHeadTask = Http.GetJsonAsync<PlayerHourlyHeadToHeadSummary>($"api/PlayerHourlyHeadToHead/players/{playerId}");
+                headToHeadSummary = await headToHeadTask;
+                StateHasChanged();
+
+            }
+            catch (Exception)
+            {
+                //Ignore
+            }
+            isLoadingHeadToHead = false;
+
         }
     }
 
