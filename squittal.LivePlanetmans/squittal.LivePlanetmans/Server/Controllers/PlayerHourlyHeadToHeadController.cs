@@ -56,15 +56,17 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                     select new PlayerHourlyHeadToHeadSummaryRow()
                     {
-                        //AttackerCharacterId = charactersGroup.Key.AttackerCharacterId,
                         AttackerCharacterId = attackerCharacters.Id,
                         AttackerName = attackerCharacters.Name,
                         AttackerFactionId = attackerCharacters.FactionId,
+                        AttackerBattleRank = attackerCharacters.BattleRank,
+                        AttackerPrestigeLevel = attackerCharacters.PrestigeLevel,
 
-                        //VictimCharacterId = charactersGroup.Key.CharacterId,
                         VictimCharacterId = victimCharacters.Id,
                         VictimName = victimCharacters.Name,
                         VictimFactionId = victimCharacters.FactionId,
+                        VictimBattleRank = victimCharacters.BattleRank,
+                        VictimPrestigeLevel = victimCharacters.PrestigeLevel,
 
                         AttackerKills = (from kill in dbContext.Deaths
                                          //where kill.AttackerCharacterId == charactersGroup.Key.AttackerCharacterId
@@ -101,48 +103,48 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                            select kill).Count()
                     };
 
-                var players = await query
-                                      .AsNoTracking()
-                                      .ToArrayAsync();
+                var allHeadToHeadPlayers = await query
+                                                    .AsNoTracking()
+                                                    .ToArrayAsync();
 
-                var victims = players
+                var victims = allHeadToHeadPlayers
                                 .GroupBy(p => new { p.AttackerCharacterId, p.VictimCharacterId })
-                                .Select(grp => new PlayerHourlyHeadToHeadSummaryRow()
-                                {
-                                    AttackerCharacterId = grp.Key.AttackerCharacterId,
-                                    AttackerName = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId).Select(p => p.AttackerName).FirstOrDefault(),
-                                    AttackerFactionId = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId).Select(p => p.AttackerFactionId).FirstOrDefault(),
+                                .Select(grp => grp.First()) // new PlayerHourlyHeadToHeadSummaryRow()
+                                //{
+                                //    AttackerCharacterId = grp.Key.AttackerCharacterId,
+                                //    AttackerName = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId).Select(p => p.AttackerName).FirstOrDefault(),
+                                //    AttackerFactionId = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId).Select(p => p.AttackerFactionId).FirstOrDefault(),
                                     
-                                    VictimCharacterId = grp.Key.VictimCharacterId,
-                                    VictimName = grp.Where(p => p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimName).FirstOrDefault(),
-                                    VictimFactionId = grp.Where(p => p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimFactionId).FirstOrDefault(),
+                                //    VictimCharacterId = grp.Key.VictimCharacterId,
+                                //    VictimName = grp.Where(p => p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimName).FirstOrDefault(),
+                                //    VictimFactionId = grp.Where(p => p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimFactionId).FirstOrDefault(),
 
-                                    AttackerKills = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.AttackerKills).FirstOrDefault(),
-                                    AttackerHeadshots = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.AttackerHeadshots).FirstOrDefault(),
-                                    VictimKills = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimKills).FirstOrDefault(),
-                                    VictimHeadshots = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimHeadshots).FirstOrDefault()
-                                })
+                                //    AttackerKills = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.AttackerKills).FirstOrDefault(),
+                                //    AttackerHeadshots = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.AttackerHeadshots).FirstOrDefault(),
+                                //    VictimKills = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimKills).FirstOrDefault(),
+                                //    VictimHeadshots = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimHeadshots).FirstOrDefault()
+                                //})
                                 .OrderByDescending(grp => grp.AttackerKills)
                                 .Where(grp => grp.AttackerCharacterId == characterId)
                                 .ToArray();
 
-                var nemeses = players
+                var nemeses = allHeadToHeadPlayers
                                 .GroupBy(p => new { p.AttackerCharacterId, p.VictimCharacterId })
-                                .Select(grp => new PlayerHourlyHeadToHeadSummaryRow()
-                                {
-                                    AttackerCharacterId = grp.Key.AttackerCharacterId,
-                                    AttackerName = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId).Select(p => p.AttackerName).FirstOrDefault(),
-                                    AttackerFactionId = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId).Select(p => p.AttackerFactionId).FirstOrDefault(),
+                                .Select(grp => grp.First()) //new PlayerHourlyHeadToHeadSummaryRow()
+                                //{
+                                //    AttackerCharacterId = grp.Key.AttackerCharacterId,
+                                //    AttackerName = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId).Select(p => p.AttackerName).FirstOrDefault(),
+                                //    AttackerFactionId = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId).Select(p => p.AttackerFactionId).FirstOrDefault(),
 
-                                    VictimCharacterId = grp.Key.VictimCharacterId,
-                                    VictimName = grp.Where(p => p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimName).FirstOrDefault(),
-                                    VictimFactionId = grp.Where(p => p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimFactionId).FirstOrDefault(),
+                                //    VictimCharacterId = grp.Key.VictimCharacterId,
+                                //    VictimName = grp.Where(p => p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimName).FirstOrDefault(),
+                                //    VictimFactionId = grp.Where(p => p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimFactionId).FirstOrDefault(),
 
-                                    AttackerKills = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.AttackerKills).FirstOrDefault(),
-                                    AttackerHeadshots = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.AttackerHeadshots).FirstOrDefault(),
-                                    VictimKills = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimKills).FirstOrDefault(),
-                                    VictimHeadshots = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimHeadshots).FirstOrDefault()
-                                })
+                                //    AttackerKills = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.AttackerKills).FirstOrDefault(),
+                                //    AttackerHeadshots = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.AttackerHeadshots).FirstOrDefault(),
+                                //    VictimKills = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimKills).FirstOrDefault(),
+                                //    VictimHeadshots = grp.Where(p => p.AttackerCharacterId == grp.Key.AttackerCharacterId && p.VictimCharacterId == grp.Key.VictimCharacterId).Select(p => p.VictimHeadshots).FirstOrDefault()
+                                //})
                                 .OrderByDescending(grp => grp.AttackerKills)
                                 .Where(grp => grp.VictimCharacterId == characterId)
                                 .ToArray();
