@@ -19,9 +19,15 @@ namespace squittal.LivePlanetmans.Shared.Models
         public string AttackerCharacterId { get; set; }
         public string AttackerName { get; set; }
         public int? AttackerFactionId { get; set; }
+        public int AttackerBattleRank { get; set; }
+        public int AttackerPrestigeLevel { get; set; }
+
         public string VictimCharacterId { get; set; }
         public string VictimName { get; set; }
         public int? VictimFactionId { get; set; }
+        public int VictimBattleRank { get; set; }
+        public int VictimPrestigeLevel { get; set; }
+
         public int AttackerKills { get; set; }
         public int AttackerHeadshots { get; set; }
         public int VictimKills { get; set; }
