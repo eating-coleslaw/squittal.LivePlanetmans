@@ -163,9 +163,9 @@ else
                 </div>
             }
 
-            @if ((isLoadingKillboard == true && view == viewTranslator[PlayerDetailsView.kills])
-                      || (isLoadingWeapons == true && view == viewTranslator[PlayerDetailsView.weapons])
-                      || (isLoadingHeadToHead == true && view == viewTranslator[PlayerDetailsView.players]))
+            @if ((view == viewTranslator[PlayerDetailsView.kills] && (isLoadingKillboard == true || kills == null))
+                      || (view == viewTranslator[PlayerDetailsView.weapons] && (isLoadingWeapons == true || topWeaponsByKills == null || topWeaponsByDeaths == null))
+                      || (view == viewTranslator[PlayerDetailsView.players] && (isLoadingHeadToHead == true || headToHeadSummary == null)))
             {
                 <div class="spinner-ellipsis">
                     <div class="dot"></div>
@@ -181,11 +181,11 @@ else
                 @*<h5 style="font-size: 1rem; padding-left: 0.75rem;">Kills This Hour</h5>*@
                 @if (kills == null || isLoadingKillboard == true)
                 {
-                    <p class="text-muted"><em>Loading killboard...</em></p>
+                    @*<p class="text-muted"><em>Loading killboard...</em></p>*@
                 }
                 else
                 {
-                    <div style="max-height: 400px; overflow: auto; border-top: 0px solid @GetFactionColorFromId(stats.FactionId)80; border-bottom: 1px solid @GetFactionColorFromId(stats.FactionId)80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem;">
+                    <div style="max-height: 400px; overflow: auto; border-top: 0px solid @GetFactionColorFromId(stats.FactionId)80; border-bottom: 1px solid @GetFactionColorFromId(stats.FactionId)80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem; margin-bottom: 1.5rem;">
                         <table class="table-responsive-sm table" style="font-size: 0.85rem !important;">
                             <tbody style="font-size: small;">
                                 @foreach (var kill in kills)
@@ -265,14 +265,14 @@ else
 
             @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.weapons] && isLoadingWeapons != true)
             {
-                <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem;">
-                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
-                        <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Weapons By Kills</h5>
+                <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">
+                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
+                        <h5 style="font-size: 1rem; margin-bottom: 0.25rem">Top Weapons By Kills</h5>
                         @if (topWeaponsByKills != null && isLoadingWeapons != true)
                         {
 
-                            <div style="max-height: 350px; overflow: auto;">
-                                <table class="table-responseive-sm table-striped-light" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; margin-left: 0.75rem;">
+                            <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
+                                <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 0px solid @GetFactionLightColorFromId(stats.FactionId);">  @*margin-left: 0.75rem;">*@
                                     <thead style="vertical-align: bottom;">
                                         <tr>
                                             @*<th>Weapon ID</th>*@
@@ -284,7 +284,7 @@ else
                                 @*</table>*@
 
                                 @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
-                                    <tbody>
+                                    <tbody style="background-color: var(--sq-bs-white-lit);">
                                         @foreach (var weapon in topWeaponsByKills)
                                         {
                                             <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
@@ -300,13 +300,13 @@ else
                         }
                     </div>
 
-                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
-                        <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Weapons By Deaths</h5>
+                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+                        <h5 style="font-size: 1rem; margin-bottom: 0.25rem">Top Weapons By Deaths</h5>
                         @if (topWeaponsByDeaths != null && isLoadingWeapons != true)
                         {
 
-                            <div style="max-height: 350px; overflow: auto;">
-                                <table class="table-responseive-sm table-striped-light" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; margin-left: 0.75rem;">
+                            <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
+                                <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 0px solid @GetFactionLightColorFromId(stats.FactionId);">  @*margin-left: 0.75rem;">*@
                                     <thead style="vertical-align: bottom;">
                                         <tr>
                                             @*<th>Weapon ID</th>*@
@@ -318,7 +318,7 @@ else
                                 @*</table>*@
 
                                 @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
-                                    <tbody>
+                                    <tbody style="background-color: var(--sq-bs-white-lit);">
                                         @foreach (var weapon in topWeaponsByDeaths)
                                         {
                                             <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
@@ -338,26 +338,26 @@ else
 
             @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.players] && isLoadingHeadToHead != true)
             {
-                <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem;">
-                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
-                        <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Victims</h5>
+                <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">
+                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem; padding: 0;">
+                        <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">Top Victims</h5>
                         @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByKills.Any() == true && isLoadingHeadToHead != true)
                         {
 
-                            <div style="max-height: 350px; overflow: auto; margin-top: -1rem;">
-                                <table class="table-responseive-sm table-striped-light" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; margin-left: 0.75rem;">
-                                    <thead style="vertical-align: bottom;">
+                            <div style="max-height: calc(350px - 1.5rem); overflow: auto; padding: 0 0 0.5rem 0.5rem;">
+                                <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(stats.FactionId);">  @*margin-left: 0.75rem;">*@
+                                    <thead style="vertical-align: bottom; line-height: 0.5rem;">
                                         <tr>
                                             @*<th>Weapon ID</th>*@
-                                            <th class="p-name"></th>
-                                            <th>Kills</th>
-                                            <th>Deaths</th>
-                                            <th class="stacked-label" title="Head-to-Head Kill-Death Ratio">
-                                                <span class="small">H2H</span>
+                                            <th class="p-name" style="padding-bottom: 0.5rem;"></th>
+                                            <th style="padding-bottom: 0.5rem;">K</th>
+                                            <th style="padding-bottom: 0.5rem;">D</th>
+                                            <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem;">
+                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
                                                 <span>KDR</span>
                                             </th>
-                                            <th class="stacked-label" title="Head-to-Head Headshot Ratio">
-                                                <span class="small">H2H</span>
+                                            <th class="stacked-label" title="Head-to-Head Headshot Ratio" style="padding-bottom: 0.5rem;">
+                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
                                                 <span>HSR</span>
                                             </th>
                                         </tr>
@@ -383,25 +383,25 @@ else
                         }
                     </div>
 
-                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightColorFromId(stats.FactionId))30; border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
-                        <h5 style="font-size: 1rem; padding-left: 0.75rem;">Top Nemeses</h5>
+                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+                        <h5 style="font-size: 1rem; margin-bottom: 0.25rem; background-color: ">Top Nemeses</h5>
                         @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByDeaths.Any() == true && isLoadingHeadToHead != true)
                         {
 
-                            <div style="max-height: 350px; overflow: auto; margin-top: -1rem;">
-                                <table class="table-responseive-sm table-striped-light" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; margin-left: 0.75rem;">
-                                    <thead style="vertical-align: bottom;">
+                            <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
+                                <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important;">  @*margin-left: 0.75rem;">*@
+                                    <thead style="vertical-align: bottom; line-height: 0.5rem;">
                                         <tr>
                                             @*<th>Weapon ID</th>*@
-                                            <th class="p-name"></th>
-                                            <th>Kills</th>
-                                            <th>Deaths</th>
-                                            <th class="stacked-label" title="Head-to-Head Kill-Death Ratio">
-                                                <span class="small">H2H</span>
+                                            <th class="p-name" style="padding-bottom: 0.5rem;"></th>
+                                            <th style="padding-bottom: 0.5rem;">K</th>
+                                            <th style="padding-bottom: 0.5rem;">D</th>
+                                            <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem;">
+                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
                                                 <span>KDR</span>
                                             </th>
-                                            <th class="stacked-label" title="Head-to-Head Headshot Ratio">
-                                                <span class="small">H2H</span>
+                                            <th class="stacked-label" title="Head-to-Head Headshot Ratio" style="padding-bottom: 0.5rem;">
+                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
                                                 <span>HSR</span>
                                             </th>
                                         </tr>
@@ -432,9 +432,9 @@ else
 
         </div>
 
-        <div id="details-footer" style="font-family: 'Roboto Mono'; display: contents;">
-            <div style="margin: 0.3125rem 0rem;">
-                <a href="@GetUrlFromCharacterId(player.Id)" title="Open Voidwell player profile" class="text-muted" style="font-size: 0.8rem; padding-left: 0.8rem; margin-top: 0.1rem; font-weight: 400;" target="_blank">
+        <div id="details-footer" style="font-family: 'Roboto Mono'; position: absolute; bottom: 0.5rem; height: 1rem; line-height: 1rem;">
+            <div> @*style="margin: 0.3125rem 0rem;">*@
+                <a href="@GetUrlFromCharacterId(player.Id)" title="Open Voidwell player profile" class="text-muted" style="font-size: 0.8rem; padding-left: 0.8rem; font-weight: 400;" target="_blank"> @*margin-top: 0.1rem; >*@
                     @player.Id
                     <span class="h6 oi oi-external-link" style="font-size: 60%; opacity: 0.5;"></span>
                 </a>
@@ -730,27 +730,77 @@ else
 
     string GetFactionLightColorFromId(int? factionId)
     {
-        string color = "#a4a4c2"; // 27273A"; //"FFF2F0";
+        string color = "var(--sq-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
 
         switch (factionId)
         {
             //VS
             case 1:
-                color = "#CABCFF";
+                color = "var(--sq-ps2-vs-primary-light)"; //#CABCFF";
                 break;
 
             //NC
             case 2:
-                color = "#B6DDFD";
+                color = "var(--sq-ps2-nc-primary-light)"; //#B6DDFD";
                 break;
 
             //TR
             case 3:
-                color = "#FFD2D3";
+                color = "var(--sq-ps2-tr-primary-light)"; //#FFD2D3";
                 break;
         }
 
         return color;
+    }
+
+    string GetFactionLightAlphaColorFromId(int? factionId)
+    {
+        string color = "var(--sq-ps2-ns-primary-light-alpha)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "var(--sq-ps2-vs-primary-light-alpha)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                color = "var(--sq-ps2-nc-primary-light-alpha)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                color = "var(--sq-ps2-tr-primary-light-alpha)"; //#FFD2D3";
+                break;
+        }
+
+        return color;
+    }
+
+    string GetFactionClassFromId(int? factionId)
+    {
+        string cssClass = "ns"; //table-striped-striped var(--sqp-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                cssClass = "vs"; // var(--sqp-ps2-vs-primary-light)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                cssClass = "nc"; // var(--sqp-ps2-nc-primary-light)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                cssClass = "tr"; // var(--sqp-ps2-tr-primary-light)"; //#FFD2D3";
+                break;
+        }
+
+        return cssClass;
     }
 
     string GetViewTabStyle(PlayerDetailsView thisView)
@@ -762,18 +812,6 @@ else
         else
         {
             int gridColumn = (thisView == PlayerDetailsView.kills || (view == viewTranslator[PlayerDetailsView.kills] && thisView == PlayerDetailsView.weapons)) ? 2 : 3;
-
-
-
-
-            //switch (thisView)
-            //{
-            //    case PlayerDetailsView.kills:
-            //        gridColumn = 2;
-            //        break;
-
-            //    case PlayerDetails.
-            //}
 
             return $"grid-row: 1; background-color: transparent; color: var(--blue); font-weight: 400; font-size: 1rem;"; // grid-column: {gridColumn}; ";
         }

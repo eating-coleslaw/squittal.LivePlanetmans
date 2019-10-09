@@ -10,6 +10,18 @@
     --sq-ps2-nc-primary: #1e62fc;
     --sq-ps2-tr-primary: #e04c70;
     --sq-ps2-ns-primary: #27273A;
+    --sq-ps2-vs-primary-light: #CABCFF;
+    --sq-ps2-nc-primary-light: #B6DDFD;
+    --sq-ps2-tr-primary-light: #FFD2D3;
+    --sq-ps2-ns-primary-light: #a4a4c2;
+    --sq-ps2-vs-primary-light-alpha: #CABCFF30;
+    --sq-ps2-nc-primary-light-alpha: #B6DDFD30;
+    --sq-ps2-tr-primary-light-alpha: #FFD2D330;
+    --sq-ps2-ns-primary-light-alpha: #a4a4c230;
+    --sq-ps2-vs-primary-light-alpha-40: #CABCFF40;
+    --sq-ps2-nc-primary-light-alpha-40: #B6DDFD40;
+    --sq-ps2-tr-primary-light-alpha-40: #FFD2D340;
+    --sq-ps2-ns-primary-light-alpha-40: #a4a4c240;
     --sq-pale-purple: #b7a8d7;
     --bs-blue: #007bff;
     --bs-blue-alpha: #007bff10;
@@ -455,9 +467,32 @@ th.stacked-label span.small {
     font-size: 0.6rem;
 }
 
-.table-striped-light tbody tr:nth-of-type(2n+1) {
+
+/*.table-striped-light tbody tr:nth-of-type(2n+1) {
     background-color: var(--sq-bg-white-lit);
+}*/
+
+/*.table-striped-light tbody {
+    background-color: var(--sq-bg-white-lit);
+}*/
+
+
+.table-striped-light.vs tbody tr:nth-of-type(2n+1) {
+    background-color: var(--sq-ps2-vs-primary-light-alpha-40);
 }
+
+.table-striped-light.nc tbody tr:nth-of-type(2n+1) {
+    background-color: var(--sq-ps2-nc-primary-light-alpha-40);
+}
+
+.table-striped-light.tr tbody tr:nth-of-type(2n+1) {
+    background-color: var(--sq-ps2-tr-primary-light-alpha-40);
+}
+
+.table-striped-light.ns tbody tr:nth-of-type(2n+1) {
+    background-color: var(--sq-ps2-ns-primary-light-alpha-40);
+}
+
 
 .table-striped-light th {
     padding: 0 10px 0 5px;
