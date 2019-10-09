@@ -136,14 +136,14 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                 return topWeapons
                         .GroupBy(w => w.WeaponId)
-                        .Select(grp => new HourlyWeaponSummaryRow()
-                        {
-                            WeaponId = grp.Key,
-                            WeaponName = grp.Where(w => w.WeaponId == grp.Key).Select(w => w.WeaponName).FirstOrDefault(),
-                            FactionId = grp.Where(w => w.WeaponId == grp.Key).Select(w => w.FactionId).FirstOrDefault(),
-                            Kills = grp.Where(w => w.WeaponId == grp.Key).Select(w => w.Kills).FirstOrDefault(),
-                            Headshots = grp.Where(w => w.WeaponId == grp.Key).Select(w => w.Headshots).FirstOrDefault()
-                        })
+                        .Select(grp => grp.First()) //new HourlyWeaponSummaryRow()
+                        //{
+                        //    WeaponId = grp.Key,
+                        //    WeaponName = grp.Where(w => w.WeaponId == grp.Key).Select(w => w.WeaponName).FirstOrDefault(),
+                        //    FactionId = grp.Where(w => w.WeaponId == grp.Key).Select(w => w.FactionId).FirstOrDefault(),
+                        //    Kills = grp.Where(w => w.WeaponId == grp.Key).Select(w => w.Kills).FirstOrDefault(),
+                        //    Headshots = grp.Where(w => w.WeaponId == grp.Key).Select(w => w.Headshots).FirstOrDefault()
+                        //})
                         .OrderByDescending(w => w.Kills)
                         .Where(w => w.Kills > 0 && w.WeaponId != 0)
                         .ToArray();
