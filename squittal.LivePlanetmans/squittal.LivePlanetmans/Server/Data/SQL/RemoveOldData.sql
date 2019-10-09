@@ -26,7 +26,7 @@ RAISERROR( @vMessage, 0, 1 ) WITH NOWAIT;
 
   RAISERROR( N'Started rebuilding DeathEvent indexes', 0, 1 ) WITH NOWAIT;
   ALTER INDEX ALL ON DeathEvent REBUILD;
-  RAISERROR( N'Started rebuilding DeathEvent indexes', 0, 1 ) WITH NOWAIT;
+  RAISERROR( N'Finished rebuilding DeathEvent indexes', 0, 1 ) WITH NOWAIT;
   END;
 
   -- Login Events
@@ -38,7 +38,7 @@ RAISERROR( @vMessage, 0, 1 ) WITH NOWAIT;
 
   RAISERROR( N'Started rebuilding LoginEvent indexes', 0, 1 ) WITH NOWAIT;
   ALTER INDEX ALL ON PlayerLoginEvent REBUILD;
-  RAISERROR( N'Started rebuilding LoginEvent indexes', 0, 1 ) WITH NOWAIT;
+  RAISERROR( N'Finished rebuilding LoginEvent indexes', 0, 1 ) WITH NOWAIT;
   END;
 
   -- Logout Events
@@ -50,7 +50,7 @@ RAISERROR( @vMessage, 0, 1 ) WITH NOWAIT;
 
   RAISERROR( N'Started rebuilding LogoutEvent indexes', 0, 1 ) WITH NOWAIT;
   ALTER INDEX ALL ON PLayerLogoutEvent REBUILD;
-  RAISERROR( N'Started rebuilding LogoutEvent indexes', 0, 1 ) WITH NOWAIT;
+  RAISERROR( N'Finished rebuilding LogoutEvent indexes', 0, 1 ) WITH NOWAIT;
   END;
 
 END;
