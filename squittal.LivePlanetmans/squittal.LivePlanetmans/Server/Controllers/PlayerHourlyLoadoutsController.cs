@@ -138,8 +138,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     QueryNowUtc = nowUtc
                 };
 
-                var loadoutKills = allLoadoutResults.Select(e => e.LoadoutKills).Where(e => e.FactionId == playerFactionId && e.LoadoutId != 0);
-                var loadoutDeaths = allLoadoutResults.Select(e => e.LoadoutDeaths).Where(e => e.FactionId != playerFactionId && e.LoadoutId != 0);
+                var loadoutKills = allLoadoutResults.Select(e => e.LoadoutKills).Where(e => e.FactionId == playerFactionId && e.LoadoutId != 0).ToArray();
+                var loadoutDeaths = allLoadoutResults.Select(e => e.LoadoutDeaths).Where(e => e.FactionId != playerFactionId && e.LoadoutId != 0).ToArray();
 
                 playerSummary.PlayerLoadouts = loadoutKills
                                                 .GroupBy(l => l.LoadoutId)
@@ -151,7 +151,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 playerSummary.EnemyFactionLoadouts = loadoutDeaths
                                                         .GroupBy(l => new { l.FactionId, l.LoadoutId })
                                                         .Select(grp => grp.First())
-                                                        .OrderByDescending(grp => new { grp.FactionId, grp.LoadoutId })
+                                                        .OrderByDescending(grp => grp.FactionId)
+                                                        .ThenByDescending(grp => grp.LoadoutId)
                                                         //.Where(grp => grp.FactionId != playerFactionId)
                                                         .ToArray();
 
