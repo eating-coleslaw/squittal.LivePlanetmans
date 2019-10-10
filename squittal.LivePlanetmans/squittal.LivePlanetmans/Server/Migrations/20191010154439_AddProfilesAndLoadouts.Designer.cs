@@ -10,7 +10,7 @@ using squittal.LivePlanetmans.Server.Data;
 namespace squittal.LivePlanetmans.Server.Migrations
 {
     [DbContext(typeof(PlanetmansDbContext))]
-    [Migration("20191010151558_AddProfilesAndLoadouts")]
+    [Migration("20191010154439_AddProfilesAndLoadouts")]
     partial class AddProfilesAndLoadouts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -386,9 +386,7 @@ namespace squittal.LivePlanetmans.Server.Migrations
             modelBuilder.Entity("squittal.LivePlanetmans.Shared.Models.Profile", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("FactionId")
                         .HasColumnType("int");

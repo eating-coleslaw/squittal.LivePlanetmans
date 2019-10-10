@@ -24,8 +24,7 @@ namespace squittal.LivePlanetmans.Server.Migrations
                 name: "Profile",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false),
                     ProfileTypeId = table.Column<int>(nullable: false),
                     FactionId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
