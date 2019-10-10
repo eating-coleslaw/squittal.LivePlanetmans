@@ -12,13 +12,15 @@ namespace squittal.LivePlanetmans.Server.Data
         private readonly IItemService _itemService;
         private readonly IZoneService _zoneService;
         private readonly ITitleService _titleService;
+        private readonly IProfileService _profileService;
 
         public DbSeeder(
             IWorldService worldService,
             IFactionService factionService,
             IItemService itemService,
             IZoneService zoneService,
-            ITitleService titleService
+            ITitleService titleService,
+            IProfileService profileService
         )
         {
             _worldService = worldService;
@@ -26,6 +28,7 @@ namespace squittal.LivePlanetmans.Server.Data
             _itemService = itemService;
             _zoneService = zoneService;
             _titleService = titleService;
+            _profileService = profileService;
         }
 
         public async Task OnApplicationStartup(CancellationToken cancellationToken)
@@ -48,6 +51,9 @@ namespace squittal.LivePlanetmans.Server.Data
             // Won't refresh if already populated
             Task titleTask = _titleService.RefreshStore();
             TaskList.Add(titleTask);
+
+            Task profileTask = _profileService.RefreshStore();
+            TaskList.Add(profileTask);
 
             await Task.WhenAll(TaskList);
         }

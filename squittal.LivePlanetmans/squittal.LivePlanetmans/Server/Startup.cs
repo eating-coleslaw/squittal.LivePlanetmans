@@ -55,6 +55,7 @@ namespace squittal.LivePlanetmans.Server
             services.AddSingleton<IWorldService, WorldService>();
             services.AddSingleton<ICharacterService, CharacterService>();
             services.AddSingleton<IOutfitService, OutfitService>();
+            services.AddSingleton<IProfileService, ProfileService>();
 
             services.AddSingleton<IDbSeeder, DbSeeder>();
 
