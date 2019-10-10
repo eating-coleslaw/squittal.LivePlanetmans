@@ -20,7 +20,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
         private readonly IProfileService _profileService;
         private readonly ICharacterService _characterService;
 
-        public PlayerHourlyLoadoutsController(IDbContextHelper dbContextHelper, IProfileService profileService. ICharacterService characterService)
+        public PlayerHourlyLoadoutsController(IDbContextHelper dbContextHelper, IProfileService profileService, ICharacterService characterService)
         {
             _dbContextHelper = dbContextHelper;
             _profileService = profileService;
