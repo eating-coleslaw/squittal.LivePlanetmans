@@ -455,6 +455,7 @@ else
 
     PlayerHourlyHeadToHeadSummary headToHeadSummary;
 
+    PlayerHourlyLoadoutsSummary loadoutsSummary;
 
     int fetchTries = 0;
     bool isLoadingKillboard = false;
@@ -462,6 +463,7 @@ else
     bool isLoadingStats = false;
     bool isLoadingWeapons = false;
     bool isLoadingHeadToHead = false;
+    bool isLoadingLoadouts = false;
 
     [Parameter]
     public string playerId { get; set; }
@@ -568,7 +570,10 @@ else
                 kills = oldKills;
                 stats = oldStats;
             }
-            isLoadingKillboard = false;
+            finally
+            {
+                isLoadingKillboard = false;
+            }
 
 
             /* WEAPONS */
@@ -586,7 +591,10 @@ else
             {
                 //ignore
             }
-            isLoadingWeapons = false;
+            finally
+            {
+                isLoadingWeapons = false;
+            }
 
 
             /* Player Head-To-Head */
@@ -601,7 +609,10 @@ else
             {
                 //Ignore
             }
-            isLoadingHeadToHead = false;
+            finally
+            {
+                isLoadingHeadToHead = false;
+            }
 
         }
     }
@@ -829,6 +840,7 @@ else
         views.Add(PlayerDetailsView.kills, "kills");
         views.Add(PlayerDetailsView.weapons, "weapons");
         views.Add(PlayerDetailsView.players, "players");
+        views.Add(PlayerDetailsView.loadouts, "loadouts");
 
         return views;
     }
@@ -837,6 +849,7 @@ else
     {
         kills,
         weapons,
-        players
+        players,
+        loadouts
     }
 }
