@@ -5,6 +5,7 @@ using squittal.LivePlanetmans.Server.Data;
 using squittal.LivePlanetmans.Shared.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,7 +100,12 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
 
             if (censusLoadouts != null)
             {
-                await UpsertRangeAsync(censusLoadouts.Select(ConvertToDbModel));
+                var allLoadouts = new List<CensusLoadoutModel>();
+
+                allLoadouts.AddRange(censusLoadouts.ToList());
+                allLoadouts.AddRange(GetFakeNsCensusLoadoutModels());
+
+                await UpsertRangeAsync(allLoadouts.AsEnumerable().Select(ConvertToDbModel));
             }
 
         }
@@ -190,6 +196,31 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
                 FactionId = censusModel.FactionId,
                 Name = censusModel.Name.English,
                 ImageId = censusModel.ImageId
+            };
+        }
+
+        private IEnumerable<CensusLoadoutModel> GetFakeNsCensusLoadoutModels()
+        {
+            var nsLoadouts = new List<CensusLoadoutModel>
+            {
+                GetNewCensusLoadoutModel(28, 190, 4, "NS Infiltrator"),
+                GetNewCensusLoadoutModel(29, 191, 4, "NS Light Assault"),
+                GetNewCensusLoadoutModel(30, 192, 4, "NS Combat Medic"),
+                GetNewCensusLoadoutModel(31, 193, 4, "NS Engineer"),
+                GetNewCensusLoadoutModel(32, 194, 4, "NS Heavy Assault")
+            };
+
+            return nsLoadouts;
+        }
+
+        private CensusLoadoutModel GetNewCensusLoadoutModel(int loadoutId, int profileId, int factionId, string codeName)
+        {
+            return new CensusLoadoutModel()
+            {
+                LoadoutId = loadoutId,
+                ProfileId = profileId,
+                FactionId = factionId,
+                CodeName = codeName
             };
         }
 
