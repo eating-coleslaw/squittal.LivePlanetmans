@@ -4,6 +4,92 @@ using System.Text;
 
 namespace squittal.LivePlanetmans.Shared.Models
 {
+    public class PlayerLoadoutsReport
+    {
+        public string PlayerId { get; set; }
+        public int PlayerFactionId { get; set; }
+        public DateTime QueryStartTime { get; set; }
+        public DateTime QueryNowUtc { get; set; }
+
+        public IEnumerable<int> ActivePlayerLoadoutIds { get; set; }
+        public IEnumerable<int> ActiveEnemyLoadoutIds { get; set; }
+        public IEnumerable<ActiveFactionLoadouts> ActiveFactionLoadouts { get; set; }
+
+        public IEnumerable<LoadoutVsLoadoutSummaryRow> HeadToHeadLoadouts { get; set; }
+
+        public IEnumerable<LoadoutHeadToHeadSummary> PlayerLoadouts { get; set; }
+        public IEnumerable<LoadoutHeadToHeadSummary> EnemyLoadouts { get; set; }
+
+    }
+
+    public class LoadoutHeadToHeadSummary
+    {
+        public LoadoutSummary Summary { get; set; }
+        
+        //public LoadoutDetails Loadout { get; set; }
+        //public DeathEventAggregate Stats { get; set; }
+        //public IEnumerable<VictimLoadoutSummary> VictimLoadouts { get; set; }
+        public IEnumerable<FactionLoadoutsSummary> VictimFactions { get; set; }
+        public IEnumerable<LoadoutSummary> VictimLoadouts { get; set; }
+    }
+
+
+    public class FactionLoadoutsSummary
+    {
+        public FactionSummary Summary { get; set; }
+        public IEnumerable<LoadoutHeadToHeadSummary> Loadouts { get; set; }
+    }
+
+    //public class EnemyHourlyLoadoutSummaryRow
+    //{
+    //    public LoadoutDetails PlayerLoadout { get; set; }
+
+    //    public LoadoutDetails EnemyLoadout { get; set; }
+
+    //    public DeathEventAggregate AttackerDeathEventAggregate { get; set; }
+    //}
+
+    public class LoadoutSummary
+    {
+        public LoadoutDetails Loadout { get; set; }
+        public DeathEventAggregate Stats { get; set; }
+    }
+
+    //public class VictimLoadoutSummary
+    //{
+    //    public LoadoutDetails Loadout { get; set; }
+    //    public DeathEventAggregate AttackerStats { get; set; }
+    //}
+
+    public class LoadoutDetails
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int ProfileId { get; set; }
+        public int FactionId { get; set; }
+    }
+
+    public class FactionSummary
+    {
+        public FactionDetails Faction { get; set; }
+        public DeathEventAggregate Stats { get; set; }
+    }
+
+    public class FactionDetails
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class ActiveFactionLoadouts
+    {
+        public int FactionId { get; set; }
+        public IEnumerable<int> Loadouts { get; set; }
+    }
+
+    /*
+     * vvv OLD vvv
+    */
     public class PlayerHourlyLoadoutsSummary
     {
         public string PlayerId { get; set; }
@@ -13,9 +99,11 @@ namespace squittal.LivePlanetmans.Shared.Models
 
         public IEnumerable<HourlyLoadoutSummaryRow> LoadoutAggregates { get; set; }
 
+        public IEnumerable<LoadoutVsLoadoutSummaryRow> LoadoutVsLoadoutSummary { get; set; }
+
         //public IEnumerable<PlayerHourlyLoadoutsSummaryRow1> asgasgd;
-        public IEnumerable<PlayerHourlyLoadoutsSummaryRow> TopLoadoutsByKills { get; set; }
-        public IEnumerable<PlayerHourlyLoadoutsSummaryRow> TopLoadoutsByDeaths { get; set; }
+        //public IEnumerable<PlayerHourlyLoadoutsSummaryRow> TopLoadoutsByKills { get; set; }
+        //public IEnumerable<PlayerHourlyLoadoutsSummaryRow> TopLoadoutsByDeaths { get; set; }
 
         //public IEnumerable<FactionLoadoutSummaryRow> PlayerLoadouts;
         //public IEnumerable<ProfileTypeSummaryRow> EnemyLoadouts;
@@ -29,7 +117,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         public int ProfileId { get; set; }
         public int FactionId { get; set; }
         public DeathEventAggregate LoadoutDeathEventAggregate { get; set; }
-        public IEnumerable<VictimLoadoutSummary> LoadoutVsLoadoutAggregates { get; set; }
+        public IEnumerable<VictimLoadoutSummary1> LoadoutVsLoadoutAggregates { get; set; }
 
     }
 
@@ -50,7 +138,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         //public DeathEventAggregate VictimDeathEventAggregate { get; set; }
     }
 
-    public class VictimLoadoutSummary
+    public class VictimLoadoutSummary1
     {
         public int VictimLoadoutId { get; set; }
         public string VictimLoadoutName { get; set; }
