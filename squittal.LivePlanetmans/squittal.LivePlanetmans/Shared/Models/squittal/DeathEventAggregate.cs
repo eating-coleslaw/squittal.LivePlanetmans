@@ -8,8 +8,8 @@ namespace squittal.LivePlanetmans.Shared.Models
         public int Deaths { get; set; } = 0;
         public int Headshots { get; set; } = 0;
         public int HeadshotDeaths { get; set; } = 0;
-        public int Suicides { get; set; } = 0;
-        public int Teamkills { get; set; } = 0;
+        public int? Suicides { get; set; } = 0;
+        public int? Teamkills { get; set; } = 0;
 
         public double KillDeathRatio
         {
