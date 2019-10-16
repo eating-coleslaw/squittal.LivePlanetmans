@@ -56,6 +56,8 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
                 await SetupLoadoutMappingAsync();
             }
 
+            //Debug.WriteLine($"Loadout Mapping Value: {_loadoutMapping[loadoutId].Name}");
+
             return _loadoutMapping.GetValueOrDefault(loadoutId, null);
         }
 
@@ -65,10 +67,20 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
 
             try
             {
-                if (_loadoutMapping != null || _loadoutMapping.Count > 0)
+                //if (_loadoutMapping != null || _loadoutMapping.Count > 0)
+                if (_loadoutMapping != null && _loadoutMapping.Count > 0)
                 {
+                    Debug.WriteLine($"Loadout Mapping already set up!");
+
+                    foreach(var loadout in _loadoutMapping)
+                    {
+                        Debug.WriteLine($"  mapping: loadout {loadout.Key} == profile{_loadoutMapping[loadout.Key].Name}");
+                    }
+
                     return;
                 }
+
+                Debug.WriteLine($"Setting up Loadout Mapping!");
 
                 var loadoutsTask = GetAllLoadoutsAsync();
                 var profilesTask = GetAllProfilesAsync();
