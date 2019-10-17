@@ -359,13 +359,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                     FactionId = playerFactionId,
                                     Name = playerLoadoutName
                                 },
-
                                 Stats = GetStatsForEnemyLoadoutVsPlayerLoadout(groupedLoadouts, playerLoadoutId, enemyLoadoutId)
                             };
-                            
-                            //playerLoadoutSummary.Details.Name = playerLoadoutProfile.Name;
-
-                            //playerLoadoutSummary.Stats = GetStatsForEnemyLoadoutVsPlayerLoadout(groupedLoadouts, playerLoadoutId, enemyLoadoutId);
 
                             h2hPlayerLoadouts.Add(playerLoadoutSummary);
                         }
@@ -383,10 +378,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                     FactionId = factionId,
                                     Name = enemyLoadoutName
                                 },
-
                                 Stats = GetSummedLoadoutSummaryStats(h2hPlayerLoadouts)
                             },
-
                             PlayerLoadouts = h2hPlayerLoadouts
                         };
 
@@ -408,7 +401,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                 FactionId = playerFactionId,
                                 Name = playerLoadoutName
                             },
-
                             Stats = GetStatsForFactionVsPlayerLoadout(groupedLoadouts, playerLoadoutId, factionId)
                         };
 
@@ -423,12 +415,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                             {
                                 Id = factionId
                             },
-
                             Stats = GetSummedLoadoutSummaryStats(factionVsPlayerLoadoutSummaries)
                         },
-
                         FactionLoadouts = factionLoadoutSummaries,
-
                         PlayerLoadouts = factionVsPlayerLoadoutSummaries
                     };
 
@@ -440,7 +429,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 foreach (var loadoutId in activePlayerLoadouts)
                 {
                     var playerLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(loadoutId);
-                    
                     var playerLoadoutName = playerLoadoutProfile.Name ?? string.Empty;
 
                     var playerLoadoutSummary = new LoadoutSummary()
@@ -451,21 +439,13 @@ namespace squittal.LivePlanetmans.Server.Controllers
                             FactionId = playerFactionId,
                             Name = playerLoadoutName
                         },
-
                         Stats = GetStatsForPlayerLoadout(groupedLoadouts, loadoutId)
                     };
-
-                    //playerLoadoutSummary.Details.Name = playerLoadoutProfile.Name;
-
-                    //playerLoadoutSummary.Stats = GetStatsForPlayerLoadout(groupedLoadouts, loadoutId);
 
                     playerLoadouts.Add(playerLoadoutSummary);
                 }
 
                 var playerStats = GetSummedLoadoutSummaryStats(playerLoadouts);
-
-
-                Debug.WriteLine($"========================================");
 
                 return new PlayerLoadoutsReport()
                 {
