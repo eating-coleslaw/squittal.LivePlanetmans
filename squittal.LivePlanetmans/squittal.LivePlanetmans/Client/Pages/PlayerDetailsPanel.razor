@@ -455,23 +455,20 @@ else
                                         <tr>
                                             <th class="p-name" style="padding-bottom: 0.5rem;"></th>
 
-                                            @if (loadoutsReport.PlayerLoadouts != null)
+                                            @foreach (var loadout in loadoutsReport.PlayerLoadouts)
                                             {
-                                                @foreach (var loadout in loadoutsReport.PlayerLoadouts)
-                                                {
-                                                    <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem; color: @GetFactionColorFromId(loadout.Details.FactionId);">
-                                                        <span class="small" style="position: initial; margin-bottom: 0.1rem;">@loadout.Details.Name</span>
-                                                        <span>Kills</span>
-                                                    </th>
-                                                    <th style="padding-bottom: 0.5rem;">Deaths</th>
-                                                    <th style="padding-bottom: 0.5rem;">KDR</th>
-                                                }
-
-                                                <th class="stacked-label" style="padding-bottom: 0.5rem;">
-                                                    <span class="small" style="position: initial; margin-bottom: 0.1rem;">Total</span>
+                                                <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem; color: @GetFactionColorFromId(loadout.Details.FactionId);">
+                                                    <span class="small" style="position: initial; margin-bottom: 0.1rem;">@loadout.Details.Name</span>
                                                     <span>Kills</span>
                                                 </th>
+                                                <th style="padding-bottom: 0.5rem;">Deaths</th>
+                                                <th style="padding-bottom: 0.5rem;">KDR</th>
                                             }
+
+                                            <th class="stacked-label" style="padding-bottom: 0.5rem;">
+                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">Total</span>
+                                                <span>Kills</span>
+                                            </th>
                                         </tr>
                                     </thead>
 
@@ -480,79 +477,47 @@ else
                                         <tr style="color: @GetFactionColorFromId(stats.FactionId)">
                                             <td>Player Total</td>
 
-                                            @if (loadoutsReport.PlayerLoadouts != null)
+                                            @foreach (var loadout in loadoutsReport.PlayerLoadouts)
                                             {
-                                                @foreach (var loadout in loadoutsReport.PlayerLoadouts)
-                                                {
-                                                    @if (loadout.Stats != null)
-                                                    {
-                                                        <td>@loadout.Stats.Kills</td>
-                                                        <td>@loadout.Stats.Deaths</td>
-                                                        <td>@loadout.Stats.KillDeathRatio</td>
-                                                    }
-                                                }
+                                                <td>@loadout.Stats.Kills</td>
+                                                <td>@loadout.Stats.Deaths</td>
+                                                <td>@loadout.Stats.KillDeathRatio</td>
                                             }
 
-
-                                            @if (loadoutsReport.PlayerStats != null)
-                                            {
-                                                <td>@loadoutsReport.PlayerStats.Kills</td>
-                                            }
+                                            <td>@loadoutsReport.PlayerStats.Kills</td>
                                         </tr>
 
-                                        @if (loadoutsReport.FactionLoadouts != null)
+                                        @foreach (var faction in loadoutsReport.FactionLoadouts)
                                         {
-                                            @foreach (var faction in loadoutsReport.FactionLoadouts)
-                                            {
-                                                <tr style="color: @GetFactionColorFromId(faction.Summary.Details.Id); font-weight: 500;">
+                                            <tr style="color: @GetFactionColorFromId(faction.Summary.Details.Id); font-weight: 500;">
 
-                                                    <td>Faction Total</td>
+                                                <td>Faction Total</td>
 
-                                                    @if (faction.PlayerLoadouts != null)
-                                                    {
-                                                        @foreach (var playerLoadout in faction.PlayerLoadouts)
-                                                        {
-                                                            @if (playerLoadout.Stats != null)
-                                                            {
-                                                                <td>@playerLoadout.Stats.Kills</td>
-                                                                <td>@playerLoadout.Stats.Deaths</td>
-                                                                <td>@playerLoadout.Stats.KillDeathRatio</td>
-                                                            }
-                                                        }
-                                                    }
-
-                                                    @if (faction.Summary.Stats != null)
-                                                    {
-                                                        <td>@faction.Summary.Stats.Kills</td>
-                                                    }
-                                                </tr>
-
-                                                @if (faction.FactionLoadouts != null)
+                                                @foreach (var playerLoadout in faction.PlayerLoadouts)
                                                 {
-                                                    @foreach (var factionLoadout in faction.FactionLoadouts)
-                                                    {
-                                                        <tr style="color: @GetFactionColorFromId(faction.Summary.Details.Id)">
-
-                                                            <td>@factionLoadout.Summary.Details.Name</td>
-
-                                                            @foreach (var playerLoadout in factionLoadout.PlayerLoadouts)
-                                                            {
-                                                                @if (playerLoadout.Stats != null)
-                                                                {
-                                                                    <td>@playerLoadout.Stats.Kills</td>
-                                                                    <td>@playerLoadout.Stats.Deaths</td>
-                                                                    <td>@playerLoadout.Stats.KillDeathRatio</td>
-                                                                }
-                                                            }
-
-                                                            @if (factionLoadout.Summary.Stats != null)
-                                                            {
-                                                                <td>@factionLoadout.Summary.Stats.Kills</td>
-                                                            }
-
-                                                        </tr>
-                                                    }
+                                                    <td>@playerLoadout.Stats.Kills</td>
+                                                    <td>@playerLoadout.Stats.Deaths</td>
+                                                    <td>@playerLoadout.Stats.KillDeathRatio</td>
                                                 }
+
+                                                <td>@faction.Summary.Stats.Kills</td>
+                                            </tr>
+
+                                            @foreach (var factionLoadout in faction.FactionLoadouts)
+                                            {
+                                                <tr style="color: @GetFactionColorFromId(faction.Summary.Details.Id)">
+
+                                                    <td>@factionLoadout.Summary.Details.Name</td>
+
+                                                    @foreach (var playerLoadout in factionLoadout.PlayerLoadouts)
+                                                    {
+                                                        <td>@playerLoadout.Stats.Kills</td>
+                                                        <td>@playerLoadout.Stats.Deaths</td>
+                                                        <td>@playerLoadout.Stats.KillDeathRatio</td>
+                                                    }
+
+                                                    <td>@factionLoadout.Summary.Stats.Kills</td>
+                                                </tr>
                                             }
                                         }
                                     </tbody>
