@@ -338,80 +338,37 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 
                 foreach (var factionId in activeFactions)
                 {
-                    //var factionLoadoutsSummary = new FactionLoadoutsSummary
-                    //{
-                    //    Summary = new FactionSummary()
-                    //    {
-                    //        Details = new FactionDetails()
-                    //        {
-                    //            Id = factionId
-                    //        }
-                    //    }
-                    //};
-
                     var factionLoadouts = activeFactionLoadouts.Where(f => f.FactionId == factionId).SelectMany(f => f.Loadouts);
 
                     var factionLoadoutSummaries = new List<EnemyLoadoutHeadToHeadSummary>();
 
                     foreach (var enemyLoadoutId in factionLoadouts)
                     {
-                        //var enemyLoadoutSummary = new LoadoutSummary
-                        //{
-                        //    Details = new LoadoutDetails()
-                        //    {
-                        //        Id = enemyLoadoutId,
-                        //        FactionId = factionId
-                        //    }
-                        //};
-
-                        //var enemyLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(enemyLoadoutId);
-                        //var enemyLoadoutName = enemyLoadoutProfile.Name ?? string.Empty;
-
-                        //enemyLoadoutSummary.Details.Name = enemyLoadoutProfile.Name ?? string.Empty;
-
-                        //var enemyH2HSummary = new EnemyLoadoutHeadToHeadSummary()
-                        //{
-                            //Summary = enemyLoadoutSummary
-                        //};
-
                         var h2hPlayerLoadouts = new List<LoadoutSummary>();
                         
                         foreach (var playerLoadoutId in activePlayerLoadouts)
                         {
+                            var playerLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(playerLoadoutId);
+                            var playerLoadoutName = playerLoadoutProfile.Name;
+
                             var playerLoadoutSummary = new LoadoutSummary
                             {
                                 Details = new LoadoutDetails()
                                 {
                                     Id = playerLoadoutId,
-                                    FactionId = playerFactionId
-                                }
-                            };
-                            var playerLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(playerLoadoutId);
-                            
-                            playerLoadoutSummary.Details.Name = playerLoadoutProfile.Name;
+                                    FactionId = playerFactionId,
+                                    Name = playerLoadoutName
+                                },
 
-                            playerLoadoutSummary.Stats = GetStatsForEnemyLoadoutVsPlayerLoadout(groupedLoadouts, playerLoadoutId, enemyLoadoutId);
+                                Stats = GetStatsForEnemyLoadoutVsPlayerLoadout(groupedLoadouts, playerLoadoutId, enemyLoadoutId)
+                            };
+                            
+                            //playerLoadoutSummary.Details.Name = playerLoadoutProfile.Name;
+
+                            //playerLoadoutSummary.Stats = GetStatsForEnemyLoadoutVsPlayerLoadout(groupedLoadouts, playerLoadoutId, enemyLoadoutId);
 
                             h2hPlayerLoadouts.Add(playerLoadoutSummary);
                         }
-
-                        //var enemyLoadoutSummary = new LoadoutSummary
-                        //{
-                        //    Details = new LoadoutDetails()
-                        //    {
-                        //        Id = enemyLoadoutId,
-                        //        FactionId = factionId,
-                        //        Name = enemyLoadoutName
-                        //    },
-
-                        //    Stats = new DeathEventAggregate()
-                        //    {
-                        //        Kills = h2hPlayerLoadouts.Sum(pl => pl.Stats.Kills),
-                        //        Headshots = h2hPlayerLoadouts.Sum(pl => pl.Stats.Headshots),
-                        //        Deaths = h2hPlayerLoadouts.Sum(pl => pl.Stats.Deaths),
-                        //        HeadshotDeaths = h2hPlayerLoadouts.Sum(pl => pl.Stats.HeadshotDeaths)
-                        //    }
-                        //};
 
                         var enemyLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(enemyLoadoutId);
                         var enemyLoadoutName = enemyLoadoutProfile.Name ?? string.Empty;
@@ -428,36 +385,13 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                 },
 
                                 Stats = GetSummedLoadoutSummaryStats(h2hPlayerLoadouts)
-
-                                //Stats = new DeathEventAggregate
-                                //{
-                                //    Kills = h2hPlayerLoadouts.Sum(pl => pl.Stats.Kills),
-                                //    Headshots = h2hPlayerLoadouts.Sum(pl => pl.Stats.Headshots),
-                                //    Deaths = h2hPlayerLoadouts.Sum(pl => pl.Stats.Deaths),
-                                //    HeadshotDeaths = h2hPlayerLoadouts.Sum(pl => pl.Stats.HeadshotDeaths)
-                                //}
                             },
 
                             PlayerLoadouts = h2hPlayerLoadouts
                         };
 
-                        //enemyH2HSummary.PlayerLoadouts = h2hPlayerLoadouts;
-
-                        //enemyH2HSummary.Summary.Stats = new DeathEventAggregate()
-                        //{
-                        //    Kills = h2hPlayerLoadouts.Sum(pl => pl.Stats.Kills),
-                        //    Headshots = h2hPlayerLoadouts.Sum(pl => pl.Stats.Headshots),
-                        //    Deaths = h2hPlayerLoadouts.Sum(pl => pl.Stats.Deaths),
-                        //    HeadshotDeaths = h2hPlayerLoadouts.Sum(pl => pl.Stats.HeadshotDeaths)
-                        //};
-
                         factionLoadoutSummaries.Add(enemyH2HSummary);
                     }
-
-
-                    
-
-                    //factionLoadoutsSummary.FactionLoadouts = factionLoadoutSummaries;
 
                     var factionVsPlayerLoadoutSummaries = new List<LoadoutSummary>();
 
@@ -477,15 +411,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                             Stats = GetStatsForFactionVsPlayerLoadout(groupedLoadouts, playerLoadoutId, factionId)
                         };
-                        //playerLoadoutSummary.Details.Name = playerLoadoutProfile.Name;
-
-                        //playerLoadoutSummary.Stats = GetStatsForFactionVsPlayerLoadout(groupedLoadouts, playerLoadoutId, factionId);
-
-                        Debug.WriteLine($"   vs {playerLoadoutSummary.Details.Name}  [Kills: {playerLoadoutSummary.Stats.Kills} Deaths: {playerLoadoutSummary.Stats.Deaths}]");
 
                         factionVsPlayerLoadoutSummaries.Add(playerLoadoutSummary);
                     }
-
 
                     var factionLoadoutsSummary = new FactionLoadoutsSummary
                     {
@@ -497,68 +425,45 @@ namespace squittal.LivePlanetmans.Server.Controllers
                             },
 
                             Stats = GetSummedLoadoutSummaryStats(factionVsPlayerLoadoutSummaries)
-
-                            //Stats = new DeathEventAggregate()
-                            //{
-                            //    Kills = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.Kills),
-                            //    Headshots = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.Headshots),
-                            //    Deaths = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.Deaths),
-                            //    HeadshotDeaths = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.HeadshotDeaths)
-                            //}
                         },
 
                         FactionLoadouts = factionLoadoutSummaries,
 
-                        PlayerLoadouts = factionVsPlayerLoadoutSummaries,
-
+                        PlayerLoadouts = factionVsPlayerLoadoutSummaries
                     };
-
-
-                    //factionLoadoutsSummary.PlayerLoadouts = factionVsPlayerLoadoutSummaries;
-
-                    //factionLoadoutsSummary.Summary.Stats = new DeathEventAggregate()
-                    //{
-                    //    Kills = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.Kills),
-                    //    Headshots = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.Headshots),
-                    //    Deaths = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.Deaths),
-                    //    HeadshotDeaths = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.HeadshotDeaths)
-                    //};
 
                     allFactionsLoadoutSummaries.Add(factionLoadoutsSummary);
                 }
-                Debug.WriteLine($"========================================");
-
-
 
                 var playerLoadouts = new List<LoadoutSummary>();
 
                 foreach (var loadoutId in activePlayerLoadouts)
                 {
+                    var playerLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(loadoutId);
+                    
+                    var playerLoadoutName = playerLoadoutProfile.Name ?? string.Empty;
+
                     var playerLoadoutSummary = new LoadoutSummary()
                     {
                         Details = new LoadoutDetails()
                         {
                             Id = loadoutId,
-                            FactionId = playerFactionId
-                        }
-                    };
-                    var playerLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(loadoutId);
-                    playerLoadoutSummary.Details.Name = playerLoadoutProfile.Name;
+                            FactionId = playerFactionId,
+                            Name = playerLoadoutName
+                        },
 
-                    playerLoadoutSummary.Stats = GetStatsForPlayerLoadout(groupedLoadouts, loadoutId);
+                        Stats = GetStatsForPlayerLoadout(groupedLoadouts, loadoutId)
+                    };
+
+                    //playerLoadoutSummary.Details.Name = playerLoadoutProfile.Name;
+
+                    //playerLoadoutSummary.Stats = GetStatsForPlayerLoadout(groupedLoadouts, loadoutId);
 
                     playerLoadouts.Add(playerLoadoutSummary);
                 }
 
                 var playerStats = GetSummedLoadoutSummaryStats(playerLoadouts);
 
-                //var playerStats = new DeathEventAggregate()
-                //{
-                //    Kills = playerLoadouts.Sum(pl => pl.Stats.Kills),
-                //    Headshots = playerLoadouts.Sum(pl => pl.Stats.Headshots),
-                //    Deaths = playerLoadouts.Sum(pl => pl.Stats.Deaths),
-                //    HeadshotDeaths = playerLoadouts.Sum(pl => pl.Stats.HeadshotDeaths)
-                //};
 
                 Debug.WriteLine($"========================================");
 
