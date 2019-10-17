@@ -871,15 +871,10 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 var activeFactionLoadouts = GetActiveFactionLoadouts(loadoutVsLoadoutRows, activeFactions);
 
 
-                foreach (var group in groupedLoadouts) //.Where(g => g.AttackerFactionId == playerFactionId))
+                foreach (var group in groupedLoadouts)
                 {
                     var alId = group.AttackerLoadoutId;
                     Debug.WriteLine($"*{group.AttackerLoadoutName} [{group.AttackerLoadoutId}] vs {group.VictimLoadoutName} [{group.VictimLoadoutId}]* [Kills: {group.AttackerStats.Kills}  Deaths: {group.AttackerStats.Deaths}]");
-
-                    //foreach (var victim in groupedLoadouts.Where(v => v.AttackerLoadoutId == alId))
-                    //{
-                    //    Debug.WriteLine($"   {victim.VictimLoadoutName} [{victim.VictimLoadoutId}]   Kills: {victim.AttackerDeathEventAggregate.Kills}  Deaths: {victim.AttackerDeathEventAggregate.Deaths}");
-                    //}
                     Debug.WriteLine($"========================================");
 
                 }
@@ -900,12 +895,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         }
                     };
 
-                    Debug.WriteLine($"=== Faction {factionId} ===");
-
                     var factionLoadouts = activeFactionLoadouts.Where(f => f.FactionId == factionId).SelectMany(f => f.Loadouts);
 
                     var factionLoadoutSummaries = new List<EnemyLoadoutHeadToHeadSummary>();
-
 
                     foreach (var enemyLoadoutId in factionLoadouts)
                     {
@@ -918,8 +910,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
                             }
                         };
                         var enemyLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(enemyLoadoutId);
+
                         enemyLoadoutSummary.Details.Name = enemyLoadoutProfile.Name ?? string.Empty;
-                        Debug.WriteLine($"   Loadout {enemyLoadoutSummary.Details.Name}");
 
                         var enemyH2HSummary = new EnemyLoadoutHeadToHeadSummary()
                         {
@@ -927,11 +919,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         };
 
                         var h2hPlayerLoadouts = new List<LoadoutSummary>();
-
-
+                        
                         foreach (var playerLoadoutId in activePlayerLoadouts)
                         {
-                            /* EnemyLoadoutHeadToHeadSummary . PlayerLoadouts */
                             var playerLoadoutSummary = new LoadoutSummary
                             {
                                 Details = new LoadoutDetails()
@@ -939,80 +929,46 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                     Id = playerLoadoutId,
                                     FactionId = playerFactionId
                                 }
-
-                                /*
-                                Stats = (groupedLoadouts
-                                            .Where(grp => (grp.AttackerLoadoutId == playerLoadoutId && grp.VictimLoadoutId == enemyLoadoutId )
-                                                           || (grp.VictimLoadoutId == playerLoadoutId && grp.AttackerLoadoutId == enemyLoadoutId))
-                                            .Select(grp => grp.AttackerStats) //new DeathEventAggregate()
-                                            //{
-                                            //    Kills = grp.AttackerStats.Kills,
-                                            //    Headshots = grp.AttackerStats.Headshots,
-                                            //    Deaths = grp.AttackerStats.Deaths,
-                                            //    HeadshotDeaths = grp.AttackerStats.HeadshotDeaths
-                                            //})
-                                            .FirstOrDefault()) ?? new DeathEventAggregate()
-                                */
                             };
                             var playerLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(playerLoadoutId);
+                            
                             playerLoadoutSummary.Details.Name = playerLoadoutProfile.Name;
 
+                            playerLoadoutSummary.Stats = GetStatsForEnemyLoadoutVsPlayerLoadout(groupedLoadouts, playerLoadoutId, enemyLoadoutId);
 
-                            if (groupedLoadouts.Any(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimLoadoutId == enemyLoadoutId))
-                            {
-                                playerLoadoutSummary.Stats = groupedLoadouts
-                                                                .Where(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimLoadoutId == enemyLoadoutId)
-                                                                .Select(grp => grp.AttackerStats)
-                                                                .FirstOrDefault();
-                            }
-                            else if (groupedLoadouts.Any(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerLoadoutId == enemyLoadoutId))
-                            {
-                                playerLoadoutSummary.Stats = groupedLoadouts
-                                    .Where(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerLoadoutId == enemyLoadoutId)
-                                    .Select(grp => grp.AttackerStats)
-                                    .FirstOrDefault();
-                            }
-                            else
-                            {
-                                playerLoadoutSummary.Stats = new DeathEventAggregate();
-                            }
-
-
-                            if (playerLoadoutSummary.Stats == null)
-                            {
-                                playerLoadoutSummary.Stats = new DeathEventAggregate();
-                                Debug.WriteLine($"      vs {playerLoadoutSummary.Details.Name} [null stats]   [Kills: {playerLoadoutSummary.Stats.Kills} Deaths: {playerLoadoutSummary.Stats.Deaths}]");
-                            }
-                            else
-                            {
-                                Debug.WriteLine($"      vs {playerLoadoutSummary.Details.Name}  [Kills: {playerLoadoutSummary.Stats.Kills} Deaths: {playerLoadoutSummary.Stats.Deaths}]");
-                            }
-
+                            //if (groupedLoadouts.Any(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimLoadoutId == enemyLoadoutId))
+                            //{
+                            //    playerLoadoutSummary.Stats = groupedLoadouts
+                            //                                    .Where(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimLoadoutId == enemyLoadoutId)
+                            //                                    .Select(grp => grp.AttackerStats)
+                            //                                    .FirstOrDefault();
+                            //}
+                            //else if (groupedLoadouts.Any(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerLoadoutId == enemyLoadoutId))
+                            //{
+                            //    playerLoadoutSummary.Stats = groupedLoadouts
+                            //        .Where(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerLoadoutId == enemyLoadoutId)
+                            //        .Select(grp => grp.AttackerStats)
+                            //        .FirstOrDefault();
+                            //}
+                            //else
+                            //{
+                            //    playerLoadoutSummary.Stats = new DeathEventAggregate();
+                            //}
 
                             h2hPlayerLoadouts.Add(playerLoadoutSummary);
-
-
                         }
 
                         enemyH2HSummary.PlayerLoadouts = h2hPlayerLoadouts;
 
                         enemyH2HSummary.Summary.Stats = new DeathEventAggregate()
                         {
-                            //Kills = h2hPlayerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Kills),
-                            //Headshots = h2hPlayerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Headshots),
-                            //Deaths = h2hPlayerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Deaths),
-                            //HeadshotDeaths = h2hPlayerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.HeadshotDeaths)
                             Kills = h2hPlayerLoadouts.Sum(pl => pl.Stats.Kills),
                             Headshots = h2hPlayerLoadouts.Sum(pl => pl.Stats.Headshots),
                             Deaths = h2hPlayerLoadouts.Sum(pl => pl.Stats.Deaths),
                             HeadshotDeaths = h2hPlayerLoadouts.Sum(pl => pl.Stats.HeadshotDeaths)
                         };
 
-                        Debug.WriteLine($"   Loadout {enemyLoadoutSummary.Details.Name}  [Kills: {enemyLoadoutSummary.Stats.Kills} Deaths: {enemyLoadoutSummary.Stats.Deaths}]");
-
                         factionLoadoutSummaries.Add(enemyH2HSummary);
-
-                        Debug.WriteLine($"________________________________");
                     }
 
                     factionLoadoutsSummary.FactionLoadouts = factionLoadoutSummaries;
@@ -1028,53 +984,39 @@ namespace squittal.LivePlanetmans.Server.Controllers
                             {
                                 Id = playerLoadoutId,
                                 FactionId = playerFactionId
-                            },
-
-                            Stats = (groupedLoadouts
-                                        .Where(grp => grp.AttackerLoadoutId == playerLoadoutId
-                                                   && grp.VictimFactionId == factionId)
-                                        .Select(grp => grp.AttackerStats) //new DeathEventAggregate()
-                                        //{
-                                        //    Kills = grp.AttackerStats.Kills,
-                                        //    Headshots = grp.AttackerStats.Headshots,
-                                        //    Deaths = grp.AttackerStats.Deaths,
-                                        //    HeadshotDeaths = grp.AttackerStats.HeadshotDeaths
-                                        //})
-                                        .FirstOrDefault()) ?? new DeathEventAggregate()
+                            }
                         };
                         var playerLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(playerLoadoutId);
                         playerLoadoutSummary.Details.Name = playerLoadoutProfile.Name;
 
+                        playerLoadoutSummary.Stats = GetStatsForFactionVsPlayerLoadout(groupedLoadouts, playerLoadoutId, factionId);
 
-                        if (groupedLoadouts.Any(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimFactionId == factionId))
-                        {
-                            var targetRows = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimFactionId == factionId).ToArray();
-                            playerLoadoutSummary.Stats = new DeathEventAggregate()
-                            {
-                                Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
-                                Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
-                                Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
-                                HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths),
-                            };
-                        }
-                        else if (groupedLoadouts.Any(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerFactionId == factionId))
-                        {
-                            var targetRows = groupedLoadouts.Where(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerFactionId == factionId).ToArray();
-                            playerLoadoutSummary.Stats = new DeathEventAggregate()
-                            {
-                                Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
-                                Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
-                                Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
-                                HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths),
-                            };
-                        }
-                        else
-                        {
-                            playerLoadoutSummary.Stats = new DeathEventAggregate();
-                        }
-
-
-
+                        //if (groupedLoadouts.Any(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimFactionId == factionId))
+                        //{
+                        //    var targetRows = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimFactionId == factionId).ToArray();
+                        //    playerLoadoutSummary.Stats = new DeathEventAggregate()
+                        //    {
+                        //        Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
+                        //        Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
+                        //        Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
+                        //        HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths),
+                        //    };
+                        //}
+                        //else if (groupedLoadouts.Any(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerFactionId == factionId))
+                        //{
+                        //    var targetRows = groupedLoadouts.Where(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerFactionId == factionId).ToArray();
+                        //    playerLoadoutSummary.Stats = new DeathEventAggregate()
+                        //    {
+                        //        Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
+                        //        Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
+                        //        Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
+                        //        HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths),
+                        //    };
+                        //}
+                        //else
+                        //{
+                        //    playerLoadoutSummary.Stats = new DeathEventAggregate();
+                        //}
 
                         Debug.WriteLine($"   vs {playerLoadoutSummary.Details.Name}  [Kills: {playerLoadoutSummary.Stats.Kills} Deaths: {playerLoadoutSummary.Stats.Deaths}]");
 
@@ -1089,10 +1031,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         Headshots = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.Headshots),
                         Deaths = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.Deaths),
                         HeadshotDeaths = factionVsPlayerLoadoutSummaries.Sum(f => f.Stats.HeadshotDeaths)
-                        //Kills = factionVsPlayerLoadoutSummaries.Where(f => f.Stats != null).Sum(f => f.Stats.Kills),
-                        //Headshots = factionVsPlayerLoadoutSummaries.Where(f => f.Stats != null).Sum(f => f.Stats.Headshots),
-                        //Deaths = factionVsPlayerLoadoutSummaries.Where(f => f.Stats != null).Sum(f => f.Stats.Deaths),
-                        //HeadshotDeaths = factionVsPlayerLoadoutSummaries.Where(f => f.Stats != null).Sum(f => f.Stats.HeadshotDeaths)
                     };
 
                     allFactionsLoadoutSummaries.Add(factionLoadoutsSummary);
@@ -1111,206 +1049,51 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         {
                             Id = loadoutId,
                             FactionId = playerFactionId
-                            //Name = await _profileService.GetProfileFromLoadoutIdAsync(loadoutId).Result.Name // loadoutId.ToString() //groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).Select(grp => grp.AttackerLoadoutName).First()
-                                        //?? groupedLoadouts.Where(grp => grp.VictimLoadoutId == loadoutId).Select(grp => grp.VictimLoadoutName).FirstOrDefault(),
-                            //ProfileId = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId || grp.VictimLoadoutId == loadoutId).Select(grp => grp.AttackerProfileId).FirstOrDefault()
                         }
-
-                        //Stats = new DeathEventAggregate()
-                        //{
-                        //    Kills = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).Sum(grp => grp.AttackerStats.Kills),
-                        //    Headshots = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).Sum(grp => grp.AttackerStats.Headshots),
-                        //    Deaths = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).Sum(grp => grp.AttackerStats.Deaths),
-                        //    HeadshotDeaths = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).Sum(grp => grp.AttackerStats.HeadshotDeaths),
-                        //}
                     };
                     var playerLoadoutProfile = await _profileService.GetProfileFromLoadoutIdAsync(loadoutId);
                     playerLoadoutSummary.Details.Name = playerLoadoutProfile.Name;
 
+                    playerLoadoutSummary.Stats = GetStatsForPlayerLoadout(groupedLoadouts, loadoutId);
 
-                    if (groupedLoadouts.Any(grp => grp.AttackerLoadoutId == loadoutId))
-                    {
-                        var targetRows = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).ToArray();
-                        playerLoadoutSummary.Stats = new DeathEventAggregate()
-                        {
-                            Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
-                            Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
-                            Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
-                            HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths)
-                        };
-
-                        //playerLoadoutSummary.Stats = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).Select(grp => grp.AttackerStats).FirstOrDefault();
-                    }
-                    else if (groupedLoadouts.Any(grp => grp.VictimLoadoutId == loadoutId))
-                    {
-                        var targetRows = groupedLoadouts.Where(grp => grp.VictimLoadoutId == loadoutId).ToArray();
-                        playerLoadoutSummary.Stats = new DeathEventAggregate()
-                        {
-                            Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
-                            Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
-                            Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
-                            HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths)
-                        };
-
-                        //playerLoadoutSummary.Stats = groupedLoadouts.Where(grp => grp.VictimLoadoutId == loadoutId).Select(grp => grp.AttackerStats).FirstOrDefault();
-                    }
-                    else
-                    {
-                        playerLoadoutSummary.Stats = new DeathEventAggregate();
-                    }
-
-                    //playerLoadoutSummary.Details.Name = await _profileService.GetProfileFromLoadoutIdAsync(loadoutId).Result.Name;
-
-                    //    (groupedLoadouts
-                    //                .Where(grp => grp.AttackerLoadoutId == loadoutId)
-                    //                .Select(grp => new DeathEventAggregate()
-                    //                {
-                    //                    Kills = grp.AttackerStats.Sum
-                    //                }) //grp.AttackerStats)
-                    //                .First()) ?? new DeathEventAggregate()
-                    //};
+                    //if (groupedLoadouts.Any(grp => grp.AttackerLoadoutId == loadoutId))
+                    //{
+                    //    var targetRows = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).ToArray();
+                    //    playerLoadoutSummary.Stats = new DeathEventAggregate()
+                    //    {
+                    //        Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
+                    //        Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
+                    //        Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
+                    //        HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths)
+                    //    };
+                    //}
+                    //else if (groupedLoadouts.Any(grp => grp.VictimLoadoutId == loadoutId))
+                    //{
+                    //    var targetRows = groupedLoadouts.Where(grp => grp.VictimLoadoutId == loadoutId).ToArray();
+                    //    playerLoadoutSummary.Stats = new DeathEventAggregate()
+                    //    {
+                    //        Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
+                    //        Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
+                    //        Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
+                    //        HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths)
+                    //    };
+                    //}
+                    //else
+                    //{
+                    //    playerLoadoutSummary.Stats = new DeathEventAggregate();
+                    //}
 
                     playerLoadouts.Add(playerLoadoutSummary);
                 }
 
                 var playerStats = new DeathEventAggregate()
                 {
-                    //Kills = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Kills),
-                    //Headshots = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Headshots),
-                    //Deaths = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Deaths),
-                    //HeadshotDeaths = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.HeadshotDeaths)
                     Kills = playerLoadouts.Sum(pl => pl.Stats.Kills),
                     Headshots = playerLoadouts.Sum(pl => pl.Stats.Headshots),
                     Deaths = playerLoadouts.Sum(pl => pl.Stats.Deaths),
                     HeadshotDeaths = playerLoadouts.Sum(pl => pl.Stats.HeadshotDeaths)
                 };
                 Debug.WriteLine($"========================================");
-
-                /*
-                var playerLoadouts = groupedLoadouts
-                                        .GroupBy(vsRow => vsRow.AttackerLoadoutId) //new { vsRow.AttackerLoadoutId, vsRow.VictimLoadoutId })
-                                        .Select(grp => new LoadoutHeadToHeadSummary()
-                                        {
-                                            Summary = new LoadoutSummary()
-                                            {
-                                                Details = new LoadoutDetails()
-                                                {
-                                                    Id = grp.Key,
-                                                    Name = grp.Select(g => g.AttackerLoadoutName).First(),
-                                                    ProfileId = grp.Select(g => g.AttackerProfileId).First(),
-                                                    FactionId = grp.Select(g => g.AttackerFactionId).First()
-
-                                                },
-
-                                                Stats = new DeathEventAggregate()
-                                                {
-                                                    Kills = grp.Where(g => g.AttackerLoadoutId == grp.Key).GroupBy(aggGrp => new { aggGrp.AttackerLoadoutId, aggGrp.VictimLoadoutId }).Select(aggGrp => aggGrp.First()).Sum(aggGrp => aggGrp.AttackerStats.Kills), //  .Where(vGrp => vGrp.  Where(g => g.AttackerLoadoutId == grp.Key).Select(g => g.AttackerDeathEventAggregate.Kills).Sum(),
-                                                Headshots = grp.Where(g => g.AttackerLoadoutId == grp.Key).GroupBy(aggGrp => new { aggGrp.AttackerLoadoutId, aggGrp.VictimLoadoutId }).Select(aggGrp => aggGrp.First()).Sum(aggGrp => aggGrp.AttackerStats.Headshots),
-                                                    Deaths = grp.Where(g => g.AttackerLoadoutId == grp.Key).GroupBy(aggGrp => new { aggGrp.AttackerLoadoutId, aggGrp.VictimLoadoutId }).Select(aggGrp => aggGrp.First()).Sum(aggGrp => aggGrp.AttackerStats.Deaths),
-                                                    HeadshotDeaths = grp.Where(g => g.AttackerLoadoutId == grp.Key).GroupBy(aggGrp => new { aggGrp.AttackerLoadoutId, aggGrp.VictimLoadoutId }).Select(aggGrp => aggGrp.First()).Sum(aggGrp => aggGrp.AttackerStats.HeadshotDeaths)
-                                                }
-
-                                            },
-
-                                            VictimFactions = grp.Select(g => new FactionLoadoutsSummary()
-                                            {
-                                                Summary = new FactionSummary()
-                                                {
-                                                    Details = new FactionDetails()
-                                                    {
-                                                        Id = g.VictimFactionId
-                                                    },
-
-                                                    Stats = new DeathEventAggregate()
-                                                    {
-                                                        Kills = grp.Where(a => a.AttackerLoadoutId == grp.Key && a.VictimFactionId == g.VictimFactionId).GroupBy(aggGrp => aggGrp.VictimFactionId).Select(aggGrp => aggGrp.First()).Sum(aggGrp => aggGrp.AttackerStats.Kills),
-                                                        Headshots = grp.Where(a => a.AttackerLoadoutId == grp.Key && a.VictimFactionId == g.VictimFactionId).GroupBy(aggGrp => aggGrp.VictimFactionId).Select(aggGrp => aggGrp.First()).Sum(aggGrp => aggGrp.AttackerStats.Headshots),
-                                                        Deaths = grp.Where(a => a.AttackerLoadoutId == grp.Key && a.VictimFactionId == g.VictimFactionId).GroupBy(aggGrp => aggGrp.VictimFactionId).Select(aggGrp => aggGrp.First()).Sum(aggGrp => aggGrp.AttackerStats.Deaths),
-                                                        HeadshotDeaths = grp.Where(a => a.AttackerLoadoutId == grp.Key && a.VictimFactionId == g.VictimFactionId).GroupBy(aggGrp => aggGrp.VictimFactionId).Select(aggGrp => aggGrp.First()).Sum(aggGrp => aggGrp.AttackerStats.HeadshotDeaths),
-                                                    }
-                                                }
-                                            }).GroupBy(fls => fls.Summary.Details.Id).Select(flsGrp => flsGrp.First()),
-
-
-                                            VictimLoadouts = grp.Select(g => new LoadoutSummary()
-                                            {
-                                                Details = new LoadoutDetails()
-                                                {
-                                                    Id = g.VictimLoadoutId,
-                                                    Name = grp.Where(v => v.VictimLoadoutId == g.VictimLoadoutId).Select(v => v.VictimLoadoutName).First(),
-                                                    ProfileId = grp.Where(v => v.VictimLoadoutId == g.VictimLoadoutId).Select(v => v.VictimProfileId).First(),
-                                                    FactionId = grp.Where(v => v.VictimLoadoutId == g.VictimLoadoutId).Select(v => v.VictimFactionId).First(),
-                                                },
-
-                                                Stats = new DeathEventAggregate()
-                                                {
-                                                    Kills = grp.Where(a => a.AttackerLoadoutId == grp.Key && a.VictimLoadoutId == g.VictimLoadoutId).GroupBy(vAggGrp => vAggGrp.VictimLoadoutId).Select(vg => vg.First()).Sum(vg => vg.AttackerStats.Kills), // Select(a => a.AttackerDeathEventAggregate.Kills).Sum(),
-                                                Headshots = grp.Where(a => g.AttackerLoadoutId == grp.Key && a.VictimLoadoutId == g.VictimLoadoutId).GroupBy(vAggGrp => vAggGrp.VictimLoadoutId).Select(vg => vg.First()).Sum(vg => vg.AttackerStats.Headshots), //Select(a => a.AttackerDeathEventAggregate.Headshots).Sum(),
-                                                Deaths = grp.Where(a => g.AttackerLoadoutId == grp.Key && a.VictimLoadoutId == g.VictimLoadoutId).GroupBy(vAggGrp => vAggGrp.VictimLoadoutId).Select(vg => vg.First()).Sum(vg => vg.AttackerStats.Deaths), //Select(a => a.AttackerDeathEventAggregate.Deaths).Sum(),
-                                                HeadshotDeaths = grp.Where(a => g.AttackerLoadoutId == grp.Key && a.VictimLoadoutId == g.VictimLoadoutId).GroupBy(vAggGrp => vAggGrp.VictimLoadoutId).Select(vg => vg.First()).Sum(vg => vg.AttackerStats.HeadshotDeaths) //Select(a => a.AttackerDeathEventAggregate.HeadshotDeaths).Sum()
-                                            }
-                                            }).GroupBy(vls => vls.Details.Id).Select(vlsGrp => vlsGrp.First())
-                                        })
-                                        .Where(grp => grp.Summary.Details.FactionId == playerFactionId) // FactionId == playerFactionId)
-                                        .OrderBy(grp => grp.Summary.Details.Id)
-                                        .ThenBy(grp => grp.VictimLoadouts.Select(g => g.Details.Id).First()) // Summary.Loadout.Id).Select(g => g.VictimLoadoutId).First())
-                                        .Distinct()
-                                        .ToArray();
-                */
-
-
-                /*
-                foreach (var loadout in playerLoadouts) //loadoutsSummary.LoadoutAggregates) //.Where(m => m.FactionId != stats.FactionId))
-                {
-                    {
-                        foreach (var victim in loadout.VictimLoadouts)
-                        {
-                            Debug.WriteLine($"{loadout.Summary.Details.Id} vs {victim.Details.Id}  [Kills: {victim.Stats.Kills}]");
-                        }
-                    }
-                }
-                */
-
-
-                //var finalSummary = attackerLoadoutAggregates
-                //                    .GroupBy(l => new { l.LoadoutId, )
-
-                /*
-                foreach (var al in attackerLoadoutAggregates)
-                {
-                    Debug.WriteLine($"*{al.LoadoutName} [{al.LoadoutId}]* [Kills: {al.LoadoutDeathEventAggregate.Kills}  Deaths: {al.LoadoutDeathEventAggregate.Deaths}]");
-
-                    foreach (var vl in al.LoadoutVsLoadoutAggregates)
-                    {
-                        Debug.WriteLine($"   {vl.VictimLoadoutName} [{vl.VictimLoadoutId}]   Kills: {vl.AttackerDeathEventAggregate.Kills}  Deaths: {vl.AttackerDeathEventAggregate.Deaths}");
-                    }
-                    Debug.WriteLine($"________________________________");
-
-                }
-                */
-
-
-                //var topByKills = allHeadToHeadPlayers
-                //                .GroupBy(p => new { p.AttackerLoadoutId, p.VictimLoadoutId })
-                //                .Select(grp => grp.First())
-                //                //.OrderByDescending(grp => grp.AttackerKills)
-                //                .OrderByDescending(grp => grp.AttackerLoadoutId)
-                //                .ThenByDescending(grp => grp.VictimLoadoutId)
-                //                .Where(grp => grp.AttackerFactionId == playerFactionId)
-                //                .ToArray();
-
-                //var topByDeaths = allHeadToHeadPlayers
-                //                .GroupBy(p => new { p.AttackerLoadoutId, p.VictimLoadoutId })
-                //                .Select(grp => grp.First())
-                //                //.OrderByDescending(grp => grp.AttackerKills)
-                //                .OrderByDescending(grp => grp.AttackerLoadoutId)
-                //                .ThenBy(grp => grp.VictimLoadoutId)
-                //                .Where(grp => grp.VictimFactionId == playerFactionId)
-                //                .ToArray();
-
-                //Debug.WriteLine($"{topByKills.Count()}");
-                //Debug.WriteLine($"{topByDeaths.Count()}");
-
 
                 return new PlayerLoadoutsReport()
                 {
@@ -1326,11 +1109,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     PlayerLoadouts = playerLoadouts,
                     FactionLoadouts = allFactionsLoadoutSummaries,
                     PlayerStats = playerStats
-                    //TopLoadoutsByKills = topByKills,
-                    //TopLoadoutsByDeaths = topByDeaths
                 };
-
-                    //return groupedLoadouts;
             }
         }
 
@@ -1339,7 +1118,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         {
             var activePlayerAttackerLoadouts = GetActivePlayerAttackerLoadouts(loadoutVsLoadoutRows, playerFactionId);
 
-            // get loadouts with deaths
             var activePlayerVictimLoadouts = GetActivePlayerVictimLoadouts(loadoutVsLoadoutRows, playerFactionId);
 
             return activePlayerAttackerLoadouts
@@ -1370,7 +1148,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         {
             var activeEnemyAttackerLoadouts = GetActiveEnemyAttackerLoadouts(loadoutVsLoadoutRows, playerFactionId);
 
-            // get loadouts with deaths
             var activeEnemyVictimLoadouts = GetActiveEnemyVictimLoadouts(loadoutVsLoadoutRows, playerFactionId);
 
             return activeEnemyAttackerLoadouts
@@ -1456,6 +1233,88 @@ namespace squittal.LivePlanetmans.Server.Controllers
             }
 
             return activeFactionLoadouts;
+        }
+
+        private DeathEventAggregate GetStatsForEnemyLoadoutVsPlayerLoadout(IEnumerable<LoadoutVsLoadoutSummaryRow> groupedVsRows, int playerLoadoutId, int enemyLoadoutId)
+        {
+            if (groupedVsRows.Any(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimLoadoutId == enemyLoadoutId))
+            {
+                return groupedVsRows
+                        .Where(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimLoadoutId == enemyLoadoutId)
+                        .Select(grp => grp.AttackerStats)
+                        .FirstOrDefault();
+            }
+            else if (groupedVsRows.Any(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerLoadoutId == enemyLoadoutId))
+            {
+                return groupedVsRows
+                    .Where(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerLoadoutId == enemyLoadoutId)
+                    .Select(grp => grp.AttackerStats)
+                    .FirstOrDefault();
+            }
+            else
+            {
+                return new DeathEventAggregate();
+            }
+        }
+
+        private DeathEventAggregate GetStatsForFactionVsPlayerLoadout(IEnumerable<LoadoutVsLoadoutSummaryRow> groupedVsRows, int playerLoadoutId, int enemyFactionId)
+        {
+            if (groupedVsRows.Any(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimFactionId == enemyFactionId))
+            {
+                var targetRows = groupedVsRows.Where(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimFactionId == enemyFactionId).ToArray();
+                return new DeathEventAggregate()
+                {
+                    Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
+                    Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
+                    Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
+                    HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths),
+                };
+            }
+            else if (groupedVsRows.Any(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerFactionId == enemyFactionId))
+            {
+                var targetRows = groupedVsRows.Where(grp => grp.VictimLoadoutId == playerLoadoutId && grp.AttackerFactionId == enemyFactionId).ToArray();
+                return new DeathEventAggregate()
+                {
+                    Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
+                    Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
+                    Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
+                    HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths),
+                };
+            }
+            else
+            {
+                return new DeathEventAggregate();
+            }
+        }
+
+        private DeathEventAggregate GetStatsForPlayerLoadout(IEnumerable<LoadoutVsLoadoutSummaryRow> groupedVsRows, int playerLoadoutId)
+        {
+            if (groupedVsRows.Any(grp => grp.AttackerLoadoutId == playerLoadoutId))
+            {
+                var targetRows = groupedVsRows.Where(grp => grp.AttackerLoadoutId == playerLoadoutId).ToArray();
+                return new DeathEventAggregate()
+                {
+                    Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
+                    Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
+                    Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
+                    HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths)
+                };
+            }
+            else if (groupedVsRows.Any(grp => grp.VictimLoadoutId == playerLoadoutId))
+            {
+                var targetRows = groupedVsRows.Where(grp => grp.VictimLoadoutId == playerLoadoutId).ToArray();
+                return new DeathEventAggregate()
+                {
+                    Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
+                    Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
+                    Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
+                    HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths)
+                };
+            }
+            else
+            {
+                return new DeathEventAggregate();
+            }
         }
     }
 
