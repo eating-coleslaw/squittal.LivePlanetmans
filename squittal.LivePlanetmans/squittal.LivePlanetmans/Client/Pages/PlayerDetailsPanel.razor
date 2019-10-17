@@ -446,7 +446,7 @@ else
                 <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">  @*max-width: 702px;">*@
                     <div class="col-sm-12" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); margin-right: 0.3125rem; padding: 0;"> @*flex-basis: calc(50% - 0.3125rem);*@
                         <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">Hourly Loadout Summary</h5>
-                        @if (isLoadingLoadouts != true && loadoutsReport != null) //loadoutsSummary != null && 
+                        @if (isLoadingLoadouts != true && loadoutsReport != null) 
                         {
 
                             <div style="max-height: calc(350px - 1.5rem); overflow: auto; padding: 0 0 0.5rem 0.5rem;">
@@ -457,33 +457,21 @@ else
 
                                             @if (loadoutsReport.PlayerLoadouts != null)
                                             {
-                                                @foreach (var loadout in loadoutsReport.PlayerLoadouts) //loadoutsSummary.LoadoutAggregates) //.Where(m => m.FactionId != stats.FactionId))
+                                                @foreach (var loadout in loadoutsReport.PlayerLoadouts)
                                                 {
-                                                    @*@if (model.FactionId != stats.FactionId)
-                                            {*@
                                                     <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem; color: @GetFactionColorFromId(loadout.Details.FactionId);">
                                                         <span class="small" style="position: initial; margin-bottom: 0.1rem;">@loadout.Details.Name</span>
                                                         <span>Kills</span>
                                                     </th>
                                                     <th style="padding-bottom: 0.5rem;">Deaths</th>
                                                     <th style="padding-bottom: 0.5rem;">KDR</th>
-
-                                                    @*}*@
                                                 }
 
-                                                <th style="padding-bottom: 0.5rem;">
+                                                <th class="stacked-label" style="padding-bottom: 0.5rem;">
                                                     <span class="small" style="position: initial; margin-bottom: 0.1rem;">Total</span>
                                                     <span>Kills</span>
                                                 </th>
                                             }
-
-
-
-                                            @*<th class="p-name" style="padding-bottom: 0.5rem;"></th>
-                                            <th style="padding-bottom: 0.5rem;">K</th>
-                                            <th style="padding-bottom: 0.5rem;">D</th>
-                                            <th style="padding-bottom: 0.5rem;">KDR</th>
-                                            <th style="padding-bottom: 0.5rem;">HSR</th>*@
                                         </tr>
                                     </thead>
 
@@ -567,128 +555,11 @@ else
                                                 }
                                             }
                                         }
-
-
-
-                                        @*<tr style="color: @GetFactionColorFromId(stats.FactionId)">
-            <td>Player Total</td>
-
-            @foreach (var playerL in loadoutsReport.ActivePlayerLoadoutIds)
-            {
-                <td>@loadoutsReport.PlayerLoadouts.Where(l => l.Summary.Details.Id == playerL).Select(l => l.Summary.Stats.Kills).FirstOrDefault()</td>
-                <td>@loadoutsReport.PlayerLoadouts.Where(l => l.Summary.Details.Id == playerL).Select(l => l.Summary.Stats.Deaths).FirstOrDefault()</td>
-                <td>@loadoutsReport.PlayerLoadouts.Where(l => l.Summary.Details.Id == playerL).Select(l => l.Summary.Stats.KillDeathRatio).FirstOrDefault()</td>
-            }
-            <td>@loadoutsReport.PlayerLoadouts.Sum(l => l.Summary.Stats.Kills)</td>
-        </tr>
-
-        @foreach (var faction in loadoutsReport.ActiveFactionLoadouts)
-        {
-            <tr style="color: @GetFactionColorFromId(faction.FactionId)">
-
-                <td>Faction Total</td>
-
-                @foreach (var playerL in loadoutsReport.ActivePlayerLoadoutIds)
-                {
-                    <td>@loadoutsReport.HeadToHeadLoadouts.Where(h2h => h2h.AttackerLoadoutId == playerL && h2h.VictimFactionId == faction.FactionId).Sum(h2h => h2h.AttackerStats.Kills)</td>
-                    <td>@loadoutsReport.HeadToHeadLoadouts.Where(h2h => h2h.AttackerLoadoutId == playerL && h2h.VictimFactionId == faction.FactionId).Sum(h2h => h2h.AttackerStats.Deaths)</td>
-                    <td>@loadoutsReport.HeadToHeadLoadouts.Where(h2h => h2h.AttackerLoadoutId == playerL && h2h.VictimFactionId == faction.FactionId).Sum(h2h => h2h.AttackerStats.KillDeathRatio)</td>
-                }
-                <td>@loadoutsReport.HeadToHeadLoadouts.Where(h2h => h2h.VictimFactionId == faction.FactionId).Sum(h2h => h2h.AttackerStats.Kills)</td>
-            </tr>
-
-            @foreach (var enemyL in faction.Loadouts)
-            {
-                <tr style="color: @GetFactionColorFromId(faction.FactionId)">
-
-                    <td>@loadoutModels.Where(m => m.Id == enemyL).Select(m => m.CodeName).FirstOrDefault()</td>
-
-                    @foreach (var playerL in loadoutsReport.ActivePlayerLoadoutIds)
-                    {
-                        <td>@loadoutsReport.HeadToHeadLoadouts.Where(h2h => h2h.AttackerLoadoutId == playerL && h2h.VictimLoadoutId == enemyL).Select(h2h => h2h.AttackerStats.Kills).FirstOrDefault()</td>
-                        <td>@loadoutsReport.HeadToHeadLoadouts.Where(h2h => h2h.AttackerLoadoutId == playerL && h2h.VictimLoadoutId == enemyL).Select(h2h => h2h.AttackerStats.Deaths).FirstOrDefault()</td>
-                        <td>@loadoutsReport.HeadToHeadLoadouts.Where(h2h => h2h.AttackerLoadoutId == playerL && h2h.VictimLoadoutId == enemyL).Select(h2h => h2h.AttackerStats.KillDeathRatio).FirstOrDefault()</td>
-                    }
-                    <td>@loadoutsReport.HeadToHeadLoadouts.Where(h2h => h2h.VictimLoadoutId == enemyL).Sum(h2h => h2h.AttackerStats.Kills)</td>
-
-                </tr>
-            }
-        }*@
-
-                                        @*@foreach (var loadout in loadoutsSummary.LoadoutAggregates)
-        {
-            <tr style="color: @GetFactionColorFromId(loadout.FactionId)">
-
-                <td>@loadout.LoadoutName</td>
-
-                @foreach (var model in loadoutModels.Where(m => m.FactionId != stats.FactionId))
-                {
-                    <td style="color: @GetFactionColorFromId(model.FactionId);">@(loadout.LoadoutVsLoadoutAggregates.Where(l => l.VictimLoadoutId == model.Id).Select(l => l.AttackerDeathEventAggregate.KillDeathRatio).FirstOrDefault())</td>
-                }
-
-                <td>@loadout.LoadoutDeathEventAggregate.KillDeathRatio</td>
-
-
-            </tr>
-        }*@
-
-
-                                        @*@foreach (var loadout in loadoutsSummary.TopLoadoutsByKills)
-        {
-            <tr style="color: @GetFactionColorFromId(loadout.AttackerFactionId)">
-                <td>@loadout.AttackerLoadoutName</td>
-                <td>@loadout.VictimLoadoutName</td>
-                <td>@loadout.AttackerKills</td>
-                <td>@loadout.VictimKills</td>
-                <td>@loadout.AttackerKillDeathRatio</td>
-                <td>@loadout.AttackerHeadshotRatio</td>
-            </tr>
-        }*@
                                     </tbody>
                                 </table>
                             </div>
                         }
                     </div>
-
-                    @*<div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
-                        <h5 style="font-size: 1rem; margin-bottom: 0.25rem; background-color: ">Top Nemeses</h5>
-                        @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByDeaths.Any() == true && isLoadingHeadToHead != true)
-                        {
-
-                            <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
-                                <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important;">
-                                    <thead style="vertical-align: bottom; line-height: 0.5rem;">
-                                        <tr>
-                                            <th class="p-name" style="padding-bottom: 0.5rem;"></th>
-                                            <th style="padding-bottom: 0.5rem;">K</th>
-                                            <th style="padding-bottom: 0.5rem;">D</th>
-                                            <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem;">
-                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
-                                                <span>KDR</span>
-                                            </th>
-                                            <th class="stacked-label" title="Head-to-Head Headshot Ratio" style="padding-bottom: 0.5rem;">
-                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
-                                                <span>HSR</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @foreach (var player in headToHeadSummary.TopPlayersByDeaths)
-                                        {
-                                            <tr style="color: @GetFactionColorFromId(player.AttackerFactionId)">
-                                                <td>@player.AttackerName</td>
-                                                <td>@player.VictimKills</td>
-                                                <td>@player.AttackerKills</td>
-                                                <td>@player.VictimKillDeathRatio</td>
-                                                <td>@player.VictimHeadshotRatio</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                    </div>*@
                 </div>
             }
 
@@ -718,10 +589,8 @@ else
 
     PlayerHourlyHeadToHeadSummary headToHeadSummary;
 
-    PlayerHourlyLoadoutsSummary loadoutsSummary;
-    Loadout[] loadoutModels;
-
     PlayerLoadoutsReport loadoutsReport;
+    Loadout[] loadoutModels;
 
     int fetchTries = 0;
     bool isLoadingKillboard = false;
@@ -861,7 +730,6 @@ else
 
                 topWeaponsByKills = await weaponKillsTask;
                 topWeaponsByDeaths = await weaponDeathsTask;
-                //isLoadingWeapons = false;
                 StateHasChanged();
             }
             catch (Exception)
@@ -894,69 +762,17 @@ else
             /* Player Loadouts Breakdown */
             try
             {
-                //Task<IEnumerable<PlayerHourlyLoadoutsSummaryRow>> loadoutsTask = Http.GetJsonAsync<IEnumerable<PlayerHourlyLoadoutsSummaryRow>>($"api/PlayerHourlyLoadouts/loadouts/{playerId}");
-                //var loadouts = await loadoutsTask;
-
-                //foreach (var loadout in loadouts)
-                //{
-                //    Debug.WriteLine($"{loadout.AttackerLoadoutName} {loadout.AttackerKills}");
-                //}
-
-                //Task<PlayerHourlyLoadoutsSummary> loadoutsTask = Http.GetJsonAsync<PlayerHourlyLoadoutsSummary>($"api/PlayerHourlyLoadouts/loadouts1/{playerId}");
-                //loadoutsSummary = await loadoutsTask;
-
-
-                //Task<PlayerHourlyLoadoutsSummary> loadoutsTask = Http.GetJsonAsync<PlayerHourlyLoadoutsSummary>($"api/PlayerHourlyLoadouts/loadouts/{playerId}");
-                //loadoutsSummary = await loadoutsTask;
-                //Debug.WriteLine($"Loadouts Summary == null: {loadoutsSummary == null}");
-
-                loadoutsReport = await Http.GetJsonAsync<PlayerLoadoutsReport>($"api/PlayerHourlyLoadouts/h2h/{playerId}");
-
-                //Debug.WriteLine($"Loadouts Report: {loadoutsReport.PlayerLoadouts.Count()} Player Loadouts");
-                //Debug.WriteLine($"Loadouts Report: {loadoutsReport.PlayerLoadouts.Count()} Enemy Loadouts");
-
-                //Debug.WriteLine($"Loadouts Report == null: {loadoutsReport == null}");
-
-                //foreach (var row in loadoutsReport.PlayerLoadouts)
-                //{
-                //    Debug.WriteLine($"   {row.Details.Id}");
-                //}
-
-
-                //Debug.WriteLine($"Class Kills: {loadoutsSummary.TopLoadoutsByKills.Count()}");
-                //Debug.WriteLine($"Class Deaths: {loadoutsSummary.TopLoadoutsByDeaths.Count()}");
-
-                //Debug.WriteLine($"Player Loadouts Summary: {((loadoutsSummary.PlayerLoadouts != null) ? "not-null" : "null")}");
-                //Debug.WriteLine($"Player Loadouts Count: {((loadoutsSummary.PlayerLoadouts != null) ? loadoutsSummary.PlayerLoadouts.Count().ToString() : "null")}");
-
-                //var testList = new List<FactionLoadoutSummaryRow>();
-                //var test = new FactionLoadoutSummaryRow()
-                //{
-                //    FactionId = 1,
-                //    LoadoutId = 15,
-                //    Kills = 111,
-                //    Headshots = 44
-                //};
-
-                //testList.Add(test);
-
-                //loadoutsSummary.PlayerLoadouts = testList.ToArray();
-
+                var loadoutsTask = Http.GetJsonAsync<PlayerLoadoutsReport>($"api/PlayerHourlyLoadouts/h2h/{playerId}");
+                loadoutsReport = await loadoutsTask;
                 StateHasChanged();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Ignore
-                Debug.WriteLine($"Loadout request errored: {ex}");
             }
             finally
             {
-                //Debug.WriteLine($"Loadouts Summary: {loadoutsSummary.PlayerId}");
-                //Debug.WriteLine($"PlayerLoadouts: {loadoutsSummary.QueryNowUtc}");
-                //Debug.WriteLine($"Enemy Loadouts: {loadoutsSummary.QueryStartTime}");
-                //Debug.WriteLine($"Enemy Faction Loadouts: {loadoutsSummary.EnemyFactionLoadouts}");
-
                 isLoadingLoadouts = false;
             }
         }
