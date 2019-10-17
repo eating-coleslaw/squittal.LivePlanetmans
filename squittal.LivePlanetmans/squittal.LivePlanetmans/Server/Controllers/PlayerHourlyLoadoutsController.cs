@@ -1018,7 +1018,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     factionLoadoutsSummary.FactionLoadouts = factionLoadoutSummaries;
 
 
-                    /* Faction vs Player summaries */
+                    /* Faction vs Player Loadout summaries */
                     var factionVsPlayerLoadoutSummaries = new List<LoadoutSummary>();
                     foreach (var playerLoadoutId in activePlayerLoadouts)
                     {
@@ -1130,11 +1130,29 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                     if (groupedLoadouts.Any(grp => grp.AttackerLoadoutId == loadoutId))
                     {
-                        playerLoadoutSummary.Stats = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).Select(grp => grp.AttackerStats).FirstOrDefault();
+                        var targetRows = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).ToArray();
+                        playerLoadoutSummary.Stats = new DeathEventAggregate()
+                        {
+                            Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
+                            Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
+                            Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
+                            HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths)
+                        };
+
+                        //playerLoadoutSummary.Stats = groupedLoadouts.Where(grp => grp.AttackerLoadoutId == loadoutId).Select(grp => grp.AttackerStats).FirstOrDefault();
                     }
                     else if (groupedLoadouts.Any(grp => grp.VictimLoadoutId == loadoutId))
                     {
-                        playerLoadoutSummary.Stats = groupedLoadouts.Where(grp => grp.VictimLoadoutId == loadoutId).Select(grp => grp.AttackerStats).FirstOrDefault();
+                        var targetRows = groupedLoadouts.Where(grp => grp.VictimLoadoutId == loadoutId).ToArray();
+                        playerLoadoutSummary.Stats = new DeathEventAggregate()
+                        {
+                            Kills = targetRows.Sum(rows => rows.AttackerStats.Kills),
+                            Headshots = targetRows.Sum(rows => rows.AttackerStats.Headshots),
+                            Deaths = targetRows.Sum(rows => rows.AttackerStats.Deaths),
+                            HeadshotDeaths = targetRows.Sum(rows => rows.AttackerStats.HeadshotDeaths)
+                        };
+
+                        //playerLoadoutSummary.Stats = groupedLoadouts.Where(grp => grp.VictimLoadoutId == loadoutId).Select(grp => grp.AttackerStats).FirstOrDefault();
                     }
                     else
                     {
@@ -1157,10 +1175,14 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                 var playerStats = new DeathEventAggregate()
                 {
-                    Kills = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Kills),
-                    Headshots = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Headshots),
-                    Deaths = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Deaths),
-                    HeadshotDeaths = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.HeadshotDeaths)
+                    //Kills = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Kills),
+                    //Headshots = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Headshots),
+                    //Deaths = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.Deaths),
+                    //HeadshotDeaths = playerLoadouts.Where(pl => pl.Stats != null).Sum(pl => pl.Stats.HeadshotDeaths)
+                    Kills = playerLoadouts.Sum(pl => pl.Stats.Kills),
+                    Headshots = playerLoadouts.Sum(pl => pl.Stats.Headshots),
+                    Deaths = playerLoadouts.Sum(pl => pl.Stats.Deaths),
+                    HeadshotDeaths = playerLoadouts.Sum(pl => pl.Stats.HeadshotDeaths)
                 };
                 Debug.WriteLine($"========================================");
 
