@@ -38,6 +38,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
             return _loadouts.ToArray();
         }
 
+        /*
         [HttpGet("loadouts/{characterId}")]
         public async Task<ActionResult<PlayerHourlyLoadoutsSummary>> GetHourlyLoadoutsAsync(string characterId)
         {
@@ -195,7 +196,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     Debug.WriteLine($"________________________________");
 
                 }
-                */
+                
 
 
                 //var topByKills = allHeadToHeadPlayers
@@ -232,6 +233,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 };
             }
         }
+        */
+
 
         [HttpGet("h2h/{characterId}")]
         public async Task<ActionResult<PlayerLoadoutsReport>> GetHourlyLoadoutsHeadToHeadAsync(string characterId)
@@ -453,10 +456,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     PlayerFactionId = playerFactionId,
                     QueryStartTime = startTime,
                     QueryNowUtc = nowUtc,
-                    ActivePlayerLoadoutIds = activePlayerLoadouts,
-                    ActiveEnemyLoadoutIds = activeEnemyLoadouts,
-                    ActiveFactionLoadouts = activeFactionLoadouts,
-                    HeadToHeadLoadouts = groupedLoadouts,
 
                     PlayerLoadouts = playerLoadouts,
                     FactionLoadouts = allFactionsLoadoutSummaries,
@@ -465,7 +464,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
             }
         }
 
-
+        #region Active Loadout & Factions Helpers
         private IEnumerable<int> GetActivePlayerLoadouts(IEnumerable<LoadoutVsLoadoutSummaryRow> loadoutVsLoadoutRows, int playerFactionId)
         {
             var activePlayerAttackerLoadouts = GetActivePlayerAttackerLoadouts(loadoutVsLoadoutRows, playerFactionId);
@@ -556,7 +555,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     .ToList();
         }
 
-
         private IEnumerable<ActiveFactionLoadouts> GetActiveFactionLoadouts(IEnumerable<LoadoutVsLoadoutSummaryRow> loadoutVsLoadoutRows, IEnumerable<int> activeFactions)
         {
             var activeFactionLoadouts = new List<ActiveFactionLoadouts>();
@@ -586,7 +584,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
             return activeFactionLoadouts;
         }
+        #endregion
 
+        #region Loadout Stat Helpers
         private DeathEventAggregate GetStatsForEnemyLoadoutVsPlayerLoadout(IEnumerable<LoadoutVsLoadoutSummaryRow> groupedVsRows, int playerLoadoutId, int enemyLoadoutId)
         {
             if (groupedVsRows.Any(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimLoadoutId == enemyLoadoutId))
@@ -679,6 +679,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 HeadshotDeaths = loadoutSummaries.Sum(ls => ls.Stats.HeadshotDeaths)
             };
         }
+        #endregion
     }
 
 }
