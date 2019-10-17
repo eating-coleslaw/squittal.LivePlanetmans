@@ -19,14 +19,16 @@ namespace squittal.LivePlanetmans.Server.Controllers
         private readonly IDbContextHelper _dbContextHelper;
         private readonly IProfileService _profileService;
         private readonly ICharacterService _characterService;
+        private readonly IFactionService _factionService;
 
         private IEnumerable<Loadout> _loadouts;
 
-        public PlayerHourlyLoadoutsController(IDbContextHelper dbContextHelper, IProfileService profileService, ICharacterService characterService)
+        public PlayerHourlyLoadoutsController(IDbContextHelper dbContextHelper, IProfileService profileService, ICharacterService characterService, IFactionService factionService)
         {
             _dbContextHelper = dbContextHelper;
             _profileService = profileService;
             _characterService = characterService;
+            _factionService = factionService;
         }
 
         [HttpGet("models/loadouts")]
@@ -212,13 +214,17 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         factionVsPlayerLoadoutSummaries.Add(playerLoadoutSummary);
                     }
 
+                    var factionEntity = await _factionService.GetFactionAsync(factionId);
+                    var factionName = factionEntity.Name ?? string.Empty;
+
                     var factionLoadoutsSummary = new FactionLoadoutsSummary
                     {
                         Summary = new FactionSummary()
                         {
                             Details = new FactionDetails()
                             {
-                                Id = factionId
+                                Id = factionId,
+                                Name = factionName
                             },
                             Stats = GetSummedLoadoutSummaryStats(factionVsPlayerLoadoutSummaries)
                         },

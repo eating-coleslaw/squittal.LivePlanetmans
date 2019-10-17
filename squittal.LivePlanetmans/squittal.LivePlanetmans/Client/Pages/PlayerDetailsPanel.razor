@@ -182,7 +182,6 @@ else
 
                 @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.kills])
                 {
-                    @*<h5 style="font-size: 1rem; padding-left: 0.75rem;">Kills This Hour</h5>*@
                     @if (kills == null || isLoadingKillboard == true)
                     {
                         @*<p class="text-muted"><em>Loading killboard...</em></p>*@
@@ -277,10 +276,8 @@ else
 
                             <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
                                 <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 0px solid @GetFactionLightColorFromId(stats.FactionId);">
-                                    @*margin-left: 0.75rem;">*@
                                     <thead style="vertical-align: bottom;">
                                         <tr>
-                                            @*<th>Weapon ID</th>*@
                                             <th class="p-name"></th>
                                             <th>Kills</th>
                                             <th>HSR</th>
@@ -288,12 +285,10 @@ else
                                     </thead>
                                     @*</table>*@
 
-                                    @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
                                     <tbody style="background-color: var(--sq-bs-white-lit);">
                                         @foreach (var weapon in topWeaponsByKills)
                                         {
                                             <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
-                                                @*<td>@weapon.WeaponId</td>*@
                                                 <td>@weapon.WeaponName</td>
                                                 <td>@weapon.Kills</td>
                                                 <td>@weapon.HeadshotRatio</td>
@@ -312,23 +307,18 @@ else
 
                             <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
                                 <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 0px solid @GetFactionLightColorFromId(stats.FactionId);">
-                                    @*margin-left: 0.75rem;">*@
                                     <thead style="vertical-align: bottom;">
                                         <tr>
-                                            @*<th>Weapon ID</th>*@
                                             <th class="p-name"></th>
                                             <th>Deaths</th>
                                             <th>HSR</th>
                                         </tr>
                                     </thead>
-                                    @*</table>*@
 
-                                    @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
                                     <tbody style="background-color: var(--sq-bs-white-lit);">
                                         @foreach (var weapon in topWeaponsByDeaths)
                                         {
                                             <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
-                                                @*<td>@weapon.WeaponId</td>*@
                                                 <td>@weapon.WeaponName</td>
                                                 <td>@weapon.Kills</td>
                                                 <td>@weapon.HeadshotRatio</td>
@@ -352,10 +342,8 @@ else
 
                             <div style="max-height: calc(350px - 1.5rem); overflow: auto; padding: 0 0 0.5rem 0.5rem;">
                                 <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(stats.FactionId);">
-                                    @*margin-left: 0.75rem;">*@
                                     <thead style="vertical-align: bottom; line-height: 0.5rem;">
                                         <tr>
-                                            @*<th>Weapon ID</th>*@
                                             <th class="p-name" style="padding-bottom: 0.5rem;"></th>
                                             <th style="padding-bottom: 0.5rem;">K</th>
                                             <th style="padding-bottom: 0.5rem;">D</th>
@@ -369,14 +357,11 @@ else
                                             </th>
                                         </tr>
                                     </thead>
-                                    @*</table>*@
 
-                                    @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
                                     <tbody>
                                         @foreach (var player in headToHeadSummary.TopPlayersByKills)
                                         {
                                             <tr style="color: @GetFactionColorFromId(player.VictimFactionId)">
-                                                @*<td>@weapon.WeaponId</td>*@
                                                 <td>@player.VictimName</td>
                                                 <td>@player.AttackerKills</td>
                                                 <td>@player.VictimKills</td>
@@ -397,10 +382,8 @@ else
 
                             <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
                                 <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important;">
-                                    @*margin-left: 0.75rem;">*@
                                     <thead style="vertical-align: bottom; line-height: 0.5rem;">
                                         <tr>
-                                            @*<th>Weapon ID</th>*@
                                             <th class="p-name" style="padding-bottom: 0.5rem;"></th>
                                             <th style="padding-bottom: 0.5rem;">K</th>
                                             <th style="padding-bottom: 0.5rem;">D</th>
@@ -414,14 +397,11 @@ else
                                             </th>
                                         </tr>
                                     </thead>
-                                    @*</table>*@
 
-                                    @*<table class="table-responseive-sm" style="width: 100%; font-size: 0.85rem !important; margin-left: 0.75rem;">*@
                                     <tbody>
                                         @foreach (var player in headToHeadSummary.TopPlayersByDeaths)
                                         {
                                             <tr style="color: @GetFactionColorFromId(player.AttackerFactionId)">
-                                                @*<td>@weapon.WeaponId</td>*@
                                                 <td>@player.AttackerName</td>
                                                 <td>@player.VictimKills</td>
                                                 <td>@player.AttackerKills</td>
@@ -443,8 +423,8 @@ else
             *@
             @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.loadouts] && isLoadingLoadouts != true)
             {
-                <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">  @*max-width: 702px;">*@
-                    <div class="col-sm-12" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); margin-right: 0.3125rem; padding: 0;"> @*flex-basis: calc(50% - 0.3125rem);*@
+                <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">
+                    <div class="col-sm-12" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); margin-right: 0.3125rem; padding: 0;">
                         <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">Hourly Loadout Summary</h5>
                         @if (isLoadingLoadouts != true && loadoutsReport != null) 
                         {
@@ -489,18 +469,18 @@ else
 
                                         @foreach (var faction in loadoutsReport.FactionLoadouts)
                                         {
-                                            <tr style="color: @GetFactionColorFromId(faction.Summary.Details.Id); font-weight: 500;">
+                                            <tr style="color: @GetFactionColorFromId(faction.Summary.Details.Id); font-weight: 500; border-bottom: 1px solid @GetFactionColorFromId(faction.Summary.Details.Id); background-color: transparent;">
 
-                                                <td>Faction Total</td>
+                                                <td style="padding-top: 0.75rem;">@faction.Summary.Details.Name</td>
 
                                                 @foreach (var playerLoadout in faction.PlayerLoadouts)
                                                 {
-                                                    <td>@playerLoadout.Stats.Kills</td>
-                                                    <td>@playerLoadout.Stats.Deaths</td>
-                                                    <td>@playerLoadout.Stats.KillDeathRatio</td>
+                                                    <td style="padding-top: 0.75rem;">@playerLoadout.Stats.Kills</td>
+                                                    <td style="padding-top: 0.75rem;">@playerLoadout.Stats.Deaths</td>
+                                                    <td style="padding-top: 0.75rem;">@playerLoadout.Stats.KillDeathRatio</td>
                                                 }
 
-                                                <td>@faction.Summary.Stats.Kills</td>
+                                                <td style="padding-top: 0.75rem;">@faction.Summary.Stats.Kills</td>
                                             </tr>
 
                                             @foreach (var factionLoadout in faction.FactionLoadouts)
@@ -532,7 +512,7 @@ else
         </div>
 
         <div id="details-footer" style="font-family: 'Roboto Mono'; position: absolute; bottom: 0.5rem; height: 1rem; line-height: 1rem;">
-            <div> @*style="margin: 0.3125rem 0rem;">*@
+            <div>
                 <a href="@GetUrlFromCharacterId(player.Id)" title="Open Voidwell player profile" class="text-muted" style="font-size: 0.8rem; padding-left: 0.8rem; font-weight: 400;" target="_blank"> @*margin-top: 0.1rem; >*@
                     @player.Id
                     <span class="h6 oi oi-external-link" style="font-size: 60%; opacity: 0.5;"></span>
