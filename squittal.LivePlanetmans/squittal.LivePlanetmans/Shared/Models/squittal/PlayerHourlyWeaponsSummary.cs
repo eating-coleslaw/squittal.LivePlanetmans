@@ -7,6 +7,7 @@ namespace squittal.LivePlanetmans.Shared.Models
     public class PlayerHourlyWeaponsSummary
     {
         public string PlayerId { get; set; }
+        public int PlayerFactionId { get; set; }
         public DateTime QueryStartTime { get; set; }
         public DateTime QueryNowUtc { get; set; }
 
