@@ -160,9 +160,9 @@ else
                 {
                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; border-top-left-radius: 0.2rem; border-bottom: 2px solid @GetFactionColorFromId(stats.FactionId)80;">
                         <button title="Open killboard view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.kills) padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.kills))">Kills this Hour</button>
-                        <button title="Open weapons view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.weapons)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.weapons))">Weapons Breakdown</button>
+                        <button title="Open weapons view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.weapons)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.weapons))">Weapons</button>
                         <button title="Open player head-to-head view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.players)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.players))">Head-to-Head</button>
-                        <button title="Open player loadouts view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.loadouts)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.loadouts))">Class Breakdown</button>
+                        <button title="Open player loadouts view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.loadouts)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.loadouts))">Classes</button>
                     </div>
                 }
 
