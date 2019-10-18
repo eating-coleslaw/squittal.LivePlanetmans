@@ -1,0 +1,234 @@
+﻿@*<h3>PlayerWeaponsDetailsView</h3>*@
+
+@using squittal.LivePlanetmans.Shared.Models
+@inject HttpClient Http
+
+@if ((topWeaponsByKills == null && topWeaponsByDeaths == null) || isLoadingWeapons == true)
+{
+    @if (isSelectedView == true)
+    {
+        <SpinnerEllipsis />
+    }
+}
+else if (isSelectedView == true)
+{
+    <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">
+        <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(playerFactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
+            <h5 style="font-size: 1rem; margin-bottom: 0.25rem">Top Weapons By Kills</h5>
+            @if (topWeaponsByKills != null && isLoadingWeapons != true)
+            {
+
+                <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
+                    <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(playerFactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 0px solid @GetFactionLightColorFromId(playerFactionId);">
+                        <thead style="vertical-align: bottom;">
+                            <tr>
+                                <th class="p-name"></th>
+                                <th>Kills</th>
+                                <th>HSR</th>
+                            </tr>
+                        </thead>
+                        @*</table>*@
+
+                        <tbody style="background-color: var(--sq-bs-white-lit);">
+                            @foreach (var weapon in topWeaponsByKills)
+                            {
+                                <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
+                                    <td>@weapon.WeaponName</td>
+                                    <td>@weapon.Kills</td>
+                                    <td>@weapon.HeadshotRatio</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
+        <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(playerFactionId);">
+            <h5 style="font-size: 1rem; margin-bottom: 0.25rem">Top Weapons By Deaths</h5>
+            @if (topWeaponsByDeaths != null && isLoadingWeapons != true)
+            {
+
+                <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
+                    <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(playerFactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 0px solid @GetFactionLightColorFromId(playerFactionId);">
+                        <thead style="vertical-align: bottom;">
+                            <tr>
+                                <th class="p-name"></th>
+                                <th>Deaths</th>
+                                <th>HSR</th>
+                            </tr>
+                        </thead>
+
+                        <tbody style="background-color: var(--sq-bs-white-lit);">
+                            @foreach (var weapon in topWeaponsByDeaths)
+                            {
+                                <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
+                                    <td>@weapon.WeaponName</td>
+                                    <td>@weapon.Kills</td>
+                                    <td>@weapon.HeadshotRatio</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string playerId { get; set; }
+
+    [Parameter]
+    public int playerFactionId { get; set; } = 4;
+
+    [Parameter]
+    public bool isSelectedView { get; set; }
+
+    bool isLoadingWeapons = false;
+
+    HourlyWeaponSummaryRow[] topWeaponsByKills;
+    HourlyWeaponSummaryRow[] topWeaponsByDeaths;
+
+
+    string renderedPlayerId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await OnPlayerIdChange();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (playerId != renderedPlayerId && !string.IsNullOrEmpty(playerId))
+        {
+            renderedPlayerId = playerId;
+            await OnPlayerIdChange();
+        }
+    }
+
+    private async Task OnPlayerIdChange()
+    {
+        isLoadingWeapons = true;
+
+        try
+        {
+            Task<HourlyWeaponSummaryRow[]> weaponKillsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/kills/{playerId}");
+            Task<HourlyWeaponSummaryRow[]> weaponDeathsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/deaths/{playerId}");
+
+            topWeaponsByKills = await weaponKillsTask;
+            topWeaponsByDeaths = await weaponDeathsTask;
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            //ignore
+        }
+        finally
+        {
+            isLoadingWeapons = false;
+        }
+    }
+
+    string GetFactionColorFromId(int? factionId)
+    {
+        string color = "#27273A"; // 2F2F2F";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "#652fdc"; // 6A4CE0";
+                break;
+
+            //NC
+            case 2:
+                color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
+                break;
+
+            //TR
+            case 3:
+                color = "#e04c70"; // FF6C70";
+                break;
+        }
+
+        return color;
+    }
+
+    string GetFactionLightColorFromId(int? factionId)
+    {
+        string color = "var(--sq-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "var(--sq-ps2-vs-primary-light)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                color = "var(--sq-ps2-nc-primary-light)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                color = "var(--sq-ps2-tr-primary-light)"; //#FFD2D3";
+                break;
+        }
+
+        return color;
+    }
+
+    string GetFactionLightAlphaColorFromId(int? factionId)
+    {
+        string color = "var(--sq-ps2-ns-primary-light-alpha)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "var(--sq-ps2-vs-primary-light-alpha)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                color = "var(--sq-ps2-nc-primary-light-alpha)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                color = "var(--sq-ps2-tr-primary-light-alpha)"; //#FFD2D3";
+                break;
+        }
+
+        return color;
+    }
+
+    string GetFactionClassFromId(int? factionId)
+    {
+        string cssClass = "ns"; //table-striped-striped var(--sqp-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                cssClass = "vs"; // var(--sqp-ps2-vs-primary-light)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                cssClass = "nc"; // var(--sqp-ps2-nc-primary-light)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                cssClass = "tr"; // var(--sqp-ps2-tr-primary-light)"; //#FFD2D3";
+                break;
+        }
+
+        return cssClass;
+    }
+
+}
