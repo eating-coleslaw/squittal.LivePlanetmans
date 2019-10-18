@@ -168,7 +168,7 @@ else
                 }
 
                 @if ((view == viewTranslator[PlayerDetailsView.kills] && (isLoadingKillboard == true || kills == null))
-                         || (view == viewTranslator[PlayerDetailsView.players] && (isLoadingHeadToHead == true || headToHeadSummary == null)))
+                        || (view == viewTranslator[PlayerDetailsView.players] && (isLoadingHeadToHead == true || headToHeadSummary == null)))
                 {
                     <SpinnerEllipsis />
                 }
@@ -187,94 +187,94 @@ else
                                 <tbody style="font-size: small;">
                                     @foreach (var kill in kills)
                                     {
-                                    <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; border-top: @GetKillboardBorderStyle(kill.VictimId);">
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem; border: inherit;">
-                                            @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
-                                        </td>
+                                        <tr style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; border-top: @GetKillboardBorderStyle(kill.VictimId);">
+                                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem; border: inherit;">
+                                                @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
+                                            </td>
 
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
-                                            @if (kill.VictimId == playerId)
-                                            {
-                                                @loadoutModels.Where(m => m.Id == (int)kill.AttackerLoadoutId).Select(m => m.CodeName).FirstOrDefault()
-                                            }
-                                            else
-                                            {
-                                                @loadoutModels.Where(m => m.Id == (int)kill.VictimLoadoutId).Select(m => m.CodeName).FirstOrDefault()
-                                            }
-                                        </td>
+                                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
+                                                @if (kill.VictimId == playerId)
+                                                {
+                                                    @loadoutModels.Where(m => m.Id == (int)kill.AttackerLoadoutId).Select(m => m.CodeName).FirstOrDefault()
+                                                }
+                                                else
+                                                {
+                                                    @loadoutModels.Where(m => m.Id == (int)kill.VictimLoadoutId).Select(m => m.CodeName).FirstOrDefault()
+                                                }
+                                            </td>
 
-                                        <td style="padding: 0.1rem 0.3125rem 0.1rem 0; max-width: 55px; width: 1rem; border: inherit;">
-                                            @if (kill.VictimId == playerId)
-                                            {
-                                                @((string.IsNullOrWhiteSpace(kill.AttackerOutfitAlias)) ? "" : $"[{kill.AttackerOutfitAlias}]")
-                                            }
-                                            else
-                                            {
-                                                @((string.IsNullOrWhiteSpace(kill.VictimOutfitAlias)) ? "" : $"[{kill.VictimOutfitAlias}]")
-                                            }
-                                        </td>
+                                            <td style="padding: 0.1rem 0.3125rem 0.1rem 0; max-width: 55px; width: 1rem; border: inherit;">
+                                                @if (kill.VictimId == playerId)
+                                                {
+                                                    @((string.IsNullOrWhiteSpace(kill.AttackerOutfitAlias)) ? "" : $"[{kill.AttackerOutfitAlias}]")
+                                                }
+                                                else
+                                                {
+                                                    @((string.IsNullOrWhiteSpace(kill.VictimOutfitAlias)) ? "" : $"[{kill.VictimOutfitAlias}]")
+                                                }
+                                            </td>
 
-                                        <td style="padding: 0.1rem 0.75rem 0.1rem 0; border: inherit;">
-                                            @if (kill.VictimId == playerId)
-                                            {
-                                                <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))">
-                                                    <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis;">@kill.AttackerName</div>
-                                                    <div style="display: inline-block; vertical-align: super;">
-                                                        <sup>
-                                                            @(kill.AttackerBattleRank)
-                                                            @if (stats.PrestigeLevel != 0)
-                                                            {
-                                                                <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
-                                                            }
-                                                        </sup>
-                                                    </div>
-                                                    @*</a>*@
-                                                </button>
-                                            }
-                                            else
-                                            {
-                                                <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;" @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))">
-                                                    <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>
-                                                    <div style="display: inline-block;">
-                                                        <sup>
-                                                            @(kill.VictimBattleRank)
-                                                            @if (kill.VictimPrestigeLevel != 0)
-                                                            {
-                                                                <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
-                                                            }
-                                                        </sup>
-                                                    </div>
-                                                    @*</a>*@
-                                                </button>
-                                            }
-                                        </td>
+                                            <td style="padding: 0.1rem 0.75rem 0.1rem 0; border: inherit;">
+                                                @if (kill.VictimId == playerId)
+                                                {
+                                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))">
+                                                        <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis;">@kill.AttackerName</div>
+                                                        <div style="display: inline-block; vertical-align: super;">
+                                                            <sup>
+                                                                @(kill.AttackerBattleRank)
+                                                                @if (stats.PrestigeLevel != 0)
+                                                                {
+                                                                    <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
+                                                                }
+                                                            </sup>
+                                                        </div>
+                                                        @*</a>*@
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;" @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))">
+                                                        <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>
+                                                        <div style="display: inline-block;">
+                                                            <sup>
+                                                                @(kill.VictimBattleRank)
+                                                                @if (kill.VictimPrestigeLevel != 0)
+                                                                {
+                                                                    <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
+                                                                }
+                                                            </sup>
+                                                        </div>
+                                                        @*</a>*@
+                                                    </button>
+                                                }
+                                            </td>
 
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
-                                            @if (kill.IsHeadshot == true)
-                                            {
-                                                <span class="oi small oi-target" aria-hidden="true" style="padding-left: 0.3125rem; padding-right: 0.3125rem;"></span>
-                                            }
-                                        </td>
+                                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
+                                                @if (kill.IsHeadshot == true)
+                                                {
+                                                    <span class="oi small oi-target" aria-hidden="true" style="padding-left: 0.3125rem; padding-right: 0.3125rem;"></span>
+                                                }
+                                            </td>
 
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
-                                            @kill.AttackerWeaponName
-                                        </td>
+                                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
+                                                @kill.AttackerWeaponName
+                                            </td>
 
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
-                                            @if (kill.VictimId == playerId)
-                                            {
-                                                @loadoutModels.Where(m => m.Id == (int)kill.VictimLoadoutId).Select(m => m.CodeName).FirstOrDefault()
-                                            }
-                                            else
-                                            {
-                                                @loadoutModels.Where(m => m.Id == (int)kill.AttackerLoadoutId).Select(m => m.CodeName).FirstOrDefault()
-                                            }
-                                        </td>
+                                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">
+                                                @if (kill.VictimId == playerId)
+                                                {
+                                                    @loadoutModels.Where(m => m.Id == (int)kill.VictimLoadoutId).Select(m => m.CodeName).FirstOrDefault()
+                                                }
+                                                else
+                                                {
+                                                    @loadoutModels.Where(m => m.Id == (int)kill.AttackerLoadoutId).Select(m => m.CodeName).FirstOrDefault()
+                                                }
+                                            </td>
 
-                                        <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
-                                            @kill.ZoneName
-                                        </td>
-                                    </tr>
+                                            <td style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">
+                                                @kill.ZoneName
+                                            </td>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>
@@ -287,8 +287,14 @@ else
 
             @if (stats != null)
             {
-                <PlayerWeaponsDetailsView playerId=@playerId playerFactionId=@stats.FactionId isSelectedView=@isSelectedViewWeapons/>
+                <PlayerWeaponsDetailsView playerId=@playerId playerFactionId=@stats.FactionId isSelectedView=@isSelectedViewWeapons />
             }
+
+            @if (stats != null)
+            {
+                <PlayerHeadToHeadDetailsView playerId=@playerId playerFactionId=@stats.FactionId isSelectedView=@isSelectedViewHeadToHead />
+            }
+
 
             @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.players] && isLoadingHeadToHead != true)
             {
@@ -376,7 +382,7 @@ else
             }
 
 
-            <PlayerLoadoutsDetailsView  playerId=@playerId isSelectedView=@isSelectedViewLoadouts/> @*(!string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.loadouts])/>*@
+            <PlayerLoadoutsDetailsView playerId=@playerId isSelectedView=@isSelectedViewLoadouts /> @*(!string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.loadouts])/>*@
 
         </div>
 
