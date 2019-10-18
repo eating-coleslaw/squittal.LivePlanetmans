@@ -1,0 +1,268 @@
+﻿@using squittal.LivePlanetmans.Shared.Models
+@inject HttpClient Http
+
+@if (loadoutsReport == null || isLoadingLoadouts == true)
+{
+    @if (isSelectedView == true)
+    {
+        <SpinnerEllipsis />
+    }
+}
+else if (isSelectedView == true)
+{
+    <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">
+        <div class="col-sm-12" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(loadoutsReport.PlayerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(loadoutsReport.PlayerFactionId); margin-right: 0.3125rem; padding: 0;">
+            <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">Hourly Loadout Summary</h5>
+            @if (isLoadingLoadouts != true && loadoutsReport != null)
+            {
+
+                <div style="max-height: calc(350px - 1.5rem); overflow: auto; padding: 0 0 0.5rem 0.5rem;">
+                    <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(loadoutsReport.PlayerFactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(loadoutsReport.PlayerFactionId);">
+                        <thead style="vertical-align: bottom; line-height: 0.5rem;">
+                            <tr>
+                                <th class="p-name" style="padding-bottom: 0.5rem;"></th>
+
+                                @foreach (var loadout in loadoutsReport.PlayerLoadouts)
+                                {
+                                    <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem; color: @GetFactionColorFromId(loadout.Details.FactionId);">
+                                        <span class="small" style="position: initial; margin-bottom: 0.1rem;">@loadout.Details.Name</span>
+                                        <span>Kills</span>
+                                    </th>
+                                    <th style="padding-bottom: 0.5rem;">D</th>
+                                    <th style="padding-bottom: 0.5rem;">KDR</th>
+                                }
+
+                                <th class="stacked-label" style="padding-bottom: 0.5rem;">
+                                    <span class="small" style="position: initial; margin-bottom: 0.1rem;">Total</span>
+                                    <span>Kills</span>
+                                </th>
+                                <th style="padding-bottom: 0.5rem;">D</th>
+                                <th style="padding-bottom: 0.5rem;">KDR</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr style="color: @GetFactionColorFromId(loadoutsReport.PlayerFactionId)">
+                                <td>Player Total</td>
+
+                                @foreach (var loadout in loadoutsReport.PlayerLoadouts)
+                                {
+                                    <td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">@loadout.Stats.Kills</td>
+                                    <td>@loadout.Stats.Deaths</td>
+                                    <td>@loadout.Stats.KillDeathRatio</td>
+                                }
+
+                                <td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId)">@loadoutsReport.PlayerStats.Kills</td>
+                                <td>@loadoutsReport.PlayerStats.Deaths</td>
+                                <td>@loadoutsReport.PlayerStats.KillDeathRatio</td>
+                            </tr>
+
+                            @foreach (var faction in loadoutsReport.FactionLoadouts)
+                            {
+                                <tr style="color: @GetFactionColorFromId(faction.Summary.Details.Id); font-weight: 500; border-bottom: 1px solid @GetFactionColorFromId(faction.Summary.Details.Id); background-color: transparent;">
+
+                                    <td style="padding-top: 0.75rem;">@faction.Summary.Details.Name</td>
+
+                                    @foreach (var playerLoadout in faction.PlayerLoadouts)
+                                    {
+                                        <td style="padding-top: 0.75rem; border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">@playerLoadout.Stats.Kills</td>
+                                        <td style="padding-top: 0.75rem;">@playerLoadout.Stats.Deaths</td>
+                                        <td style="padding-top: 0.75rem;">@playerLoadout.Stats.KillDeathRatio</td>
+                                    }
+
+                                    <td style="padding-top: 0.75rem; border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">@faction.Summary.Stats.Kills</td>
+                                    <td style="padding-top: 0.75rem;">@faction.Summary.Stats.Deaths</td>
+                                    <td style="padding-top: 0.75rem;">@faction.Summary.Stats.KillDeathRatio</td>
+                                </tr>
+
+                                @foreach (var factionLoadout in faction.FactionLoadouts)
+                                {
+                                    <tr style="color: @GetFactionColorFromId(faction.Summary.Details.Id)">
+
+                                        <td>@factionLoadout.Summary.Details.Name</td>
+
+                                        @foreach (var playerLoadout in factionLoadout.PlayerLoadouts)
+                                        {
+                                            <td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">@playerLoadout.Stats.Kills</td>
+                                            <td>@playerLoadout.Stats.Deaths</td>
+                                            <td>@playerLoadout.Stats.KillDeathRatio</td>
+                                        }
+
+                                        <td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">@factionLoadout.Summary.Stats.Kills</td>
+                                        <td>@factionLoadout.Summary.Stats.Deaths</td>
+                                        <td>@factionLoadout.Summary.Stats.KillDeathRatio</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public string playerId { get; set; }
+
+    [Parameter]
+    public bool isSelectedView { get; set; }
+
+    PlayerLoadoutsReport loadoutsReport;
+
+    bool isLoadingLoadouts = false;
+
+    Loadout[] loadoutModels;
+
+    string renderedPlayerId;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (loadoutModels == null || loadoutModels.Count() == 0)
+        {
+            loadoutModels = await Http.GetJsonAsync<Loadout[]>($"api/PlayerHourlyLoadouts/models/loadouts");
+        }
+        await OnPlayerIdChange();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (playerId != renderedPlayerId && !string.IsNullOrEmpty(playerId))
+        {
+            renderedPlayerId = playerId;
+            await OnPlayerIdChange();
+        }
+    }
+
+    private async Task OnPlayerIdChange()
+    {
+        if (!string.IsNullOrWhiteSpace(playerId) && isLoadingLoadouts != true)
+        {
+            isLoadingLoadouts = true;
+
+            try
+            {
+                var loadoutsTask = Http.GetJsonAsync<PlayerLoadoutsReport>($"api/PlayerHourlyLoadouts/h2h/{playerId}");
+                loadoutsReport = await loadoutsTask;
+                StateHasChanged();
+
+            }
+            catch (Exception)
+            {
+                //Ignore
+            }
+            finally
+            {
+                isLoadingLoadouts = false;
+            }
+        }
+    }
+
+    string GetFactionColorFromId(int? factionId)
+    {
+        string color = "#27273A"; // 2F2F2F";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "#652fdc"; // 6A4CE0";
+                break;
+
+            //NC
+            case 2:
+                color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
+                break;
+
+            //TR
+            case 3:
+                color = "#e04c70"; // FF6C70";
+                break;
+        }
+
+        return color;
+    }
+
+    string GetFactionLightColorFromId(int? factionId)
+    {
+        string color = "var(--sq-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "var(--sq-ps2-vs-primary-light)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                color = "var(--sq-ps2-nc-primary-light)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                color = "var(--sq-ps2-tr-primary-light)"; //#FFD2D3";
+                break;
+        }
+
+        return color;
+    }
+
+    string GetFactionLightAlphaColorFromId(int? factionId)
+    {
+        string color = "var(--sq-ps2-ns-primary-light-alpha)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "var(--sq-ps2-vs-primary-light-alpha)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                color = "var(--sq-ps2-nc-primary-light-alpha)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                color = "var(--sq-ps2-tr-primary-light-alpha)"; //#FFD2D3";
+                break;
+        }
+
+        return color;
+    }
+
+    string GetFactionClassFromId(int? factionId)
+    {
+        string cssClass = "ns"; //table-striped-striped var(--sqp-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                cssClass = "vs"; // var(--sqp-ps2-vs-primary-light)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                cssClass = "nc"; // var(--sqp-ps2-nc-primary-light)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                cssClass = "tr"; // var(--sqp-ps2-tr-primary-light)"; //#FFD2D3";
+                break;
+        }
+
+        return cssClass;
+    }
+
+
+
+}
