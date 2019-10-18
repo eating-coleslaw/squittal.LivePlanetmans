@@ -66,7 +66,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     where death.Timestamp >= startTime
                        && (death.AttackerCharacterId == characterId
                             || death.CharacterId == characterId)
-                       && death.DeathEventType == DeathEventType.Kill
+                       //&& death.DeathEventType == DeathEventType.Kill
 
                     join loadout in dbContext.Loadouts
                       on death.CharacterLoadoutId equals loadout.Id into victimLoadoutsQ
@@ -109,7 +109,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                             Deaths = (from kill in dbContext.Deaths
                                       where kill.CharacterId == characterId
-                                         && kill.DeathEventType == DeathEventType.Kill
+                                         //&& kill.DeathEventType == DeathEventType.Kill
                                          && kill.CharacterLoadoutId == attackerLoadouts.Id
                                          && kill.AttackerLoadoutId == victimLoadouts.Id
                                          && kill.Timestamp >= startTime
@@ -117,7 +117,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                             HeadshotDeaths = (from kill in dbContext.Deaths
                                               where kill.CharacterId == characterId
-                                                 && kill.DeathEventType == DeathEventType.Kill
+                                                 //&& kill.DeathEventType == DeathEventType.Kill
                                                  && kill.CharacterLoadoutId == attackerLoadouts.Id
                                                  && kill.AttackerLoadoutId == victimLoadouts.Id
                                                  && kill.Timestamp >= startTime
