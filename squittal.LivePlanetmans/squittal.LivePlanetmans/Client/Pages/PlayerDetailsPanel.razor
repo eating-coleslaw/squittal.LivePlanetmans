@@ -167,8 +167,7 @@ else
                     </div>
                 }
 
-                @if ((view == viewTranslator[PlayerDetailsView.kills] && (isLoadingKillboard == true || kills == null))
-                        || (view == viewTranslator[PlayerDetailsView.players] && (isLoadingHeadToHead == true || headToHeadSummary == null)))
+                @if (view == viewTranslator[PlayerDetailsView.kills] && (isLoadingKillboard == true || kills == null))
                 {
                     <SpinnerEllipsis />
                 }
@@ -292,95 +291,8 @@ else
 
             @if (stats != null)
             {
-                <PlayerHeadToHeadDetailsView playerId=@playerId playerFactionId=@stats.FactionId isSelectedView=@isSelectedViewHeadToHead />
+                <PlayerHeadToHeadDetailsView playerId=@playerId isSelectedView=@isSelectedViewHeadToHead />
             }
-
-
-            @if (stats != null && !string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.players] && isLoadingHeadToHead != true)
-            {
-                <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">
-                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem; padding: 0;">
-                        <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">Top Victims</h5>
-                        @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByKills.Any() == true && isLoadingHeadToHead != true)
-                        {
-
-                            <div style="max-height: calc(350px - 1.5rem); overflow: auto; padding: 0 0 0.5rem 0.5rem;">
-                                <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(stats.FactionId);">
-                                    <thead style="vertical-align: bottom; line-height: 0.5rem;">
-                                        <tr>
-                                            <th class="p-name" style="padding-bottom: 0.5rem;"></th>
-                                            <th style="padding-bottom: 0.5rem;">K</th>
-                                            <th style="padding-bottom: 0.5rem;">D</th>
-                                            <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem;">
-                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
-                                                <span>KDR</span>
-                                            </th>
-                                            <th class="stacked-label" title="Head-to-Head Headshot Ratio" style="padding-bottom: 0.5rem;">
-                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
-                                                <span>HSR</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @foreach (var player in headToHeadSummary.TopPlayersByKills)
-                                        {
-                                            <tr style="color: @GetFactionColorFromId(player.VictimFactionId)">
-                                                <td>@player.VictimName</td>
-                                                <td>@player.AttackerKills</td>
-                                                <td>@player.VictimKills</td>
-                                                <td>@player.AttackerKillDeathRatio</td>
-                                                <td>@player.AttackerHeadshotRatio</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                    </div>
-
-                    <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
-                        <h5 style="font-size: 1rem; margin-bottom: 0.25rem;">Top Nemeses</h5>
-                        @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByDeaths.Any() == true && isLoadingHeadToHead != true)
-                        {
-
-                            <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
-                                <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(stats.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important;">
-                                    <thead style="vertical-align: bottom; line-height: 0.5rem;">
-                                        <tr>
-                                            <th class="p-name" style="padding-bottom: 0.5rem;"></th>
-                                            <th style="padding-bottom: 0.5rem;">K</th>
-                                            <th style="padding-bottom: 0.5rem;">D</th>
-                                            <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem;">
-                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
-                                                <span>KDR</span>
-                                            </th>
-                                            <th class="stacked-label" title="Head-to-Head Headshot Ratio" style="padding-bottom: 0.5rem;">
-                                                <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
-                                                <span>HSR</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @foreach (var player in headToHeadSummary.TopPlayersByDeaths)
-                                        {
-                                            <tr style="color: @GetFactionColorFromId(player.AttackerFactionId)">
-                                                <td>@player.AttackerName</td>
-                                                <td>@player.VictimKills</td>
-                                                <td>@player.AttackerKills</td>
-                                                <td>@player.VictimKillDeathRatio</td>
-                                                <td>@player.VictimHeadshotRatio</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
-
 
             <PlayerLoadoutsDetailsView playerId=@playerId isSelectedView=@isSelectedViewLoadouts /> @*(!string.IsNullOrWhiteSpace(view) && view == viewTranslator[PlayerDetailsView.loadouts])/>*@
 
@@ -404,15 +316,12 @@ else
 
     PlayerKillboardItem[] kills;
 
-    PlayerHourlyHeadToHeadSummary headToHeadSummary;
-
     Loadout[] loadoutModels;
 
     int fetchTries = 0;
     bool isLoadingKillboard = false;
     bool isLoadingCharacter = false;
     bool isLoadingStats = false;
-    bool isLoadingHeadToHead = false;
 
     bool isSelectedViewKillboard = false;
     bool isSelectedViewWeapons = false;
@@ -495,12 +404,6 @@ else
         if (!string.IsNullOrWhiteSpace(playerId) && isLoadingKillboard != true)
         {
             isLoadingKillboard = true;
-            isLoadingHeadToHead = true;
-
-            //var oldPlayer = player;
-            //var oldKills = kills;
-            //var oldStats = stats;
-
 
             /* DETAILS & KILLBOARD */
             try
@@ -509,51 +412,22 @@ else
                 Task<PlayerHourlyStatsData> statsTask = Http.GetJsonAsync<PlayerHourlyStatsData>($"api/PlayerDetails/stats/{playerId}");
                 Task<PlayerKillboardItem[]> killsTask = Http.GetJsonAsync<PlayerKillboardItem[]>($"api/PlayerDetails/kills/{playerId}");
 
-                //Task<HourlyWeaponSummaryRow[]> weaponKillsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weaponKills/{playerId}");
-
                 player = await playerTask;
-                //isLoadingCharacter = false;
                 StateHasChanged();
 
                 kills = await killsTask;
-                //isLoadingKillboard = false;
                 StateHasChanged();
 
                 stats = await statsTask;
-                //isLoadingStats = false;
                 StateHasChanged();
-
-                //topWeaponsByKills = await weaponKillsTask;
-                //isLoadingWeapons = false;
-                //StateHasChanged();
             }
             catch (Exception)
             {
                 //Ignore
-                //player = oldPlayer;
-                //kills = oldKills;
-                //stats = oldStats;
             }
             finally
             {
                 isLoadingKillboard = false;
-            }
-
-            /* Player Head-To-Head */
-            try
-            {
-                Task<PlayerHourlyHeadToHeadSummary> headToHeadTask = Http.GetJsonAsync<PlayerHourlyHeadToHeadSummary>($"api/PlayerHourlyHeadToHead/players/{playerId}");
-                headToHeadSummary = await headToHeadTask;
-                StateHasChanged();
-
-            }
-            catch (Exception)
-            {
-                //Ignore
-            }
-            finally
-            {
-                isLoadingHeadToHead = false;
             }
         }
     }

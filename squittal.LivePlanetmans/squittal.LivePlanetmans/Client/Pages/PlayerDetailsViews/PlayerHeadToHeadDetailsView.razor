@@ -11,13 +11,13 @@
 else if (isSelectedView == true)
 {
     <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">
-        <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(playerFactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem; padding: 0;">
+        <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(headToHeadSummary.PlayerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(headToHeadSummary.PlayerFactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem; padding: 0;">
             <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">Top Victims</h5>
             @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByKills.Any() == true && isLoadingHeadToHead != true)
             {
 
                 <div style="max-height: calc(350px - 1.5rem); overflow: auto; padding: 0 0 0.5rem 0.5rem;">
-                    <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(playerFactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(playerFactionId);">
+                    <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(headToHeadSummary.PlayerFactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(headToHeadSummary.PlayerFactionId);">
                         <thead style="vertical-align: bottom; line-height: 0.5rem;">
                             <tr>
                                 <th class="p-name" style="padding-bottom: 0.5rem;"></th>
@@ -51,13 +51,13 @@ else if (isSelectedView == true)
             }
         </div>
 
-        <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(playerFactionId);">
+        <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(headToHeadSummary.PlayerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(headToHeadSummary.PlayerFactionId);">
             <h5 style="font-size: 1rem; margin-bottom: 0.25rem;">Top Nemeses</h5>
             @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByDeaths.Any() == true && isLoadingHeadToHead != true)
             {
 
                 <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
-                    <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(playerFactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important;">
+                    <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(headToHeadSummary.PlayerFactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important;">
                         <thead style="vertical-align: bottom; line-height: 0.5rem;">
                             <tr>
                                 <th class="p-name" style="padding-bottom: 0.5rem;"></th>
@@ -96,9 +96,6 @@ else if (isSelectedView == true)
 @code {
     [Parameter]
     public string playerId { get; set; }
-
-    [Parameter]
-    public int playerFactionId { get; set; } = 4;
 
     [Parameter]
     public bool isSelectedView { get; set; }

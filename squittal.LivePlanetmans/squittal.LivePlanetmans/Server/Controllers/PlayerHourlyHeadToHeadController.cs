@@ -17,10 +17,12 @@ namespace squittal.LivePlanetmans.Server.Controllers
     public class PlayerHourlyHeadToHeadController : ControllerBase
     {
         private readonly IDbContextHelper _dbContextHelper;
+        private readonly ICharacterService _characterService;
 
-        public PlayerHourlyHeadToHeadController(IDbContextHelper dbContextHelper)
+        public PlayerHourlyHeadToHeadController(IDbContextHelper dbContextHelper, ICharacterService characterService)
         {
             _dbContextHelper = dbContextHelper;
+            _characterService = characterService;
         }
 
         [HttpGet("players/{characterId}")]
@@ -28,6 +30,16 @@ namespace squittal.LivePlanetmans.Server.Controllers
         {
             DateTime nowUtc = DateTime.UtcNow;
             DateTime startTime = nowUtc - TimeSpan.FromHours(1);
+
+            var characterEntity = await _characterService.GetCharacterAsync(characterId);
+
+            if (characterEntity == null)
+            {
+                return null;
+            }
+
+            var playerFactionId = characterEntity.FactionId;
+
 
             using (var factory = _dbContextHelper.GetFactory())
             {
@@ -152,6 +164,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 return new PlayerHourlyHeadToHeadSummary()
                 {
                     PlayerId = characterId,
+                    PlayerFactionId = playerFactionId,
                     QueryStartTime = startTime,
                     QueryNowUtc = nowUtc,
                     TopPlayersByKills = victims,
