@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29311.281
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "squittal.LivePlanetmans.Server", "squittal.LivePlanetmans\Server\squittal.LivePlanetmans.Server.csproj", "{977D1360-7A5C-42DE-82CF-8D976551D177}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "squittal.LivePlanetmans.Server", "squittal.LivePlanetmans\Server\squittal.LivePlanetmans.Server.csproj", "{977D1360-7A5C-42DE-82CF-8D976551D177}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "squittal.LivePlanetmans.Client", "squittal.LivePlanetmans\Client\squittal.LivePlanetmans.Client.csproj", "{C5F7AE14-844C-40EB-B002-7AC0E8F9DBCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "squittal.LivePlanetmans.Client", "squittal.LivePlanetmans\Client\squittal.LivePlanetmans.Client.csproj", "{C5F7AE14-844C-40EB-B002-7AC0E8F9DBCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "squittal.LivePlanetmans.Shared", "squittal.LivePlanetmans\Shared\squittal.LivePlanetmans.Shared.csproj", "{0954717E-94AE-4EC6-9D07-6218AADF2C89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "squittal.LivePlanetmans.Shared", "squittal.LivePlanetmans\Shared\squittal.LivePlanetmans.Shared.csproj", "{0954717E-94AE-4EC6-9D07-6218AADF2C89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

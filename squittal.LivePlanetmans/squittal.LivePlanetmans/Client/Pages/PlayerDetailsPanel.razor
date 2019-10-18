@@ -171,12 +171,7 @@ else
                          || (view == viewTranslator[PlayerDetailsView.players] && (isLoadingHeadToHead == true || headToHeadSummary == null))
                          || (view == viewTranslator[PlayerDetailsView.loadouts] && (isLoadingLoadouts == true || loadoutsReport == null)))
                 {
-                    <div class="spinner-ellipsis">
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                    </div>
+                    <SpinnerEllipsis />
                 }
 
 
