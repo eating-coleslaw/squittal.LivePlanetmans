@@ -9,6 +9,7 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
         Task<IEnumerable<Profile>> GetAllProfilesAsync();
         Task<IEnumerable<Loadout>> GetAllLoadoutsAsync();
         Task<Profile> GetProfileFromLoadoutIdAsync(int loadoutId);
+        Task<Dictionary<int, Profile>> GetLoadoutMapping();
         Task RefreshStore();
     }
 }

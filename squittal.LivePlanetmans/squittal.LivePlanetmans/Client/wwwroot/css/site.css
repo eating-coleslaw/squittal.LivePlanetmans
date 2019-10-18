@@ -592,6 +592,68 @@ th.stacked-label span.small {
     }
 
 
+/*
+    PS2 Class Icons
+*/
+.vs .ps2-icon, .vs.ps2-icon {
+    filter: brightness(0) saturate(0%) invert(27%) sepia(83%) saturate(6912%) hue-rotate(257deg) brightness(88%) contrast(94%);
+}
+
+.nc .ps2-icon, .nc.ps2-icon {
+    filter: brightness(0) saturate(0%) invert(26%) sepia(100%) saturate(2651%) hue-rotate(217deg) brightness(100%) contrast(98%);
+}
+
+.tr .ps2-icon, .tr.ps2-icon {
+    filter: brightness(0) saturate(0%) invert(52%) sepia(68%) saturate(3907%) hue-rotate(316deg) brightness(91%) contrast(93%);
+}
+
+.ns .ps2-icon, .ns.ps2-icon {
+    filter: brightness(0) saturate(0%) invert(12%) sepia(17%) saturate(1304%) hue-rotate(201deg) brightness(91%) contrast(88%);
+}
+
+.ps2-icon {
+    /*display: inline-block;*/
+    background-image: url('../images/even_borders/Icon_white_unknown_no_border_32.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 1rem;
+    width: 1rem;
+    margin-top: 0.15rem;
+    /*filter: drop-shadow(0px 0px 2px var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)));*/
+}
+
+
+
+    .ps2-icon.medic {
+        background-image: url('../images/Icon_white_combatMedic_32.png') !important;
+    }
+
+    .ps2-icon.la {
+        background-image: url('../images/Icon_white_lightAssault_32.png') !important;
+    }
+
+    .ps2-icon.infil {
+        background-image: url('../images/Icon_white_infiltrator_32.png') !important;
+    }
+
+    .ps2-icon.heavy {
+        background-image: url('../images/Icon_white_heavyAssault_32.png') !important;
+    }
+
+    .ps2-icon.engie {
+        background-image: url('../images/Icon_white_engineer_32.png') !important;
+    }
+
+    .ps2-icon.max {
+        background-image: url('../images/Icon_white_max_32.png') !important;
+    }
+
+    .ps2-icon.unknown {
+        background-image: url('../images/Icon_white_unknown_32.png') !important;
+    }
+
+
 
 /* Ellipsis Spinner
      - credit to https://loading.io/css/ for starting point

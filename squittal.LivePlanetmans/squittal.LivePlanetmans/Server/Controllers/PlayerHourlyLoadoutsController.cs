@@ -22,6 +22,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
         private readonly IFactionService _factionService;
 
         private IEnumerable<Loadout> _loadouts;
+        private IEnumerable<Profile> _profiles;
+        private Dictionary<int, Profile> _loadoutMapping;
 
         public PlayerHourlyLoadoutsController(IDbContextHelper dbContextHelper, IProfileService profileService, ICharacterService characterService, IFactionService factionService)
         {
@@ -38,6 +40,31 @@ namespace squittal.LivePlanetmans.Server.Controllers
             _loadouts = await modelsTask;
 
             return _loadouts.ToArray();
+        }
+
+        [HttpGet("mappings/loadout/profile")]
+        public async Task<ActionResult<Dictionary<int, int>>> GetLoadoutToProfileTypeIdMapping()
+        {
+            var mappingTask = _profileService.GetLoadoutMapping();
+            _loadoutMapping = await mappingTask;
+
+            foreach (var keyValuePair in _loadoutMapping)
+            {
+                Debug.WriteLine($"{keyValuePair.Key} :: {keyValuePair.Value.Name} [{keyValuePair.Value.Id}]");
+            }
+
+            return _loadoutMapping.ToDictionary(m => m.Key, m => m.Value.ProfileTypeId);
+
+            //return _loadoutMapping;
+        }
+        
+        [HttpGet("models/profiles")]
+        public async Task<ActionResult<IEnumerable<Profile>>> GetAllProfileModelsAsync()
+        {
+            var modelsTask = _profileService.GetAllProfilesAsync();
+            _profiles = await modelsTask;
+            
+            return _profiles.ToArray();
         }
 
         [HttpGet("h2h/{characterId}")]

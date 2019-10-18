@@ -61,6 +61,16 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
             return _loadoutMapping.GetValueOrDefault(loadoutId, null);
         }
 
+        public async Task<Dictionary<int, Profile>> GetLoadoutMapping()
+        {
+            if (_loadoutMapping == null || _loadoutMapping.Count == 0)
+            {
+                await SetupLoadoutMappingAsync();
+            }
+
+            return _loadoutMapping;
+        }
+
         private async Task SetupLoadoutMappingAsync()
         {
             await _loadoutSemaphore.WaitAsync();
