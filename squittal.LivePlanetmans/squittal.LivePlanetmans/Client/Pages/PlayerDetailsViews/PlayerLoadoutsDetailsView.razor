@@ -25,7 +25,7 @@ else if (isSelectedView == true)
                                 @foreach (var loadout in loadoutsReport.PlayerLoadouts)
                                 {
                                     <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem; color: @GetFactionColorFromId(loadout.Details.FactionId); ">
-                                        <span class="small @GetLoadoutIconClass(loadout.Details.Id) @GetFactionClassFromId(loadout.Details.FactionId)" title="@loadout.Details.Name" style="position: initial; margin-bottom: 0.1rem; margin-left: calc(50% - 8px);"></span> @*loadout.Details.Name</span>*@
+                                        <span class="small @GetLoadoutIconClass(loadout.Details.Id) @GetFactionClassFromId(loadout.Details.FactionId)" title="@loadout.Details.Name" style="position: initial; margin-bottom: 0.1rem; margin-left: calc(65% - 8px);"></span> @*loadout.Details.Name</span>*@
                                         @*<span>Kills</span>*@
                                     </th>
                                     @*<th style="padding-bottom: 0.5rem;">D</th>*@
@@ -70,7 +70,7 @@ else if (isSelectedView == true)
                             {
                                 <tr style="color: @GetFactionColorFromId(faction.Summary.Details.Id); font-weight: 500; border-bottom: 1px solid @GetFactionColorFromId(faction.Summary.Details.Id); background-color: transparent; vertical-align: bottom;">
 
-                                    <td style="padding-top: 0.75rem;">@faction.Summary.Details.Name</td>
+                                    <td style="padding-top: 0.75rem; width: 160px;">@faction.Summary.Details.Name</td>
 
                                     @foreach (var playerLoadout in faction.PlayerLoadouts)
                                     {

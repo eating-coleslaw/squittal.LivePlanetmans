@@ -595,19 +595,19 @@ th.stacked-label span.small {
 /*
     PS2 Class Icons
 */
-.vs .ps2-icon, .vs.ps2-icon {
+/*.vs .ps2-icon,*/ .vs.ps2-icon {
     filter: brightness(0) saturate(0%) invert(27%) sepia(83%) saturate(6912%) hue-rotate(257deg) brightness(88%) contrast(94%);
 }
 
-.nc .ps2-icon, .nc.ps2-icon {
+/*.nc .ps2-icon,*/ .nc.ps2-icon {
     filter: brightness(0) saturate(0%) invert(26%) sepia(100%) saturate(2651%) hue-rotate(217deg) brightness(100%) contrast(98%);
 }
 
-.tr .ps2-icon, .tr.ps2-icon {
+/*.tr .ps2-icon,*/ .tr.ps2-icon {
     filter: brightness(0) saturate(0%) invert(52%) sepia(68%) saturate(3907%) hue-rotate(316deg) brightness(91%) contrast(93%);
 }
 
-.ns .ps2-icon, .ns.ps2-icon {
+/*.ns .ps2-icon,*/ .ns.ps2-icon {
     filter: brightness(0) saturate(0%) invert(12%) sepia(17%) saturate(1304%) hue-rotate(201deg) brightness(91%) contrast(88%);
 }
 
