@@ -8,8 +8,9 @@ namespace squittal.LivePlanetmans.Shared.Models
         public int Deaths { get; set; } = 0;
         public int Headshots { get; set; } = 0;
         public int HeadshotDeaths { get; set; } = 0;
-        public int? Suicides { get; set; } = 0;
-        public int? Teamkills { get; set; } = 0;
+        public int Suicides { get; set; } = 0;
+        public int Teamkills { get; set; } = 0;
+        public int TeamkillDeaths { get; set; } = 0;
 
         public double KillDeathRatio
         {
@@ -52,6 +53,18 @@ namespace squittal.LivePlanetmans.Shared.Models
             {
                 return 0;
             }
+        }
+
+        public DeathEventAggregate Add(DeathEventAggregate addend)
+        {
+            Kills += addend.Kills;
+            Headshots += addend.Headshots;
+            Teamkills += addend.Teamkills;
+            Deaths += addend.Deaths;
+            Suicides += addend.Suicides;
+            HeadshotDeaths += addend.HeadshotDeaths;
+
+            return this;
         }
     }
 }

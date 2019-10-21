@@ -1,4 +1,5 @@
 ﻿@using squittal.LivePlanetmans.Shared.Models
+@using System.Globalization
 @inject HttpClient Http
 
 @if (loadoutsReport == null || isLoadingLoadouts == true)
@@ -12,10 +13,12 @@ else if (isSelectedView == true)
 {
     <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">
         <div class="col-sm-12" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(loadoutsReport.PlayerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(loadoutsReport.PlayerFactionId); margin-right: 0.3125rem; padding: 0;">
-            <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">Hourly Loadout Summary</h5>
+            <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">
+                Hourly Loadout Summary
+                <span class="text-muted" style="font-size: 0.85rem; font-weight: 300;">@GetLocalizedQueryDateRangeDisplay()</span>
+            </h5>
             @if (isLoadingLoadouts != true && loadoutsReport != null)
             {
-
                 <div style="max-height: calc(350px - 1.5rem); overflow: auto; padding: 0 0 0.5rem 0.5rem;">
                     <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(loadoutsReport.PlayerFactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(loadoutsReport.PlayerFactionId);">
                         <thead style="vertical-align: bottom; line-height: 0.5rem;">
@@ -215,6 +218,22 @@ else if (isSelectedView == true)
                 isLoadingLoadouts = false;
             }
         }
+    }
+
+    string GetLocalizedQueryDateRangeDisplay()
+    {
+        if (loadoutsReport.QueryStartTime == null || loadoutsReport.QueryNowUtc == null)
+        {
+            return string.Empty;
+        }
+
+        //var convertedStart = TimeZoneInfo.ConvertTimeFromUtc(loadoutsReport.QueryStartTime, TimeZoneInfo.Local);
+        //var convertedEnd = TimeZoneInfo.ConvertTimeFromUtc(loadoutsReport.QueryNowUtc, TimeZoneInfo.Local);
+
+        var convertedStart = loadoutsReport.QueryStartTime - TimeSpan.FromHours(5);
+        var convertedEnd = loadoutsReport.QueryNowUtc - TimeSpan.FromHours(5);
+
+        return $"{convertedStart.ToLongTimeString()} - {convertedEnd.ToLongTimeString()}";
     }
 
     string GetLoadoutIconClass(int loadoutId)

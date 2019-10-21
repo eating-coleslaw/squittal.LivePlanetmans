@@ -73,5 +73,15 @@ namespace squittal.LivePlanetmans.Shared.Models
         public int VictimFactionId { get; set; }
 
         public DeathEventAggregate AttackerStats { get; set; }
+
+        public DeathEventAggregate VictimStats { get; set; }
+
+        public string DebugInfoString
+        {
+            get
+            {
+                return $"{AttackerLoadoutName} [{AttackerLoadoutId}] vs {VictimLoadoutName} [{VictimLoadoutId}] :: {AttackerStats.KillDeathRatio} {AttackerStats.Kills} | {AttackerStats.Deaths} :: {VictimStats.KillDeathRatio} {VictimStats.Kills} | {VictimStats.Deaths}";
+            }
+        }
     }
 }
