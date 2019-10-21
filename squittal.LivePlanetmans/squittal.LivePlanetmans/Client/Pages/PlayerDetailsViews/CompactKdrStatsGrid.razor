@@ -1,16 +1,20 @@
 ﻿@using squittal.LivePlanetmans.Shared.Models
 
-<div style="display: grid; grid-template-columns: 1fr 1.75rem; grid-template-rows: 1rem 1rem; grid-template-areas: 'kdr kills' 'kdr deaths'; color: inherit;">
+@*<div style="display: grid; grid-template-columns: 1fr 1.75rem; grid-template-rows: 1rem 1rem; grid-template-areas: 'kdr kills' 'kdr deaths'; color: inherit;">*@
+<div style="display: grid; grid-template-columns: 1fr 1.75rem 1.75rem; grid-template-rows: 1rem; grid-template-areas: 'kdr kills deaths'; color: inherit; opacity: @_gridOpacity;">
     @if (deathEventAggregate != null)
     {
-        <div style="grid-area: kdr; text-align: right; font-size: 1.1rem; padding: 0.35rem 0.75rem 0.25rem 0;">
+        @*<div style="grid-area: kdr; text-align: right; font-size: 1.1rem; padding: 0.35rem 0.75rem 0.25rem 0;">*@
+        <div style="grid-area: kdr; text-align: right; font-size: 1rem;">
             @deathEventAggregate.KillDeathRatio
         </div>
-        <div style="grid-area: kills; text-align: left; font-size: 0.75rem;">
-            @deathEventAggregate.Kills
+        @*<div style="grid-area: kills; text-align: left; font-size: 0.75rem;">*@
+        <div style="grid-area: kills; text-align: right; font-size: 0.9rem; padding-left: 0.5rem;">
+            <sup>@deathEventAggregate.Kills</sup>
         </div>
-        <div style="grid-area: deaths; text-align: right; font-size: 0.75rem;">
-            @deathEventAggregate.Deaths
+        @*<div style="grid-area: deaths; text-align: right; font-size: 0.75rem;">*@
+        <div style="grid-area: deaths; text-align: right; font-size: 0.9rem; padding-left: 0.5rem;">
+             <sub>@deathEventAggregate.Deaths</sub>
         </div>
     }
 </div>
@@ -18,4 +22,19 @@
 @code {
     [Parameter]
     public DeathEventAggregate deathEventAggregate { get; set; }
+
+    private double _gridOpacity = 1.0;
+    private double _dimmedGridOpacity = 0.5;
+
+    protected override void OnParametersSet()
+    {
+        if (deathEventAggregate != null && deathEventAggregate.Kills == 0 && deathEventAggregate.Deaths == 0)
+        {
+            _gridOpacity = _dimmedGridOpacity;
+        }
+        else
+        {
+            _gridOpacity = 1.0;
+        }
+    }
 }
