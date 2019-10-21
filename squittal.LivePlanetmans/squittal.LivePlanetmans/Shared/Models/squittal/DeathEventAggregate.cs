@@ -43,6 +43,14 @@ namespace squittal.LivePlanetmans.Shared.Models
             }
         }
 
+        public bool HasEvents
+        {
+            get
+            {
+                return (Kills > 0 || Deaths > 0 || Teamkills > 0);
+            }
+        }
+
         private double GetHeadshotRatio(int kills, int headshots)
         {
             if (kills > 0)
