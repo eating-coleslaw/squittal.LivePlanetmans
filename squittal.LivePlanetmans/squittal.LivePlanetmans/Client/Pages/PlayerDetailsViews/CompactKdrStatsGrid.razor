@@ -1,18 +1,14 @@
 ﻿@using squittal.LivePlanetmans.Shared.Models
 
-@*<div style="display: grid; grid-template-columns: 1fr 1.75rem; grid-template-rows: 1rem 1rem; grid-template-areas: 'kdr kills' 'kdr deaths'; color: inherit;">*@
 <div style="display: grid; grid-template-columns: 1fr 1.75rem 1.75rem; grid-template-rows: 1rem; grid-template-areas: 'kdr kills deaths'; color: inherit; opacity: @_gridOpacity; font-weight: @_fontWeight;">
     @if (deathEventAggregate != null)
     {
-        @*<div style="grid-area: kdr; text-align: right; font-size: 1.1rem; padding: 0.35rem 0.75rem 0.25rem 0;">*@
         <div style="grid-area: kdr; text-align: right; font-size: 1rem; font-size: 0.9rem;">
             @deathEventAggregate.KillDeathRatio
         </div>
-        @*<div style="grid-area: kills; text-align: left; font-size: 0.75rem;">*@
         <div style="grid-area: kills; text-align: right; font-size: 0.9rem; padding-left: 0.5rem;">
             <sup>@deathEventAggregate.Kills</sup>
         </div>
-        @*<div style="grid-area: deaths; text-align: right; font-size: 0.75rem;">*@
         <div style="grid-area: deaths; text-align: right; font-size: 0.9rem; padding-left: 0.5rem;">
              <sub>@deathEventAggregate.Deaths</sub>
         </div>

@@ -1,5 +1,4 @@
 ﻿@using squittal.LivePlanetmans.Shared.Models
-@using System.Globalization
 @inject HttpClient Http
 
 @if (loadoutsReport == null || isLoadingLoadouts == true)
@@ -28,24 +27,11 @@ else if (isSelectedView == true)
                                 @foreach (var loadout in loadoutsReport.PlayerLoadouts)
                                 {
                                     <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="color: @GetFactionColorFromId(loadout.Details.FactionId); padding-top: 0.3125rem;">
-@*                                        <span class="small @GetLoadoutIconClass(loadout.Details.Id) @GetFactionClassFromId(loadout.Details.FactionId)" title="@loadout.Details.Name" style="position: initial; margin-bottom: 0.1rem; margin-left: calc(65% - 8px);"></span> *@
-                                        @*<span>Kills</span>*@
-
                                         <CompactKdrStatsGridTableHeader loadoutIconClass=@GetLoadoutIconClass(loadout.Details.Id) factionClass=@GetFactionClassFromId(loadout.Details.FactionId) loadoutName=@loadout.Details.Name />
-
                                     </th>
-                                    @*<th style="padding-bottom: 0.5rem;">D</th>*@
-                                    @*<th style="padding-bottom: 0.5rem;">KDR</th>*@
                                 }
 
                                 <th style="padding-bottom: 0.5rem; text-align: right;">Total</th>
-
-                                @*<th class="stacked-label" style="padding-bottom: 0.5rem;">
-                                    <span class="small" style="position: initial; margin-bottom: 0.1rem;">Total</span>
-                                    <span>Kills</span>
-                                </th>*@
-                                @*<th style="padding-bottom: 0.5rem;">D</th>*@
-                                @*<th style="padding-bottom: 0.5rem;">KDR</th>*@
                             </tr>
                         </thead>
 
@@ -57,19 +43,13 @@ else if (isSelectedView == true)
                                 @foreach (var loadout in loadoutsReport.PlayerLoadouts)
                                 {
                                     <td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">
-                                        <CompactKdrStatsGrid deathEventAggregate=@loadout.Stats/> @*loadout.Stats.Kills*@
+                                        <CompactKdrStatsGrid deathEventAggregate=@loadout.Stats/>
                                     </td>
-                                    @*<td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">@loadout.Stats.Kills</td>
-                                    <td>@loadout.Stats.Deaths</td>
-                                    <td>@loadout.Stats.KillDeathRatio</td>*@
                                 }
 
                                 <td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId)">
                                     <CompactKdrStatsGrid deathEventAggregate=@loadoutsReport.PlayerStats />
                                 </td>
-                                @*<td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId)">@loadoutsReport.PlayerStats.Kills</td>*@
-                                @*<td>@loadoutsReport.PlayerStats.Deaths</td>*@
-                                @*<td>@loadoutsReport.PlayerStats.KillDeathRatio</td>*@
                             </tr>
 
                             <tr style="height: 0.5rem;"></tr>
@@ -83,19 +63,13 @@ else if (isSelectedView == true)
                                     @foreach (var playerLoadout in faction.PlayerLoadouts)
                                     {
                                         <td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">
-                                            <CompactKdrStatsGrid deathEventAggregate=@playerLoadout.Stats/> @*loadout.Stats.Kills*@
+                                            <CompactKdrStatsGrid deathEventAggregate=@playerLoadout.Stats/>
                                         </td>
-                                        @*<td style="padding-top: 0.75rem; border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">@playerLoadout.Stats.Kills</td>*@
-                                        @*<td style="padding-top: 0.75rem;">@playerLoadout.Stats.Deaths</td>*@
-                                        @*<td style="padding-top: 0.75rem;">@playerLoadout.Stats.KillDeathRatio</td>*@
                                     }
 
                                     <td style="padding-top: 0.75rem; border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">
                                         <CompactKdrStatsGrid deathEventAggregate=@faction.Summary.Stats/> 
                                     </td>
-                                    @*<td style="padding-top: 0.75rem; border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">@faction.Summary.Stats.Kills</td>*@
-                                    @*<td style="padding-top: 0.75rem;">@faction.Summary.Stats.Deaths</td>*@
-                                    @*<td style="padding-top: 0.75rem;">@faction.Summary.Stats.KillDeathRatio</td>*@
                                 </tr>
 
                                 @foreach (var factionLoadout in faction.FactionLoadouts)
@@ -106,24 +80,16 @@ else if (isSelectedView == true)
                                             <div class="@GetLoadoutIconClass(factionLoadout.Summary.Details.Id) @GetFactionClassFromId(factionLoadout.Summary.Details.FactionId)" title="@factionLoadout.Summary.Details.Name"></div>
                                         </td>
 
-                                        @*<td>@factionLoadout.Summary.Details.Name</td>*@
-
                                         @foreach (var playerLoadout in factionLoadout.PlayerLoadouts)
                                         {
                                             <td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">
                                                 <CompactKdrStatsGrid deathEventAggregate=@playerLoadout.Stats />
                                             </td>
-                                            @*<td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">@playerLoadout.Stats.Kills</td>*@
-                                            @*<td>@playerLoadout.Stats.Deaths</td>*@
-                                            @*<td>@playerLoadout.Stats.KillDeathRatio</td>*@
                                         }
 
                                         <td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">
                                             <CompactKdrStatsGrid deathEventAggregate=@factionLoadout.Summary.Stats />
                                         </td>
-                                        @*<td style="border-left: 1px solid @GetFactionColorFromId(loadoutsReport.PlayerFactionId);">@factionLoadout.Summary.Stats.Kills</td>*@
-                                        @*<td>@factionLoadout.Summary.Stats.Deaths</td>*@
-                                        @*<td>@factionLoadout.Summary.Stats.KillDeathRatio</td>*@
                                     </tr>
                                 }
                             }
@@ -157,10 +123,6 @@ else if (isSelectedView == true)
 
     protected override async Task OnInitializedAsync()
     {
-        //if (loadoutModels == null || loadoutModels.Count() == 0)
-        //{
-        //    loadoutModels = await Http.GetJsonAsync<Loadout[]>($"api/PlayerHourlyLoadouts/models/loadouts");
-        //}
         var modelsTask = SetUpLoadoutModels();
         var profileTask = SetUpProfileModels();
 
@@ -231,10 +193,6 @@ else if (isSelectedView == true)
         {
             return string.Empty;
         }
-
-        //var convertedStart = TimeZoneInfo.ConvertTimeFromUtc(loadoutsReport.QueryStartTime, TimeZoneInfo.Local);
-        //var convertedEnd = TimeZoneInfo.ConvertTimeFromUtc(loadoutsReport.QueryNowUtc, TimeZoneInfo.Local);
-
         var convertedStart = loadoutsReport.QueryStartTime - TimeSpan.FromHours(5);
         var convertedEnd = loadoutsReport.QueryNowUtc - TimeSpan.FromHours(5);
 
