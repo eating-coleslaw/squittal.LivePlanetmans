@@ -80,7 +80,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         {
             get
             {
-                return $"{AttackerLoadoutName} [{AttackerLoadoutId}] vs {VictimLoadoutName} [{VictimLoadoutId}] :: {AttackerStats.KillDeathRatio} {AttackerStats.Kills} | {AttackerStats.Deaths} :: {VictimStats.KillDeathRatio} {VictimStats.Kills} | {VictimStats.Deaths}";
+                return $"{AttackerLoadoutName} [{AttackerLoadoutId}] vs {VictimLoadoutName} [{VictimLoadoutId}] :: {AttackerStats.KillDeathRatio} {AttackerStats.Kills} | {AttackerStats.Deaths}  ({AttackerStats.Teamkills} | {AttackerStats.TeamkillDeaths}) :: {VictimStats.KillDeathRatio} {VictimStats.Kills} | {VictimStats.Deaths}  ({VictimStats.Teamkills} | {VictimStats.TeamkillDeaths}) ";
             }
         }
     }
