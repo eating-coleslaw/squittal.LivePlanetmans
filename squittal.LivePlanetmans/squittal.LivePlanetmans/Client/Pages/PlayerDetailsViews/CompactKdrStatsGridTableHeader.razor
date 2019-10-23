@@ -1,16 +1,10 @@
-﻿<div style="display: grid; grid-template-columns: 1fr 0.8rem 0.8rem; grid-template-rows: 1rem; grid-template-areas: 'kdr kills deaths'; color: inherit;">
+﻿<div style="min-width: 70px; height: 1rem;">  @*style="display: grid; grid-template-columns: 1fr 0.8rem 0.8rem; grid-template-rows: 1rem; grid-template-areas: 'kdr kills deaths'; color: inherit;">*@
         
-    <div style="grid-area: kdr; text-align: right; font-size: 0.8rem;">
+    <div> @*style="grid-area: kdr; text-align: right; font-size: 0.8rem;">*@
         <div class="small @loadoutIconClass @factionClass" title="@loadoutName" style="position: relative; float: left; top: -4px; display: inline-block; height: 12px; width: 12px; vertical-align: text-top;"></div>
         <div style="display: inline-block; vertical-align: text-top; float: left; padding-left: 0.2rem;">KDR</div>
-    </div>
-
-    <div style="grid-area: kills; text-align: right; font-size: 0.8rem; padding-left: 0.5rem;">
-        <sup>K</sup>
-    </div>
-
-    <div style="grid-area: deaths; text-align: right; font-size: 0.8rem; padding-left: 0.5rem;">
-        <sub>D</sub>
+        <sup style="top: 0px; padding-left: 0.5rem; float: left;">K</sup>
+        <sub style="padding-left: 1.5rem; float: left;">D</sub>
     </div>
 </div>
 
