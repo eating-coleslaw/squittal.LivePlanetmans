@@ -211,6 +211,14 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                          && kill.Timestamp >= startTime
                                       select kill).Count(),
 
+                            Suicides = (from kill in dbContext.Deaths
+                                         where kill.CharacterId == characterId
+                                            && kill.DeathEventType == DeathEventType.Suicide
+                                            && kill.CharacterLoadoutId == victimLoadouts.Id
+                                            && kill.AttackerLoadoutId == attackerLoadouts.Id
+                                            && kill.Timestamp >= startTime
+                                         select kill).Count(),
+
                             TeamkillDeaths = (from kill in dbContext.Deaths
                                               where kill.CharacterId == characterId
                                                  && kill.DeathEventType == DeathEventType.Teamkill
@@ -555,98 +563,32 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 {
                     // Loadouts that teamkilled the player
                     activeAttackerLoadouts = (loadoutVsLoadoutRows
-                                                            //.Where(l => l.AttackerFactionId == faction)
-
                                                             .Where(l => l.AttackerFactionId == faction
                                                                      && l.VictimFactionId == faction
-                                                                     && l.VictimStats.TeamkillDeaths > 0) // || l.VictimStats.Deaths > 0))
-                                                                     //&& ( l.AttackerStats.Teamkills > 0 || l.VictimStats.TeamkillDeaths > 0) )
-
-                                                            //.Where(l => l.AttackerFactionId == faction && l.VictimFactionId != playerFactionId)
-                                                                     //&& ((l.VictimFactionId == playerFactionId && (l.VictimStats.TeamkillDeaths > 0|| l.AttackerStats.Teamkills > 0)) //l.AttackerStats.Teamkills > 0) // l.VictimStats.TeamkillDeaths > 0) //(l.AttackerStats.Teamkills > 0 || l.VictimStats.TeamkillDeaths > 0))
-                                                                        //|| l.VictimFactionId != playerFactionId))
-                                                            //.Select(l => l.AttackerLoadoutId)
-                                                            
+                                                                     && (l.VictimStats.TeamkillDeaths > 0 || l.VictimStats.Suicides > 0))
                                                             .Select(l => l.AttackerLoadoutId)
-                                                            //.Select(l => l.VictimLoadoutId)
                                                             .Distinct()
                                                             .ToList());
 
-                    Debug.WriteLine("==================================");
-                    foreach (var l in activeAttackerLoadouts)
-                    {
-                        Debug.WriteLine($"    activeAttackerLoadouts F{faction}: {l}");
-                    }
-
-                    //activeAttackerLoadouts.Union(loadoutVsLoadoutRows
-                    //                                .Where(l => l.AttackerFactionId == faction
-                    //                                         && l.VictimFactionId == faction
-                    //                                         && l.VictimStats.TeamkillDeaths > 0 || l.AttackerStats.TeamkillDeaths > 0)
-                    //                                //.Select(l => l.VictimLoadoutId)
-                    //                                .Select(l => l.AttackerLoadoutId)
-                    //                                .Distinct()
-                    //                                .ToList());
-
-                    //foreach (var l in activeAttackerLoadouts)
-                    //{
-                    //    Debug.WriteLine($"    activeAttackerLoadouts F{faction} - Union: {l}");
-                    //}
-
-                    // loadouts that the player teamkilled
+                    // Loadouts that the player teamkilled
                     activeVictimLoadouts = (loadoutVsLoadoutRows
                                                 .Where(l => l.AttackerFactionId == faction
                                                          && l.VictimFactionId == faction
-                                                         && l.AttackerStats.Teamkills > 0) // || l.AttackerStats.Teamkills > 0)
+                                                         && l.AttackerStats.Teamkills > 0)
                                                 .Select(l => l.VictimLoadoutId)
-                                                //.Select(l => l.AttackerLoadoutId)
                                                 .Distinct()
                                                 .ToList());
-
-                    foreach (var l in activeVictimLoadouts)
-                    {
-                        Debug.WriteLine($"    activeVictimLoadouts F{faction}: {l}");
-                    }
-
-                    //activeVictimLoadouts.Union(loadoutVsLoadoutRows
-                    //                            .Where(l => l.AttackerFactionId == faction
-                    //                                     && l.VictimFactionId == faction
-                    //                                     && (l.VictimStats.Teamkills > 0 || l.AttackerStats.TeamkillDeaths > 0))
-                    //                                     //&& l.VictimStats.Teamkills > 0 || l.AttackerStats.TeamkillDeaths > 0)
-                    //                            .Select(l => l.VictimLoadoutId)
-                    //                            //.Select(l => l.AttackerLoadoutId)
-                    //                            .Distinct()
-                    //                            .ToList());
-
-                    //foreach (var l in activeVictimLoadouts)
-                    //{
-                    //    Debug.WriteLine($"    activeVictimLoadouts F{faction} - Union: {l}");
-                    //}
-
-                    //activeVictimLoadouts = (loadoutVsLoadoutRows
-                    //                            //.Where(l => l.VictimFactionId == faction)
-                    //                            .Where(l => l.VictimFactionId == faction 
-                    //                                     && ((l.AttackerFactionId == playerFactionId && l.AttackerStats.Teamkills > 0) //(l.VictimStats.TeamkillDeaths > 0 || l.AttackerStats.Teamkills > 0 ) ) // && (l.VictimStats.TeamkillDeaths > 0 || l.VictimStats.TeamkillDeaths > 0))
-                    //                                         || l.AttackerFactionId != playerFactionId ) )
-                    //                            .Select(l => l.VictimLoadoutId)
-                    //                            .Distinct()
-                    //                            .ToList());
                 }
                 else
                 {
                     activeAttackerLoadouts = (loadoutVsLoadoutRows
                                                                 .Where(l => l.AttackerFactionId == faction)
-                                                                //.Where(l => l.AttackerFactionId == faction
-                                                                //         && ((l.VictimFactionId == faction && (l.AttackerStats.Teamkills > 0 || l.AttackerStats.TeamkillDeaths > 0))
-                                                                //            || l.VictimFactionId != faction ) )
                                                                 .Select(l => l.AttackerLoadoutId)
                                                                 .Distinct()
                                                                 .ToList());
 
                     activeVictimLoadouts = (loadoutVsLoadoutRows
                                                                     .Where(l => l.VictimFactionId == faction)
-                                                                    //.Where(l => l.VictimFactionId == faction
-                                                                         //&& ((l.AttackerFactionId == faction && (l.VictimStats.TeamkillDeaths > 0 || l.VictimStats.TeamkillDeaths > 0))
-                                                                            //|| (l.AttackerFactionId != faction)))
                                                                     .Select(l => l.VictimLoadoutId)
                                                                     .Distinct()
                                                                     .ToList());
@@ -669,16 +611,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         #region Loadout Stat Helpers
         private DeathEventAggregate GetStatsForEnemyLoadoutVsPlayerLoadout(IEnumerable<LoadoutVsLoadoutSummaryRow> groupedVsRows, int playerLoadoutId, int playerFactionId, int enemyLoadoutId, int enemyFactionId)
         {
-            //var playerFactionId = groupedVsRows
-            //                        .Where(grp => grp.AttackerLoadoutId == playerLoadoutId)
-            //                        .Select(grp => grp.AttackerFactionId)
-            //                        .FirstOrDefault();
-
-            //var enemyFactionId = groupedVsRows
-            //                        .Where(grp => grp.AttackerLoadoutId == enemyLoadoutId)
-            //                        .Select(grp => grp.AttackerFactionId)
-            //                        .FirstOrDefault();
-
             var useTeamkills = (playerFactionId == enemyFactionId);
 
             if (groupedVsRows.Any(grp => grp.AttackerLoadoutId == playerLoadoutId && grp.VictimLoadoutId == enemyLoadoutId))
