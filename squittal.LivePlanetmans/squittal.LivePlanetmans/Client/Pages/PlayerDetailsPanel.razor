@@ -438,7 +438,7 @@ else
     private async Task OnPlayerIdChange()
     {
         fetchTries += 1;
-        if (!string.IsNullOrWhiteSpace(playerId)) // && isLoadingKillboard != true)
+        if (!string.IsNullOrWhiteSpace(playerId))
         {
             // If a process is already underway, cancel it
             if (cts != null)
@@ -478,9 +478,8 @@ else
                     player = JsonConvert.DeserializeObject<Character>(playerJsonString);
                     stats= JsonConvert.DeserializeObject<PlayerHourlyStatsData>(statsJsonString);
                     kills = JsonConvert.DeserializeObject<PlayerKillboardItem[]>(killsJsonString);
-
-                    StateHasChanged();
                 }
+                StateHasChanged();
 
                 //HttpResponseMessage playerResponse = await Http.GetAsync($"api/PlayerDetails/{playerId}", cts.Token);
                 //HttpResponseMessage statsResponse = await Http.GetAsync($"api/PlayerDetails/stats/{playerId}", cts.Token);
