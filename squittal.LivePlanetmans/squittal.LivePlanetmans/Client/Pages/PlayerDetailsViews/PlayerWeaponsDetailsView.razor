@@ -111,10 +111,8 @@ else if (isSelectedView == true)
 
     private async Task OnPlayerIdChange()
     {
-        if (!string.IsNullOrWhiteSpace(playerId)) // && isLoadingWeapons != true)
+        if (!string.IsNullOrWhiteSpace(playerId))
         {
-            //isLoadingWeapons = true;
-
             // If a process is already underway, cancel it
             if (cts != null)
             {
@@ -142,11 +140,6 @@ else if (isSelectedView == true)
                     topWeaponsByKills = JsonConvert.DeserializeObject<HourlyWeaponSummaryRow[]>(killsJsonString);
                     topWeaponsByDeaths = JsonConvert.DeserializeObject<HourlyWeaponSummaryRow[]>(deathsJsonString);
                 }
-                //Task<HourlyWeaponSummaryRow[]> weaponKillsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/kills/{playerId}");
-                //Task<HourlyWeaponSummaryRow[]> weaponDeathsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/deaths/{playerId}");
-
-                //topWeaponsByKills = await weaponKillsTask;
-                //topWeaponsByDeaths = await weaponDeathsTask;
                 StateHasChanged();
             }
             catch (OperationCanceledException)

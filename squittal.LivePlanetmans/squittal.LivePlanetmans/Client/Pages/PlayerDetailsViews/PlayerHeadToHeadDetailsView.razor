@@ -126,10 +126,8 @@ else if (isSelectedView == true)
 
     private async Task OnPlayerIdChange()
     {
-        if (!string.IsNullOrWhiteSpace(playerId)) // && isLoadingHeadToHead != true)
+        if (!string.IsNullOrWhiteSpace(playerId))
         {
-            //isLoadingHeadToHead = true;
-
             // If a process is already underway, cancel it
             if (cts != null)
             {
@@ -152,8 +150,6 @@ else if (isSelectedView == true)
                     cts.Token.ThrowIfCancellationRequested();
                     headToHeadSummary = JsonConvert.DeserializeObject<PlayerHourlyHeadToHeadSummary>(jsonString);
                 }
-                //Task<PlayerHourlyHeadToHeadSummary> headToHeadTask = Http.GetJsonAsync<PlayerHourlyHeadToHeadSummary>($"api/PlayerHourlyHeadToHead/players/{playerId}");
-                //headToHeadSummary = await headToHeadTask;
                 StateHasChanged();
 
             }

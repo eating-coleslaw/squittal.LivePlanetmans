@@ -480,27 +480,10 @@ else
                     kills = JsonConvert.DeserializeObject<PlayerKillboardItem[]>(killsJsonString);
                 }
                 StateHasChanged();
-
-                //HttpResponseMessage playerResponse = await Http.GetAsync($"api/PlayerDetails/{playerId}", cts.Token);
-                //HttpResponseMessage statsResponse = await Http.GetAsync($"api/PlayerDetails/stats/{playerId}", cts.Token);
-                //HttpResponseMessage killsResponse = await Http.GetAsync($"api/PlayerDetails/kills/{playerId}", cts.Token);
-
-                //Task<Character> playerTask = Http.GetJsonAsync<Character>($"api/PlayerDetails/{playerId}");
-                //Task<PlayerHourlyStatsData> statsTask = Http.GetJsonAsync<PlayerHourlyStatsData>($"api/PlayerDetails/stats/{playerId}");
-                //Task<PlayerKillboardItem[]> killsTask = Http.GetJsonAsync<PlayerKillboardItem[]>($"api/PlayerDetails/kills/{playerId}");
-
-                //player = await playerTask;
-                //StateHasChanged();
-
-                //kills = await killsTask;
-                //StateHasChanged();
-
-                //stats = await statsTask;
-                //StateHasChanged();
             }
             catch (OperationCanceledException)
             {
-                // Debug.WriteLine($"Operation cancelled: api/PlayerHourlyLoadouts/h2h/{playerId}");
+                // Debug.WriteLine($"Operation cancelled: player details ({playerId})");
             }
             catch (Exception)
             {

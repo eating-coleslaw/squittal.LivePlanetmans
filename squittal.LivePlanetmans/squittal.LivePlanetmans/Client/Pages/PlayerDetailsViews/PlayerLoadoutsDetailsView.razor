@@ -169,10 +169,8 @@ else if (isSelectedView == true)
 
     private async Task OnPlayerIdChange()
     {
-        if (!string.IsNullOrWhiteSpace(playerId)) // && isLoadingLoadouts != true)
+        if (!string.IsNullOrWhiteSpace(playerId))
         {
-            //isLoadingLoadouts = true;
-
             // If a process is already underway, cancel it
             if (cts != null)
             {
@@ -194,10 +192,7 @@ else if (isSelectedView == true)
                     cts.Token.ThrowIfCancellationRequested();
                     loadoutsReport = JsonConvert.DeserializeObject<PlayerLoadoutsReport>(jsonString);
                 }
-                //var loadoutsTask = Http.GetJsonAsync<PlayerLoadoutsReport>($"api/PlayerHourlyLoadouts/h2h/{playerId}");
-                //loadoutsReport = await loadoutsTask;
                 StateHasChanged();
-
             }
             catch (OperationCanceledException)
             {
