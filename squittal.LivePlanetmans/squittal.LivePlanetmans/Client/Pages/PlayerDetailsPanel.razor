@@ -24,9 +24,9 @@ else
 {
     @if (player != null)
     {
-        <div id="details-header" style="font-family: 'Roboto Mono'; display: grid; grid-template-columns: 1.5fr 1fr 80px; grid-template-rows: 1fr; border-top: 2px solid @GetFactionColorFromId(player.FactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
+        <div id="details-header" style="font-family: 'Roboto Mono'; display: grid; grid-template-columns: 1.5fr 1fr 80px; grid-template-rows: 1fr; border-top: 2px solid @GetFactionColorFromId(_playerFactionId); border-top-left-radius: 0.2rem; border-top-right-radius: 0.2rem; padding: 5px 10px;">
             <div class="h2" style="margin-bottom: 0px; word-wrap: break-word; grid-column: 1 / 3;">
-                <a href="@GetUrlFromCharacterName(player.Name)" title="Open fisu player profile" target="_blank" style="color:@GetFactionColorFromId(player.FactionId);">
+                <a href="@GetUrlFromCharacterName(player.Name)" title="Open fisu player profile" target="_blank" style="color:@GetFactionColorFromId(_playerFactionId);">
                     @player.Name
                     <span class="h6 oi oi-external-link" style="opacity: 0.5;"></span>
                 </a>
@@ -43,7 +43,7 @@ else
 
             @if (stats != null)
             {
-                <div style="color: @GetFactionColorFromId(player.FactionId); grid-row: 2; font-size: 0.8rem;">
+                <div style="color: @GetFactionColorFromId(_playerFactionId); grid-row: 2; font-size: 0.8rem;">
                     @if (!string.IsNullOrWhiteSpace(stats.TitleName))
                     {
                         <span>@stats.TitleName of the </span>
@@ -53,7 +53,7 @@ else
 
                 @if (stats.OutfitName != null)
                 {
-                    <div style="color: @GetFactionColorFromId(player.FactionId); grid-row: 2; grid-column: 2 / 4; text-align: right; font-size: 0.8rem;">
+                    <div style="color: @GetFactionColorFromId(_playerFactionId); grid-row: 2; grid-column: 2 / 4; text-align: right; font-size: 0.8rem;">
                         @if (!string.IsNullOrWhiteSpace(stats.OutfitAlias))
                         {
                             <span style="font-size: 0.7rem; font-weight: 400;">[@(stats.OutfitAlias)] </span>
@@ -68,107 +68,20 @@ else
         </div>
 
         <div id="details-body" style="padding: 0px 10px; font-family: 'Roboto Mono';">
-            <PlayerDetailsMainStats playerId=@playerId />
             
-            @*
-            @if (stats != null)
-            {
-                <div class="row" style="margin: initial;">
-                    <div id="details-hourly-stats" class="col-sm-9" style="flex-basis: 70%; display: grid; grid-template-columns: 1fr 1fr 1fr 0.3125fr 2fr; grid-template-rows: 1rem 1fr; grid-template-areas: 'header header header header header' 'badge1 badge2 badge3 blank right' 'footer footer footer footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
-
-                        <div style="margin: 0px; font-size: 1rem; grid-area: header;">
-                            Hourly Stats
-                        </div>
-
-                        <div title="Kills Per Minute" style="grid-area: badge1; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
-                            <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
-                                @stats.KillsPerMinute
-                                <div style="text-align: right; font-size: 0.8rem;">KPM</div>
-                            </div>
-                        </div>
-
-                        <div title="Kill Death Ratio" style="grid-area: badge2; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
-                            <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
-                                @stats.KillDeathRatio
-                                <div style="text-align: right; font-size: 0.8rem;">KDR</div>
-                            </div>
-                        </div>
-
-                        <div title="Head Shot Ratio" style="grid-area: badge3; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(player.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(player.FactionId);">
-                            <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
-                                @stats.HeadshotRatio<span style="font-size: 0.75rem;">%</span>
-                                <div style="text-align: right; font-size: 0.8rem; margin-top: -0.25rem;">HSR</div>
-                            </div>
-                        </div>
-
-                        <dl class="row" style="grid-area: right; margin: 0px;">
-                            <dt class="col-sm-7 text-muted" style="padding: 0px;">Kills</dt>
-                            <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Kills</dd>
-
-                            <dt class="col-sm-7 text-muted" style="padding: 0px;">Deaths</dt>
-                            <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Deaths</dd>
-
-                            <dt class="col-sm-7 text-muted" style="padding: 0px;">Team Kills</dt>
-                            <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.TeamKills</dd>
-
-                            <dt class="col-sm-7 text-muted" style="padding: 0px;">Suicides</dt>
-                            <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Suicides</dd>
-                        </dl>
-                    </div>
-
-                    <div id="details-session-stats" class="col-sm-8" style="flex-basis: calc(30% - 1rem); margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
-                        <div style="margin: 0px; font-size: 1rem; grid-area: header;">
-                            Play Session
-                        </div>
-
-                        <div style="margin: 0px; font-size: 0.8rem; grid-column: 1 / 3; grid-row: 2;">
-                            <div style="margin-bottom: 0.3125rem; padding-left: 15px;">@GetSessionDisplayTimes()</div>
-
-                            <dl class="row" style="margin: 0px;">
-                                <dt class="col-sm-7 text-muted">Duration</dt>
-                                <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@GetSessionDurationDisplay()</dd>
-
-                                <dt class="col-sm-7 text-muted">Kills</dt>
-                                <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
-                                    @if (stats.SessionKills == null)
-                                    {
-                                        <span>-</span>
-                                    }
-                                    else
-                                    {
-                                        <span>@stats.SessionKills</span>
-                                    }
-                                </dd>
-
-                                <dt class="col-sm-7 text-muted">KPM</dt>
-                                <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
-                                    @if (stats.SessionKills == null)
-                                    {
-                                        <span>-</span>
-                                    }
-                                    else
-                                    {
-                                        <span>@stats.SessionKillsPerMinute</span>
-                                    }
-                                </dd>
-                            </dl>
-                        </div>
-                    </div>
-
-                </div>
-            }*@
-
+            <PlayerDetailsMainStats playerId=@playerId playerFactionId=@_playerFactionId/>
+            
             <div style="margin-top: 0.5rem;">
 
-                @if (stats != null)
-                {
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; border-top-left-radius: 0.2rem; border-bottom: 2px solid @GetFactionColorFromId(stats.FactionId)80;">
+                @*@if (stats != null)
+                {*@
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; border-top-left-radius: 0.2rem; border-bottom: 2px solid @GetFactionColorFromId(_playerFactionId)80;">
                         <button title="Open killboard view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.kills) padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.kills))">Kills this Hour</button>
                         <button title="Open weapons view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.weapons)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.weapons))">Weapons</button>
                         <button title="Open player head-to-head view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.players)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.players))">Head-to-Head</button>
                         <button title="Open player loadouts view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.loadouts)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.loadouts))">Classes</button>
                     </div>
-                }
+                @*}*@
 
                 @if (view == viewTranslator[PlayerDetailsView.kills] && (isLoadingKillboard == true || kills == null))
                 {
@@ -184,7 +97,7 @@ else
                     }
                     else
                     {
-                        <div style="max-height: 400px; overflow: auto; border-top: 0px solid @GetFactionColorFromId(stats.FactionId)80; border-bottom: 1px solid @GetFactionColorFromId(stats.FactionId)80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem; margin-bottom: 1.5rem;">
+                        <div style="max-height: 400px; overflow: auto; border-top: 0px solid @GetFactionColorFromId(_playerFactionId)80; border-bottom: 1px solid @GetFactionColorFromId(_playerFactionId)80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem; margin-bottom: 1.5rem;">
                             <table class="table-responsive-sm table" style="font-size: 0.85rem !important;">
                                 <tbody style="font-size: small;">
                                     @foreach (var kill in kills)
@@ -345,11 +258,16 @@ else
     public string playerId { get; set; }
 
     [Parameter]
+    public int playerFactionId { get; set; }
+
+    [Parameter]
     public string view { get; set; } = "kills";
 
     public Dictionary<PlayerDetailsView, string> viewTranslator = GetViewTranslator();
 
     string renderedPlayerId;
+
+    private int _playerFactionId;
 
     [Parameter]
     public EventCallback<string> OnKillboardPlayerSelected { get; set; }
@@ -381,6 +299,8 @@ else
         {
             view = viewTranslator[PlayerDetailsView.kills];
         }
+
+        _playerFactionId = playerFactionId;
     }
 
     protected override async Task OnInitializedAsync()
@@ -424,6 +344,9 @@ else
         {
             renderedPlayerId = playerId;
             killboardPlayerId = playerId;
+
+            _playerFactionId = playerFactionId;
+
             await OnPlayerIdChange();
         }
     }
@@ -476,6 +399,8 @@ else
                     player = JsonConvert.DeserializeObject<Character>(playerJsonString);
                     stats= JsonConvert.DeserializeObject<PlayerHourlyStatsData>(statsJsonString);
                     kills = JsonConvert.DeserializeObject<PlayerKillboardItem[]>(killsJsonString);
+
+                    _playerFactionId = player.FactionId;
                 }
                 StateHasChanged();
             }
@@ -776,7 +701,7 @@ else
     {
         if (viewTranslator[thisView] == view)
         {
-            return $"grid-row: 1; background-color: {GetFactionLightColorFromId(stats.FactionId)}; color: var(--sq-black) !important; font-size: 1rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0; text-decoration: none;"; // grid-column: 1; ";
+            return $"grid-row: 1; background-color: {GetFactionLightColorFromId(_playerFactionId)}; color: var(--sq-black) !important; font-size: 1rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0; text-decoration: none;"; // grid-column: 1; ";
         }
         else
         {

@@ -185,7 +185,7 @@
         </div>
 
         <div id="player-details" class="col-lg-6" style="border: 2px solid @GetPlayerDetailsBorderColor() !important; border-radius: 0.2rem; padding: 0px; margin: 0 0 10px 5px; background-color: @GetPlayerDetailsBackgroundColor();">
-            <PlayerDetailsPanel playerId="@playerId" OnKillboardPlayerSelected="KillboardPlayerSelected"/> @*worldId="@worldId" OnCharacterIdChanged="KillboardPlayerSelected"/>*@
+            <PlayerDetailsPanel playerId="@playerId" playerFactionId=@_selectedPlayerFactionId OnKillboardPlayerSelected="KillboardPlayerSelected"/> @*worldId="@worldId" OnCharacterIdChanged="KillboardPlayerSelected"/>*@
         </div>
     </div>
         
@@ -221,6 +221,8 @@
     System.Timers.Timer autoRefreshTimer;
 
     string selectedPlayer = "";
+
+    private int _selectedPlayerFactionId;
 
 
 
@@ -400,6 +402,8 @@
                     players = JsonConvert.DeserializeObject<PlayerHourlyStatsData[]>(jsonString);
 
                     ResolveLatestZoneNames();
+
+                    _selectedPlayerFactionId = players.Where(p => p.PlayerId == playerId).Select(p => p.FactionId).FirstOrDefault();
                 }
 
                 //players = await playersTask;
@@ -495,6 +499,8 @@
     {
         selectedPlayer = characterId;
         playerId = selectedPlayer;
+
+        _selectedPlayerFactionId = players.Where(p => p.PlayerId == playerId).Select(p => p.FactionId).FirstOrDefault();
 
         NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
     }
