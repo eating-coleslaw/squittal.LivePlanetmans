@@ -29,8 +29,66 @@ namespace squittal.LivePlanetmans.Server.Controllers
         [HttpGet("{characterId}")]
         public async Task<ActionResult<Character>> GetPlayerDetailsAsync(string characterId)
         {
-
             return await _characterService.GetCharacterAsync(characterId);
+        }
+
+        [HttpGet("details/{characterId}")]
+        public async Task<ActionResult<PlayerDetails>> GetPlayerDetails(string characterId)
+        {
+            DateTime nowUtc = DateTime.UtcNow;
+            DateTime startTime = nowUtc - TimeSpan.FromHours(1);
+
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                IQueryable<PlayerDetails> query =
+
+                    from character in dbContext.Characters
+
+                    join outfitMember in dbContext.OutfitMembers
+                      on character.Id equals outfitMember.CharacterId into outfitMemberQ
+                    from outfitMember in outfitMemberQ.DefaultIfEmpty()
+
+                    join outfit in dbContext.Outfits
+                      on outfitMember.OutfitId equals outfit.Id into outfitQ
+                    from outfit in outfitQ.DefaultIfEmpty()
+
+                    join faction in dbContext.Factions
+                      on character.FactionId equals faction.Id
+
+                    join title in dbContext.Titles
+                      on character.TitleId equals title.Id into titleQ
+                    from title in titleQ.DefaultIfEmpty()
+
+                    join world in dbContext.Worlds
+                      on character.WorldId equals world.Id
+
+                    where character.Id == characterId
+
+                    select new PlayerDetails()
+                    {
+                        PlayerId = characterId,
+                        PlayerName = character.Name,
+                        OutfitAlias = outfit.Alias,
+                        OutfitName = outfit.Name,
+                        OutfitRankName = outfitMember.Rank,
+                        FactionId = character.FactionId,
+                        FactionName = faction.Name,
+                        BattleRank = character.BattleRank,
+                        PrestigeLevel = character.PrestigeLevel,
+                        TitleName = title.Name,
+                        WorldId = world.Id,
+                        WorldName = world.Name
+                    };
+
+                var playerDetails = await query.AsNoTracking().FirstOrDefaultAsync();
+
+                playerDetails.QueryNowUtc = nowUtc;
+                playerDetails.QueryStartTime = startTime;
+
+                return playerDetails;
+            }
         }
 
         [HttpGet("kills/{characterId}")]
