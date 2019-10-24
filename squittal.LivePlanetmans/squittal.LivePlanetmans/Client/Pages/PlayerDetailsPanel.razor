@@ -346,7 +346,6 @@ else
 
     public Dictionary<PlayerDetailsView, string> viewTranslator = GetViewTranslator();
 
-
     string renderedPlayerId;
 
     [Parameter]
@@ -370,7 +369,6 @@ else
 
     protected override void OnInitialized()
     {
-        //InitializeViewTranslator();
         if (viewTranslator == null || viewTranslator.Count() == 0)
         {
             viewTranslator = GetViewTranslator();
@@ -390,9 +388,6 @@ else
         await Task.WhenAll(modelsTask, profileTask);
 
         SetUpLoadoutMapping();
-
-        //await SetUpLoadoutModels();
-        //await SetUpLoadoutMapping();
 
         await OnPlayerIdChange();
     }
@@ -531,7 +526,6 @@ else
                 ? $"{(startTime - fiveHours).ToString("M")} {(startTime - fiveHours).ToShortTimeString()} - Now"
                 : $"{(startTime - fiveHours).ToString("M")} {(startTime - fiveHours).ToShortTimeString()} - {(endTime - fiveHours).ToString("M")} {(endTime - fiveHours).ToShortTimeString()}";
         }
-
     }
 
     DateTime GetSessionStartTime()
