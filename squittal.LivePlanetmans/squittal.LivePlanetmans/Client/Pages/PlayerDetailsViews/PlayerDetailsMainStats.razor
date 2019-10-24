@@ -1,0 +1,328 @@
+﻿@using squittal.LivePlanetmans.Shared.Models
+@using System.Threading
+@using Newtonsoft.Json
+@inject HttpClient Http
+
+@if (stats != null)
+{
+    <div class="row" style="margin: initial;">
+        <div id="details-hourly-stats" class="col-sm-9" style="flex-basis: 70%; display: grid; grid-template-columns: 1fr 1fr 1fr 0.3125fr 2fr; grid-template-rows: 1rem 1fr; grid-template-areas: 'header header header header header' 'badge1 badge2 badge3 blank right' 'footer footer footer footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+
+            <div style="margin: 0px; font-size: 1rem; grid-area: header;">
+                Hourly Stats
+            </div>
+
+            <div title="Kills Per Minute" style="grid-area: badge1; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(stats.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(stats.FactionId);">
+                <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
+                    @stats.KillsPerMinute
+                    <div style="text-align: right; font-size: 0.8rem;">KPM</div>
+                </div>
+            </div>
+
+            <div title="Kill Death Ratio" style="grid-area: badge2; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(stats.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(stats.FactionId);">
+                <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
+                    @stats.KillDeathRatio
+                    <div style="text-align: right; font-size: 0.8rem;">KDR</div>
+                </div>
+            </div>
+
+            <div title="Head Shot Ratio" style="grid-area: badge3; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(stats.FactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(stats.FactionId);">
+                <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
+                    @stats.HeadshotRatio<span style="font-size: 0.75rem;">%</span>
+                    <div style="text-align: right; font-size: 0.8rem; margin-top: -0.25rem;">HSR</div>
+                </div>
+            </div>
+
+            <dl class="row" style="grid-area: right; margin: 0px;">
+                <dt class="col-sm-7 text-muted" style="padding: 0px;">Kills</dt>
+                <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Kills</dd>
+
+                <dt class="col-sm-7 text-muted" style="padding: 0px;">Deaths</dt>
+                <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Deaths</dd>
+
+                <dt class="col-sm-7 text-muted" style="padding: 0px;">Team Kills</dt>
+                <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.TeamKills</dd>
+
+                <dt class="col-sm-7 text-muted" style="padding: 0px;">Suicides</dt>
+                <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Suicides</dd>
+            </dl>
+        </div>
+
+        <div id="details-session-stats" class="col-sm-8" style="flex-basis: calc(30% - 1rem); margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(stats.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(stats.FactionId);">
+            <div style="margin: 0px; font-size: 1rem; grid-area: header;">
+                Play Session
+            </div>
+
+            <div style="margin: 0px; font-size: 0.8rem; grid-column: 1 / 3; grid-row: 2;">
+                <div style="margin-bottom: 0.3125rem; padding-left: 15px;">@GetSessionDisplayTimes()</div>
+
+                <dl class="row" style="margin: 0px;">
+                    <dt class="col-sm-7 text-muted">Duration</dt>
+                    <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@GetSessionDurationDisplay()</dd>
+
+                    <dt class="col-sm-7 text-muted">Kills</dt>
+                    <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
+                        @if (stats.SessionKills == null)
+                        {
+                            <span>-</span>
+                        }
+                        else
+                        {
+                            <span>@stats.SessionKills</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-7 text-muted">KPM</dt>
+                    <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
+                        @if (stats.SessionKills == null)
+                        {
+                            <span>-</span>
+                        }
+                        else
+                        {
+                            <span>@stats.SessionKillsPerMinute</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string playerId { get; set; }
+
+    PlayerHourlyStatsData stats;
+
+    bool isLoadingStats = false;
+    CancellationTokenSource cts;
+
+    string renderedPlayerId;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await OnPlayerIdChange();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (playerId != renderedPlayerId && !string.IsNullOrEmpty(playerId))
+        {
+            renderedPlayerId = playerId;
+            await OnPlayerIdChange();
+        }
+    }
+
+    private async Task OnPlayerIdChange()
+    {
+        if (!string.IsNullOrWhiteSpace(playerId))
+        {
+            // If a process is already underway, cancel it
+            if (cts != null)
+            {
+                cts.Cancel();
+            }
+
+            // Set cts to cancel the current process if another table refresh is requested
+            CancellationTokenSource newCTS = new CancellationTokenSource();
+            cts = newCTS;
+
+            try
+            {
+                isLoadingStats = true;
+                HttpResponseMessage response = await Http.GetAsync($"api/PlayerDetails/stats/{playerId}", cts.Token);
+
+                if (response != null)
+                {
+                    var jsonString = await response.Content.ReadAsStringAsync();
+                    cts.Token.ThrowIfCancellationRequested();
+                    stats = JsonConvert.DeserializeObject<PlayerHourlyStatsData>(jsonString);
+                }
+                StateHasChanged();
+            }
+            catch (OperationCanceledException)
+            {
+                // Debug.WriteLine($"Operation cancelled: api/PlayerHourlyLoadouts/h2h/{playerId}");
+            }
+            catch (Exception)
+            {
+                //Ignore
+            }
+            finally
+            {
+                isLoadingStats = false;
+            }
+
+            // When the process is complete, signal that another process can proceed
+            if (cts == newCTS)
+            {
+                cts = null;
+            }
+        }
+    }
+
+    string GetSessionDisplayTimes()
+    {
+        if (stats == null)
+        {
+            return string.Empty;
+        }
+
+        var startTime = GetSessionStartTime();
+        var endTime = GetSessionEndTime();
+
+        bool endIsNow = (endTime == stats.QueryNowUtc);
+        bool sameDates = (startTime.Date == endTime.Date);
+        var fiveHours = TimeSpan.FromHours(5);
+
+        if (sameDates == true)
+        {
+            return endIsNow
+                ? $"{(startTime - fiveHours).ToShortTimeString()} - Now"
+                : $"{(startTime - fiveHours).ToShortTimeString()} - {(endTime - fiveHours).ToShortTimeString()}";
+        }
+        else
+        {
+            return endIsNow
+                ? $"{(startTime - fiveHours).ToString("M")} {(startTime - fiveHours).ToShortTimeString()} - Now"
+                : $"{(startTime - fiveHours).ToString("M")} {(startTime - fiveHours).ToShortTimeString()} - {(endTime - fiveHours).ToString("M")} {(endTime - fiveHours).ToShortTimeString()}";
+        }
+    }
+
+    DateTime GetSessionStartTime()
+    {
+        return (stats.LatestLoginTime ?? stats.QueryStartTime);
+    }
+
+    DateTime GetSessionEndTime()
+    {
+        var sessionEndTime = (stats.LatestLogoutTime ?? stats.QueryNowUtc); // (playerStats.LatestLogoutTime != null) ? (playerStats.LatestLogoutTime ?? nowUtc) : nowUtc;
+
+        if (sessionEndTime <= GetSessionStartTime())
+        {
+            sessionEndTime = stats.QueryNowUtc;
+        }
+
+        return sessionEndTime;
+    }
+
+    string GetSessionDurationDisplay()
+    {
+        var duration = (GetSessionEndTime() - GetSessionStartTime());
+
+        var totalMinutes = (int)Math.Round(duration.TotalMinutes, 0);
+
+        int hours = (totalMinutes / 60);
+
+        var remainder = totalMinutes - (hours * 60);
+
+        string hoursDisplay = (hours > 0) ? $"{hours}h" : string.Empty;
+        string minutesDisplay = (remainder > 0) ? $"{remainder}m" : string.Empty;
+        string space = (hours > 0 && remainder > 0) ? " " : string.Empty;
+
+        return $"{hoursDisplay}{space}{minutesDisplay}";
+    }
+
+    string GetFactionColorFromId(int? factionId)
+    {
+        string color = "#27273A"; // 2F2F2F";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "#652fdc"; // 6A4CE0";
+                break;
+
+            //NC
+            case 2:
+                color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
+                break;
+
+            //TR
+            case 3:
+                color = "#e04c70"; // FF6C70";
+                break;
+        }
+
+        return color;
+    }
+
+    string GetFactionLightColorFromId(int? factionId)
+    {
+        string color = "var(--sq-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "var(--sq-ps2-vs-primary-light)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                color = "var(--sq-ps2-nc-primary-light)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                color = "var(--sq-ps2-tr-primary-light)"; //#FFD2D3";
+                break;
+        }
+
+        return color;
+    }
+
+    string GetFactionLightAlphaColorFromId(int? factionId)
+    {
+        string color = "var(--sq-ps2-ns-primary-light-alpha)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                color = "var(--sq-ps2-vs-primary-light-alpha)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                color = "var(--sq-ps2-nc-primary-light-alpha)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                color = "var(--sq-ps2-tr-primary-light-alpha)"; //#FFD2D3";
+                break;
+        }
+
+        return color;
+    }
+
+    string GetFactionClassFromId(int? factionId)
+    {
+        string cssClass = "ns"; //table-striped-striped var(--sqp-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                cssClass = "vs"; // var(--sqp-ps2-vs-primary-light)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                cssClass = "nc"; // var(--sqp-ps2-nc-primary-light)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                cssClass = "tr"; // var(--sqp-ps2-tr-primary-light)"; //#FFD2D3";
+                break;
+        }
+
+        return cssClass;
+    }
+}
