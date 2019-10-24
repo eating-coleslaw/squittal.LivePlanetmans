@@ -14,37 +14,37 @@
 
             <div title="Kills Per Minute" style="grid-area: badge1; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(_playerFactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(_playerFactionId);">
                 <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
-                    @stats.KillsPerMinute
+                    <span style="color: @_dataColor;">@stats.KillsPerMinute</span>
                     <div style="text-align: right; font-size: 0.8rem;">KPM</div>
                 </div>
             </div>
 
             <div title="Kill Death Ratio" style="grid-area: badge2; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(_playerFactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(_playerFactionId);">
                 <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
-                    @stats.KillDeathRatio
+                    <span style="color: @_dataColor;">@stats.KillDeathRatio</span>
                     <div style="text-align: right; font-size: 0.8rem;">KDR</div>
                 </div>
             </div>
 
             <div title="Head Shot Ratio" style="grid-area: badge3; line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(_playerFactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; background-color: @GetFactionLightColorFromId(_playerFactionId);">
                 <div style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">
-                    @stats.HeadshotRatio<span style="font-size: 0.75rem;">%</span>
+                    <span style="color: @_dataColor;">@stats.HeadshotRatio</span><span style="font-size: 0.75rem; color: @_dataColor;">%</span>
                     <div style="text-align: right; font-size: 0.8rem; margin-top: -0.25rem;">HSR</div>
                 </div>
             </div>
 
             <dl class="row" style="grid-area: right; margin: 0px;">
                 <dt class="col-sm-7 text-muted" style="padding: 0px;">Kills</dt>
-                <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Kills</dd>
+                <dd class="col-sm-3" style="color: @_dataColor; margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Kills</dd>
 
                 <dt class="col-sm-7 text-muted" style="padding: 0px;">Deaths</dt>
-                <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Deaths</dd>
+                <dd class="col-sm-3" style="color: @_dataColor; margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Deaths</dd>
 
                 <dt class="col-sm-7 text-muted" style="padding: 0px;">Team Kills</dt>
-                <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.TeamKills</dd>
+                <dd class="col-sm-3" style="color: @_dataColor; margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.TeamKills</dd>
 
                 <dt class="col-sm-7 text-muted" style="padding: 0px;">Suicides</dt>
-                <dd class="col-sm-3" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Suicides</dd>
+                <dd class="col-sm-3" style="color: @_dataColor; margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@stats.Suicides</dd>
             </dl>
         </div>
 
@@ -54,14 +54,14 @@
             </div>
 
             <div style="margin: 0px; font-size: 0.8rem; grid-column: 1 / 3; grid-row: 2;">
-                <div style="margin-bottom: 0.3125rem; padding-left: 15px;">@GetSessionDisplayTimes()</div>
+                <div style="color: @_dataColor; margin-bottom: 0.3125rem; padding-left: 15px;">@GetSessionDisplayTimes()</div>
 
                 <dl class="row" style="margin: 0px;">
                     <dt class="col-sm-7 text-muted">Duration</dt>
-                    <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@GetSessionDurationDisplay()</dd>
+                    <dd class="col-sm-5" style="color: @_dataColor; margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@GetSessionDurationDisplay()</dd>
 
                     <dt class="col-sm-7 text-muted">Kills</dt>
-                    <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
+                    <dd class="col-sm-5" style="color: @_dataColor; margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
                         @if (stats.SessionKills == null)
                         {
                             <span>-</span>
@@ -73,7 +73,7 @@
                     </dd>
 
                     <dt class="col-sm-7 text-muted">KPM</dt>
-                    <dd class="col-sm-5" style="margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
+                    <dd class="col-sm-5" style="color: @_dataColor; margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
                         @if (stats.SessionKills == null)
                         {
                             <span>-</span>
@@ -106,6 +106,14 @@
 
     private int _playerFactionId;
 
+    private string _dataColorDefault = "var(--sq-black)";
+    private string _dataColor;
+    private string _dataColorTransparent = "transparent";
+
+    protected override void OnInitialized()
+    {
+        _dataColor = _dataColorDefault;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -140,6 +148,8 @@
             try
             {
                 isLoadingStats = true;
+                _dataColor = _dataColorTransparent;
+
                 HttpResponseMessage response = await Http.GetAsync($"api/PlayerDetails/stats/{playerId}", cts.Token);
 
                 if (response != null)
@@ -149,6 +159,7 @@
                     stats = JsonConvert.DeserializeObject<PlayerHourlyStatsData>(jsonString);
 
                     _playerFactionId = stats.FactionId;
+                    _dataColor = _dataColorDefault;
                 }
                 StateHasChanged();
             }
