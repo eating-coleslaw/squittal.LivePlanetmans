@@ -2,8 +2,8 @@
 @using squittal.LivePlanetmans.Client.Pages.PlayerDetailsViews
 @using squittal.LivePlanetmans.Shared.Models
 @using System.Diagnostics
+@using System.Threading
 @using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
@@ -304,7 +304,8 @@ else
 
         <div id="details-footer" style="font-family: 'Roboto Mono'; position: absolute; bottom: 0.5rem; height: 1rem; line-height: 1rem;">
             <div>
-                <a href="@GetUrlFromCharacterId(player.Id)" title="Open Voidwell player profile" class="text-muted" style="font-size: 0.8rem; padding-left: 0.8rem; font-weight: 400;" target="_blank"> @*margin-top: 0.1rem; >*@
+                <a href="@GetUrlFromCharacterId(player.Id)" title="Open Voidwell player profile" class="text-muted" style="font-size: 0.8rem; padding-left: 0.8rem; font-weight: 400;" target="_blank">
+                    @*margin-top: 0.1rem; >*@
                     @player.Id
                     <span class="h6 oi oi-external-link" style="font-size: 60%; opacity: 0.5;"></span>
                 </a>
@@ -329,6 +330,7 @@ else
     bool isLoadingKillboard = false;
     bool isLoadingCharacter = false;
     bool isLoadingStats = false;
+    CancellationTokenSource cts;
 
     bool isSelectedViewKillboard = false;
     bool isSelectedViewWeapons = false;
@@ -438,23 +440,70 @@ else
         fetchTries += 1;
         if (!string.IsNullOrWhiteSpace(playerId) && isLoadingKillboard != true)
         {
-            isLoadingKillboard = true;
+            //isLoadingKillboard = true;
+
+            // If a process is already underway, cancel it
+            if (cts != null)
+            {
+                cts.Cancel();
+            }
+
+            // Set cts to cancel the current process if another table refresh is requested
+            CancellationTokenSource newCTS = new CancellationTokenSource();
+            cts = newCTS;
+
+            var taskList = new List<Task<HttpResponseMessage>>();
 
             /* DETAILS & KILLBOARD */
             try
             {
-                Task<Character> playerTask = Http.GetJsonAsync<Character>($"api/PlayerDetails/{playerId}");
-                Task<PlayerHourlyStatsData> statsTask = Http.GetJsonAsync<PlayerHourlyStatsData>($"api/PlayerDetails/stats/{playerId}");
-                Task<PlayerKillboardItem[]> killsTask = Http.GetJsonAsync<PlayerKillboardItem[]>($"api/PlayerDetails/kills/{playerId}");
+                isLoadingKillboard = true;
 
-                player = await playerTask;
-                StateHasChanged();
+                var playerTask = Http.GetAsync($"api/PlayerDetails/{playerId}", cts.Token);
+                var statsTask = Http.GetAsync($"api/PlayerDetails/stats/{playerId}", cts.Token);
+                var killsTask = Http.GetAsync($"api/PlayerDetails/kills/{playerId}", cts.Token);
 
-                kills = await killsTask;
-                StateHasChanged();
+                await Task.WhenAll(playerTask, statsTask, killsTask);
 
-                stats = await statsTask;
-                StateHasChanged();
+                var playerResponse = playerTask.Result;
+                var statsResponse = statsTask.Result;
+                var killsResponse= killsTask .Result;
+
+                if (playerResponse != null && statsResponse != null && killsResponse != null)
+                {
+                    var playerJsonString = await playerResponse.Content.ReadAsStringAsync();
+                    var statsJsonString = await statsResponse.Content.ReadAsStringAsync();
+                    var killsJsonString = await killsResponse.Content.ReadAsStringAsync();
+
+                    cts.Token.ThrowIfCancellationRequested();
+
+                    player = JsonConvert.DeserializeObject<Character>(playerJsonString);
+                    stats= JsonConvert.DeserializeObject<PlayerHourlyStatsData>(statsJsonString);
+                    kills = JsonConvert.DeserializeObject<PlayerKillboardItem[]>(killsJsonString);
+
+                    StateHasChanged();
+                }
+
+                //HttpResponseMessage playerResponse = await Http.GetAsync($"api/PlayerDetails/{playerId}", cts.Token);
+                //HttpResponseMessage statsResponse = await Http.GetAsync($"api/PlayerDetails/stats/{playerId}", cts.Token);
+                //HttpResponseMessage killsResponse = await Http.GetAsync($"api/PlayerDetails/kills/{playerId}", cts.Token);
+
+                //Task<Character> playerTask = Http.GetJsonAsync<Character>($"api/PlayerDetails/{playerId}");
+                //Task<PlayerHourlyStatsData> statsTask = Http.GetJsonAsync<PlayerHourlyStatsData>($"api/PlayerDetails/stats/{playerId}");
+                //Task<PlayerKillboardItem[]> killsTask = Http.GetJsonAsync<PlayerKillboardItem[]>($"api/PlayerDetails/kills/{playerId}");
+
+                //player = await playerTask;
+                //StateHasChanged();
+
+                //kills = await killsTask;
+                //StateHasChanged();
+
+                //stats = await statsTask;
+                //StateHasChanged();
+            }
+            catch (OperationCanceledException)
+            {
+                // Debug.WriteLine($"Operation cancelled: api/PlayerHourlyLoadouts/h2h/{playerId}");
             }
             catch (Exception)
             {
@@ -463,6 +512,12 @@ else
             finally
             {
                 isLoadingKillboard = false;
+            }
+
+            // When the process is complete, signal that another process can proceed
+            if (cts == newCTS)
+            {
+                cts = null;
             }
         }
     }

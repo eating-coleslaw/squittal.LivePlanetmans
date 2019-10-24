@@ -1,4 +1,6 @@
 ﻿@using squittal.LivePlanetmans.Shared.Models
+@using System.Threading
+@using Newtonsoft.Json
 @inject HttpClient Http
 
 @if ((topWeaponsByKills == null && topWeaponsByDeaths == null) || isLoadingWeapons == true)
@@ -85,6 +87,7 @@ else if (isSelectedView == true)
     public bool isSelectedView { get; set; }
 
     bool isLoadingWeapons = false;
+    CancellationTokenSource cts;
 
     HourlyWeaponSummaryRow[] topWeaponsByKills;
     HourlyWeaponSummaryRow[] topWeaponsByDeaths;
@@ -108,24 +111,62 @@ else if (isSelectedView == true)
 
     private async Task OnPlayerIdChange()
     {
-        isLoadingWeapons = true;
+        if (!string.IsNullOrWhiteSpace(playerId)) // && isLoadingWeapons != true)
+        {
+            //isLoadingWeapons = true;
 
-        try
-        {
-            Task<HourlyWeaponSummaryRow[]> weaponKillsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/kills/{playerId}");
-            Task<HourlyWeaponSummaryRow[]> weaponDeathsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/deaths/{playerId}");
+            // If a process is already underway, cancel it
+            if (cts != null)
+            {
+                cts.Cancel();
+            }
 
-            topWeaponsByKills = await weaponKillsTask;
-            topWeaponsByDeaths = await weaponDeathsTask;
-            StateHasChanged();
-        }
-        catch (Exception)
-        {
-            //ignore
-        }
-        finally
-        {
-            isLoadingWeapons = false;
+            // Set cts to cancel the current process if another table refresh is requested
+            CancellationTokenSource newCTS = new CancellationTokenSource();
+            cts = newCTS;
+
+            try
+            {
+                isLoadingWeapons = true;
+                
+                HttpResponseMessage killsResponse = await Http.GetAsync($"api/PlayerHourlyWeapons/weapons/kills/{playerId}", cts.Token);
+                HttpResponseMessage deathsResponse = await Http.GetAsync($"api/PlayerHourlyWeapons/weapons/deaths/{playerId}", cts.Token);
+
+                if (killsResponse != null && deathsResponse != null)
+                {
+                    var killsJsonString = await killsResponse.Content.ReadAsStringAsync();
+                    var deathsJsonString = await deathsResponse.Content.ReadAsStringAsync();
+
+                    cts.Token.ThrowIfCancellationRequested();
+
+                    topWeaponsByKills = JsonConvert.DeserializeObject<HourlyWeaponSummaryRow[]>(killsJsonString);
+                    topWeaponsByDeaths = JsonConvert.DeserializeObject<HourlyWeaponSummaryRow[]>(deathsJsonString);
+                }
+                //Task<HourlyWeaponSummaryRow[]> weaponKillsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/kills/{playerId}");
+                //Task<HourlyWeaponSummaryRow[]> weaponDeathsTask = Http.GetJsonAsync<HourlyWeaponSummaryRow[]>($"api/PlayerHourlyWeapons/weapons/deaths/{playerId}");
+
+                //topWeaponsByKills = await weaponKillsTask;
+                //topWeaponsByDeaths = await weaponDeathsTask;
+                StateHasChanged();
+            }
+            catch (OperationCanceledException)
+            {
+                // Debug.WriteLine($"Operation cancelled: api/PlayerHourlyWeapons/weapons/[kills,deaths]/{playerId}");
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+            finally
+            {
+                isLoadingWeapons = false;
+            }
+
+            // When the process is complete, signal that another process can proceed
+            if (cts == newCTS)
+            {
+                cts = null;
+            }
         }
     }
 

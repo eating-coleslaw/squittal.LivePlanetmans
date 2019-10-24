@@ -1,4 +1,6 @@
 ﻿@using squittal.LivePlanetmans.Shared.Models
+@using System.Threading
+@using Newtonsoft.Json
 @inject HttpClient Http
 
 @if (headToHeadSummary == null || isLoadingHeadToHead == true)
@@ -103,6 +105,7 @@ else if (isSelectedView == true)
     PlayerHourlyHeadToHeadSummary headToHeadSummary;
 
     bool isLoadingHeadToHead = false;
+    CancellationTokenSource cts;
 
     string renderedPlayerId;
 
@@ -123,17 +126,40 @@ else if (isSelectedView == true)
 
     private async Task OnPlayerIdChange()
     {
-        if (!string.IsNullOrWhiteSpace(playerId) && isLoadingHeadToHead != true)
+        if (!string.IsNullOrWhiteSpace(playerId)) // && isLoadingHeadToHead != true)
         {
-            isLoadingHeadToHead = true;
+            //isLoadingHeadToHead = true;
 
-            /* Player Head-To-Head */
+            // If a process is already underway, cancel it
+            if (cts != null)
+            {
+                cts.Cancel();
+            }
+
+            // Set cts to cancel the current process if another table refresh is requested
+            CancellationTokenSource newCTS = new CancellationTokenSource();
+            cts = newCTS;
+
             try
             {
-                Task<PlayerHourlyHeadToHeadSummary> headToHeadTask = Http.GetJsonAsync<PlayerHourlyHeadToHeadSummary>($"api/PlayerHourlyHeadToHead/players/{playerId}");
-                headToHeadSummary = await headToHeadTask;
+                isLoadingHeadToHead = true;
+
+                HttpResponseMessage response = await Http.GetAsync($"api/PlayerHourlyHeadToHead/players/{playerId}", cts.Token);
+
+                if (response != null)
+                {
+                    var jsonString = await response.Content.ReadAsStringAsync();
+                    cts.Token.ThrowIfCancellationRequested();
+                    headToHeadSummary = JsonConvert.DeserializeObject<PlayerHourlyHeadToHeadSummary>(jsonString);
+                }
+                //Task<PlayerHourlyHeadToHeadSummary> headToHeadTask = Http.GetJsonAsync<PlayerHourlyHeadToHeadSummary>($"api/PlayerHourlyHeadToHead/players/{playerId}");
+                //headToHeadSummary = await headToHeadTask;
                 StateHasChanged();
 
+            }
+            catch (OperationCanceledException)
+            {
+                // Debug.WriteLine($"Operation cancelled: api/PlayerHourlyHeadToHead/players/{playerId}");
             }
             catch (Exception)
             {
@@ -142,6 +168,12 @@ else if (isSelectedView == true)
             finally
             {
                 isLoadingHeadToHead = false;
+            }
+
+            // When the process is complete, signal that another process can proceed
+            if (cts == newCTS)
+            {
+                cts = null;
             }
         }
     }
