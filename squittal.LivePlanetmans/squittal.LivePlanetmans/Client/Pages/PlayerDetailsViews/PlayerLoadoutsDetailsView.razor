@@ -1,4 +1,5 @@
 ﻿@using squittal.LivePlanetmans.Shared.Models
+
 @inject HttpClient Http
 
 @if (loadoutsReport == null || isLoadingLoadouts == true)
@@ -26,8 +27,8 @@ else if (isSelectedView == true)
 
                                 @foreach (var loadout in loadoutsReport.PlayerLoadouts)
                                 {
-                                    <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="color: @GetFactionColorFromId(loadout.Details.FactionId); padding-top: 0.3125rem;">
-                                        <CompactKdrStatsGridTableHeader loadoutIconClass=@GetLoadoutIconClass(loadout.Details.Id) factionClass=@GetFactionClassFromId(loadout.Details.FactionId) loadoutName=@loadout.Details.Name />
+                                    <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="color: @GetFactionColorFromId(loadout.Details.FactionId); padding-top: 0.3125rem; padding-right: 0;">
+                                        <LoadoutDetailsColumnHeader loadoutIconClass=@GetLoadoutIconClass(loadout.Details.Id) factionClass=@GetFactionClassFromId(loadout.Details.FactionId) loadoutName=@loadout.Details.Name />
                                     </th>
                                 }
 
@@ -52,10 +53,11 @@ else if (isSelectedView == true)
                                 </td>
                             </tr>
 
-                            <tr style="height: 0.5rem;"></tr>
 
                             @foreach (var faction in loadoutsReport.FactionLoadouts)
                             {
+                                <tr style="height: 0.5rem;"></tr>
+                                
                                 <tr style="color: @GetFactionColorFromId(faction.Summary.Details.Id); font-weight: 500; border-bottom: 1px solid @GetFactionColorFromId(faction.Summary.Details.Id); background-color: transparent; vertical-align: bottom;">
 
                                     <td style="padding-top: 0.75rem; width: 160px;">@GetFactionAbbrevFromId(faction.Summary.Details.Id)</td>

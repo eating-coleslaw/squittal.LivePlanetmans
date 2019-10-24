@@ -1,0 +1,33 @@
+﻿<div style="min-width: 70px; height: 1rem; margin-left: auto; width: max-content;">
+    <div class="small @_loadoutIconclass @_factionClass" title="@_loadoutName" style="position: relative; float: left; top: -4px; display: inline-block; height: 12px; width: 12px; vertical-align: text-top;"></div>
+    <div style="display: inline-block; vertical-align: text-top; float: left; padding-left: 0.2rem;">KDR</div>
+    <sup style="top: 0px; padding-left: 0.5rem; float: left;">K</sup>
+    <sub style="padding-left: 1.5rem; float: left;">D</sub>
+</div>
+
+@code {
+
+    [Parameter]
+    public string loadoutIconClass { get; set; }
+
+    [Parameter]
+    public string factionClass { get; set; }
+
+    [Parameter]
+    public string loadoutName { get; set; }
+
+    private string _loadoutIconclass = string.Empty;
+    private string _factionClass = string.Empty;
+    private string _loadoutName = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        _loadoutIconclass = (!string.IsNullOrWhiteSpace(loadoutIconClass)) ? loadoutIconClass : string.Empty;
+
+        _factionClass = (!string.IsNullOrWhiteSpace(factionClass)) ? factionClass : string.Empty;
+
+        _loadoutName = (!string.IsNullOrWhiteSpace(loadoutName)) ? loadoutName : string.Empty;
+    }
+
+}
+
