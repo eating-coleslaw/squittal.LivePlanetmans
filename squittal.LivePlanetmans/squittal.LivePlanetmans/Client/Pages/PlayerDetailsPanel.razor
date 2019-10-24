@@ -438,10 +438,8 @@ else
     private async Task OnPlayerIdChange()
     {
         fetchTries += 1;
-        if (!string.IsNullOrWhiteSpace(playerId) && isLoadingKillboard != true)
+        if (!string.IsNullOrWhiteSpace(playerId)) // && isLoadingKillboard != true)
         {
-            //isLoadingKillboard = true;
-
             // If a process is already underway, cancel it
             if (cts != null)
             {
