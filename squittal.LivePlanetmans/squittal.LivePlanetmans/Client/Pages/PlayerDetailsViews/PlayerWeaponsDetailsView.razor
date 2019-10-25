@@ -91,9 +91,6 @@ else if (isSelectedView == true)
 
     HourlyPlayerWeaponsReport weaponsReport;
 
-    WeaponSummaryRow[] topWeaponsByKills;
-    WeaponSummaryRow[] topWeaponsByDeaths;
-
     string renderedPlayerId;
 
 
@@ -139,26 +136,8 @@ else if (isSelectedView == true)
                     cts.Token.ThrowIfCancellationRequested();
 
                     weaponsReport = JsonConvert.DeserializeObject<HourlyPlayerWeaponsReport>(jsonString);
-
-                    //topWeaponsByKills = weaponsReport.TopWeaponsByKills;
-                    //topWeaponsByDeaths = weaponsReport.TopWeaponsByDeaths;
                 }
                 StateHasChanged();
-
-                //HttpResponseMessage killsResponse = await Http.GetAsync($"api/PlayerHourlyWeapons/weapons/kills/{playerId}", cts.Token);
-                //HttpResponseMessage deathsResponse = await Http.GetAsync($"api/PlayerHourlyWeapons/weapons/deaths/{playerId}", cts.Token);
-
-                //if (killsResponse != null && deathsResponse != null)
-                //{
-                //    var killsJsonString = await killsResponse.Content.ReadAsStringAsync();
-                //    var deathsJsonString = await deathsResponse.Content.ReadAsStringAsync();
-
-                //    cts.Token.ThrowIfCancellationRequested();
-
-                //    topWeaponsByKills = JsonConvert.DeserializeObject<HourlyWeaponSummaryRow[]>(killsJsonString);
-                //    topWeaponsByDeaths = JsonConvert.DeserializeObject<HourlyWeaponSummaryRow[]>(deathsJsonString);
-                //}
-                //StateHasChanged();
             }
             catch (OperationCanceledException)
             {
