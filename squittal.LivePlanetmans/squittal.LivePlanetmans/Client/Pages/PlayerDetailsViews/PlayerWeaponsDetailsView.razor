@@ -3,7 +3,7 @@
 @using Newtonsoft.Json
 @inject HttpClient Http
 
-@if ((topWeaponsByKills == null && topWeaponsByDeaths == null) || isLoadingWeapons == true)
+@if ((weaponsReport == null) || isLoadingWeapons == true)
 {
     @if (isSelectedView == true)
     {
@@ -15,7 +15,7 @@ else if (isSelectedView == true)
     <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">
         <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(playerFactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">
             <h5 style="font-size: 1rem; margin-bottom: 0.25rem">Top Weapons By Kills</h5>
-            @if (topWeaponsByKills != null && isLoadingWeapons != true)
+            @if (weaponsReport != null && weaponsReport.TopWeaponsByKills.Any() == true && isLoadingWeapons != true)
             {
 
                 <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
@@ -30,12 +30,12 @@ else if (isSelectedView == true)
                         @*</table>*@
 
                         <tbody style="background-color: var(--sq-bs-white-lit);">
-                            @foreach (var weapon in topWeaponsByKills)
+                            @foreach (var weapon in weaponsReport.TopWeaponsByKills)
                             {
                                 <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
                                     <td>@weapon.WeaponName</td>
-                                    <td>@weapon.Kills</td>
-                                    <td>@weapon.HeadshotRatio</td>
+                                    <td>@weapon.WeaponStats.Kills</td>
+                                    <td>@weapon.WeaponStats.HeadshotRatio</td>
                                 </tr>
                             }
                         </tbody>
@@ -46,7 +46,7 @@ else if (isSelectedView == true)
 
         <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(playerFactionId);">
             <h5 style="font-size: 1rem; margin-bottom: 0.25rem">Top Weapons By Deaths</h5>
-            @if (topWeaponsByDeaths != null && isLoadingWeapons != true)
+            @if (weaponsReport != null && weaponsReport.TopWeaponsByDeaths.Any() == true && isLoadingWeapons != true)
             {
 
                 <div style="max-height: calc(350px - 1.5rem); overflow: auto;">
@@ -60,12 +60,12 @@ else if (isSelectedView == true)
                         </thead>
 
                         <tbody style="background-color: var(--sq-bs-white-lit);">
-                            @foreach (var weapon in topWeaponsByDeaths)
+                            @foreach (var weapon in weaponsReport.TopWeaponsByDeaths)
                             {
                                 <tr style="color: @GetFactionColorFromId(weapon.FactionId)">
                                     <td>@weapon.WeaponName</td>
-                                    <td>@weapon.Kills</td>
-                                    <td>@weapon.HeadshotRatio</td>
+                                    <td>@weapon.WeaponStats.Deaths</td>
+                                    <td>@weapon.WeaponStats.HeadshotDeathRatio</td>
                                 </tr>
                             }
                         </tbody>
@@ -89,8 +89,10 @@ else if (isSelectedView == true)
     bool isLoadingWeapons = false;
     CancellationTokenSource cts;
 
-    HourlyWeaponSummaryRow[] topWeaponsByKills;
-    HourlyWeaponSummaryRow[] topWeaponsByDeaths;
+    HourlyPlayerWeaponsReport weaponsReport;
+
+    WeaponSummaryRow[] topWeaponsByKills;
+    WeaponSummaryRow[] topWeaponsByDeaths;
 
     string renderedPlayerId;
 
@@ -126,21 +128,37 @@ else if (isSelectedView == true)
             try
             {
                 isLoadingWeapons = true;
-                
-                HttpResponseMessage killsResponse = await Http.GetAsync($"api/PlayerHourlyWeapons/weapons/kills/{playerId}", cts.Token);
-                HttpResponseMessage deathsResponse = await Http.GetAsync($"api/PlayerHourlyWeapons/weapons/deaths/{playerId}", cts.Token);
 
-                if (killsResponse != null && deathsResponse != null)
+                HttpResponseMessage response = await Http.GetAsync($"api/PlayerHourlyWeapons/weapons/{playerId}", cts.Token);
+
+
+                if (response != null)
                 {
-                    var killsJsonString = await killsResponse.Content.ReadAsStringAsync();
-                    var deathsJsonString = await deathsResponse.Content.ReadAsStringAsync();
+                    var jsonString = await response.Content.ReadAsStringAsync();
 
                     cts.Token.ThrowIfCancellationRequested();
 
-                    topWeaponsByKills = JsonConvert.DeserializeObject<HourlyWeaponSummaryRow[]>(killsJsonString);
-                    topWeaponsByDeaths = JsonConvert.DeserializeObject<HourlyWeaponSummaryRow[]>(deathsJsonString);
+                    weaponsReport = JsonConvert.DeserializeObject<HourlyPlayerWeaponsReport>(jsonString);
+
+                    //topWeaponsByKills = weaponsReport.TopWeaponsByKills;
+                    //topWeaponsByDeaths = weaponsReport.TopWeaponsByDeaths;
                 }
                 StateHasChanged();
+
+                //HttpResponseMessage killsResponse = await Http.GetAsync($"api/PlayerHourlyWeapons/weapons/kills/{playerId}", cts.Token);
+                //HttpResponseMessage deathsResponse = await Http.GetAsync($"api/PlayerHourlyWeapons/weapons/deaths/{playerId}", cts.Token);
+
+                //if (killsResponse != null && deathsResponse != null)
+                //{
+                //    var killsJsonString = await killsResponse.Content.ReadAsStringAsync();
+                //    var deathsJsonString = await deathsResponse.Content.ReadAsStringAsync();
+
+                //    cts.Token.ThrowIfCancellationRequested();
+
+                //    topWeaponsByKills = JsonConvert.DeserializeObject<HourlyWeaponSummaryRow[]>(killsJsonString);
+                //    topWeaponsByDeaths = JsonConvert.DeserializeObject<HourlyWeaponSummaryRow[]>(deathsJsonString);
+                //}
+                //StateHasChanged();
             }
             catch (OperationCanceledException)
             {

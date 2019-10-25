@@ -1,22 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace squittal.LivePlanetmans.Shared.Models
 {
-    public class PlayerHourlyWeaponsSummary
+    public class HourlyPlayerWeaponsReport
     {
         public string PlayerId { get; set; }
         public int PlayerFactionId { get; set; }
         public DateTime QueryStartTime { get; set; }
         public DateTime QueryNowUtc { get; set; }
 
-        public HourlyWeaponSummaryRow[] TopWeaponsByKills { get; set; }
-        public HourlyWeaponSummaryRow[] TopWeaponsByDeaths { get; set; }
+        public IEnumerable<WeaponSummaryRow> TopWeaponsByKills { get; set; }
+        public IEnumerable<WeaponSummaryRow> TopWeaponsByDeaths { get; set; }
+
+        //public HourlyWeaponSummaryRow[] TopWeaponsByKills { get; set; }
+        //public HourlyWeaponSummaryRow[] TopWeaponsByDeaths { get; set; }
 
         //public IEnumerable<HourlyWeaponSummaryRow> TopWeaponsByKills { get; set; }
-        //public IEnumerable<HourlyWeaponSummaryRow> TopWeaponsByDeaths { get; set; }
 
+    }
+
+    public class WeaponSummaryRow
+    {
+        public int WeaponId { get; set; }
+        public string WeaponName { get; set; }
+        public int FactionId { get; set; }
+
+        public DeathEventAggregate WeaponStats { get; set; }
+        public DeathEventAggregate WeaponStatsAsVictim { get; set; }
     }
 
     public class HourlyWeaponSummaryRow
@@ -25,6 +36,8 @@ namespace squittal.LivePlanetmans.Shared.Models
         public string WeaponName { get; set; }
         public int? FactionId { get; set; }
         
+        public DeathEventAggregate WeaponStats { get; set; }
+
         public int Kills { get; set; }
         public int Headshots { get; set; }
         public double HeadshotRatio
