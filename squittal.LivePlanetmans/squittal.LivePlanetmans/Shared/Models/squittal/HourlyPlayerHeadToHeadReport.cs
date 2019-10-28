@@ -27,7 +27,21 @@ namespace squittal.LivePlanetmans.Shared.Models
             _sortDirection = _defaultSortDirection;
         }
 
-        public void SortReport(SortColumn column)
+        public HourlyPlayerHeadToHeadReport(IEnumerable<PlayerHeadToHeadSummaryRow> summaries)
+        {
+            _sortColumn = _defaultSortColumn;
+            _sortDirection = _defaultSortDirection;
+
+            HeadToHeadSummaries = summaries;
+            SortReportByDefaults();
+        }
+
+        public void SortReportByDefaults()
+        {
+            SortReportByColumn(_defaultSortColumn);
+        }
+
+        public void SortReportByColumn(SortColumn column)
         {
             UpdateSortColumn(column);
             UpdateSortDirection(column);
@@ -118,13 +132,63 @@ namespace squittal.LivePlanetmans.Shared.Models
         public DeathEventAggregate EnemyStats { get; set; }
     }
 
-    public class HeadToHeadSummaryRow
+    public class HeadToHeadSummaryRow : IEquatable<HeadToHeadSummaryRow>
     {
         public PlayerDetails AttackerDetails { get; set; }
         public PlayerDetails VictimDetails { get; set; }
 
         public DeathEventAggregate AttackerStats { get; set; }
         public DeathEventAggregate VictimStats { get; set; }
+
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as HeadToHeadSummaryRow);
+        }
+
+        public bool Equals(HeadToHeadSummaryRow r)
+        {
+            if (ReferenceEquals(r, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, r))
+            {
+                return true;
+            }
+
+            if (this.GetType() != r.GetType())
+            {
+                return false;
+            }
+
+            return (AttackerDetails.PlayerId == r.AttackerDetails.PlayerId) && (VictimDetails.PlayerId == r.VictimDetails.PlayerId);
+        }
+
+        public static bool operator ==(HeadToHeadSummaryRow lhs, HeadToHeadSummaryRow rhs)
+        {
+            if (ReferenceEquals(lhs, null))
+            {
+                if (ReferenceEquals(rhs, null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            return lhs.Equals(rhs);
+        }
+        
+        public static bool operator !=(HeadToHeadSummaryRow lhs, HeadToHeadSummaryRow rhs)
+        {
+            return !(lhs == rhs);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 
     public enum SortDirection
