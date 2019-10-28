@@ -183,6 +183,12 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                     //.GroupBy(row => new { AttackerCharacterId = row.AttackerDetails.PlayerId, VictimCharacterId = row.VictimDetails.PlayerId })
                                                     .ToArrayAsync();
 
+                Debug.WriteLine("===================================");
+                foreach (var row in allPlayerIsAttackerH2H)
+                {
+                    Debug.WriteLine($"{row.DebugString}");
+                }
+
                 var allPlayerIsVictimH2H = await query
                                                     .AsNoTracking()
                                                     .Where(h2h => h2h.VictimDetails.PlayerId == characterId)
@@ -190,6 +196,11 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                     //.GroupBy(row => new { AttackerCharacterId = row.AttackerDetails.PlayerId, VictimCharacterId = row.VictimDetails.PlayerId })
                                                     .ToArrayAsync();
 
+                Debug.WriteLine("-----------------------------------");
+                foreach (var row in allPlayerIsVictimH2H)
+                {
+                    Debug.WriteLine($"{row.DebugString}");
+                }
 
                 var attackerPlayerH2HSummaries = allPlayerIsAttackerH2H
                                                     .GroupBy(row => new { AttackerCharacterId = row.AttackerDetails.PlayerId, VictimCharacterId = row.VictimDetails.PlayerId })
@@ -208,6 +219,12 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                     })
                                                     .ToList();
 
+                Debug.WriteLine("===================================");
+                foreach (var row in attackerPlayerH2HSummaries)
+                {
+                    Debug.WriteLine($"{row.DebugString}");
+                }
+
                 var victimPlayerH2HSummaries = allPlayerIsVictimH2H
                                                 .GroupBy(row => new { AttackerCharacterId = row.AttackerDetails.PlayerId, VictimCharacterId = row.VictimDetails.PlayerId })
                                                 .Select(grp => grp.First())
@@ -225,10 +242,21 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                 })
                                                 .ToList();
 
+                Debug.WriteLine("-----------------------------------");
+                foreach (var row in victimPlayerH2HSummaries)
+                {
+                    Debug.WriteLine($"{row.DebugString}");
+                }
+
                 var allPlayerH2HSummaries = attackerPlayerH2HSummaries
                                             .Union(victimPlayerH2HSummaries)
                                             .ToArray();
 
+                Debug.WriteLine("-----------------------------------");
+                foreach (var row in allPlayerH2HSummaries)
+                {
+                    Debug.WriteLine($"{row.DebugString}");
+                }
 
                 var playerDetails = allHeadToHeadPlayers.Any(h2h => h2h.AttackerDetails.PlayerId == characterId)
                                         ? allHeadToHeadPlayers

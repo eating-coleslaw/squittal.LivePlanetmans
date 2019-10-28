@@ -130,6 +130,14 @@ namespace squittal.LivePlanetmans.Shared.Models
         
         public DeathEventAggregate PlayerStats { get; set; }
         public DeathEventAggregate EnemyStats { get; set; }
+
+        public string DebugString
+        {
+            get
+            {
+                return $"   vs {EnemyDetails.PlayerName}: k{PlayerStats.Kills} d{PlayerStats.Deaths}  |  k{EnemyStats.Kills} d{EnemyStats.Deaths}";
+            }
+        }
     }
 
     public class HeadToHeadSummaryRow : IEquatable<HeadToHeadSummaryRow>
@@ -140,6 +148,14 @@ namespace squittal.LivePlanetmans.Shared.Models
         public DeathEventAggregate AttackerStats { get; set; }
         public DeathEventAggregate VictimStats { get; set; }
 
+
+        public string DebugString
+        {
+            get
+            {
+                return $"{AttackerDetails.PlayerName} vs {VictimDetails.PlayerName}: k{AttackerStats.Kills} d{AttackerStats.Deaths}";
+            }
+        }
 
         public override bool Equals(object obj)
         {

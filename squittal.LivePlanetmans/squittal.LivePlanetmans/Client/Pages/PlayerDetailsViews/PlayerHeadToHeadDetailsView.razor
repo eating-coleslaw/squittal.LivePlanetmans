@@ -93,6 +93,19 @@ else if (isSelectedView == true)
             }
         </div>
     </div>
+
+    @if (headToHeadReport != null && headToHeadReport.HeadToHeadSummaries != null && headToHeadReport.HeadToHeadSummaries.Count() > 0)
+    @foreach (var enemy in headToHeadReport.HeadToHeadSummaries)
+    {
+        <table>
+            <tr>
+                <td>@enemy.EnemyDetails.PlayerName</td>
+                <td>@enemy.PlayerStats.Kills</td>
+                <td>@enemy.PlayerStats.Deaths</td>
+                <td>@enemy.PlayerStats.KillDeathRatio</td>
+            </tr>
+        </table>    
+    }
 }
 
 @code {
@@ -103,6 +116,8 @@ else if (isSelectedView == true)
     public bool isSelectedView { get; set; }
 
     PlayerHourlyHeadToHeadSummary headToHeadSummary;
+
+    HourlyPlayerHeadToHeadReport headToHeadReport;
 
     bool isLoadingHeadToHead = false;
     CancellationTokenSource cts;
@@ -143,12 +158,22 @@ else if (isSelectedView == true)
                 isLoadingHeadToHead = true;
 
                 HttpResponseMessage response = await Http.GetAsync($"api/PlayerHourlyHeadToHead/players/{playerId}", cts.Token);
+                
+                HttpResponseMessage reportResponse = await Http.GetAsync($"api/PlayerHourlyHeadToHead/h2h/{playerId}", cts.Token);
 
-                if (response != null)
+
+
+                if (response != null && reportResponse != null)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
+
+                    var reportJsonString = await reportResponse.Content.ReadAsStringAsync();
+
                     cts.Token.ThrowIfCancellationRequested();
+
                     headToHeadSummary = JsonConvert.DeserializeObject<PlayerHourlyHeadToHeadSummary>(jsonString);
+
+                    headToHeadReport = JsonConvert.DeserializeObject<HourlyPlayerHeadToHeadReport>(reportJsonString);
                 }
                 StateHasChanged();
 
