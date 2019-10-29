@@ -23,23 +23,25 @@ else if (isSelectedView == true)
                         <thead style="vertical-align: bottom; line-height: 0.5rem;">
                             <tr>
                                 <th class="p-name" style="padding-bottom: 0.25rem;">
-                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnClickColumnHeader(SortColumn.Player))">
+                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; line-height: 0.5rem;" @onclick="@(() => OnClickColumnHeader(SortColumn.Player))">
                                         Enemy
                                     </button>
                                 </th>
                                 <th style="padding-bottom: 0.25rem;">
-                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnClickColumnHeader(SortColumn.Kills))">
+                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; line-height: 0.5rem;" @onclick="@(() => OnClickColumnHeader(SortColumn.Kills))">
                                         Kills
                                     </button>
                                 </th>
                                 <th style="padding-bottom: 0.25rem;">
-                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important;" @onclick="@(() => OnClickColumnHeader(SortColumn.Deaths))">
+                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; line-height: 0.5rem;" @onclick="@(() => OnClickColumnHeader(SortColumn.Deaths))">
                                         Deaths
                                     </button>
                                 </th>
                                 <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.25rem; padding-top: 0.15rem;">
-                                    <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
-                                    <span>KDR</span>
+                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; line-height: 0.5rem; text-align: left;" @onclick="@(() => OnClickColumnHeader(SortColumn.KillDeathRatio))">
+                                        <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
+                                        <span>KDR</span>
+                                    </button>
                                 </th>
                                 <th class="stacked-label" title="Head-to-Head Headshot Ratio" style="padding-bottom: 0.25rem; padding-top: 0.15rem;">
                                     <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
