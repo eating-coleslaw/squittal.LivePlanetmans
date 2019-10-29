@@ -268,12 +268,12 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                             .Select(h2h => h2h.VictimDetails)
                                             .FirstOrDefault();
 
-                return new HourlyPlayerHeadToHeadReport()
-                {
-                    PlayerDetails = playerDetails,
-                    QueryTimes = queryTimes,
-                    HeadToHeadSummaries = allPlayerH2HSummaries
-                };
+                return new HourlyPlayerHeadToHeadReport(playerDetails, allPlayerH2HSummaries, queryTimes);
+                //{
+                //    PlayerDetails = playerDetails,
+                //    QueryTimes = queryTimes,
+                //    HeadToHeadSummaries = allPlayerH2HSummaries
+                //};
 
 
                 //var victims = allHeadToHeadPlayers

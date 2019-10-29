@@ -21,30 +21,38 @@ namespace squittal.LivePlanetmans.Shared.Models
         private SortColumn _sortColumn;
         private SortDirection _sortDirection;
 
+        private SortColumn _prevSortColumn;
+        private SortDirection _prevSortDirection;
+
         public HourlyPlayerHeadToHeadReport()
         {
-            _sortColumn = _defaultSortColumn;
-            _sortDirection = _defaultSortDirection;
+            //_sortColumn = _defaultSortColumn;
+            //_sortDirection = _defaultSortDirection;
         }
 
-        public HourlyPlayerHeadToHeadReport(IEnumerable<PlayerHeadToHeadSummaryRow> summaries)
+        public HourlyPlayerHeadToHeadReport(PlayerDetails playerDetails, IEnumerable<PlayerHeadToHeadSummaryRow> summaries, DbQueryTimes dbQueryTimes)
         {
-            _sortColumn = _defaultSortColumn;
-            _sortDirection = _defaultSortDirection;
+            //_sortColumn = _defaultSortColumn;
+            //_sortDirection = _defaultSortDirection;
 
+            PlayerDetails = playerDetails;
             HeadToHeadSummaries = summaries;
-            SortReportByDefaults();
+            QueryTimes = dbQueryTimes;
+            SortByDefaults();
         }
 
-        public void SortReportByDefaults()
+        public void SortByDefaults()
         {
-            SortReportByColumn(_defaultSortColumn);
+            _prevSortColumn = _sortColumn;
+            _prevSortDirection = _sortDirection;
+            
+            SortByColumn(_defaultSortColumn, true);
         }
 
-        public void SortReportByColumn(SortColumn column)
+        public void SortByColumn(SortColumn column, bool forceDefaultDirection = false)
         {
             UpdateSortColumn(column);
-            UpdateSortDirection(column);
+            UpdateSortDirection(column, forceDefaultDirection);
 
             switch (column)
             {
@@ -74,41 +82,45 @@ namespace squittal.LivePlanetmans.Shared.Models
         private IEnumerable<PlayerHeadToHeadSummaryRow> SortByKills()
         {
             return (_sortDirection == SortDirection.Ascending)
-                ? HeadToHeadSummaries.OrderBy(h2h => h2h.PlayerStats.Kills) //.AsEnumerable()
-                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.PlayerStats.Kills); //.AsEnumerable()
+                ? HeadToHeadSummaries.OrderBy(h2h => h2h.PlayerStats.Kills).AsEnumerable()
+                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.PlayerStats.Kills).AsEnumerable();
         }
 
         private IEnumerable<PlayerHeadToHeadSummaryRow> SortByDeaths()
         {
             return (_sortDirection == SortDirection.Ascending)
-                ? HeadToHeadSummaries.OrderBy(h2h => h2h.PlayerStats.Deaths)
-                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.PlayerStats.Deaths);
+                ? HeadToHeadSummaries.OrderBy(h2h => h2h.PlayerStats.Deaths).AsEnumerable()
+                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.PlayerStats.Deaths).AsEnumerable();
         }
 
         private IEnumerable<PlayerHeadToHeadSummaryRow> SortByKillDeathRatio()
         {
             return (_sortDirection == SortDirection.Ascending)
-                ? HeadToHeadSummaries.OrderBy(h2h => h2h.PlayerStats.KillDeathRatio)
-                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.PlayerStats.KillDeathRatio);
+                ? HeadToHeadSummaries.OrderBy(h2h => h2h.PlayerStats.KillDeathRatio).AsEnumerable()
+                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.PlayerStats.KillDeathRatio).AsEnumerable();
         }
 
         private IEnumerable<PlayerHeadToHeadSummaryRow> SortByPlayerName()
         {
             return (_sortDirection == SortDirection.Ascending)
-                ? HeadToHeadSummaries.OrderBy(h2h => h2h.EnemyDetails.PlayerName)
-                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.EnemyDetails.PlayerName);
+                ? HeadToHeadSummaries.OrderBy(h2h => h2h.EnemyDetails.PlayerName).AsEnumerable()
+                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.EnemyDetails.PlayerName).AsEnumerable();
         }
 
 
         private SortColumn UpdateSortColumn(SortColumn column)
         {
+            _prevSortColumn = _sortColumn;
+
             _sortColumn = column;
             return _sortColumn;
         }
 
-        private SortDirection UpdateSortDirection(SortColumn column)
+        private SortDirection UpdateSortDirection(SortColumn newColumn, bool forceDefaultDirection)
         {
-            _sortDirection = (column == _sortColumn)
+            _prevSortDirection = _sortDirection;
+
+            _sortDirection = (newColumn == _prevSortColumn && forceDefaultDirection != true)
                                 ? GetOppositeSortDirection(_sortDirection)
                                 : _defaultSortDirection;
 
@@ -124,7 +136,7 @@ namespace squittal.LivePlanetmans.Shared.Models
 
     }
 
-    public class PlayerHeadToHeadSummaryRow
+    public class PlayerHeadToHeadSummaryRow : IEquatable<PlayerHeadToHeadSummaryRow>
     {
         public PlayerDetails EnemyDetails { get; set; }
         
@@ -137,6 +149,55 @@ namespace squittal.LivePlanetmans.Shared.Models
             {
                 return $"   vs {EnemyDetails.PlayerName}: k{PlayerStats.Kills} d{PlayerStats.Deaths}  |  k{EnemyStats.Kills} d{EnemyStats.Deaths}";
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as PlayerHeadToHeadSummaryRow);
+        }
+
+        public bool Equals(PlayerHeadToHeadSummaryRow r)
+        {
+            if (ReferenceEquals(r, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, r))
+            {
+                return true;
+            }
+
+            if (this.GetType() != r.GetType())
+            {
+                return false;
+            }
+
+            return (EnemyDetails.PlayerId == r.EnemyDetails.PlayerId) && (EnemyDetails.PlayerId == r.EnemyDetails.PlayerId);
+        }
+
+        public static bool operator ==(PlayerHeadToHeadSummaryRow lhs, PlayerHeadToHeadSummaryRow rhs)
+        {
+            if (ReferenceEquals(lhs, null))
+            {
+                if (ReferenceEquals(rhs, null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(PlayerHeadToHeadSummaryRow lhs, PlayerHeadToHeadSummaryRow rhs)
+        {
+            return !(lhs == rhs);
+        }
+
+        public override int GetHashCode()
+        {
+            return EnemyDetails.PlayerId.GetHashCode(); // base.GetHashCode();
         }
     }
 

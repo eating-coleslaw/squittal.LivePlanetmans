@@ -81,10 +81,10 @@ else if (isSelectedView == true)
                             {
                                 <tr style="color: @GetFactionColorFromId(player.AttackerFactionId)">
                                     <td>@player.AttackerName</td>
-                                    <td>@player.VictimKills</td>
-                                    <td>@player.AttackerKills</td>
-                                    <td>@player.VictimKillDeathRatio</td>
-                                    <td>@player.VictimHeadshotRatio</td>
+                                    <td style="padding-left: 5px;">@player.VictimKills</td>
+                                    <td style="padding-left: 5px;">@player.AttackerKills</td >
+                                    <td style="padding-left: 5px;">@player.VictimKillDeathRatio</td>
+                                    <td style="padding-left: 5px;">@player.VictimHeadshotRatio</td>
                                 </tr>
                             }
                         </tbody>
@@ -100,8 +100,8 @@ else if (isSelectedView == true)
         <table>
             <tr>
                 <td>@enemy.EnemyDetails.PlayerName</td>
-                <td>@enemy.PlayerStats.Kills</td>
-                <td>@enemy.PlayerStats.Deaths</td>
+                <td>@($"k{enemy.PlayerStats.Kills}")</td>
+                <td>@($"d{enemy.PlayerStats.Deaths}")</td>
                 <td>@enemy.PlayerStats.KillDeathRatio</td>
             </tr>
         </table>    
