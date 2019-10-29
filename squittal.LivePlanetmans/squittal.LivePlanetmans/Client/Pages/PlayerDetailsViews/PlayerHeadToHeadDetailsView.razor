@@ -13,38 +13,48 @@
 else if (isSelectedView == true)
 {
     <div class="row" style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">
-        <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(headToHeadSummary.PlayerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(headToHeadSummary.PlayerFactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem; padding: 0;">
-            <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">Top Victims</h5>
-            @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByKills.Any() == true && isLoadingHeadToHead != true)
+        <div class="col-sm-12" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(headToHeadReport.PlayerDetails.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(headToHeadReport.PlayerDetails.FactionId); padding: 0;">
+            <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">Enemies this Hour</h5>
+            @if (headToHeadReport != null && headToHeadReport.HeadToHeadSummaries.Any() == true && isLoadingHeadToHead != true)
             {
 
                 <div style="max-height: calc(350px - 1.5rem); overflow: auto; padding: 0 0 0.5rem 0.5rem;">
-                    <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(headToHeadSummary.PlayerFactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(headToHeadSummary.PlayerFactionId);">
+                    <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(headToHeadReport.PlayerDetails.FactionId);">
                         <thead style="vertical-align: bottom; line-height: 0.5rem;">
                             <tr>
-                                <th class="p-name" style="padding-bottom: 0.5rem;"></th>
-                                <th style="padding-bottom: 0.5rem;">K</th>
-                                <th style="padding-bottom: 0.5rem;">D</th>
-                                <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.5rem;">
+                                <th class="p-name" style="padding-bottom: 0.25rem;"></th>
+                                <th style="padding-bottom: 0.25rem;">K</th>
+                                <th style="padding-bottom: 0.25rem;">D</th>
+                                <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.25rem; padding-top: 0.15rem;">
                                     <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
                                     <span>KDR</span>
                                 </th>
-                                <th class="stacked-label" title="Head-to-Head Headshot Ratio" style="padding-bottom: 0.5rem;">
+                                <th class="stacked-label" title="Head-to-Head Headshot Ratio" style="padding-bottom: 0.25rem; padding-top: 0.15rem;">
                                     <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
+                                    <span>HSR</span>
+                                </th>
+                                <th class="stacked-label" title="Head-to-Head Kill-Death Ratio" style="padding-bottom: 0.25rem; padding-top: 0.15rem;">
+                                    <span class="small" style="position: initial; margin-bottom: 0.1rem;">Enemy</span>
+                                    <span>KDR</span>
+                                </th>
+                                <th class="stacked-label" title="Head-to-Head Headshot Ratio" style="padding-bottom: 0.25rem; padding-top: 0.15rem;">
+                                    <span class="small" style="position: initial; margin-bottom: 0.1rem;">Enemy</span>
                                     <span>HSR</span>
                                 </th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            @foreach (var player in headToHeadSummary.TopPlayersByKills)
+                            @foreach (var player in headToHeadReport.HeadToHeadSummaries)
                             {
-                                <tr style="color: @GetFactionColorFromId(player.VictimFactionId)">
-                                    <td>@player.VictimName</td>
-                                    <td>@player.AttackerKills</td>
-                                    <td>@player.VictimKills</td>
-                                    <td>@player.AttackerKillDeathRatio</td>
-                                    <td>@player.AttackerHeadshotRatio</td>
+                                <tr style="color: @GetFactionColorFromId(player.EnemyDetails.FactionId)">
+                                    <td>@player.EnemyDetails.PlayerName</td>
+                                    <td>@player.PlayerStats.Kills</td>
+                                    <td>@player.PlayerStats.Deaths</td>
+                                    <td>@player.PlayerStats.KillDeathRatio</td>
+                                    <td>@player.PlayerStats.HeadshotRatio</td>
+                                    <td>@player.EnemyStats.KillDeathRatio</td>
+                                    <td>@player.EnemyStats.HeadshotRatio</td>
                                 </tr>
                             }
                         </tbody>
@@ -53,7 +63,8 @@ else if (isSelectedView == true)
             }
         </div>
 
-        <div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(headToHeadSummary.PlayerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(headToHeadSummary.PlayerFactionId);">
+
+        @*<div class="col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(headToHeadSummary.PlayerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(headToHeadSummary.PlayerFactionId);">
             <h5 style="font-size: 1rem; margin-bottom: 0.25rem;">Top Nemeses</h5>
             @if (headToHeadSummary != null && headToHeadSummary.TopPlayersByDeaths.Any() == true && isLoadingHeadToHead != true)
             {
@@ -91,7 +102,7 @@ else if (isSelectedView == true)
                     </table>
                 </div>
             }
-        </div>
+        </div>*@
     </div>
 
     @if (headToHeadReport != null && headToHeadReport.HeadToHeadSummaries != null && headToHeadReport.HeadToHeadSummaries.Count() > 0)
