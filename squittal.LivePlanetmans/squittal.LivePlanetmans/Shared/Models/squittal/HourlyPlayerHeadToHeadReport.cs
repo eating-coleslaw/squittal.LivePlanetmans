@@ -120,9 +120,14 @@ namespace squittal.LivePlanetmans.Shared.Models
         {
             _prevSortDirection = _sortDirection;
 
+            // Sorting by Player Name should default to ascending (A-Z) instead of descending (Z-A)
+            var tempDefaultSortDirection = (newColumn == SortColumn.Player)
+                ? SortDirection.Ascending
+                : _defaultSortDirection;
+
             _sortDirection = (newColumn == _prevSortColumn && forceDefaultDirection != true)
                                 ? GetOppositeSortDirection(_sortDirection)
-                                : _defaultSortDirection;
+                                : tempDefaultSortDirection;
 
             return _sortDirection;
         }
