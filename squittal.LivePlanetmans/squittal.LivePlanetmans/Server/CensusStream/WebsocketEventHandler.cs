@@ -190,15 +190,22 @@ namespace squittal.LivePlanetmans.Server.CensusStream
             {
                 var dbContext = factory.GetDbContext();
 
-                var dataModel = new PlayerLogin
+                try
                 {
-                    CharacterId = payload.CharacterId,
-                    Timestamp = payload.Timestamp,
-                    WorldId = payload.WorldId
-                };
+                    var dataModel = new PlayerLogin
+                    {
+                        CharacterId = payload.CharacterId,
+                        Timestamp = payload.Timestamp,
+                        WorldId = payload.WorldId
+                    };
 
-                dbContext.PlayerLogins.Add(dataModel);
-                await dbContext.SaveChangesAsync();
+                    dbContext.PlayerLogins.Add(dataModel);
+                    await dbContext.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    //Ignore
+                }
             }
         }
 
@@ -209,15 +216,22 @@ namespace squittal.LivePlanetmans.Server.CensusStream
             {
                 var dbContext = factory.GetDbContext();
 
-                var dataModel = new PlayerLogout
+                try
                 {
-                    CharacterId = payload.CharacterId,
-                    Timestamp = payload.Timestamp,
-                    WorldId = payload.WorldId
-                };
+                    var dataModel = new PlayerLogout
+                    {
+                        CharacterId = payload.CharacterId,
+                        Timestamp = payload.Timestamp,
+                        WorldId = payload.WorldId
+                    };
 
-                dbContext.PlayerLogouts.Add(dataModel);
-                await dbContext.SaveChangesAsync();
+                    dbContext.PlayerLogouts.Add(dataModel);
+                    await dbContext.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    //Ignore
+                }
             }
         }
 
