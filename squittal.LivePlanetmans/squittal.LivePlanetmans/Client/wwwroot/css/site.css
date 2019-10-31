@@ -467,16 +467,34 @@ th.stacked-label span.small {
     font-size: 0.6rem;
 }
 
+th.sortable > .btn.btn-link {
+    font-size: 0.8rem;
+    padding: 0rem !important;
+    line-height: 0.5rem;
+    text-align: left;
+}
+
+th.sortable.sorted-ascending::after {
+    content: url('https://api.iconify.design/oi-chevron-top.svg?color=%2327273A&height=8');
+    vertical-align: -0.125em;
+}
+
+th.sortable.sorted-descending::after {
+    content: url('https://api.iconify.design/oi-chevron-bottom.svg?color=%2327273A&height=8');
+    vertical-align: -0.125em;
+}
+
+th.sortable.sorted-none::after {
+    content: url('https://api.iconify.design/oi-chevron-bottom.svg?color=%230000&height=8');
+    vertical-align: -0.125em;
+}
 
 /*.table-striped-light tbody tr:nth-of-type(2n+1) {
     background-color: var(--sq-bg-white-lit);
 }*/
-
 /*.table-striped-light tbody {
     background-color: var(--sq-bg-white-lit);
 }*/
-
-
 .table-striped-light.vs tbody tr:nth-of-type(2n+1) {
     background-color: var(--sq-ps2-vs-primary-light-alpha-40);
 }

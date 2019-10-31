@@ -15,8 +15,40 @@ namespace squittal.LivePlanetmans.Shared.Models
         public PlayerHeadToHeadSummaryRow[] SortedHeadToHeadSummaries { get; set; }
 
 
-        private SortColumn _defaultSortColumn = SortColumn.Kills;
-        private SortDirection _defaultSortDirection = SortDirection.Descending;
+        public SortColumn SortColumn
+        {
+            get
+            {
+                return _sortColumn;
+            }
+        }
+
+        public SortDirection SortDirection
+        {
+            get
+            {
+                return _sortDirection;
+            }
+        }
+
+        public static SortColumn DefaultSortColumn
+        {
+            get
+            {
+                return _defaultSortColumn;
+            }
+        }
+
+        public static SortDirection DefaultSortDirection
+        {
+            get
+            {
+                return _defaultSortDirection;
+            }
+        }
+        
+        private static readonly SortColumn _defaultSortColumn = SortColumn.Kills;
+        private static readonly SortDirection _defaultSortDirection = SortDirection.Descending;
 
         private SortColumn _sortColumn;
         private SortDirection _sortDirection;
