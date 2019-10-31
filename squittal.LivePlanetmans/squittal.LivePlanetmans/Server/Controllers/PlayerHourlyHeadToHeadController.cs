@@ -127,45 +127,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                  && kill.Timestamp >= startTime
                                                  && kill.IsHeadshot == true
                                               select kill).Count(),
-                        }//,
-
-                        //VictimStats = new DeathEventAggregate()
-                        //{
-                        //    Kills = (from kill in dbContext.Deaths
-                        //                       //where kill.AttackerCharacterId == charactersGroup.Key.CharacterId
-                        //                       //&& kill.CharacterId == charactersGroup.Key.AttackerCharacterId
-                        //                   where kill.AttackerCharacterId == victimCharacters.Id
-                        //                      && kill.CharacterId == attackerCharacters.Id
-                        //                      && kill.Timestamp >= startTime
-                        //                   select kill).Count(),
-
-                        //    Headshots = (from kill in dbContext.Deaths
-                        //                           //where kill.AttackerCharacterId == charactersGroup.Key.CharacterId
-                        //                           //&& kill.CharacterId == charactersGroup.Key.AttackerCharacterId
-                        //                       where kill.AttackerCharacterId == victimCharacters.Id
-                        //                          && kill.CharacterId == attackerCharacters.Id
-                        //                          && kill.Timestamp >= startTime
-                        //                          && kill.IsHeadshot == true
-                        //                       select kill).Count(),
-
-                        //    Deaths = (from kill in dbContext.Deaths
-                        //                  //where kill.AttackerCharacterId == charactersGroup.Key.CharacterId
-                        //                  //&& kill.CharacterId == charactersGroup.Key.AttackerCharacterId
-                        //              where kill.AttackerCharacterId == attackerCharacters.Id
-                        //                 && kill.CharacterId == victimCharacters.Id
-                        //                 && kill.Timestamp >= startTime
-                        //              select kill).Count(),
-
-                        //    HeadshotDeaths = (from kill in dbContext.Deaths
-                        //                          //where kill.AttackerCharacterId == charactersGroup.Key.CharacterId
-                        //                          //&& kill.CharacterId == charactersGroup.Key.AttackerCharacterId
-                        //                      where kill.AttackerCharacterId == attackerCharacters.Id
-                        //                         && kill.CharacterId == victimCharacters.Id
-                        //                         && kill.Timestamp >= startTime
-                        //                         && kill.IsHeadshot == true
-                        //                      select kill).Count()
-                        //}
-
+                        }
                     };
 
                 var allHeadToHeadPlayers = await query
@@ -176,31 +138,13 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                     //.GroupBy(row => new { AttackerCharacterId = row.AttackerDetails.PlayerId, VictimCharacterId = row.VictimDetails.PlayerId })
                                                     .ToArrayAsync();
 
-                var allPlayerIsAttackerH2H = await query
-                                                    .AsNoTracking()
-                                                    .Where(h2h => h2h.AttackerDetails.PlayerId == characterId)
-                                                    .Distinct()
-                                                    //.GroupBy(row => new { AttackerCharacterId = row.AttackerDetails.PlayerId, VictimCharacterId = row.VictimDetails.PlayerId })
-                                                    .ToArrayAsync();
-
-                Debug.WriteLine("===================================");
-                foreach (var row in allPlayerIsAttackerH2H)
-                {
-                    Debug.WriteLine($"{row.DebugString}");
-                }
-
-                var allPlayerIsVictimH2H = await query
-                                                    .AsNoTracking()
-                                                    .Where(h2h => h2h.VictimDetails.PlayerId == characterId)
-                                                    .Distinct()
-                                                    //.GroupBy(row => new { AttackerCharacterId = row.AttackerDetails.PlayerId, VictimCharacterId = row.VictimDetails.PlayerId })
-                                                    .ToArrayAsync();
-
-                Debug.WriteLine("-----------------------------------");
-                foreach (var row in allPlayerIsVictimH2H)
-                {
-                    Debug.WriteLine($"{row.DebugString}");
-                }
+                var allPlayerIsAttackerH2H = allHeadToHeadPlayers
+                                                .Where(h2h => h2h.AttackerDetails.PlayerId == characterId)
+                                                .ToArray();
+                                                
+                var allPlayerIsVictimH2H = allHeadToHeadPlayers
+                                                .Where(h2h => h2h.VictimDetails.PlayerId == characterId)
+                                                .ToArray();
 
                 var attackerPlayerH2HSummaries = allPlayerIsAttackerH2H
                                                     .GroupBy(row => new { AttackerCharacterId = row.AttackerDetails.PlayerId, VictimCharacterId = row.VictimDetails.PlayerId })
