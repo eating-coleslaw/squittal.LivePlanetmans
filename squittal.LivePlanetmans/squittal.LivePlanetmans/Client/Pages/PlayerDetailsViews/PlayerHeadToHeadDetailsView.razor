@@ -68,7 +68,7 @@ else if (isSelectedView == true)
                             @foreach (var player in headToHeadReport.HeadToHeadSummaries)
                             {
                                 <tr style="color: @GetFactionColorFromId(player.EnemyDetails.FactionId)">
-                                    <td>
+                                    <td class="inline-player-br">
                                         @if (string.IsNullOrWhiteSpace(player.EnemyDetails.PlayerName))
                                         {
                                             @player.EnemyDetails.PlayerId

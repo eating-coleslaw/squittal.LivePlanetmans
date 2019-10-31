@@ -429,6 +429,8 @@ dt {
         font-size: small;
         line-height: 1.1;
         padding: 0 0 0.1rem 0;
+        max-width: 225px;
+        width: max-content;
     }
 
 .inline-player-br > div {
@@ -437,12 +439,11 @@ dt {
 
     .inline-player-br .player-name{
         /*display: inline-block;*/
-        max-width: 250px;
+        max-width: 200px;
         overflow: hidden;
         text-overflow: ellipsis;
         vertical-align: bottom;
         padding-bottom: 0.1rem;
-        
     }
 
 td .inline-player-br .oi {
