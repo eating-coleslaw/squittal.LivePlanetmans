@@ -68,8 +68,20 @@ namespace squittal.LivePlanetmans.Shared.Models
                     HeadToHeadSummaries = SortByKillDeathRatio();
                     break;
 
+                case SortColumn.HeadshotRatio:
+                    HeadToHeadSummaries = SortByHeadshotRatio();
+                    break;
+
                 case SortColumn.Player:
                     HeadToHeadSummaries = SortByPlayerName();
+                    break;
+
+                case SortColumn.EnemyKillDeathRatio:
+                    HeadToHeadSummaries = SortByEnemyKillDeathRatio();
+                    break;
+
+                case SortColumn.EnemyHeadshotRatio:
+                    HeadToHeadSummaries = SortByEnemyHeadshotRatio();
                     break;
 
                 default:
@@ -78,6 +90,12 @@ namespace squittal.LivePlanetmans.Shared.Models
             }
         }
 
+        private IEnumerable<PlayerHeadToHeadSummaryRow> SortByPlayerName()
+        {
+            return (_sortDirection == SortDirection.Ascending)
+                ? HeadToHeadSummaries.OrderBy(h2h => h2h.EnemyDetails.PlayerName).AsEnumerable()
+                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.EnemyDetails.PlayerName).AsEnumerable();
+        }
 
         private IEnumerable<PlayerHeadToHeadSummaryRow> SortByKills()
         {
@@ -100,13 +118,6 @@ namespace squittal.LivePlanetmans.Shared.Models
                 : HeadToHeadSummaries.OrderByDescending(h2h => h2h.PlayerStats.KillDeathRatio).AsEnumerable();
         }
 
-        private IEnumerable<PlayerHeadToHeadSummaryRow> SortByPlayerName()
-        {
-            return (_sortDirection == SortDirection.Ascending)
-                ? HeadToHeadSummaries.OrderBy(h2h => h2h.EnemyDetails.PlayerName).AsEnumerable()
-                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.EnemyDetails.PlayerName).AsEnumerable();
-        }
-
 
         private SortColumn UpdateSortColumn(SortColumn column)
         {
@@ -114,6 +125,27 @@ namespace squittal.LivePlanetmans.Shared.Models
 
             _sortColumn = column;
             return _sortColumn;
+        }
+
+        private IEnumerable<PlayerHeadToHeadSummaryRow> SortByHeadshotRatio()
+        {
+            return (_sortDirection == SortDirection.Ascending)
+                ? HeadToHeadSummaries.OrderBy(h2h => h2h.PlayerStats.HeadshotRatio).AsEnumerable()
+                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.PlayerStats.HeadshotRatio).AsEnumerable();
+        }
+
+        private IEnumerable<PlayerHeadToHeadSummaryRow> SortByEnemyKillDeathRatio()
+        {
+            return (_sortDirection == SortDirection.Ascending)
+                ? HeadToHeadSummaries.OrderBy(h2h => h2h.EnemyStats.KillDeathRatio).AsEnumerable()
+                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.EnemyStats.KillDeathRatio).AsEnumerable();
+        }
+
+        private IEnumerable<PlayerHeadToHeadSummaryRow> SortByEnemyHeadshotRatio()
+        {
+            return (_sortDirection == SortDirection.Ascending)
+                ? HeadToHeadSummaries.OrderBy(h2h => h2h.EnemyStats.HeadshotRatio).AsEnumerable()
+                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.EnemyStats.HeadshotRatio).AsEnumerable();
         }
 
         private SortDirection UpdateSortDirection(SortColumn newColumn, bool forceDefaultDirection)
@@ -281,9 +313,12 @@ namespace squittal.LivePlanetmans.Shared.Models
 
     public enum SortColumn
     {
+        Player,
         Kills,
         Deaths,
         KillDeathRatio,
-        Player
+        HeadshotRatio,
+        EnemyKillDeathRatio,
+        EnemyHeadshotRatio
     }
 }
