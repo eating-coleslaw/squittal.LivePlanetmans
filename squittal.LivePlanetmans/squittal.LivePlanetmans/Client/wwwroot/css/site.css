@@ -472,17 +472,34 @@ th.sortable > .btn.btn-link {
     padding: 0rem !important;
     line-height: 0.5rem;
     text-align: left;
+    text-decoration: none;
+    color: var(--sq-black);
 }
+
+    th.sortable > .btn.btn-link:hover, th.sortable > .btn.btn-link:focus {
+        color: var(--bs-blue);
+    }
+
 
 th.sortable.sorted-ascending::after {
     content: url('https://api.iconify.design/oi-chevron-top.svg?color=%2327273A&height=8');
     vertical-align: -0.125em;
 }
 
+/*th.sortable.sorted-ascending:hover::after {
+    content: url('https://api.iconify.design/oi-chevron-top.svg?color=%23007bff&height=8');
+    vertical-align: -0.125em;
+}*/
+
 th.sortable.sorted-descending::after {
     content: url('https://api.iconify.design/oi-chevron-bottom.svg?color=%2327273A&height=8');
     vertical-align: -0.125em;
 }
+
+/*th.sortable.sorted-descending:hover::after {
+    content: url('https://api.iconify.design/oi-chevron-bottom.svg?color=%23007bff&height=8');
+    vertical-align: -0.125em;
+}*/
 
 th.sortable.sorted-none::after {
     content: url('https://api.iconify.design/oi-chevron-bottom.svg?color=%230000&height=8');

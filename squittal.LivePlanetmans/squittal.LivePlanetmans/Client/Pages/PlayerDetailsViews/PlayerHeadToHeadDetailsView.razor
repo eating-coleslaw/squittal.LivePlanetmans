@@ -68,7 +68,26 @@ else if (isSelectedView == true)
                             @foreach (var player in headToHeadReport.HeadToHeadSummaries)
                             {
                                 <tr style="color: @GetFactionColorFromId(player.EnemyDetails.FactionId)">
-                                    <td>@player.EnemyDetails.PlayerName</td>
+                                    <td>
+                                        @if (string.IsNullOrWhiteSpace(player.EnemyDetails.PlayerName))
+                                        {
+                                            @player.EnemyDetails.PlayerId
+                                        }
+                                        else
+                                        {
+                                            <div class="player-name">@player.EnemyDetails.PlayerName </div>
+                                            <div>
+                                                <sup>
+                                                    @(player.EnemyDetails.BattleRank)
+                                                    @if (player.EnemyDetails.PrestigeLevel != 0)
+                                                    {
+                                                        <span class="oi oi-star small" aria-hidden="true"></span>
+                                                    }
+                                                </sup>
+                                            </div>
+                                            @*</td>*@
+                                        }
+                                    </td>
                                     <td>@player.PlayerStats.Kills</td>
                                     <td>@player.PlayerStats.Deaths</td>
                                     <td>@player.PlayerStats.KillDeathRatio</td>
