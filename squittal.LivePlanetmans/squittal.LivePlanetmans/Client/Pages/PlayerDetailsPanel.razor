@@ -52,7 +52,6 @@ else
                 {
                     @if (kills == null || isLoadingKillboard == true || loadoutModels == null || profileTypeIdMapping == null)
                     {
-                        @*<p class="text-muted"><em>Loading killboard...</em></p>*@
                     }
                     else
                     {
@@ -102,7 +101,6 @@ else
                                                                 }
                                                             </sup>
                                                         </div>
-                                                        @*</a>*@
                                                     </button>
                                                 }
                                                 else
@@ -118,7 +116,6 @@ else
                                                                 }
                                                             </sup>
                                                         </div>
-                                                        @*</a>*@
                                                     </button>
                                                 }
                                             </td>
@@ -176,7 +173,6 @@ else
         <div id="details-footer" style="font-family: 'Roboto Mono'; position: absolute; bottom: 0.5rem; height: 1rem; line-height: 1rem;">
             <div>
                 <a href="@GetUrlFromCharacterId(player.Id)" title="Open Voidwell player profile" class="text-muted" style="font-size: 0.8rem; padding-left: 0.8rem; font-weight: 400;" target="_blank">
-                    @*margin-top: 0.1rem; >*@
                     @player.Id
                     <span class="h6 oi oi-external-link" style="font-size: 60%; opacity: 0.5;"></span>
                 </a>

@@ -1,7 +1,6 @@
 ﻿@page "/"
 @page "/leaderboard"
 @page "/activity"
-@*@page "/leaderboard/{worldId}"*@
 @using squittal.LivePlanetmans.Shared.Models
 @using System.Timers
 @using System.Linq
@@ -382,7 +381,6 @@
             {
                 isLoading = true;
                 isFetchingLeaderboard = true;
-                //Task<PlayerHourlyStatsData[]> playersTask = Http.GetJsonAsync<PlayerHourlyStatsData[]>($"api/PlayerLeaderboard/{worldId}");
 
                 DateTime start = DateTime.UtcNow;
                 Debug.WriteLine($"Fetching leaderboard data for world {worldId}");
@@ -405,8 +403,6 @@
 
                     _selectedPlayerFactionId = players.Where(p => p.PlayerId == playerId).Select(p => p.FactionId).FirstOrDefault();
                 }
-
-                //players = await playersTask;
 
                 DateTime end = DateTime.UtcNow;
                 var elapsed = (int)(end - start).TotalMilliseconds;
@@ -438,11 +434,6 @@
             {
                 cts = null;
             }
-
-            //lastRefreshTime = (DateTime.Now.ToUniversalTime() - TimeSpan.FromHours(5));
-            //GetNewAutoRefreshTimer();
-            //isLoading = false;
-            //StateHasChanged();
         }
     }
 

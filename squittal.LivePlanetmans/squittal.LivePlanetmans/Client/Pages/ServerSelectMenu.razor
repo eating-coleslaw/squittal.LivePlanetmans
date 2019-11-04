@@ -1,5 +1,4 @@
 ﻿@page "/serverselect"
-@*@page "/serverselect/{selectedWorldId}"*@
 @using squittal.LivePlanetmans.Shared.Models
 @using Microsoft.AspNetCore.WebUtilities @*for QueryHelpers*@
 @inject HttpClient Http
@@ -32,9 +31,6 @@ else
     [Parameter]
     public string playerId { get; set; }
 
-    //string selectedWorldName = "";
-    //World selectedWorld = new World();
-
     protected override async Task OnInitializedAsync()
     {
         worlds = await Http.GetJsonAsync<World[]>("api/Worlds");
@@ -51,12 +47,6 @@ else
         {
             playerId = qPlayerId.First();
         }
-
-
-        //if (worldId != null && worlds.Any())
-        //{
-        //    selectedWorld = worlds.Where(w => w.Id == worldId).FirstOrDefault();
-        //}
     }
 
     protected override void OnParametersSet()
@@ -76,11 +66,8 @@ else
 
     void OnWorldIdChange(ChangeEventArgs eventArgs)
     {
-        var worldId = Int32.Parse(eventArgs.Value.ToString()); //.ToString();
+        var worldId = Int32.Parse(eventArgs.Value.ToString());
 
-        //if (!string.IsNullOrWhiteSpace(worldId) && worldId != "Server")
-        //{
-        //NavigationManager.NavigateTo($"activity/{eventArgs.Value.ToString()}");
         if (!string.IsNullOrWhiteSpace(playerId))
         {
             NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
