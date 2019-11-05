@@ -26,21 +26,18 @@ else
     {
         <PlayerDetailsPanelHeader playerId=@playerId playerFactionId=@_playerFactionId />
 
-        <div id="details-body" style="padding: 0px 10px; font-family: 'Roboto Mono';">
+        <div id="details-body" class="@GetFactionClassFromId(_playerFactionId)" style="padding: 0px 10px; font-family: 'Roboto Mono';">
             
             <PlayerDetailsMainStats playerId=@playerId playerFactionId=@_playerFactionId/>
             
             <div style="margin-top: 0.5rem;">
 
-                @*@if (stats != null)
-                {*@
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; border-top-left-radius: 0.2rem; border-bottom: 2px solid @GetFactionColorFromId(_playerFactionId)80;">
-                        <button title="Open killboard view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.kills) padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.kills))">Kills this Hour</button>
-                        <button title="Open weapons view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.weapons)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.weapons))">Weapons</button>
-                        <button title="Open player head-to-head view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.players)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.players))">Head-to-Head</button>
-                        <button title="Open player loadouts view" class="btn btn-link" style="@GetViewTabStyle(PlayerDetailsView.loadouts)  padding: 0rem !important;" @onclick="@(() => OnSelectNewView(PlayerDetailsView.loadouts))">Classes</button>
-                    </div>
-                @*}*@
+                <div class="tabbed-button-container"> @*style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; border-top-left-radius: 0.2rem; border-bottom: 2px solid @GetFactionColorFromId(_playerFactionId)80;">*@
+                    <button title="Open killboard view" class="btn btn-link @GetViewTabStyle(PlayerDetailsView.kills)" @onclick="@(() => OnSelectNewView(PlayerDetailsView.kills))">Kills this Hour</button>
+                    <button title="Open weapons view" class="btn btn-link @GetViewTabStyle(PlayerDetailsView.weapons)" @onclick="@(() => OnSelectNewView(PlayerDetailsView.weapons))">Weapons</button>
+                    <button title="Open player head-to-head view" class="btn btn-link @GetViewTabStyle(PlayerDetailsView.players)" @onclick="@(() => OnSelectNewView(PlayerDetailsView.players))">Head-to-Head</button>
+                    <button title="Open player loadouts view" class="btn btn-link @GetViewTabStyle(PlayerDetailsView.loadouts)" @onclick="@(() => OnSelectNewView(PlayerDetailsView.loadouts))">Classes</button>
+                </div>
 
                 @if (view == viewTranslator[PlayerDetailsView.kills] && (isLoadingKillboard == true || kills == null))
                 {
@@ -652,13 +649,15 @@ else
     {
         if (viewTranslator[thisView] == view)
         {
-            return $"grid-row: 1; background-color: {GetFactionLightColorFromId(_playerFactionId)}; color: var(--sq-black) !important; font-size: 1rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0; text-decoration: none;"; // grid-column: 1; ";
+            return $"view-visible";
+            //return $"grid-row: 1; background-color: {GetFactionLightColorFromId(_playerFactionId)}; color: var(--sq-black) !important; font-size: 1rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0; text-decoration: none;"; // grid-column: 1; ";
         }
         else
         {
             int gridColumn = (thisView == PlayerDetailsView.kills || (view == viewTranslator[PlayerDetailsView.kills] && thisView == PlayerDetailsView.weapons)) ? 2 : 3;
 
-            return $"grid-row: 1; background-color: transparent; color: var(--blue); font-weight: 400; font-size: 1rem;"; // grid-column: {gridColumn}; ";
+            return $"view-hidden";
+            //return $"grid-row: 1; background-color: transparent; color: var(--blue); font-weight: 400; font-size: 1rem;"; // grid-column: {gridColumn}; ";
         }
     }
 

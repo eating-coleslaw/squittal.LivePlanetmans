@@ -1,4 +1,6 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('squittal-colors.css');
+@import url('spinner-ellipsis.css');
 
 :root {
     --sq-light-blue-gray: #d4d4ff;
@@ -29,6 +31,35 @@
     --bs-gray-alpha: #6c757d15;
     --bs-pink-alpha: #e83e8c25;
 }
+
+
+/*.vs {
+    --sq-ps2-primary: #652fdc;
+    --sq-ps2-primary-light: #CABCFF;
+    --sq-ps2-primary-light-alpha-30: #CABCFF30;
+    --sq-ps2-primary-light-alpha-40: #CABCFF40;
+}
+
+.nc {
+    --sq-ps2-primary: #1e62fc;
+    --sq-ps2-primary-light: #B6DDFD;
+    --sq-ps2-primary-light-alpha-30: #B6DDFD30;
+    --sq-ps2-primary-light-alpha-40: #B6DDFD40;
+}
+
+.tr {
+    --sq-ps2-primary: #e04c70;
+    --sq-ps2-primary-light: #FFD2D3;
+    --sq-ps2-primary-light-alpha-30: #FFD2D330;
+    --sq-ps2-primary-light-alpha-40: #FFD2D340;
+}
+
+.ns {
+    --sq-ps2-primary: #27273A;
+    --sq-ps2-primary-light: #a4a4c2;
+    --sq-ps2-primary-light-alpha-30: #a4a4c230;
+    --sq-ps2-primary-light-alpha-40: #a4a4c240;
+}*/
 
 html, body {
     font-family: 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -487,32 +518,23 @@ th.sortable.sorted-ascending::after {
     vertical-align: -0.125em;
 }
 
-/*th.sortable.sorted-ascending:hover::after {
-    content: url('https://api.iconify.design/oi-chevron-top.svg?color=%23007bff&height=8');
-    vertical-align: -0.125em;
-}*/
-
 th.sortable.sorted-descending::after {
     content: url('https://api.iconify.design/oi-chevron-bottom.svg?color=%2327273A&height=8');
     vertical-align: -0.125em;
 }
 
-/*th.sortable.sorted-descending:hover::after {
-    content: url('https://api.iconify.design/oi-chevron-bottom.svg?color=%23007bff&height=8');
-    vertical-align: -0.125em;
-}*/
 
 th.sortable.sorted-none::after {
     content: url('https://api.iconify.design/oi-chevron-bottom.svg?color=%230000&height=8');
     vertical-align: -0.125em;
 }
 
-/*.table-striped-light tbody tr:nth-of-type(2n+1) {
-    background-color: var(--sq-bg-white-lit);
-}*/
-/*.table-striped-light tbody {
-    background-color: var(--sq-bg-white-lit);
-}*/
+
+.table-striped-light tbody tr:nth-of-type(2n+1) {
+    background-color: var(--sq-ps2-primary-light-alpha-40);
+}
+
+
 .table-striped-light.vs tbody tr:nth-of-type(2n+1) {
     background-color: var(--sq-ps2-vs-primary-light-alpha-40);
 }
@@ -694,7 +716,7 @@ th.sortable.sorted-none::after {
 /* Ellipsis Spinner
      - credit to https://loading.io/css/ for starting point
 */
-.spinner-ellipsis {
+/*.spinner-ellipsis {
     position: relative;
     width: 64px;
     height: 2rem;
@@ -784,5 +806,42 @@ th.sortable.sorted-none::after {
         transform: translate(19px, 0);
         background: var(--sq-ps2-tr-primary);
     }
+}*/
+
+.tabbed-button-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    border-top-left-radius: 0.2rem;
+    border-bottom: 2px solid var(--sq-ps2-primary-light); /*@GetFactionColorFromId(_playerFactionId)80;*/
 }
 
+    .tabbed-button-container button {
+        padding: 0rem !important;
+    }
+
+        .tabbed-button-container button.view-visible {
+            grid-row: 1;
+            background-color: var(--sq-ps2-primary-light-alpha-80);
+            color: var(--sq-black) !important;
+            font-size: 1rem;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            text-decoration: none;
+        }
+
+        .tabbed-button-container button.view-hidden {
+            grid-row: 1;
+            background-color: transparent;
+            color: var(--blue);
+            font-weight: 400;
+            font-size: 1rem;
+        }
+
+            .tabbed-button-container button.view-hidden:hover,
+            .tabbed-button-container button.view-hidden:focus {
+                grid-row: 1;
+                background-color: var(--sq-ps2-primary-light-alpha-40);
+                color: var(--blue);
+                font-weight: 400;
+                font-size: 1rem;
+            }
