@@ -35,8 +35,9 @@ Planetside 2 live activity stats and leaderboard.
 ## Running the App
 
 1. Open the folder squittal.LivePlanetmans\squittal.LivePlanetmans\squittal.LivePlanetmans\Server in a command prompt window (Shift + Right Click > Open command window here, or Open PowerShell window here).
-2. Enter `dotnet run` to start the app.
-3. In your web browser navigate to the site displayed after the "Now listening on: ..." console message (e.g. <http://localhost:55572>).
+2. If it's the first time running the app, or you just synced changes from the repository, enter `dotnet build` to build the app.
+3. Enter `dotnet run` to start the app.
+4. In your web browser navigate to the site displayed after the "Now listening on: ..." console message (e.g. <http://localhost:55572>).
 
 ## Maintenance
 
