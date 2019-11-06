@@ -338,11 +338,11 @@ dt {
     Layout Styles
 */
 .sq-card {
-    border: 2px solid var(--sq-light-blue-gray-alpha-5a); /*!important;*/
+    border: 2px solid var(--sq-light-blue-gray-alpha-5a);
     border-radius: 0.2rem;
     padding: 0px;
     margin: 0 0 10px 5px;
-    background-color: var(--sq-bg-white-lit); /*@GetPlayerDetailsBackgroundColor();*/
+    background-color: var(--sq-bg-white-lit);
 }
 
     .sq-card.details {
@@ -351,17 +351,87 @@ dt {
     }
 
 
-        .sq-card.details .header {
+        .sq-card.details .player-header {
             font-family: 'Roboto Mono';
             display: grid;
             grid-template-columns: 1.5fr 1fr 80px;
             grid-template-rows: 1fr;
-            border-top: 2px solid var(--sq-ps2-primary);  /*@GetFactionColorFromId(_playerFactionId);*/
+            grid-template-areas: 'name name rank' 'faction outfit outfit';
+            border-top: 2px solid var(--sq-ps2-primary);
             border-top-left-radius: 0.2rem;
             border-top-right-radius: 0.2rem;
             padding: 5px 10px;
         }
 
+            .sq-card.details .player-header .name {
+                grid-area: name;
+                margin-bottom: 0px;
+                word-wrap: break-word;
+                font-size: 2rem;
+                font-weight: 500;
+                line-height: 1.2;
+            }
+
+                .sq-card.details .player-header .name a {
+                    color: var(--sq-ps2-primary) !important;
+                }
+
+                .sq-card.details .player-header .name .oi-external-link {
+                    opacity: 0.5;
+                    font-size: 1rem;
+                    margin-bottom: 0.5rem;
+                }
+
+            .sq-card.details .player-header .rank {
+                grid-area: rank;
+                text-align: right;
+            }
+
+                .sq-card.details .player-header .rank .oi {
+                    color: var(--sq-yellow);
+                    vertical-align: middle;
+                    font-size: 0.8rem;
+                    margin-bottom: 0.5rem;
+                }
+
+                .sq-card.details .player-header .rank .oi-star {
+                    color: var(--sq-yellow);
+                }
+
+                .sq-card.details .player-header .rank .rank-label {
+                    font-size: 0.75rem;
+                    font-weight: 300;
+                    margin-top: -0.1rem;
+                    color: var(--bs-gray);
+                }
+
+                .sq-card.details .player-header .rank .oi + .rank-label {
+                    margin-top: -0.3rem;
+                }
+
+            .sq-card.details .player-header .faction {
+                grid-area: faction;
+                color: var(--sq-ps2-primary);
+                font-size: 0.8rem;
+            }
+
+            .sq-card.details .player-header .outfit {
+                grid-area: outfit;
+                color: var(--sq-ps2-primary);
+                text-align: right;
+                font-size: 0.8rem;
+            }
+
+                .sq-card.details .player-header .outfit .alias {
+                    font-size: 0.7rem;
+                    font-weight: 400;
+                }
+
+                .sq-card.details .player-header .outfit .oi {
+                    font-size: 0.5rem;
+                    top: 0px;
+                    padding: 0 0.3125rem;
+                }
 
     .sq-card.pre-text {
         border-color: transparent !important;
