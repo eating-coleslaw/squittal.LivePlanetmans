@@ -334,17 +334,38 @@ dt {
     }
 
 
+/*
+    Layout Styles
+*/
+.sq-panel {
+    border: 2px solid var(--sq-light-blue-gray-alpha-5a) !important; /*!important;*/
+    border-radius: 0.2rem;
+    padding: 0px;
+    margin: 0 0 10px 5px;
+    background-color: var(--sq-bg-white-lit) !important; /*@GetPlayerDetailsBackgroundColor();*/
+}
+
+    .sq-panel.details {
+        border-color: var(--sq-light-blue-gray-alpha-5a);
+        background-color: var(--sq-bg-white-lit);
+    }
+
+    .sq-panel.pre-text {
+        border-color: transparent !important;
+        background-color: transparent !important;
+    }
+
+
 
 
 /*
     Leaderboard Styles
 */
-
-.leaderboard-table {
-    width: 100%;
-    margin-top: -1rem;
-    font-family: 'Roboto Mono';
-}
+    .leaderboard-table {
+        width: 100%;
+        margin-top: -1rem;
+        font-family: 'Roboto Mono';
+    }
 
     .leaderboard-table thead {
         line-height: 1.1rem;

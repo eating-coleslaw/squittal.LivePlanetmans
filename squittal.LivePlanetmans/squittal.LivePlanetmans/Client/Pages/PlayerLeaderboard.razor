@@ -183,7 +183,7 @@
 
         </div>
 
-        <div id="player-details" class="col-lg-6" style="border: 2px solid @GetPlayerDetailsBorderColor() !important; border-radius: 0.2rem; padding: 0px; margin: 0 0 10px 5px; background-color: @GetPlayerDetailsBackgroundColor();">
+        <div id="player-details" class="sq-panel col-lg-6 @GetPlayerDetailsPanelClass()"> @*style="border: 2px solid @GetPlayerDetailsBorderColor() !important; border-radius: 0.2rem; padding: 0px; margin: 0 0 10px 5px; background-color: @GetPlayerDetailsBackgroundColor();">*@
             <PlayerDetailsPanel playerId="@playerId" playerFactionId=@_selectedPlayerFactionId OnKillboardPlayerSelected="KillboardPlayerSelected"/> @*worldId="@worldId" OnCharacterIdChanged="KillboardPlayerSelected"/>*@
         </div>
     </div>
@@ -571,6 +571,11 @@
                 : $"{(startTime - fiveHours).ToString("M")} {(startTime - fiveHours).ToShortTimeString()} - {(endTime - fiveHours).ToString("M")} {(endTime - fiveHours).ToShortTimeString()}";
         }
 
+    }
+
+    string GetPlayerDetailsPanelClass()
+    {
+        return (!string.IsNullOrWhiteSpace(playerId)) ? "details" : "pre-text";
     }
 
     string GetPlayerDetailsBorderColor()
