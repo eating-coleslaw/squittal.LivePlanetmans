@@ -83,7 +83,7 @@ else
                                             <td style="padding: 0.1rem 0.75rem 0.1rem 0; border: inherit;">
                                                 @if (kill.VictimId == playerId)
                                                 {
-                                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; vertical-align: text-bottom !important; text-align: left;" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))">
+                                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; vertical-align: text-bottom !important; text-align: left;" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))" title="Open details for @kill.AttackerName">
                                                         <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis;">@kill.AttackerName</div>
                                                         <div style="display: inline-block; vertical-align: super;">
                                                             <sup>
@@ -98,7 +98,7 @@ else
                                                 }
                                                 else
                                                 {
-                                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; vertical-align: text-bottom !important; text-align: left;" @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))">
+                                                    <button class="btn btn-link" style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; vertical-align: text-bottom !important; text-align: left;" @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))" title="Open details for @kill.VictimName">
                                                         <div style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>
                                                         <div style="display: inline-block;">
                                                             <sup>

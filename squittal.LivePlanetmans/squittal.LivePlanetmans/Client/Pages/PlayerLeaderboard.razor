@@ -135,7 +135,7 @@
                                         </td>
 
                                         <td>
-                                            <button class="btn btn-link inline-player-br" style="color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))">
+                                            <button class="btn btn-link inline-player-br" style="color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))" title="Open details for @player.PlayerName">
                                                 @if (string.IsNullOrWhiteSpace(player.PlayerName))
                                                 {
                                                     @player.PlayerId
