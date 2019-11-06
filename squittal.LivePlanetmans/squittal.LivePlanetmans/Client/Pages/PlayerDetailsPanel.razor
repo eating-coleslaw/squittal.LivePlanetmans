@@ -9,16 +9,16 @@
 
 @if (string.IsNullOrWhiteSpace(playerId))
 {
-    <div style="padding: 10px;">
+    @*<div style="padding: 10px;">*@
 
-        <div class="text-muted" style="margin: 25%; font-size: 1.5rem; text-align: center; display: grid; grid-template-columns: 2rem 1fr; align-items: center; line-height: 1.5rem;">
-            <div style="display: inline block;" class="oi oi-arrow-thick-left large"></div>
-            <div style="display: inline-block;">
-                <em>Select a player to see hourly stats & session details</em>
-            </div>
+    <div class="text-muted" style="margin: 25%; font-size: 1.5rem; text-align: center; display: grid; grid-template-columns: 2rem 1fr; align-items: center; line-height: 1.5rem;">
+        <div style="display: inline block;" class="oi oi-arrow-thick-left large"></div>
+        <div style="display: inline-block;">
+            <em>Select a player to see hourly stats & session details</em>
         </div>
-
     </div>
+
+    @*</div>*@
 }
 else
 {
