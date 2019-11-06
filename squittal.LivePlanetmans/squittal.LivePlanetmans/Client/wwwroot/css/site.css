@@ -337,7 +337,7 @@ dt {
 /*
     Layout Styles
 */
-.sq-panel {
+.sq-card {
     border: 2px solid var(--sq-light-blue-gray-alpha-5a); /*!important;*/
     border-radius: 0.2rem;
     padding: 0px;
@@ -345,18 +345,18 @@ dt {
     background-color: var(--sq-bg-white-lit); /*@GetPlayerDetailsBackgroundColor();*/
 }
 
-    .sq-panel.details {
+    .sq-card.details {
         border-color: var(--sq-light-blue-gray-alpha-5a);
         background-color: var(--sq-bg-white-lit);
     }
 
-    .sq-panel.pre-text {
+    .sq-card.pre-text {
         border-color: transparent !important;
         background-color: transparent !important;
         color: var(--bs-gray) !important;
     }
 
-        .sq-panel.pre-text .icon-text-grid {
+        .sq-card.pre-text .icon-text-grid {
             margin: 25%;
             font-size: 1.5rem;
             text-align: center;
@@ -366,13 +366,13 @@ dt {
             line-height: 1.5rem;
         }
 
-        .sq-panel.pre-text .icon-text-grid div {
-            display: inline-block;
-        }
-
-            .sq-panel.pre-text .icon-text-grid div:nth-child(2) {
-                font-style: italic;
+            .sq-card.pre-text .icon-text-grid div {
+                display: inline-block;
             }
+
+                .sq-card.pre-text .icon-text-grid div:nth-child(2) {
+                    font-style: italic;
+                }
 
 
 
