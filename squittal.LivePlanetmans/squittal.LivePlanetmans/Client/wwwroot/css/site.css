@@ -513,8 +513,9 @@ dt {
         font-size: small;
         line-height: 1.1;
         padding: 0 0 0.1rem 0;
-        max-width: 225px;
+        max-width: 235px; /*225px;*/
         width: max-content;
+        text-align: left;
     }
 
 .inline-player-br > div {
