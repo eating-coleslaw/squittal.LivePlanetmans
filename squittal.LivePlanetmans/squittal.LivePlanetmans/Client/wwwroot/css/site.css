@@ -350,6 +350,19 @@ dt {
         background-color: var(--sq-bg-white-lit);
     }
 
+
+        .sq-card.details .header {
+            font-family: 'Roboto Mono';
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 80px;
+            grid-template-rows: 1fr;
+            border-top: 2px solid var(--sq-ps2-primary);  /*@GetFactionColorFromId(_playerFactionId);*/
+            border-top-left-radius: 0.2rem;
+            border-top-right-radius: 0.2rem;
+            padding: 5px 10px;
+        }
+
+
     .sq-card.pre-text {
         border-color: transparent !important;
         background-color: transparent !important;
