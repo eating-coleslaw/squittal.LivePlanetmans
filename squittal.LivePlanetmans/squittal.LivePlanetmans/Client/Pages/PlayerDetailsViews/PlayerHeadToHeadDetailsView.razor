@@ -300,23 +300,28 @@ else if (isSelectedView == true)
 
     string GetFactionClassFromId(int? factionId)
     {
-        string cssClass = "ns"; //table-striped-striped var(--sqp-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+        string cssClass = "ns";
 
         switch (factionId)
         {
-            //VS
             case 1:
-                cssClass = "vs"; // var(--sqp-ps2-vs-primary-light)"; //#CABCFF";
+                cssClass = "vs";
                 break;
 
-            //NC
             case 2:
-                cssClass = "nc"; // var(--sqp-ps2-nc-primary-light)"; //#B6DDFD";
+                cssClass = "nc";
                 break;
 
-            //TR
             case 3:
-                cssClass = "tr"; // var(--sqp-ps2-tr-primary-light)"; //#FFD2D3";
+                cssClass = "tr";
+                break;
+
+            case 4:
+                cssClass = "ns";
+                break;
+
+            default:
+                cssClass = "ns";
                 break;
         }
 
