@@ -338,11 +338,11 @@ dt {
     Layout Styles
 */
 .sq-panel {
-    border: 2px solid var(--sq-light-blue-gray-alpha-5a) !important; /*!important;*/
+    border: 2px solid var(--sq-light-blue-gray-alpha-5a); /*!important;*/
     border-radius: 0.2rem;
     padding: 0px;
     margin: 0 0 10px 5px;
-    background-color: var(--sq-bg-white-lit) !important; /*@GetPlayerDetailsBackgroundColor();*/
+    background-color: var(--sq-bg-white-lit); /*@GetPlayerDetailsBackgroundColor();*/
 }
 
     .sq-panel.details {
@@ -353,7 +353,26 @@ dt {
     .sq-panel.pre-text {
         border-color: transparent !important;
         background-color: transparent !important;
+        color: var(--bs-gray) !important;
     }
+
+        .sq-panel.pre-text .icon-text-grid {
+            margin: 25%;
+            font-size: 1.5rem;
+            text-align: center;
+            display: grid;
+            grid-template-columns: 2rem 1fr;
+            align-items: center;
+            line-height: 1.5rem;
+        }
+
+        .sq-panel.pre-text .icon-text-grid div {
+            display: inline-block;
+        }
+
+            .sq-panel.pre-text .icon-text-grid div:nth-child(2) {
+                font-style: italic;
+            }
 
 
 
