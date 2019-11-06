@@ -183,7 +183,7 @@
 
         </div>
 
-        <div id="player-details" class="sq-panel col-lg-6 @GetPlayerDetailsPanelClass()"> @*style="border: 2px solid @GetPlayerDetailsBorderColor() !important; border-radius: 0.2rem; padding: 0px; margin: 0 0 10px 5px; background-color: @GetPlayerDetailsBackgroundColor();">*@
+        <div id="player-details" class="sq-panel col-lg-6 @GetPlayerDetailsPanelClass() @GetFactionClassFromId(_selectedPlayerFactionId)">
             <PlayerDetailsPanel playerId="@playerId" playerFactionId=@_selectedPlayerFactionId OnKillboardPlayerSelected="KillboardPlayerSelected"/> @*worldId="@worldId" OnCharacterIdChanged="KillboardPlayerSelected"/>*@
         </div>
     </div>
@@ -578,6 +578,32 @@
         return (!string.IsNullOrWhiteSpace(playerId)) ? "details" : "pre-text";
     }
 
+    string GetFactionClassFromId(int? factionId)
+    {
+        string cssClass = "ns"; //table-striped-striped var(--sqp-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+
+        switch (factionId)
+        {
+            //VS
+            case 1:
+                cssClass = "vs"; // var(--sqp-ps2-vs-primary-light)"; //#CABCFF";
+                break;
+
+            //NC
+            case 2:
+                cssClass = "nc"; // var(--sqp-ps2-nc-primary-light)"; //#B6DDFD";
+                break;
+
+            //TR
+            case 3:
+                cssClass = "tr"; // var(--sqp-ps2-tr-primary-light)"; //#FFD2D3";
+                break;
+        }
+
+        return cssClass;
+    }
+
+    /*
     string GetPlayerDetailsBorderColor()
     {
         return (!string.IsNullOrWhiteSpace(playerId)) ? "#d4d4ff5a" : "transparent";
@@ -587,6 +613,7 @@
     {
         return (!string.IsNullOrWhiteSpace(playerId)) ? "#fcf6ff" : "transparent;";
     }
+    */
 
     string GetZoneDisplayEmoji(string zoneName)
     {
