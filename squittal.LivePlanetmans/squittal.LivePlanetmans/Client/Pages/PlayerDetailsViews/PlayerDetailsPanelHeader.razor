@@ -22,28 +22,26 @@
             <div class="rank-label">Battle Rank</div>
         </div>
 
-        @if (details != null)
-        {
-            <div class="faction">
-                @if (!string.IsNullOrWhiteSpace(details.TitleName))
-                {
-                    <span>@details.TitleName of the </span>
-                }
-                <span>@details.FactionName on @details.WorldName</span>
-            </div>
-
-            @if (details.OutfitName != null)
+        <div class="faction">
+            @if (!string.IsNullOrWhiteSpace(details.TitleName))
             {
-                <div class="outfit">
-                    @if (!string.IsNullOrWhiteSpace(details.OutfitAlias))
-                    {
-                        <span class="alias">[@(details.OutfitAlias)] </span>
-                    }
-                    <span>@(details.OutfitName) </span>
-                    <span class="oi oi-caret-right small"></span>
-                    <span> @details.OutfitRankName</span>
-                </div>
+                <span>@details.TitleName of the </span>
             }
+            <span>@details.FactionName on @details.WorldName</span>
+        </div>
+
+        @if (details.OutfitName != null)
+        {
+            <div class="outfit">
+                @if (!string.IsNullOrWhiteSpace(details.OutfitAlias))
+                {
+                    <span class="alias">[@(details.OutfitAlias)] </span>
+                }
+                <span>@(details.OutfitName) </span>
+                <span class="oi oi-caret-right small"></span>
+                <span> @details.OutfitRankName</span>
+            </div>
+        }
 
         }
 
