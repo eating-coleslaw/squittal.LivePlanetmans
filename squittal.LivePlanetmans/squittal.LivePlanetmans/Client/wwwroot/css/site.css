@@ -773,6 +773,46 @@ th.sortable.sorted-none::after {
         width: 77px;
     }
 
+/*
+    Loadout Details View
+*/
+
+.stat-ratio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.75rem 1.75rem;
+    grid-template-rows: 1rem;
+    grid-template-areas: 'ratio numerator denominator';
+    color: inherit;
+    opacity: 1.0;
+    font-weight: 400;
+}
+
+    .stat-ratio-grid.dimmed {
+        opacity: 0.5;
+        font-weight: 300;
+    }
+
+    .stat-ratio-grid .ratio {
+        grid-area: ratio;
+        text-align: right;
+        font-size: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .stat-ratio-grid .fraction-piece {
+        text-align: right;
+        font-size: 0.9rem;
+        padding-left: 0.5rem;
+    }
+
+        .stat-ratio-grid .fraction-piece.numerator {
+            grid-area: numerator;
+        }
+
+        .stat-ratio-grid .fraction-piece.denominator {
+            grid-area: denominator;
+        }
+
 
 /*
     PS2 Class Icons
