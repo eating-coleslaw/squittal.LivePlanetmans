@@ -443,6 +443,13 @@ dt {
                 margin-top: 0.5rem;
             }
 
+            .sq-card.details .details-body .view {
+                width: 100%;
+                margin: initial;
+                margin-top: 0.5rem;
+                margin-bottom: 1.5rem;
+            }
+
 
     .sq-card.pre-text {
         border-color: transparent !important;
@@ -634,18 +641,36 @@ th.stacked-label span.small {
     font-size: 0.6rem;
 }
 
-th.sortable > .btn.btn-link {
-    font-size: 0.8rem;
-    padding: 0rem !important;
-    line-height: 0.5rem;
-    text-align: left;
-    text-decoration: none;
-    color: var(--sq-black);
+th.sortable {
+    padding-bottom: 0.25rem !important;
 }
-
-    th.sortable > .btn.btn-link:hover, th.sortable > .btn.btn-link:focus {
-        color: var(--bs-blue);
+    
+    th.sortable.stacked-label {
+        padding-top: 0.15rem !important;
     }
+
+    th.sortable > .btn.btn-link {
+        font-size: 0.8rem;
+        padding: 0rem !important;
+        line-height: 0.5rem;
+        text-align: left;
+        text-decoration: none;
+        color: var(--sq-black);
+    }
+
+        th.sortable > .btn.btn-link:hover, th.sortable > .btn.btn-link:focus {
+            color: var(--bs-blue);
+        }
+
+    th.sortable button {
+        font-size: 0.8rem !important;
+        padding: 0rem !important;
+        line-height: 0.5rem !important;
+        text-align: left !important;
+        transition: none;
+    }
+
+    
 
 
 th.sortable.sorted-ascending::after {
@@ -990,6 +1015,7 @@ th.sortable.sorted-none::after {
 
     .tabbed-button-container button {
         padding: 0rem !important;
+        transition: none !important;
     }
 
         .tabbed-button-container button.view-visible {
