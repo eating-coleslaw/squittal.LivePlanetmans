@@ -433,6 +433,17 @@ dt {
                     padding: 0 0.3125rem;
                 }
 
+
+        .sq-card.details .details-body {
+            font-family: 'Roboto Mono';
+            padding: 0px 10px;
+        }
+
+            .sq-card.details .details-body .views-container {
+                margin-top: 0.5rem;
+            }
+
+
     .sq-card.pre-text {
         border-color: transparent !important;
         background-color: transparent !important;
