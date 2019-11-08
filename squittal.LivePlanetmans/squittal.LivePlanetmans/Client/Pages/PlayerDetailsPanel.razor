@@ -22,15 +22,13 @@ else
     {
         <PlayerDetailsPanelHeader playerId=@playerId playerFactionId=@_playerFactionId />
 
-        <div id="details-body" class="details-body @GetFactionClassFromId(_playerFactionId)"> @*style="padding: 0px 10px; font-family: 'Roboto Mono';">*@
+        <div id="details-body" class="details-body @GetFactionClassFromId(_playerFactionId)">
             
             <PlayerDetailsMainStats playerId=@playerId playerFactionId=@_playerFactionId/>
             
             <div class="views-container">
-                @*style="margin-top: 0.5rem;">*@
 
                 <div class="tabbed-button-container">
-                    @*style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; border-top-left-radius: 0.2rem; border-bottom: 2px solid @GetFactionColorFromId(_playerFactionId)80;">*@
                     <button title="Open killboard view" class="btn btn-link @GetViewTabStyle(PlayerDetailsView.kills)" @onclick="@(() => OnSelectNewView(PlayerDetailsView.kills))">Kills this Hour</button>
                     <button title="Open weapons view" class="btn btn-link @GetViewTabStyle(PlayerDetailsView.weapons)" @onclick="@(() => OnSelectNewView(PlayerDetailsView.weapons))">Weapons</button>
                     <button title="Open player head-to-head view" class="btn btn-link @GetViewTabStyle(PlayerDetailsView.players)" @onclick="@(() => OnSelectNewView(PlayerDetailsView.players))">Head-to-Head</button>
