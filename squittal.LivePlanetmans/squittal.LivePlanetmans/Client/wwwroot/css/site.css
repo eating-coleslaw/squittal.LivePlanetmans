@@ -795,13 +795,11 @@ th.sortable.sorted-none::after {
     .stat-ratio-grid .ratio {
         grid-area: ratio;
         text-align: right;
-        font-size: 1rem;
         font-size: 0.9rem;
     }
 
     .stat-ratio-grid .fraction-piece {
         text-align: right;
-        font-size: 0.9rem;
         padding-left: 0.5rem;
     }
 
