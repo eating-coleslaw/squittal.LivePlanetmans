@@ -232,11 +232,18 @@ dt {
     font-size: 0.8rem;
 }
 
-@media (min-width: 992px) {
-    
+.col-lg-6 {
+    flex: unset;
+    max-width: 100%;
+    width: auto;
+}
+
+@media (min-width: 1280px) { /*992px) {*/
     .col-lg-6 {
-        flex-basis: calc(50% - 5px);
+        flex-basis: calc(50% - 5px) !important;
     }
+
+
 
 }
 
@@ -485,6 +492,7 @@ dt {
         width: 100%;
         margin-top: -1rem;
         font-family: 'Roboto Mono';
+        overflow-x: scroll;
     }
 
     .leaderboard-table thead {
@@ -830,6 +838,23 @@ th.sortable.sorted-none::after {
     flex: 0 0 100%;
     max-width: 100%;
 }
+
+    .sq-mini-card-12 h5 {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+        padding: 0.5rem 0 0 0.5rem;
+        width: 100%;
+    }
+
+    .sq-mini-card-12 .sq-content {
+        max-height: calc(350px - 1.5rem);
+        overflow: auto;
+        padding: 0 0 0.5rem 0.5rem;
+    }
+
+    .sq-mini-card-12 .table-responseive-sm.table-striped-light {
+
+    }
 
 
 
