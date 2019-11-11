@@ -12,8 +12,8 @@
 }
 else if (isSelectedView == true)
 {
-    <div class="row view">
-        <div class="col-sm-12" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(headToHeadReport.PlayerDetails.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(headToHeadReport.PlayerDetails.FactionId); padding: 0;">
+    <div class="row view @GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)">
+        <div class="sq-mini-card-12"> @*col-sm-12" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(headToHeadReport.PlayerDetails.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(headToHeadReport.PlayerDetails.FactionId); padding: 0;">*@
             <h5 style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%">Enemies this Hour</h5>
             @if (headToHeadReport != null && headToHeadReport.HeadToHeadSummaries.Any() == true && isLoadingHeadToHead != true)
             {
@@ -39,25 +39,25 @@ else if (isSelectedView == true)
                                 </th>
                                 <th class="stacked-label sortable @GetSortClass(SortColumn.KillDeathRatio)" title="Head-to-Head Kill-Death Ratio">
                                     <button class="btn btn-link" @onclick="@(() => OnClickColumnHeader(SortColumn.KillDeathRatio))">
-                                        <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
+                                        <span class="small">H2H</span> @*style="position: initial; margin-bottom: 0.1rem;">H2H</span>*@
                                         <span>KDR</span>
                                     </button>
                                 </th>
                                 <th class="stacked-label sortable @GetSortClass(SortColumn.HeadshotRatio)" title="Head-to-Head Headshot Ratio">
                                     <button class="btn btn-link" @onclick="@(() => OnClickColumnHeader(SortColumn.HeadshotRatio))">
-                                        <span class="small" style="position: initial; margin-bottom: 0.1rem;">H2H</span>
+                                        <span class="small">H2H</span> @*style="position: initial; margin-bottom: 0.1rem;">H2H</span>*@
                                         <span>HSR</span>
                                     </button>
                                 </th>
                                 <th class="stacked-label sortable @GetSortClass(SortColumn.EnemyKillDeathRatio)" title="Head-to-Head Kill-Death Ratio">
                                     <button class="btn btn-link" @onclick="@(() => OnClickColumnHeader(SortColumn.EnemyKillDeathRatio))">
-                                        <span class="small" style="position: initial; margin-bottom: 0.1rem;">Enemy</span>
+                                        <span class="small">Enemy</span> @*style="position: initial; margin-bottom: 0.1rem;">Enemy</span>*@
                                         <span>KDR</span>
                                     </button>
                                 </th>
                                 <th class="stacked-label sortable @GetSortClass(SortColumn.EnemyHeadshotRatio)" title="Head-to-Head Headshot Ratio">
                                     <button class="btn btn-link" @onclick="@(() => OnClickColumnHeader(SortColumn.EnemyHeadshotRatio))">
-                                        <span class="small" style="position: initial; margin-bottom: 0.1rem;">Enemy</span>
+                                        <span class="small">Enemy</span> @*style="position: initial; margin-bottom: 0.1rem;">Enemy</span>*@
                                         <span>HSR</span>
                                     </button>
                                 </th>
