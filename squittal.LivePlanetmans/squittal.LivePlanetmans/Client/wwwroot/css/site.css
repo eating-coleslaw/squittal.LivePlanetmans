@@ -243,7 +243,9 @@ dt {
         flex-basis: calc(50% - 5px) !important;
     }
 
-
+    /*.leaderboard-table th.med {
+        width: 75px;
+    }*/
 
 }
 
@@ -511,7 +513,9 @@ dt {
         .leaderboard-table th.med {
             /*width: 80px;*/
             /*min-width: 60px;*/
-            width: 75px;
+            /*width: 75px;*/
+            max-width: 80px;
+            width: auto;
         }
 
         .leaderboard-table th.p-name {
