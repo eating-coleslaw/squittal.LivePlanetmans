@@ -67,7 +67,7 @@ else if (isSelectedView == true)
                         <tbody>
                             @foreach (var player in headToHeadReport.HeadToHeadSummaries)
                             {
-                                <tr class="@GetFactionClassFromId(player.EnemyDetails.FactionId)"> @*"style="color: @GetFactionColorFromId(player.EnemyDetails.FactionId)">*@
+                                <tr class="@GetFactionClassFromId(player.EnemyDetails.FactionId)">
                                     <td class="inline-player-br">
                                         @if (string.IsNullOrWhiteSpace(player.EnemyDetails.PlayerName))
                                         {
@@ -167,11 +167,11 @@ else if (isSelectedView == true)
             }
             catch (OperationCanceledException)
             {
-                // Debug.WriteLine($"Operation cancelled: api/PlayerHourlyHeadToHead/players/{playerId}");
+                // Ignore
             }
             catch (Exception)
             {
-                //Ignore
+                // Ignore
             }
             finally
             {
@@ -220,82 +220,6 @@ else if (isSelectedView == true)
         {
             return "sorted-none";
         }
-    }
-
-
-    string GetFactionColorFromId(int? factionId)
-    {
-        string color = "#27273A"; // 2F2F2F";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "#652fdc"; // 6A4CE0";
-                break;
-
-            //NC
-            case 2:
-                color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
-                break;
-
-            //TR
-            case 3:
-                color = "#e04c70"; // FF6C70";
-                break;
-        }
-
-        return color;
-    }
-
-    string GetFactionLightColorFromId(int? factionId)
-    {
-        string color = "var(--sq-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "var(--sq-ps2-vs-primary-light)"; //#CABCFF";
-                break;
-
-            //NC
-            case 2:
-                color = "var(--sq-ps2-nc-primary-light)"; //#B6DDFD";
-                break;
-
-            //TR
-            case 3:
-                color = "var(--sq-ps2-tr-primary-light)"; //#FFD2D3";
-                break;
-        }
-
-        return color;
-    }
-
-    string GetFactionLightAlphaColorFromId(int? factionId)
-    {
-        string color = "var(--sq-ps2-ns-primary-light-alpha)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "var(--sq-ps2-vs-primary-light-alpha)"; //#CABCFF";
-                break;
-
-            //NC
-            case 2:
-                color = "var(--sq-ps2-nc-primary-light-alpha)"; //#B6DDFD";
-                break;
-
-            //TR
-            case 3:
-                color = "var(--sq-ps2-tr-primary-light-alpha)"; //#FFD2D3";
-                break;
-        }
-
-        return color;
     }
 
     string GetFactionClassFromId(int? factionId)
