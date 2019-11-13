@@ -12,14 +12,14 @@
 }
 else if (isSelectedView == true)
 {
-    <div class="row view @GetFactionClassFromId(weaponsReport.PlayerFactionId)"> @*style="margin: initial; width: 100%; margin-top: 0.5rem; margin-bottom: 1.5rem;">*@
-        <div class="sq-mini-card-6"> @*col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(playerFactionId); flex-basis: calc(50% - 0.3125rem); margin-right: 0.3125rem;">*@
-            <h5>Top Weapons By Kills</h5> @*style="font-size: 1rem; margin-bottom: 0.25rem">Top Weapons By Kills</h5>*@
+    <div class="row view @GetFactionClassFromId(weaponsReport.PlayerFactionId)">
+        <div class="sq-mini-card-6">
+            <h5>Top Weapons By Kills</h5>
             @if (weaponsReport != null && weaponsReport.TopWeaponsByKills.Any() == true && isLoadingWeapons != true)
             {
 
-                <div class="sq-content"> @*style="max-height: calc(350px - 1.5rem); overflow: auto;">*@
-                    <table class="table-responsive-sm table-striped-light @GetFactionClassFromId(playerFactionId)"> @*style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 0px solid @GetFactionLightColorFromId(playerFactionId);">*@
+                <div class="sq-content">
+                    <table class="table-responsive-sm table-striped-light @GetFactionClassFromId(playerFactionId)">
                         <thead style="vertical-align: bottom;">
                             <tr>
                                 <th class="p-name"></th>
@@ -28,10 +28,10 @@ else if (isSelectedView == true)
                             </tr>
                         </thead>
 
-                        <tbody> @*style="background-color: var(--sq-bg-white-lit);">*@
+                        <tbody>
                             @foreach (var weapon in weaponsReport.TopWeaponsByKills)
                             {
-                                <tr class="@GetFactionClassFromId(weapon.FactionId)"> @*style="color: @GetFactionColorFromId(weapon.FactionId)">*@
+                                <tr class="@GetFactionClassFromId(weapon.FactionId)">
                                     <td>@weapon.WeaponName</td>
                                     <td>@weapon.WeaponStats.Kills</td>
                                     <td>@weapon.WeaponStats.HeadshotRatio</td>
@@ -43,13 +43,13 @@ else if (isSelectedView == true)
             }
         </div>
 
-        <div class="sq-mini-card-6"> @*col-sm-6" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(playerFactionId);">*@
-            <h5>Top Weapons By Deaths</h5> @*style="font-size: 1rem; margin-bottom: 0.25rem">Top Weapons By Deaths</h5>*@
+        <div class="sq-mini-card-6">
+            <h5>Top Weapons By Deaths</h5>
             @if (weaponsReport != null && weaponsReport.TopWeaponsByDeaths.Any() == true && isLoadingWeapons != true)
             {
 
-                <div class="sq-content"> @*style="max-height: calc(350px - 1.5rem); overflow: auto;">*@
-                    <table class="table-responsive-sm table-striped-light @GetFactionClassFromId(playerFactionId)"> @*style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 0px solid @GetFactionLightColorFromId(playerFactionId);">*@
+                <div class="sq-content">
+                    <table class="table-responsive-sm table-striped-light @GetFactionClassFromId(playerFactionId)">
                         <thead style="vertical-align: bottom;">
                             <tr>
                                 <th class="p-name"></th>
@@ -58,10 +58,10 @@ else if (isSelectedView == true)
                             </tr>
                         </thead>
 
-                        <tbody> @*style="background-color: var(--sq-bg-white-lit);">*@
+                        <tbody>
                             @foreach (var weapon in weaponsReport.TopWeaponsByDeaths)
                             {
-                                <tr class="@GetFactionClassFromId(weapon.FactionId)"> @*style="color: @GetFactionColorFromId(weapon.FactionId)">*@
+                                <tr class="@GetFactionClassFromId(weapon.FactionId)">
                                     <td>@weapon.WeaponName</td>
                                     <td>@weapon.WeaponStats.Deaths</td>
                                     <td>@weapon.WeaponStats.HeadshotDeathRatio</td>
@@ -140,11 +140,11 @@ else if (isSelectedView == true)
             }
             catch (OperationCanceledException)
             {
-                // Debug.WriteLine($"Operation cancelled: api/PlayerHourlyWeapons/weapons/[kills,deaths]/{playerId}");
+                // Ignore
             }
             catch (Exception)
             {
-                //ignore
+                // Ignore
             }
             finally
             {
@@ -159,80 +159,80 @@ else if (isSelectedView == true)
         }
     }
 
-    string GetFactionColorFromId(int? factionId)
-    {
-        string color = "#27273A"; // 2F2F2F";
+    //string GetFactionColorFromId(int? factionId)
+    //{
+    //    string color = "#27273A"; // 2F2F2F";
 
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "#652fdc"; // 6A4CE0";
-                break;
+    //    switch (factionId)
+    //    {
+    //        //VS
+    //        case 1:
+    //            color = "#652fdc"; // 6A4CE0";
+    //            break;
 
-            //NC
-            case 2:
-                color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
-                break;
+    //        //NC
+    //        case 2:
+    //            color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
+    //            break;
 
-            //TR
-            case 3:
-                color = "#e04c70"; // FF6C70";
-                break;
-        }
+    //        //TR
+    //        case 3:
+    //            color = "#e04c70"; // FF6C70";
+    //            break;
+    //    }
 
-        return color;
-    }
+    //    return color;
+    //}
 
-    string GetFactionLightColorFromId(int? factionId)
-    {
-        string color = "var(--sq-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+    //string GetFactionLightColorFromId(int? factionId)
+    //{
+    //    string color = "var(--sq-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
 
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "var(--sq-ps2-vs-primary-light)"; //#CABCFF";
-                break;
+    //    switch (factionId)
+    //    {
+    //        //VS
+    //        case 1:
+    //            color = "var(--sq-ps2-vs-primary-light)"; //#CABCFF";
+    //            break;
 
-            //NC
-            case 2:
-                color = "var(--sq-ps2-nc-primary-light)"; //#B6DDFD";
-                break;
+    //        //NC
+    //        case 2:
+    //            color = "var(--sq-ps2-nc-primary-light)"; //#B6DDFD";
+    //            break;
 
-            //TR
-            case 3:
-                color = "var(--sq-ps2-tr-primary-light)"; //#FFD2D3";
-                break;
-        }
+    //        //TR
+    //        case 3:
+    //            color = "var(--sq-ps2-tr-primary-light)"; //#FFD2D3";
+    //            break;
+    //    }
 
-        return color;
-    }
+    //    return color;
+    //}
 
-    string GetFactionLightAlphaColorFromId(int? factionId)
-    {
-        string color = "var(--sq-ps2-ns-primary-light-alpha)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
+    //string GetFactionLightAlphaColorFromId(int? factionId)
+    //{
+    //    string color = "var(--sq-ps2-ns-primary-light-alpha)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
 
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "var(--sq-ps2-vs-primary-light-alpha)"; //#CABCFF";
-                break;
+    //    switch (factionId)
+    //    {
+    //        //VS
+    //        case 1:
+    //            color = "var(--sq-ps2-vs-primary-light-alpha)"; //#CABCFF";
+    //            break;
 
-            //NC
-            case 2:
-                color = "var(--sq-ps2-nc-primary-light-alpha)"; //#B6DDFD";
-                break;
+    //        //NC
+    //        case 2:
+    //            color = "var(--sq-ps2-nc-primary-light-alpha)"; //#B6DDFD";
+    //            break;
 
-            //TR
-            case 3:
-                color = "var(--sq-ps2-tr-primary-light-alpha)"; //#FFD2D3";
-                break;
-        }
+    //        //TR
+    //        case 3:
+    //            color = "var(--sq-ps2-tr-primary-light-alpha)"; //#FFD2D3";
+    //            break;
+    //    }
 
-        return color;
-    }
+    //    return color;
+    //}
 
     string GetFactionClassFromId(int? factionId)
     {
