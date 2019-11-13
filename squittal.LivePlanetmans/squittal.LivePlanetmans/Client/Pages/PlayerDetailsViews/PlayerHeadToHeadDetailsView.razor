@@ -39,25 +39,25 @@ else if (isSelectedView == true)
                                 </th>
                                 <th class="stacked-label sortable @GetSortClass(SortColumn.KillDeathRatio)" title="Head-to-Head Kill-Death Ratio">
                                     <button class="btn btn-link" @onclick="@(() => OnClickColumnHeader(SortColumn.KillDeathRatio))">
-                                        <span class="small">H2H</span> @*style="position: initial; margin-bottom: 0.1rem;">H2H</span>*@
+                                        <span class="small">H2H</span>
                                         <span>KDR</span>
                                     </button>
                                 </th>
                                 <th class="stacked-label sortable @GetSortClass(SortColumn.HeadshotRatio)" title="Head-to-Head Headshot Ratio">
                                     <button class="btn btn-link" @onclick="@(() => OnClickColumnHeader(SortColumn.HeadshotRatio))">
-                                        <span class="small">H2H</span> @*style="position: initial; margin-bottom: 0.1rem;">H2H</span>*@
+                                        <span class="small">H2H</span>
                                         <span>HSR</span>
                                     </button>
                                 </th>
                                 <th class="stacked-label sortable @GetSortClass(SortColumn.EnemyKillDeathRatio)" title="Head-to-Head Kill-Death Ratio">
                                     <button class="btn btn-link" @onclick="@(() => OnClickColumnHeader(SortColumn.EnemyKillDeathRatio))">
-                                        <span class="small">Enemy</span> @*style="position: initial; margin-bottom: 0.1rem;">Enemy</span>*@
+                                        <span class="small">Enemy</span>
                                         <span>KDR</span>
                                     </button>
                                 </th>
                                 <th class="stacked-label sortable @GetSortClass(SortColumn.EnemyHeadshotRatio)" title="Head-to-Head Headshot Ratio">
                                     <button class="btn btn-link" @onclick="@(() => OnClickColumnHeader(SortColumn.EnemyHeadshotRatio))">
-                                        <span class="small">Enemy</span> @*style="position: initial; margin-bottom: 0.1rem;">Enemy</span>*@
+                                        <span class="small">Enemy</span>
                                         <span>HSR</span>
                                     </button>
                                 </th>
@@ -67,7 +67,7 @@ else if (isSelectedView == true)
                         <tbody>
                             @foreach (var player in headToHeadReport.HeadToHeadSummaries)
                             {
-                                <tr style="color: @GetFactionColorFromId(player.EnemyDetails.FactionId)">
+                                <tr class="@GetFactionClassFromId(player.EnemyDetails.FactionId)"> @*"style="color: @GetFactionColorFromId(player.EnemyDetails.FactionId)">*@
                                     <td class="inline-player-br">
                                         @if (string.IsNullOrWhiteSpace(player.EnemyDetails.PlayerName))
                                         {

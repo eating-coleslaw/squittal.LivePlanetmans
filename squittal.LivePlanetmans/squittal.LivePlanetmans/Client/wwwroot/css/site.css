@@ -877,6 +877,10 @@ th.sortable.sorted-none::after {
     }
 
 
+    .sq-content tr {
+        color: var(--sq-ps2-primary);
+    }
+
 
 /*
     Loadout Details View
