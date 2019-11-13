@@ -13,13 +13,13 @@
 else if (isSelectedView == true)
 {
     <div class="row view @GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)">
-        <div class="sq-mini-card-12"> @*col-sm-12" style="line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(headToHeadReport.PlayerDetails.FactionId)); border-top: 2px solid @GetFactionLightColorFromId(headToHeadReport.PlayerDetails.FactionId); padding: 0;">*@
-            <h5>Enemies this Hour</h5> @*style="font-size: 1rem; margin-bottom: 0.25rem; padding: 0.5rem 0 0 0.5rem; width: 100%;">Enemies this Hour</h5>*@
+        <div class="sq-mini-card-12">
+            <h5>Enemies this Hour</h5>
             @if (headToHeadReport != null && headToHeadReport.HeadToHeadSummaries.Any() == true && isLoadingHeadToHead != true)
             {
 
-                <div class="sq-content"> @*style="max-height: calc(350px - 1.5rem); overflow: auto; padding: 0 0 0.5rem 0.5rem;">*@
-                    <table class="table-responseive-sm table-striped-light @GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)" style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(headToHeadReport.PlayerDetails.FactionId);">
+                <div class="sq-content">
+                    <table class="table-responsive-sm table-striped-light @GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)"> @*style="width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(headToHeadReport.PlayerDetails.FactionId);">*@
                         <thead style="vertical-align: bottom; line-height: 0.5rem;">
                             <tr>
                                 <th class="p-name sortable @GetSortClass(SortColumn.Player)">
