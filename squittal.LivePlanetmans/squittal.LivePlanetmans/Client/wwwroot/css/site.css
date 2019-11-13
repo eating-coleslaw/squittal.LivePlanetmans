@@ -272,6 +272,15 @@ dt {
         align-content: center;
     }
 
+    .leaderboard-card .card-body {
+        margin: 5px 10px;
+        padding: 5px 0;
+        overflow-x: auto;
+    }
+
+/*
+    Styled Select
+*/
 .styled-select {
     width: 120px;
     /*overflow: hidden;*/
