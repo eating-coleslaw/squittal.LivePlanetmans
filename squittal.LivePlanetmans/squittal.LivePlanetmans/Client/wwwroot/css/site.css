@@ -890,48 +890,11 @@ th.sortable.sorted-none::after {
 
 
 .sq-mini-card-12 {
-    /*line-height: 1rem;
-    margin: 0.3125rem 0;
-    padding: 0;
-    background-color: var(--sq-ps2-primary-light-alpha-30);
-    border-top: 2px solid var(--sq-ps2-primary-light);
-    border-radius: 0.2rem;*/
     flex: 0 0 100%;
     max-width: 100%;
 }
 
-    /*.sq-mini-card-12 h5 {
-        font-size: 1rem;
-        margin-bottom: 0.25rem;
-        padding: 0.5rem 0 0 0.5rem;
-        width: 100%;
-        font-weight: 400;
-    }*/
-
-    /*.sq-mini-card-12 .sq-content {
-        max-height: calc(350px - 1.5rem);
-        overflow: auto;
-        padding: 0 0 0.5rem 0.5rem;
-    }*/
-
-    /*.sq-mini-card-12 .table-responsive-sm.table-striped-light {
-        width: calc(100% - 0.75rem);
-        font-size: 0.8rem !important;
-        border-bottom: 1px solid var(--sq-ps2-primary-light);
-    }*/
-
-    /*.sq-mini-card-12 .table-responsive-sm.table-striped-light th {
-        font-weight: 400;
-    }*/
-
-
 .sq-mini-card-6 {
-    /*line-height: 1rem;
-    margin: 0.3125rem 0;
-    padding: 0;
-    border-radius: 0.2rem;
-    background-color: var(--sq-ps2-primary-light-alpha-30);
-    border-top: 2px solid var(--sq-ps2-primary-light);*/
     flex: 0 0 50%;
     max-width: 50%;
 }
@@ -940,30 +903,6 @@ th.sortable.sorted-none::after {
         margin-right: 0.3125rem;
         flex: 0 0 calc(50% - 0.3125rem);
     }
-
-    /*.sq-mini-card-6 h5 {
-        font-size: 1rem;
-        margin-bottom: 0.25rem;
-        padding: 0.5rem 0 0 0.5rem;
-        width: 100%;
-        font-weight: 400;
-    }*/
-
-    /*.sq-mini-card-6 .sq-content {
-        max-height: calc(350px - 1.5rem);
-        overflow: auto;
-        padding: 0 0 0.5rem 0.5rem;
-    }*/
-
-    /*.sq-mini-card-6 .table-responsive-sm.table-striped-light {
-        width: calc(100% - 0.75rem);
-        font-size: 0.8rem !important;
-        border-bottom: 1px solid var(--sq-ps2-primary-light);
-    }*/
-
-    /*.sq-mini-card-6 .table-responsive-sm.table-striped-light th {
-        font-weight: 400;
-    }*/
 
 
 .sq-content tbody tr {
