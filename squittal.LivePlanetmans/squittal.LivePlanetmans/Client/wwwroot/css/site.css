@@ -912,7 +912,7 @@ th.sortable.sorted-none::after {
     }
 
 
-.sq-content tr {
+.sq-content tbody tr {
     color: var(--sq-ps2-primary);
 }
 
