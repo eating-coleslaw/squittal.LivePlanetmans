@@ -876,6 +876,36 @@ th.sortable.sorted-none::after {
         padding: 0 0 0.5rem 0.5rem;
     }
 
+        .sq-mini-card-12 .sq-content table,
+        .sq-mini-card-6 .sq-content table {
+            max-width: calc(100% - 0.75rem);
+            font-size: 0.8rem !important;
+            border-bottom: 1px solid var(--sq-ps2-primary-light);
+        }
+
+            .sq-mini-card-12 .sq-content table.sq-table-fit-content,
+            .sq-mini-card-6 .sq-content table.sq-table-fit-content {
+                width: auto;
+                width: min-content;
+            }
+
+        .sq-mini-card-12 .sq-content thead,
+        .sq-mini-card-6 .sq-content thead {
+            vertical-align: bottom;
+        }
+
+            .sq-mini-card-12 .sq-content thead.fit-stacked-labels,
+            .sq-mini-card-6 .sq-content thead.fit-stacked-labels {
+                line-height: 0.5rem;
+            }
+
+    /*.sq-mini-card-12 .sq-table-fit-content,
+    .sq-mini-card-6 .sq-table-fit-content {
+        width: calc(100% - 0.75rem);
+        font-size: 0.8rem !important;
+        border-bottom: 1px solid var(--sq-ps2-primary-light);
+    }*/
+
     .sq-mini-card-12 .table-responsive-sm.table-striped-light,
     .sq-mini-card-6 .table-responsive-sm.table-striped-light  {
         width: calc(100% - 0.75rem);
@@ -931,7 +961,8 @@ th.sortable.sorted-none::after {
 
     .stat-ratio-grid .ratio {
         grid-area: ratio;
-        text-align: right;
+        /*text-align: right;*/
+        text-align: left;
         font-size: 0.9rem;
     }
 
@@ -947,6 +978,56 @@ th.sortable.sorted-none::after {
         .stat-ratio-grid .fraction-piece.denominator {
             grid-area: denominator;
         }
+
+
+.table-stat-grids {
+    width: auto;
+    width: min-content;
+}
+
+    .table-stat-grids th {
+        padding-top: 0.3125rem;
+        padding-right: 0;
+        padding-left: 0.8rem;
+        min-width: 105px;
+        font-weight: 400;
+        /*color: var(--sq-ps2-primary);*/
+    }
+
+        .table-stat-grids th:first-child {
+            min-width: unset;
+        }
+
+        .table-stat-grids th:last-child {
+            min-width: unset;
+            padding-bottom: 0.5rem;
+            text-align: right;
+        }
+
+    .table-stat-grids tbody tr {
+        color: var(--sq-ps2-primary);
+    }
+
+        .table-stat-grids tbody tr.stat-group-total {
+            font-weight: 500;
+            background-color: transparent;
+            vertical-align: bottom;
+            border-bottom: 1px solid var(--sq-ps2-primary);
+        }
+
+    .table-stat-grids tbody tr.empty-row {
+        height: 0.5rem;
+    }
+
+    .table-stat-grids td:not(:first-child) {
+        padding-left: 0.8rem;
+        border-left: 1px solid var(--sq-ps2-primary);
+    }
+    
+
+
+
+
 
 
 /*
