@@ -20,7 +20,7 @@ else if (isSelectedView == true)
 
                 <div class="sq-content">
                     <table class="table-responsive-sm table-striped-light @GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)">
-                        <thead style="vertical-align: bottom; line-height: 0.5rem;">
+                        <thead class="fit-stacked-labels">
                             <tr>
                                 <th class="p-name sortable @GetSortClass(SortColumn.Player)">
                                     <button class="btn btn-link" @onclick="@(() => OnClickColumnHeader(SortColumn.Player))">
