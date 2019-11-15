@@ -991,7 +991,6 @@ th.sortable.sorted-none::after {
         padding-left: 0.8rem;
         min-width: 105px;
         font-weight: 400;
-        /*color: var(--sq-ps2-primary);*/
     }
 
         .table-stat-grids th:first-child {
@@ -1023,10 +1022,6 @@ th.sortable.sorted-none::after {
         padding-left: 0.8rem;
         border-left: 1px solid var(--sq-ps2-primary);
     }
-    
-
-
-
 
 
 
