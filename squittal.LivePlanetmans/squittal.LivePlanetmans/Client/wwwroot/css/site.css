@@ -244,6 +244,10 @@ dt {
         flex-basis: calc(50% - 5px) !important;
     }
 
+    .sq-card {
+        margin-left: 5px !important;
+    }
+
     /*.leaderboard-table th.med {
         width: 75px;
     }*/
@@ -258,6 +262,7 @@ dt {
     margin-right: 5px;
     margin-bottom: 10px;
     background-color: var(--sq-bg-white-lit);
+    box-shadow: 2px 2px 5px -1px var(--sq-light-blue-gray);
 }
 
     .leaderboard-card .header-container {
@@ -360,8 +365,10 @@ dt {
     border: 2px solid var(--sq-light-blue-gray-alpha-5a);
     border-radius: 0.2rem;
     padding: 0px;
-    margin: 0 0 10px 5px;
+    /*margin: 0 0 10px 5px;*/
+    margin: 0 0 10px 0;
     background-color: var(--sq-bg-white-lit);
+    box-shadow: 2px 2px 5px -1px var(--sq-light-blue-gray);
 }
 
     .sq-card.details {
@@ -474,6 +481,7 @@ dt {
         border-color: transparent !important;
         background-color: transparent !important;
         color: var(--bs-gray) !important;
+        box-shadow: none;
     }
 
         .sq-card.pre-text .icon-text-grid {
@@ -858,6 +866,7 @@ th.sortable.sorted-none::after {
     background-color: var(--sq-ps2-primary-light-alpha-30);
     border-top: 2px solid var(--sq-ps2-primary-light);
     border-radius: 0.2rem;
+    box-shadow: 2px 2px 5px -1px var(--sq-light-blue-gray);
 }
 
     .sq-mini-card-12 h5,
@@ -871,9 +880,10 @@ th.sortable.sorted-none::after {
 
     .sq-mini-card-12 .sq-content,
     .sq-mini-card-6 .sq-content {
-        max-height: calc(350px - 1.5rem);
+        max-height: calc(360px - 1.5rem);
         overflow: auto;
         padding: 0 0 0.5rem 0.5rem;
+        margin-bottom: 1rem;
     }
 
         .sq-mini-card-12 .sq-content table,
@@ -881,6 +891,7 @@ th.sortable.sorted-none::after {
             max-width: calc(100% - 0.75rem);
             font-size: 0.8rem !important;
             border-bottom: 1px solid var(--sq-ps2-primary-light);
+            /*margin-bottom: 1rem;*/
         }
 
             .sq-mini-card-12 .sq-content table.sq-table-fit-content,
