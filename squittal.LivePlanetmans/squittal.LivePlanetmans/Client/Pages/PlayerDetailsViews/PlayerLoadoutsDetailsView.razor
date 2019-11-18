@@ -18,7 +18,7 @@ else if (isSelectedView == true)
             @if (isLoadingLoadouts != true && loadoutsReport != null)
             {
                 <div class="sq-content">
-                    <table class="sq-table-fit-content table-striped-light table-stat-grids @GetFactionClassFromId(loadoutsReport.PlayerFactionId)"> @*class="table-responsive-sm" style="max-width: calc(100% - 0.75rem); font-size: 0.8rem !important; border-bottom: 1px solid @GetFactionLightColorFromId(loadoutsReport.PlayerFactionId);">*@
+                    <table class="sq-table-fit-content table-striped-light table-stat-grids @GetFactionClassFromId(loadoutsReport.PlayerFactionId)">
                         <thead class="fit-stacked-labels">
                             <tr>
                                 <th></th>
@@ -193,7 +193,7 @@ else if (isSelectedView == true)
             }
             catch (OperationCanceledException)
             {
-                // Debug.WriteLine($"Operation cancelled: api/PlayerHourlyLoadouts/h2h/{playerId}");
+                // Ignore
             }
             catch (Exception)
             {
@@ -263,81 +263,6 @@ else if (isSelectedView == true)
         }
     }
 
-    string GetFactionColorFromId(int? factionId)
-    {
-        string color = "#27273A"; // 2F2F2F";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "#652fdc"; // 6A4CE0";
-                break;
-
-            //NC
-            case 2:
-                color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
-                break;
-
-            //TR
-            case 3:
-                color = "#e04c70"; // FF6C70";
-                break;
-        }
-
-        return color;
-    }
-
-    string GetFactionLightColorFromId(int? factionId)
-    {
-        string color = "var(--sq-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "var(--sq-ps2-vs-primary-light)"; //#CABCFF";
-                break;
-
-            //NC
-            case 2:
-                color = "var(--sq-ps2-nc-primary-light)"; //#B6DDFD";
-                break;
-
-            //TR
-            case 3:
-                color = "var(--sq-ps2-tr-primary-light)"; //#FFD2D3";
-                break;
-        }
-
-        return color;
-    }
-
-    string GetFactionLightAlphaColorFromId(int? factionId)
-    {
-        string color = "var(--sq-ps2-ns-primary-light-alpha)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "var(--sq-ps2-vs-primary-light-alpha)"; //#CABCFF";
-                break;
-
-            //NC
-            case 2:
-                color = "var(--sq-ps2-nc-primary-light-alpha)"; //#B6DDFD";
-                break;
-
-            //TR
-            case 3:
-                color = "var(--sq-ps2-tr-primary-light-alpha)"; //#FFD2D3";
-                break;
-        }
-
-        return color;
-    }
-
     string GetFactionClassFromId(int? factionId)
     {
         string cssClass;
@@ -372,15 +297,12 @@ else if (isSelectedView == true)
     {
         switch (factionId)
         {
-            //VS
             case 1:
                 return "VS";
 
-            //NC
             case 2:
                 return "NC";
 
-            //TR
             case 3:
                 return "TR";
 
