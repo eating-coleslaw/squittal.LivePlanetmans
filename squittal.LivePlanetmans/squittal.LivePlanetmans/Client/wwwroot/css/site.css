@@ -1003,6 +1003,46 @@ th.sortable.sorted-none::after {
             text-align: right;
         }
 
+        .table-stat-grids th .stat-ratio-header {
+            min-width: 70px;
+            height: 1rem;
+            margin-left: auto;
+            width: max-content;
+        }
+
+            .table-stat-grids th .stat-ratio-header > * {
+                float: left;
+            }
+
+            .table-stat-grids th .stat-ratio-header .stat-icon {
+                /*float: left;*/
+                position: relative;
+                top: -6px;
+                /*display: inline-block;*/
+                /*vertical-align: text-top;*/
+                height: 14px;
+                width: 14px;
+            }
+
+            .table-stat-grids th .stat-ratio-header .ratio {
+                /*float: left;*/
+                padding-left: 0.25rem;
+                /*display: inline-block;*/
+                /*vertical-align: text-top;*/
+            }
+
+            .table-stat-grids th .stat-ratio-header .numerator {
+                /*float: left;*/
+                padding-left: 0.5rem;
+                top: 0px;
+            }
+
+            .table-stat-grids th .stat-ratio-header .denominator {
+                /*float: left;*/
+                padding-left: 1.5rem;
+            }
+
+
     .table-stat-grids tbody tr {
         color: var(--sq-ps2-primary);
     }
