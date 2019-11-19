@@ -859,6 +859,7 @@ th.sortable.sorted-none::after {
     Squittal Layout
 */
 .sq-mini-card-12,
+.sq-mini-card-9,
 .sq-mini-card-6 {
     line-height: 1rem;
     margin: 0.3125rem 0;
@@ -870,6 +871,7 @@ th.sortable.sorted-none::after {
 }
 
     .sq-mini-card-12 h5,
+    .sq-mini-card-9 h5,
     .sq-mini-card-6 h5 {
         font-size: 1rem;
         margin-bottom: 0.25rem;
@@ -879,10 +881,12 @@ th.sortable.sorted-none::after {
     }
 
     .sq-mini-card-12 .sq-content,
+    .sq-mini-card-9 .sq-content,
     .sq-mini-card-6 .sq-content {
         max-height: calc(360px - 1.5rem);
         overflow: auto;
-        padding: 0 0 0.5rem 0.5rem;
+        /*padding: 0 0 0.5rem 0.5rem;*/
+        padding: 0 0 0 0.5rem;
         margin-bottom: 0.5rem;
     }
 
@@ -935,6 +939,10 @@ th.sortable.sorted-none::after {
     max-width: 100%;
 }
 
+.sq-mini-card-9 {
+    flex-basis: 70% !important;
+}
+
 .sq-mini-card-6 {
     flex: 0 0 calc(50% - 0.25rem);
     max-width: 50%;
@@ -950,6 +958,68 @@ th.sortable.sorted-none::after {
     color: var(--sq-ps2-primary);
 }
 
+
+.death-event-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 0.3125fr 2fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 'badge1 badge2 badge3 blank right';
+    grid-gap: 0.3125rem 0rem;
+}
+
+
+
+.sq-badge {
+    /*grid-area: badge1;*/
+    line-height: 1.1rem;
+    margin: 0.3125rem;
+    margin-left: 1rem;
+    border: 1px solid var(--sq-ps2-primary-light-alpha-10);
+    border-radius: 0.2rem;
+    padding: 0.3125rem;
+    width: 5rem;
+    height: 3.5rem;
+    box-shadow: 2px 2px 5px -1px var(--sq-ps2-primary-light-alpha-80);
+    background-color: var(--sq-ps2-primary-light);
+}
+
+    .sq-badge .text-container {
+        text-align: center;
+        margin-top: 0.75rem;
+        margin-right: 0.25rem;
+        font-size: 1.5rem;
+        /*color: var(--sq-black);*/
+    }
+
+        /* badge value */
+        .sq-badge .text-container :first-child,
+        .sq-badge .text-container.percent :first-child {
+            text-align: center;
+            margin-top: 0.75rem;
+            margin-right: 0.25rem;
+            font-size: 1.5rem;
+        }
+
+        .sq-badge .text-container.percent :nth-child(2) {
+            font-size: 0.75rem;
+        }
+
+        .sq-badge .text-container.loading :first-child,
+        .sq-badge .text-container.loading.percent :nth-child(2) {
+            color: transparent !important;
+        }
+
+        /* badge label */
+        .sq-badge .text-container :nth-child(2) {
+            text-align: right;
+            font-size: 0.8rem;
+        }
+
+        .sq-badge .text-container.percent :nth-child(3) {
+            text-align: right;
+            font-size: 0.8rem;
+            margin-top: -0.25rem;
+        }
 
 /*
     Loadout Details View
