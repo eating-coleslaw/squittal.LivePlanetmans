@@ -6,12 +6,12 @@
 @if (stats != null)
 {
     <div class="row @GetFactionClassFromId(_playerFactionId)" style="margin: initial;">
-        <div class="col-sm-9 sq-mini-card-9" id="details-hourly-stats">
+        <div class="sq-mini-card-9" id="details-hourly-stats">
 
-            <h5>Hourly Stats</h5>    
+            <h5>Hourly Stats</h5>
 
             <div class="sq-content">
-                <div class="death-event-stats-grid"> 
+                <div class="death-event-stats-grid">
                     <div class="sq-badge" title="Kills Per Minute">
                         <div class="text-container @_dataClass">
                             <span>@stats.KillsPerMinute</span>
@@ -50,7 +50,49 @@
             </div>
         </div>
 
-        <div id="details-session-stats" class="col-sm-8" style="flex-basis: calc(30% - 1rem); margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(_playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(_playerFactionId);">
+        <div id="details-session-stats" class="sq-mini-card-3"> @*style="flex-basis: calc(30% - 1rem); margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(_playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(_playerFactionId);">*@
+           
+            <h5>Play Session</h5>
+
+            <div class="sq-content">
+
+                <div class="sq-text-content @_dataClass">@GetSessionDisplayTimes()</div> @*style="font-size: 0.8rem; color: @_dataColor; margin-bottom: 0.3125rem; padding-left: 15px;">@GetSessionDisplayTimes()</div>*@
+
+                <dl class="labeled-stats-grid @_dataClass">
+                    
+                    <dt>Duration</dt>
+                    <dd>@GetSessionDurationDisplay()</dd>
+
+                    <dt>Kills</dt>
+                    <dd>
+                        @if (stats.SessionKills == null)
+                        {
+                            <span>-</span>
+                        }
+                        else
+                        {
+                            <span>@stats.SessionKills</span>
+                        }
+                    </dd>
+
+                    <dt>KPM</dt>
+                    <dd>@if (stats.SessionKills == null)
+                        {
+                            <span>-</span>
+                        }
+                        else
+                        {
+                            <span>@stats.SessionKillsPerMinute</span>
+                        }
+                    </dd>
+
+                </dl>
+
+            </div>
+        </div>
+
+
+        @*<div id="details-session-stats" class="sq-mini-card-3 col-sm-8" style="flex-basis: calc(30% - 1rem); margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(_playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(_playerFactionId);">
             <div style="margin: 0px; font-size: 1rem; grid-area: header;">
                 Play Session
             </div>
@@ -87,7 +129,7 @@
                     </dd>
                 </dl>
             </div>
-        </div>
+        </div>*@
 
     </div>
 }
