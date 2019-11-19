@@ -979,6 +979,48 @@ th.sortable.sorted-none::after {
         grid-area: badge3;
     }
 
+    .death-event-stats-grid dl.row {
+        grid-area: right;
+        margin: 0px;
+        display: grid;
+        grid-template-columns: 65px 1fr;
+        grid-auto-rows: 1rem;
+    }
+
+    .death-event-stats-grid dt {
+        color: var(--bs-gray);
+        font-weight: 400;
+        padding: 0px;
+    }
+
+dl.labeled-stats-grid {
+    grid-area: right;
+    margin: 0px;
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    grid-auto-rows: 1rem;
+}
+
+    dl.labeled-stats-grid.loading {
+        color: transparent !important;
+    }
+
+    dl.labeled-stats-grid dt {
+        grid-column: 1 / 1;
+        color: var(--bs-gray) !important;
+        font-weight: 400;
+        padding: 0px;
+    }
+
+    dl.labeled-stats-grid dd {
+        grid-column: 2 / 2;
+        margin-bottom: 0px;
+        padding-left: 0.3125rem;
+        padding-right: 1rem;
+        text-align: right;
+        font-size: 0.85rem;
+    }
+
 
 
 .sq-badge {
