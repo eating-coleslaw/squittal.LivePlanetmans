@@ -50,13 +50,13 @@
             </div>
         </div>
 
-        <div id="details-session-stats" class="sq-mini-card-3"> @*style="flex-basis: calc(30% - 1rem); margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(_playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(_playerFactionId);">*@
+        <div id="details-session-stats" class="sq-mini-card-3">
            
             <h5>Play Session</h5>
 
             <div class="sq-content">
 
-                <div class="sq-text-content @_dataClass">@GetSessionDisplayTimes()</div> @*style="font-size: 0.8rem; color: @_dataColor; margin-bottom: 0.3125rem; padding-left: 15px;">@GetSessionDisplayTimes()</div>*@
+                <div class="sq-text-content @_dataClass">@GetSessionDisplayTimes()</div>
 
                 <dl class="labeled-stats-grid @_dataClass">
                     
@@ -91,46 +91,6 @@
             </div>
         </div>
 
-
-        @*<div id="details-session-stats" class="sq-mini-card-3 col-sm-8" style="flex-basis: calc(30% - 1rem); margin-left: 1rem !important; grid-template-rows: 1rem 1fr; max-width: calc(33.333333% - 1rem); display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'header header' 'left right' 'footer footer'; grid-gap: 0.3125rem 0rem; line-height: 1rem; padding: 0.5rem; margin: 0.3125rem 0; border-radius: 0.2rem; background-color: @(GetFactionLightAlphaColorFromId(_playerFactionId)); border-top: 2px solid @GetFactionLightColorFromId(_playerFactionId);">
-            <div style="margin: 0px; font-size: 1rem; grid-area: header;">
-                Play Session
-            </div>
-
-            <div style="margin: 0px; font-size: 0.8rem; grid-column: 1 / 3; grid-row: 2;">
-                <div style="color: @_dataColor; margin-bottom: 0.3125rem; padding-left: 15px;">@GetSessionDisplayTimes()</div>
-
-                <dl class="row" style="margin: 0px;">
-                    <dt class="col-sm-7 text-muted">Duration</dt>
-                    <dd class="col-sm-5" style="color: @_dataColor; margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">@GetSessionDurationDisplay()</dd>
-
-                    <dt class="col-sm-7 text-muted">Kills</dt>
-                    <dd class="col-sm-5" style="color: @_dataColor; margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
-                        @if (stats.SessionKills == null)
-                        {
-                            <span>-</span>
-                        }
-                        else
-                        {
-                            <span>@stats.SessionKills</span>
-                        }
-                    </dd>
-
-                    <dt class="col-sm-7 text-muted">KPM</dt>
-                    <dd class="col-sm-5" style="color: @_dataColor; margin-bottom: 0px; padding-left: 0.3125rem; padding-right: 0px; text-align: right; font-size: 0.85rem;">
-                        @if (stats.SessionKills == null)
-                        {
-                            <span>-</span>
-                        }
-                        else
-                        {
-                            <span>@stats.SessionKillsPerMinute</span>
-                        }
-                    </dd>
-                </dl>
-            </div>
-        </div>*@
-
     </div>
 }
 
@@ -155,13 +115,8 @@
     private string _dataClass;
 
 
-    private string _dataColorDefault = "var(--sq-black)";
-    private string _dataColor;
-    private string _dataColorTransparent = "transparent";
-
     protected override void OnInitialized()
     {
-        _dataColor = _dataColorDefault;
         _dataClass = _dataClassDefault;
     }
 
@@ -198,8 +153,6 @@
             try
             {
                 isLoadingStats = true;
-                _dataColor = _dataColorTransparent;
-
                 _dataClass = _dataClassLoading;
 
                 HttpResponseMessage response = await Http.GetAsync($"api/PlayerDetails/stats/{playerId}", cts.Token);
@@ -211,8 +164,6 @@
                     stats = JsonConvert.DeserializeObject<PlayerHourlyStatsData>(jsonString);
 
                     _playerFactionId = stats.FactionId;
-                    _dataColor = _dataColorDefault;
-
                     _dataClass = _dataClassDefault;
                 }
                 StateHasChanged();
@@ -298,81 +249,6 @@
         string space = (hours > 0 && remainder > 0) ? " " : string.Empty;
 
         return $"{hoursDisplay}{space}{minutesDisplay}";
-    }
-
-    string GetFactionColorFromId(int? factionId)
-    {
-        string color = "#27273A"; // 2F2F2F";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "#652fdc"; // 6A4CE0";
-                break;
-
-            //NC
-            case 2:
-                color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
-                break;
-
-            //TR
-            case 3:
-                color = "#e04c70"; // FF6C70";
-                break;
-        }
-
-        return color;
-    }
-
-    string GetFactionLightColorFromId(int? factionId)
-    {
-        string color = "var(--sq-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "var(--sq-ps2-vs-primary-light)"; //#CABCFF";
-                break;
-
-            //NC
-            case 2:
-                color = "var(--sq-ps2-nc-primary-light)"; //#B6DDFD";
-                break;
-
-            //TR
-            case 3:
-                color = "var(--sq-ps2-tr-primary-light)"; //#FFD2D3";
-                break;
-        }
-
-        return color;
-    }
-
-    string GetFactionLightAlphaColorFromId(int? factionId)
-    {
-        string color = "var(--sq-ps2-ns-primary-light-alpha)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "var(--sq-ps2-vs-primary-light-alpha)"; //#CABCFF";
-                break;
-
-            //NC
-            case 2:
-                color = "var(--sq-ps2-nc-primary-light-alpha)"; //#B6DDFD";
-                break;
-
-            //TR
-            case 3:
-                color = "var(--sq-ps2-tr-primary-light-alpha)"; //#FFD2D3";
-                break;
-        }
-
-        return color;
     }
 
     string GetFactionClassFromId(int? factionId)
