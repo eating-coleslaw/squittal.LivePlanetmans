@@ -883,7 +883,7 @@ th.sortable.sorted-none::after {
         max-height: calc(360px - 1.5rem);
         overflow: auto;
         padding: 0 0 0.5rem 0.5rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
 
         .sq-mini-card-12 .sq-content table,
@@ -936,13 +936,13 @@ th.sortable.sorted-none::after {
 }
 
 .sq-mini-card-6 {
-    flex: 0 0 50%;
+    flex: 0 0 calc(50% - 0.25rem);
     max-width: 50%;
 }
 
     .sq-mini-card-6:first-of-type {
-        margin-right: 0.3125rem;
-        flex: 0 0 calc(50% - 0.3125rem);
+        margin-right: 0.5rem;
+        /*flex: 0 0 calc(50% - 0.3125rem);*/
     }
 
 
