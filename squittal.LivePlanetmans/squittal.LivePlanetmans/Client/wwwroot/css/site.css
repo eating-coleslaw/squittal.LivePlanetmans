@@ -967,10 +967,21 @@ th.sortable.sorted-none::after {
     grid-gap: 0.3125rem 0rem;
 }
 
+    .death-event-stats-grid .sq-badge:first-of-type {
+        grid-area: badge1;
+    }
+
+    .death-event-stats-grid .sq-badge:nth-of-type(2) {
+        grid-area: badge2;
+    }
+
+    .death-event-stats-grid .sq-badge:nth-of-type(3) {
+        grid-area: badge3;
+    }
+
 
 
 .sq-badge {
-    /*grid-area: badge1;*/
     line-height: 1.1rem;
     margin: 0.3125rem;
     margin-left: 1rem;
@@ -988,7 +999,6 @@ th.sortable.sorted-none::after {
         margin-top: 0.75rem;
         margin-right: 0.25rem;
         font-size: 1.5rem;
-        /*color: var(--sq-black);*/
     }
 
         /* badge value */

@@ -12,22 +12,22 @@
             <h5>Hourly Stats</h5>    
 
             <div class="sq-content">
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 0.3125fr 2fr; grid-template-rows: 1fr; grid-template-areas: 'badge1 badge2 badge3 blank right'; grid-gap: 0.3125rem 0rem;">
-                    <div class="sq-badge" title="Kills Per Minute" style="grid-area: badge1;"> @*border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; box-shadow: 2px 2px 5px -1px var(--sq-ps2-primary-light-alpha-80); line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(_playerFactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; box-shadow: 2px 2px 5px -1px var(--sq-ps2-primary-light-alpha-80); background-color: @GetFactionLightColorFromId(_playerFactionId);">*@
+                <div class="death-event-stats-grid"> @*style="display: grid; grid-template-columns: 1fr 1fr 1fr 0.3125fr 2fr; grid-template-rows: 1fr; grid-template-areas: 'badge1 badge2 badge3 blank right'; grid-gap: 0.3125rem 0rem;">*@
+                    <div class="sq-badge" title="Kills Per Minute"> @* style="grid-area: badge1;"> @*border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; box-shadow: 2px 2px 5px -1px var(--sq-ps2-primary-light-alpha-80); line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(_playerFactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; box-shadow: 2px 2px 5px -1px var(--sq-ps2-primary-light-alpha-80); background-color: @GetFactionLightColorFromId(_playerFactionId);">*@
                         <div class="text-container @_dataClass"> @*style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">*@
                             <span>@stats.KillsPerMinute</span> @*style="color: @_dataColor;">@stats.KillsPerMinute</span>*@
                             <div>KPM</div> @*style="text-align: right; font-size: 0.8rem;">KPM</div>*@
                         </div>
                     </div>
 
-                    <div class="sq-badge" title="Kill Death Ratio" style="grid-area: badge2;"> @*line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(_playerFactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; box-shadow: 2px 2px 5px -1px var(--sq-ps2-primary-light-alpha-80); background-color: @GetFactionLightColorFromId(_playerFactionId);">*@
+                    <div class="sq-badge" title="Kill Death Ratio"> @* style="grid-area: badge2;"line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(_playerFactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; box-shadow: 2px 2px 5px -1px var(--sq-ps2-primary-light-alpha-80); background-color: @GetFactionLightColorFromId(_playerFactionId);">*@
                         <div class="text-container @_dataClass"> @*style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">*@
                             <span>@stats.KillDeathRatio</span> @*style="color: @_dataColor;">@stats.KillDeathRatio</span>*@
                             <div>KDR</div> @*style="text-align: right; font-size: 0.8rem;">KDR</div>*@
                         </div>
                     </div>
 
-                    <div class="sq-badge" title="Head Shot Ratio" style="grid-area: badge3;"> @*line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(_playerFactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; box-shadow: 2px 2px 5px -1px var(--sq-ps2-primary-light-alpha-80); background-color: @GetFactionLightColorFromId(_playerFactionId);">*@
+                    <div class="sq-badge" title="Head Shot Ratio"> @* style="grid-area: badge3;"> @*line-height: 1.1rem; margin: 0.3125rem; margin-left: 1rem; border: 1px solid @GetFactionColorFromId(_playerFactionId)10; border-radius: 0.2rem; padding: 0.3125rem; width: 5rem; height: 3.5rem; box-shadow: 2px 2px 5px -1px var(--sq-ps2-primary-light-alpha-80); background-color: @GetFactionLightColorFromId(_playerFactionId);">*@
                         <div class="text-container percent @_dataClass"> @*style="text-align: center; margin-top: 0.75rem; margin-right: 0.25rem; font-size: 1.5rem;">*@
                             @*<span style="color: @_dataColor;">@stats.HeadshotRatio</span><span style="font-size: 0.75rem; color: @_dataColor;">%</span>*@
                             <span>@stats.HeadshotRatio</span><span>%</span>
