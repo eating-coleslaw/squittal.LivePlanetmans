@@ -12,7 +12,7 @@
 }
 else if (isSelectedView == true)
 {
-    <div class="row view @GetFactionClassFromId(weaponsReport.PlayerFactionId)">
+    <div class="row sq-view @GetFactionClassFromId(weaponsReport.PlayerFactionId)">
         <div class="sq-mini-card-6">
             <h5>Top Weapons By Kills</h5>
             @if (weaponsReport != null && weaponsReport.TopWeaponsByKills.Any() == true && isLoadingWeapons != true)

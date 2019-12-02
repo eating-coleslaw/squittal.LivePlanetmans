@@ -469,12 +469,22 @@ dt {
                 margin-top: 0.5rem;
             }
 
-            .sq-card.details .details-body .view {
+            .sq-card.details .details-body .sq-view {
                 width: 100%;
                 margin: initial;
                 margin-top: 0.5rem;
                 margin-bottom: 1.5rem;
             }
+
+                .sq-card.details .details-body .sq-view.sq-view-fill {
+                    margin-top: 0;
+                    margin-bottom: 1.5rem;
+                    max-height: 400px;
+                    overflow: auto;
+                    border-bottom: 1px solid var(--sq-ps2-primary-light);
+                    border-top-left-radius: 0.2rem;
+                    border-bottom-right-radius: 0.2rem;
+                }
 
 
     .sq-card.pre-text {
@@ -503,17 +513,118 @@ dt {
                 }
 
 
+/*
+    Killfeed Table
+*/
+.sq-view-fill table {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+table.killfeed tbody {
+    font-size: small;
+}
+
+    table.killfeed tbody tr {
+        color: var(--sq-ps2-primary);
+        background-color: transparent;
+    }
+
+        table.killfeed tbody tr.death {
+            background-color: #F9D3D6a0;
+        }
+
+        table.killfeed tbody tr.teamkill {
+            background-color: #FEF9BF;
+        }
+
+    table.killfeed tbody td.timestamp {
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+        min-width: 105px;
+        max-width: 110px;
+        width: 7rem;
+        border: inherit;
+    }
+
+    table.killfeed tbody td.loadout-enemy {
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+        padding-left: 0.5rem;
+        max-width: 30px;
+        width: 1rem;
+        border: inherit;
+    }
+
+    table.killfeed tbody td.loadout-player {
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+        padding-left: 0.5rem;
+        max-width: 30px;
+        width: 1rem;
+        border: inherit;
+    }
+
+    table.killfeed tbody td.outfit {
+        padding: 0.1rem 0.3125rem 0.1rem 0;
+        max-width: 55px;
+        width: 1rem;
+        border: inherit;
+    }
+
+    table.killfeed tbody td.player {
+        padding: 0.1rem 0.75rem 0.1rem 0;
+        border: inherit;
+    }
+
+    table.killfeed tbody td.headshot {
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+        padding-left: 0.5rem;
+        max-width: 30px;
+        width: 1rem;
+        border: inherit;
+    }
+
+    table.killfeed tbody td.weapon {
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+        border: inherit;
+    }
+
+    table.killfeed tbody td.weapon {
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+        border: inherit;
+    }
+
+    table.killfeed tbody td.zone {
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+        border: inherit;
+    }
+
+    
+
+table.killfeed td {
+    padding: 0.75rem;
+    vertical-align: top;
+}
+
+
+
+
 
 
 /*
     Leaderboard Styles
 */
-    .leaderboard-table {
-        width: 100%;
-        margin-top: -1rem;
-        font-family: 'Roboto Mono';
-        overflow-x: scroll;
-    }
+.leaderboard-table {
+    width: 100%;
+    margin-top: -1rem;
+    font-family: 'Roboto Mono';
+    overflow-x: scroll;
+}
 
     .leaderboard-table thead {
         line-height: 1.1rem;

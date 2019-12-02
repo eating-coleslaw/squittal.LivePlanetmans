@@ -12,7 +12,7 @@
 }
 else if (isSelectedView == true)
 {
-    <div class="row view @GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)">
+    <div class="row sq-view @GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)">
         <div class="sq-mini-card-12">
             <h5>Enemies this Hour</h5>
             @if (headToHeadReport != null && headToHeadReport.HeadToHeadSummaries.Any() == true && isLoadingHeadToHead != true)

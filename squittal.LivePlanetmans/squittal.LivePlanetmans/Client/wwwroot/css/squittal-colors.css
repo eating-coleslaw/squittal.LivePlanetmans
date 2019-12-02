@@ -2,9 +2,12 @@
     --sq-light-blue-gray: #d4d4ff;
     --sq-light-blue-gray-alpha: #d4d4ff50;
     --sq-light-blue-gray-alpha-5a: #d4d4ff5a;
+    --sq-light-blue-gray-alpha-80: #d4d4ff80;
+    --sq-light-blue-gray-alpha-a0: #d4d4ffa0;
     --sq-bg-white-lit: #fcf6ff;
     --sq-bg-white-unlit: #f6f0ff;
     --sq-black: #27273A;
+    --sq-black-alpha-50: #27273A50;
     --sq-yellow: #F8BA0F;
     --sq-ps2-vs-primary: #652fdc;
     --sq-ps2-nc-primary: #1e62fc;
