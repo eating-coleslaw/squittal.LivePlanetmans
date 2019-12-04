@@ -83,14 +83,14 @@ else
                                             <td class="player">
                                                 @if (kill.VictimId == playerId)
                                                 {
-                                                    <button class="btn btn-link inline-player-br @GetKillboardRowTextClass(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId)" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))" title="Open details for @kill.AttackerName"> @*style="color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;"  @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))" title="Open details for @kill.AttackerName">*@
+                                                    <button class="btn btn-link inline-player-br @GetKillboardRowTextClass(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId)" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))" title="Open details for @kill.AttackerName">
                                                         <div class="player-name">@kill.AttackerName</div>
-                                                        <div> @*style="display: inline-block; vertical-align: super;">*@
+                                                        <div>
                                                             <sup>
                                                                 @(kill.AttackerBattleRank)
                                                                 @if (stats.PrestigeLevel != 0)
                                                                 {
-                                                                    <span class="oi oi-star small" aria-hidden="true"></span> @*style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>*@
+                                                                    <span class="oi oi-star small" aria-hidden="true"></span>
                                                                 }
                                                             </sup>
                                                         </div>
@@ -98,14 +98,14 @@ else
                                                 }
                                                 else
                                                 {
-                                                    <button class="btn btn-link inline-player-br @GetKillboardRowTextClass(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId)"@onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))" title="Open details for @kill.AttackerName"> @*style="color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;"  @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))" title="Open details for @kill.AttackerName">*@
+                                                    <button class="btn btn-link inline-player-br @GetKillboardRowTextClass(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId)"@onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))" title="Open details for @kill.AttackerName">
                                                         <div class="player-name">@kill.VictimName</div>
-                                                        <div> @*style="display: inline-block;">*@
+                                                        <div>
                                                             <sup>
                                                                 @(kill.VictimBattleRank)
                                                                 @if (kill.VictimPrestigeLevel != 0)
                                                                 {
-                                                                    <span class="oi oi-star small" aria-hidden="true"></span> @*style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>*@
+                                                                    <span class="oi oi-star small" aria-hidden="true"></span>
                                                                 }
                                                             </sup>
                                                         </div>
@@ -356,7 +356,7 @@ else
             }
             catch (OperationCanceledException)
             {
-                // Debug.WriteLine($"Operation cancelled: player details ({playerId})");
+                // Ignore
             }
             catch (Exception)
             {
@@ -491,34 +491,6 @@ else
         }
     }
 
-
-    string GetLoadoutAbbrevFromProfileTypeId(int profileTypeId)
-    {
-        switch (profileTypeId)
-        {
-            case 1:
-                return "I";
-
-            case 3:
-                return "LA";
-
-            case 4:
-                return "CM";
-
-            case 5:
-                return "E";
-
-            case 6:
-                return "HA";
-
-            case 7:
-                return "MAX";
-
-            default:
-                return "??";
-        }
-    }
-
     string GetRowBgClass(string victimId, int? victimFactionId)
     {
         if (victimId == playerId)
@@ -535,114 +507,11 @@ else
         }
     }
 
-    string GetRowBgColor(string victimId, int? victimFactionId)
-    {
-        if (victimId == playerId)
-        {
-            return "#F9D3D6a0"; // ffe0f6af"; // F9D3D6"; // FFD2E350"; //FFD2D3";
-        }
-        else if (victimFactionId != null && victimFactionId == player.FactionId)
-        {
-            return "#FEF9BF";
-        }
-        else
-        {
-            return "";
-        }
-    }
-
     string GetKillboardRowTextClass(string attackerId, int? attackerFactionId, int? victimFactionId)
     {
         int? factionId = (attackerId == player.Id) ? victimFactionId : attackerFactionId;
 
         return GetFactionClassFromId(factionId);
-    }
-
-    string GetKillboardTextColor(string attackerId, int? attackerFactionId, int? victimFactionId)
-    {
-        int? factionId = (attackerId == player.Id) ? victimFactionId : attackerFactionId;
-
-        return GetFactionColorFromId(factionId);
-    }
-
-    string GetKillboardBorderStyle(string victimId)
-    {
-        return (victimId == player.Id) ? "1px solid #27273a50" : "1px solid rgb(222, 226, 230)";
-    }
-
-    string GetFactionColorFromId(int? factionId)
-    {
-        string color = "#27273A"; // 2F2F2F";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "#652fdc"; // 6A4CE0";
-                break;
-
-            //NC
-            case 2:
-                color = "#1e62fc"; // 1E99FC"; // 5700FE"; //1E99FC";
-                break;
-
-            //TR
-            case 3:
-                color = "#e04c70"; // FF6C70";
-                break;
-        }
-
-        return color;
-    }
-
-    string GetFactionLightColorFromId(int? factionId)
-    {
-        string color = "var(--sq-ps2-ns-primary-light)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "var(--sq-ps2-vs-primary-light)"; //#CABCFF";
-                break;
-
-            //NC
-            case 2:
-                color = "var(--sq-ps2-nc-primary-light)"; //#B6DDFD";
-                break;
-
-            //TR
-            case 3:
-                color = "var(--sq-ps2-tr-primary-light)"; //#FFD2D3";
-                break;
-        }
-
-        return color;
-    }
-
-    string GetFactionLightAlphaColorFromId(int? factionId)
-    {
-        string color = "var(--sq-ps2-ns-primary-light-alpha)"; //#a4a4c2"; // 27273A"; //"FFF2F0";
-
-        switch (factionId)
-        {
-            //VS
-            case 1:
-                color = "var(--sq-ps2-vs-primary-light-alpha)"; //#CABCFF";
-                break;
-
-            //NC
-            case 2:
-                color = "var(--sq-ps2-nc-primary-light-alpha)"; //#B6DDFD";
-                break;
-
-            //TR
-            case 3:
-                color = "var(--sq-ps2-tr-primary-light-alpha)"; //#FFD2D3";
-                break;
-        }
-
-        return color;
     }
 
     string GetFactionClassFromId(int? factionId)
@@ -680,14 +549,12 @@ else
         if (viewTranslator[thisView] == view)
         {
             return $"view-visible";
-            //return $"grid-row: 1; background-color: {GetFactionLightColorFromId(_playerFactionId)}; color: var(--sq-black) !important; font-size: 1rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0; text-decoration: none;"; // grid-column: 1; ";
         }
         else
         {
             int gridColumn = (thisView == PlayerDetailsView.kills || (view == viewTranslator[PlayerDetailsView.kills] && thisView == PlayerDetailsView.weapons)) ? 2 : 3;
 
             return $"view-hidden";
-            //return $"grid-row: 1; background-color: transparent; color: var(--blue); font-weight: 400; font-size: 1rem;"; // grid-column: {gridColumn}; ";
         }
     }
 
