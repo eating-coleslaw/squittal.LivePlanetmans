@@ -53,4 +53,7 @@ RAISERROR( @vMessage, 0, 1 ) WITH NOWAIT;
   RAISERROR( N'Finished rebuilding LogoutEvent indexes', 0, 1 ) WITH NOWAIT;
   END;
 
+SET @vMessage = N'Finished deleting events prior to ' + CAST( @dStartUtc as nvarchar(30));
+RAISERROR( @vMessage, 0, 1 ) WITH NOWAIT;
+
 END;
