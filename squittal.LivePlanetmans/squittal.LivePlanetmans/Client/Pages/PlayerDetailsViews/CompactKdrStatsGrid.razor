@@ -1,15 +1,15 @@
 ﻿@using squittal.LivePlanetmans.Shared.Models
 
-<div style="display: grid; grid-template-columns: 1fr 1.75rem 1.75rem; grid-template-rows: 1rem; grid-template-areas: 'kdr kills deaths'; color: inherit; opacity: @_gridOpacity; font-weight: @_fontWeight;">
+<div class="stat-ratio-grid @_gridClass">
     @if (deathEventAggregate != null)
     {
-        <div style="grid-area: kdr; text-align: right; font-size: 1rem; font-size: 0.9rem;">
+        <div class="ratio">
             @deathEventAggregate.KillDeathRatio
         </div>
-        <div style="grid-area: kills; text-align: right; font-size: 0.9rem; padding-left: 0.5rem;">
+        <div class="fraction-piece numerator">
             <sup>@deathEventAggregate.Kills</sup>
         </div>
-        <div style="grid-area: deaths; text-align: right; font-size: 0.9rem; padding-left: 0.5rem;">
+        <div class="fraction-piece denominator">
              <sub>@deathEventAggregate.Deaths</sub>
         </div>
     }
@@ -19,23 +19,25 @@
     [Parameter]
     public DeathEventAggregate deathEventAggregate { get; set; }
 
-    private double _gridOpacity = 1.0;
-    private double _dimmedGridOpacity = 0.5;
+    private string _gridClass;
 
-    private int _fontWeight = 400;
-    private int _dimmedFontWeight = 300;
+    private string _gridClassDefault = "default";
+    private string _gridClassDimmed = "dimmed";
+
+    protected override void OnInitialized()
+    {
+        _gridClass = _gridClassDefault;
+    }
 
     protected override void OnParametersSet()
     {
         if (deathEventAggregate != null && deathEventAggregate.Kills == 0 && deathEventAggregate.Deaths == 0)
         {
-            _gridOpacity = _dimmedGridOpacity;
-            _fontWeight = _dimmedFontWeight;
+            _gridClass = _gridClassDimmed;
         }
         else
         {
-            _gridOpacity = 1.0;
-            _fontWeight = 400;
+            _gridClass = _gridClassDefault;
         }
     }
 }

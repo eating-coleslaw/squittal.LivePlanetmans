@@ -90,8 +90,8 @@
 
             </div>
 
-            <div style="padding: 5px 10px;">
-                    <table class="table-responsive-sm leaderboard-table">
+            <div class="card-body">
+                    <table class="leaderboard-table">
                         <thead>
                             <tr>
                                 <th class="icon"></th> 
@@ -135,7 +135,7 @@
                                         </td>
 
                                         <td>
-                                            <button class="btn btn-link inline-player-br" style="color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))">
+                                            <button class="btn btn-link inline-player-br" style="color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))" title="Open details for @player.PlayerName">
                                                 @if (string.IsNullOrWhiteSpace(player.PlayerName))
                                                 {
                                                     @player.PlayerId
@@ -183,7 +183,7 @@
 
         </div>
 
-        <div id="player-details" class="col-lg-6" style="border: 2px solid @GetPlayerDetailsBorderColor() !important; border-radius: 0.2rem; padding: 0px; margin: 0 0 10px 5px; background-color: @GetPlayerDetailsBackgroundColor();">
+        <div id="player-details" class="sq-card col-lg-6 @GetPlayerDetailsPanelClass() @GetFactionClassFromId(_selectedPlayerFactionId)">
             <PlayerDetailsPanel playerId="@playerId" playerFactionId=@_selectedPlayerFactionId OnKillboardPlayerSelected="KillboardPlayerSelected"/> @*worldId="@worldId" OnCharacterIdChanged="KillboardPlayerSelected"/>*@
         </div>
     </div>
@@ -573,14 +573,39 @@
 
     }
 
-    string GetPlayerDetailsBorderColor()
+    string GetPlayerDetailsPanelClass()
     {
-        return (!string.IsNullOrWhiteSpace(playerId)) ? "#d4d4ff5a" : "transparent";
+        return (!string.IsNullOrWhiteSpace(playerId)) ? "details" : "pre-text";
     }
 
-    string GetPlayerDetailsBackgroundColor()
+    string GetFactionClassFromId(int? factionId)
     {
-        return (!string.IsNullOrWhiteSpace(playerId)) ? "#fcf6ff" : "transparent;";
+        string cssClass;
+
+        switch (factionId)
+        {
+            case 1:
+                cssClass = "vs";
+                break;
+
+            case 2:
+                cssClass = "nc";
+                break;
+
+            case 3:
+                cssClass = "tr";
+                break;
+
+            case 4:
+                cssClass = "ns";
+                break;
+
+            default:
+                cssClass = "ns";
+                break;
+        }
+
+        return cssClass;
     }
 
     string GetZoneDisplayEmoji(string zoneName)
