@@ -9,6 +9,11 @@
     --sq-black: #27273A;
     --sq-black-alpha-50: #27273A50;
     --sq-yellow: #F8BA0F;
+    --sq-bg-yellow: #FEF9BF;
+    --sq-bg-yellow-alpha-a0: #FEF9BFa0;
+    --sq-bg-red: #fad4df; /*#f4d4df;*/
+    --sq-bg-red-alpha-80: #fad4df80; /*#f4d4dfa0;*/
+    --sq-bg-red-alpha-a0: #fad4dfa0; /*#f4d4dfa0;*/
     --sq-ps2-vs-primary: #652fdc;
     --sq-ps2-nc-primary: #1e62fc;
     --sq-ps2-tr-primary: #e04c70;
@@ -26,6 +31,7 @@
     --sq-ps2-tr-primary-light-alpha-40: #FFD2D340;
     --sq-ps2-ns-primary-light-alpha-40: #a4a4c240;
     --sq-pale-purple: #b7a8d7;
+    --sq-pale-purple-alpha-a0: #b7a8d7a0;
     --bs-blue: #007bff;
     --bs-blue-alpha: #007bff10;
     --bs-gray: #6c757d;
