@@ -400,6 +400,25 @@ dt {
                     border-bottom-right-radius: 0.2rem;
                 }
 
+        .sq-card.details .details-footer {
+            font-family: 'Roboto Mono';
+            position: absolute;
+            bottom: 0.5rem;
+            height: 1rem;
+            line-height: 1rem;
+        }
+
+            .sq-card.details .details-footer .footer-link {
+                color: var(--bs-gray);
+                font-size: 0.8rem;
+                padding-left: 0.8rem;
+                font-weight: 400;
+            }
+
+                .sq-card.details .details-footer .footer-link .oi {
+                    font-size: 60%;
+                    opacity: 0.5;
+                }
 
     .sq-card.pre-text {
         border-color: transparent !important;

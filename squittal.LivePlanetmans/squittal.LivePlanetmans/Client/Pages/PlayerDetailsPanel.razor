@@ -169,11 +169,11 @@ else
 
         </div>
 
-        <div id="details-footer" style="font-family: 'Roboto Mono'; position: absolute; bottom: 0.5rem; height: 1rem; line-height: 1rem;">
+        <div class="details-footer" id="details-footer"> @*style="font-family: 'Roboto Mono'; position: absolute; bottom: 0.5rem; height: 1rem; line-height: 1rem;">*@
             <div>
-                <a href="@GetUrlFromCharacterId(player.Id)" title="Open Voidwell player profile" class="text-muted" style="font-size: 0.8rem; padding-left: 0.8rem; font-weight: 400;" target="_blank">
+                <a href="@GetUrlFromCharacterId(player.Id)" class="footer-link" title="Open Voidwell player profile" target="_blank"> @*class="text-muted" style="font-size: 0.8rem; padding-left: 0.8rem; font-weight: 400;" target="_blank">*@
                     @player.Id
-                    <span class="h6 oi oi-external-link" style="font-size: 60%; opacity: 0.5;"></span>
+                    <span class="h6 oi oi-external-link"></span> @*style="font-size: 60%; opacity: 0.5;"></span>*@
                 </a>
             </div>
         </div>
