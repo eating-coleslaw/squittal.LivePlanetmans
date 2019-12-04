@@ -83,14 +83,14 @@ else
                                             <td class="player">
                                                 @if (kill.VictimId == playerId)
                                                 {
-                                                    <button class="btn btn-link inline-player-br" style="color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;"  @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))" title="Open details for @kill.AttackerName">
+                                                    <button class="btn btn-link inline-player-br @GetKillboardRowTextClass(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId)" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))" title="Open details for @kill.AttackerName"> @*style="color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;"  @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))" title="Open details for @kill.AttackerName">*@
                                                         <div class="player-name">@kill.AttackerName</div>
-                                                        <div style="display: inline-block; vertical-align: super;">
+                                                        <div> @*style="display: inline-block; vertical-align: super;">*@
                                                             <sup>
                                                                 @(kill.AttackerBattleRank)
                                                                 @if (stats.PrestigeLevel != 0)
                                                                 {
-                                                                    <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
+                                                                    <span class="oi oi-star small" aria-hidden="true"></span> @*style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>*@
                                                                 }
                                                             </sup>
                                                         </div>
@@ -98,14 +98,14 @@ else
                                                 }
                                                 else
                                                 {
-                                                    <button class="btn btn-link inline-player-br" style="color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;"  @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))" title="Open details for @kill.AttackerName">
+                                                    <button class="btn btn-link inline-player-br @GetKillboardRowTextClass(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId)"@onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))" title="Open details for @kill.AttackerName"> @*style="color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;"  @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))" title="Open details for @kill.AttackerName">*@
                                                         <div class="player-name">@kill.VictimName</div>
-                                                        <div style="display: inline-block;">
+                                                        <div> @*style="display: inline-block;">*@
                                                             <sup>
                                                                 @(kill.VictimBattleRank)
                                                                 @if (kill.VictimPrestigeLevel != 0)
                                                                 {
-                                                                    <span class="oi oi-star small" style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>
+                                                                    <span class="oi oi-star small" aria-hidden="true"></span> @*style="top: -1px; margin-left: -0.1rem;" aria-hidden="true"></span>*@
                                                                 }
                                                             </sup>
                                                         </div>

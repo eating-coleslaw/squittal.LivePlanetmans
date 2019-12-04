@@ -303,7 +303,7 @@ dt {
 
     .styled-select option {
         font-family: 'Roboto Mono';
-        font-size: small;
+        /*font-size: small;*/
     }
 
     .styled-select option.pre-text {
@@ -574,20 +574,6 @@ table.killfeed tbody {
             /*border: inherit;*/
         }
 
-            table.killfeed tbody td.loadout-player button.inline-player-br {
-                font-size: 0.8rem;
-                padding: 0rem !important;
-                vertical-align: text-bottom !important;
-                text-align: left;
-            }
-
-                table.killfeed tbody td.loadout-player button.inline-player-br .player-name {
-                    display: inline-block;
-                    max-width: 250px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
         table.killfeed tbody td.outfit {
             padding: 0.1rem 0.3125rem 0.1rem 0;
             max-width: 55px;
@@ -599,6 +585,20 @@ table.killfeed tbody {
             padding: 0.1rem 0.75rem 0.1rem 0;
             /*border: inherit;*/
         }
+
+            table.killfeed tbody td.player button.inline-player-br {
+                font-size: 0.8rem;
+                padding: 0rem; /*!important;*/
+                vertical-align: text-bottom; /*!important;*/
+                /*text-align: left;*/
+            }
+
+                /*table.killfeed tbody td.player button.inline-player-br .player-name {
+                    display: inline-block;
+                    max-width: 250px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }*/
 
         table.killfeed tbody td.headshot {
             /*padding-top: 0.1rem;
