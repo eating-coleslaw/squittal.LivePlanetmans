@@ -767,6 +767,7 @@ table.killfeed td {
         max-width: 235px; /*225px;*/
         width: max-content;
         text-align: left;
+        color: var(--sq-ps2-primary) !important;
     }
 
 .inline-player-br > div {
