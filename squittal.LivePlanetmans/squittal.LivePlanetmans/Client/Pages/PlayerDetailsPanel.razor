@@ -48,17 +48,17 @@ else
                     }
                     else
                     {
-                        <div class="sq-view sq-view-fill"> @*style="max-height: 400px; overflow: auto; border-top: 0px solid @GetFactionColorFromId(_playerFactionId)80; border-bottom: 1px solid @GetFactionColorFromId(_playerFactionId)80; border-top-left-radius: 0.2rem; border-bottom-right-radius: 0.2rem; margin-bottom: 1.5rem;">*@
-                            <table class="killfeed"> @*class="table-responsive-sm table" style="font-size: 0.85rem !important;">*@
-                                <tbody> @*style="font-size: small;">*@
+                        <div class="sq-view sq-view-fill">
+                            <table class="killfeed">
+                                <tbody>
                                     @foreach (var kill in kills)
                                     {
-                                        <tr class="@GetRowBgClass(kill.VictimId, kill.VictimFactionId) @GetKillboardRowTextClass(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId)"> @*style="background-color:@GetRowBgColor(kill.VictimId, kill.VictimFactionId); color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; border-top: @GetKillboardBorderStyle(kill.VictimId);">*@
-                                            <td class="timestamp"> @*style="padding-top: 0.1rem; padding-bottom: 0.1rem; min-width: 105px; max-width: 110px; width: 7rem; border: inherit;">*@
+                                        <tr class="@GetRowBgClass(kill.VictimId, kill.VictimFactionId) @GetKillboardRowTextClass(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId)">
+                                            <td class="timestamp">
                                                 @((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())
                                             </td>
 
-                                            <td class="loadout-enemy"> @*style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">*@
+                                            <td class="loadout-enemy">
                                                 @if (kill.VictimId == playerId)
                                                 {
                                                     <div class="@GetLoadoutIconClass((int)kill.AttackerLoadoutId) @GetFactionClassFromId(kill.AttackerFactionId)" title="Killed by @loadoutModels.Where(m => m.Id == (int)kill.AttackerLoadoutId).Select(m => m.CodeName).FirstOrDefault()"></div>
@@ -69,7 +69,7 @@ else
                                                 }
                                             </td>
 
-                                            <td class="outfit"> @*style="padding: 0.1rem 0.3125rem 0.1rem 0; max-width: 55px; width: 1rem; border: inherit;">*@
+                                            <td class="outfit">
                                                 @if (kill.VictimId == playerId)
                                                 {
                                                     @((string.IsNullOrWhiteSpace(kill.AttackerOutfitAlias)) ? "" : $"[{kill.AttackerOutfitAlias}]")
@@ -80,11 +80,11 @@ else
                                                 }
                                             </td>
 
-                                            <td class="player"> @*style="padding: 0.1rem 0.75rem 0.1rem 0; border: inherit;">*@
+                                            <td class="player">
                                                 @if (kill.VictimId == playerId)
                                                 {
-                                                    <button class="btn btn-link inline-player-br" style="color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;"  @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))" title="Open details for @kill.AttackerName"> @*style="font-size: 0.8rem; padding: 0rem !important; color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; vertical-align: text-bottom !important; text-align: left;" @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))" title="Open details for @kill.AttackerName">*@
-                                                        <div class="player-name">@kill.AttackerName</div> @*style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis;">@kill.AttackerName</div>*@
+                                                    <button class="btn btn-link inline-player-br" style="color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;"  @onclick="@(() => OnSelectKillboardPlayer(kill.AttackerId, player.WorldId))" title="Open details for @kill.AttackerName">
+                                                        <div class="player-name">@kill.AttackerName</div>
                                                         <div style="display: inline-block; vertical-align: super;">
                                                             <sup>
                                                                 @(kill.AttackerBattleRank)
@@ -98,8 +98,8 @@ else
                                                 }
                                                 else
                                                 {
-                                                    <button class="btn btn-link inline-player-br" style="color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;"  @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))" title="Open details for @kill.AttackerName"> @*style="font-size: 0.8rem; padding: 0rem !important; color:@GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important; vertical-align: text-bottom !important; text-align: left;" @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))" title="Open details for @kill.VictimName">*@
-                                                        <div class="player-name">@kill.VictimName</div> @*style="display: inline-block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom;">@kill.VictimName</div>*@
+                                                    <button class="btn btn-link inline-player-br" style="color: @GetKillboardTextColor(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId) !important;"  @onclick="@(() => OnSelectKillboardPlayer(kill.VictimId, player.WorldId))" title="Open details for @kill.AttackerName">
+                                                        <div class="player-name">@kill.VictimName</div>
                                                         <div style="display: inline-block;">
                                                             <sup>
                                                                 @(kill.VictimBattleRank)
@@ -113,7 +113,7 @@ else
                                                 }
                                             </td>
 
-                                            <td class="headshot"> @*style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">*@
+                                            <td class="headshot">
                                                 @if (kill.IsHeadshot == true)
                                                 {
                                                     @if (kill.VictimId == playerId)
@@ -124,26 +124,14 @@ else
                                                     {
                                                         <div class="ps2-icon headshot  @GetFactionClassFromId(kill.VictimFactionId)" title="Headshot"></div>
                                                     }
-
-                                                    @*<div class="ps2-icon headshot @GetFactionClassFromId(kill.VictimFactionId)" title="Headshot"></div>*@ @*<span class="oi small oi-target" aria-hidden="true"></span>*@ @*style="padding-left: 0.3125rem; padding-right: 0.3125rem;"></span>*@
                                                 }
                                             </td>
 
-                                            <td class="weapon"> @*style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">*@
-                                                
+                                            <td class="weapon">
                                                 @( !string.IsNullOrWhiteSpace(kill.AttackerWeaponName) ? @kill.AttackerWeaponName : "Unknown" )
-                                            
-                                                @*@if (!string.IsNullOrWhiteSpace(kill.AttackerWeaponName)) {
-                                                        @kill.AttackerWeaponName
-                                                }
-                                                else
-                                                {
-                                                    @("Unknown");
-                                                }*@
-
                                             </td>
 
-                                            <td class="loadout-player"> @*style="padding-top: 0.1rem; padding-bottom: 0.1rem; padding-left: 0.5rem; max-width: 30px;  width: 1rem; border: inherit;">*@
+                                            <td class="loadout-player">
                                                 @if (kill.VictimId == playerId)
                                                 {
                                                     <div class="@GetLoadoutIconClass((int)kill.VictimLoadoutId) @GetFactionClassFromId(kill.VictimFactionId)" title="Playing as @loadoutModels.Where(m => m.Id == (int)kill.VictimLoadoutId).Select(m => m.CodeName).FirstOrDefault()"></div>
@@ -154,7 +142,7 @@ else
                                                 }
                                             </td>
 
-                                            <td class="zone"> @*style="padding-top: 0.1rem; padding-bottom: 0.1rem; border: inherit;">*@
+                                            <td class="zone">
                                                 @kill.ZoneName
                                             </td>
                                         </tr>
