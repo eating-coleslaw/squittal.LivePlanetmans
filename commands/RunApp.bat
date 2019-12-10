@@ -2,6 +2,12 @@
 
 echo Starting SQL Server service...
 call :StartSqlService
+if %ERRORLEVEL% EQU 2 (
+    echo Failed to start SQL Server service. Try re-running this file as administrator.
+    echo Exiting...
+    pause
+    exit
+)
 if %ERRORLEVEL% NEQ 0 (
     echo Failed to start SQL Server service. Exiting...
     pause
