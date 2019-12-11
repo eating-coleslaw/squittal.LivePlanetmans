@@ -81,7 +81,8 @@ app {
 }
 
 .content {
-    padding-top: 1.1rem;
+    /*padding-top: 1.1rem;*/
+    padding-top: 0.2rem;
 }
 
 .navbar-toggler {
@@ -153,6 +154,50 @@ dt {
     font-weight: 500;
     font-size: 0.8rem;
 }
+
+
+/*
+    No-Link Brand Header
+*/
+.nolink-header {
+    width: 100%;
+
+    background-color: transparent !important;
+    padding: 0.2rem 1.5rem 0.2rem 2rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .nolink-header img {
+        height: 1.5rem;
+        width: 1.5rem;
+        /*height: calc( 1.5rem + 0.4rem);
+        width: calc( 1.5rem + 0.4rem);
+        padding: 0.1rem;
+        border: 2px dotted #7f39e3;
+        border-radius: 1rem;*/
+    }
+
+    .nolink-header span {
+        font-size: 1.2rem;
+        color: var(--sq-logo-purple);
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+        .nolink-header span:first-of-type {
+            position: absolute;
+        }
+
+        .nolink-header span:nth-of-type(2) {
+            position: relative;
+            /*background: linear-gradient(175deg, #e83e8c 30%, #361862 100%);*/
+            background: linear-gradient(175deg, var(--pink) 30%, var(--sq-logo-purple) 100%);
+            /*background-clip: text;*/
+            color: transparent;
+            mix-blend-mode: saturation;
+        }
+
 
 .col-lg-6 {
     flex: unset;
