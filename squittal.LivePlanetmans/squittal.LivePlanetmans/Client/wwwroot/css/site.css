@@ -171,11 +171,6 @@ dt {
     .nolink-header img {
         height: 1.5rem;
         width: 1.5rem;
-        /*height: calc( 1.5rem + 0.4rem);
-        width: calc( 1.5rem + 0.4rem);
-        padding: 0.1rem;
-        border: 2px dotted #7f39e3;
-        border-radius: 1rem;*/
     }
 
     .nolink-header span {
@@ -191,9 +186,7 @@ dt {
 
         .nolink-header span:nth-of-type(2) {
             position: relative;
-            /*background: linear-gradient(175deg, #e83e8c 30%, #361862 100%);*/
             background: linear-gradient(175deg, var(--pink) 30%, var(--sq-logo-purple) 100%);
-            /*background-clip: text;*/
             color: transparent;
             mix-blend-mode: saturation;
         }
