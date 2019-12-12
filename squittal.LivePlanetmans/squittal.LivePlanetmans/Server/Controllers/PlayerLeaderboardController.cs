@@ -17,14 +17,16 @@ namespace squittal.LivePlanetmans.Server.Controllers
     public class PlayerLeaderboardController : ControllerBase
     {
         private readonly IDbContextHelper _dbContextHelper;
+        private readonly ICharacterService _characterService;
         private readonly IZoneService _zoneService;
         private readonly ILogger<PlayerLeaderboardController> _logger;
 
         public IList<PlayerHourlyStatsData> Players { get; private set; }
 
-        public PlayerLeaderboardController(IDbContextHelper dbContextHelper, IZoneService zoneService, ILogger<PlayerLeaderboardController> logger)
+        public PlayerLeaderboardController(IDbContextHelper dbContextHelper, ICharacterService characterService, IZoneService zoneService, ILogger<PlayerLeaderboardController> logger)
         {
             _dbContextHelper = dbContextHelper;
+            _characterService = characterService;
             _zoneService = zoneService;
             _logger = logger;
         }
@@ -112,11 +114,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         Kills = (from k in dbContext.Deaths
                                  where k.AttackerCharacterId == playerGroup.Key
                                     && k.DeathEventType == DeathEventType.Kill
-                                    //&& k.AttackerCharacterId != k.CharacterId
-                                    //&& k.AttackerFactionId != k.CharacterFactionId
-                                    //&& ((k.AttackerFactionId != k.CharacterFactionId)
-                                    //    || k.AttackerFactionId == 4 || k.CharacterFactionId == 4     //Nanite Systems
-                                    //    || k.CharacterFactionId == null || k.CharacterFactionId == 0)
                                     && k.Timestamp >= startTime
                                     && k.WorldId == worldId
                                  select k).Count(),
@@ -131,30 +128,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                      where h.IsHeadshot == true
                                         && h.AttackerCharacterId == playerGroup.Key
                                         && h.DeathEventType == DeathEventType.Kill
-                                        //&& h.AttackerCharacterId != h.CharacterId
-                                        //&& h.AttackerFactionId != h.CharacterFactionId
-                                        //&& ((k.AttackerFactionId != k.CharacterFactionId)
-                                        //    || k.AttackerFactionId == 4 || k.CharacterFactionId == 4     //Nanite Systems
-                                        //    || k.CharacterFactionId == null || k.CharacterFactionId == 0)
                                         && h.Timestamp >= startTime
                                         && h.WorldId == worldId
                                      select h).Count(),
-
-                        //TeamKills = (from tk in dbContext.Deaths
-                        //             where tk.AttackerCharacterId == playerGroup.Key
-                        //                && tk.AttackerCharacterId != tk.CharacterId
-                        //                && tk.AttackerFactionId == tk.CharacterFactionId
-                        //                && tk.Timestamp >= startTime
-                        //                && tk.WorldId == worldId
-                        //             select tk).Count(),
-
-                        //Suicides = (from s in dbContext.Deaths
-                        //            where s.CharacterId == playerGroup.Key
-                        //               && (s.AttackerCharacterId == s.CharacterId
-                        //                   || s.AttackerCharacterId == "0")
-                        //               && s.Timestamp >= startTime
-                        //               && s.WorldId == worldId
-                        //            select s).Count()
                     };
 
                 var topPlayers = await topPlayersQuery
@@ -165,13 +141,13 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                           .ToArrayAsync();
 
                 // Get Latest Zone Name
-                //var zoneList = await _zoneService.GetAllZonesAsync();
                 foreach (var player in topPlayers)
                 {
-                    //player.LatestZoneName = zoneList.FirstOrDefault(z => z.Id == player.LatestZoneId)?.Name ?? string.Empty;
-
                     if (player.LatestLoginTime != null)
                     {
+                        var resolveLoginTimeTask = ResolvePlayerLastLoginTime(player.PlayerId, player.LatestLoginTime);
+
+                        player.LatestLoginTime = await resolveLoginTimeTask;
 
                         DateTime sessionStartTime = (player.LatestLoginTime ?? startTime); //(playerStats.LatestLoginTime != null) ? (playerStats.LatestLoginTime ?? startTime) : startTime;
                         DateTime sessionEndTime = (player.LatestLogoutTime ?? nowUtc); // (playerStats.LatestLogoutTime != null) ? (playerStats.LatestLogoutTime ?? nowUtc) : nowUtc;
@@ -183,10 +159,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                         player.SessionKills = await dbContext.Deaths.CountAsync(death => death.AttackerCharacterId == player.PlayerId
                                                                                       && death.DeathEventType == DeathEventType.Kill
-                                                                                      //&& death.CharacterId != player.PlayerId
-                                                                                      //&& ((death.AttackerFactionId != death.CharacterFactionId)
-                                                                                      //    || death.AttackerFactionId == 4 || death.CharacterFactionId == 4
-                                                                                      //    || death.CharacterFactionId == null || death.CharacterFactionId == 0) //Nanite Systems
                                                                                       && death.Timestamp >= sessionStartTime
                                                                                       && death.Timestamp <= sessionEndTime);
                     }
@@ -194,6 +166,29 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
             return topPlayers;
             }
+        }
+
+        private async Task<DateTime?> ResolvePlayerLastLoginTime(string characterId, DateTime? storeLoginTime)
+        {
+            var censusTimes = await _characterService.GetCharacterTimesAsync(characterId);
+
+            if (censusTimes == null)
+            {
+                return storeLoginTime;
+            }
+
+            var censusLoginTime = censusTimes.LastLoginDate;
+
+            if (censusLoginTime == default)
+            {
+                return storeLoginTime;
+            }
+            if (storeLoginTime == null)
+            {
+                return censusLoginTime;
+            }
+
+            return (censusLoginTime > storeLoginTime) ? censusLoginTime : storeLoginTime;
         }
     }
 }
