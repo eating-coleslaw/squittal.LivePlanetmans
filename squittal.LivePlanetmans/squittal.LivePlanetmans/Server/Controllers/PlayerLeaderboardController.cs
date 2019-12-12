@@ -143,14 +143,14 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 // Get Latest Zone Name
                 foreach (var player in topPlayers)
                 {
+                    var resolveLoginTimeTask = ResolvePlayerLastLoginTime(player.PlayerId, player.LatestLoginTime);
+                    player.LatestLoginTime = await resolveLoginTimeTask;
+                    
                     if (player.LatestLoginTime != null)
                     {
-                        var resolveLoginTimeTask = ResolvePlayerLastLoginTime(player.PlayerId, player.LatestLoginTime);
 
-                        player.LatestLoginTime = await resolveLoginTimeTask;
-
-                        DateTime sessionStartTime = (player.LatestLoginTime ?? startTime); //(playerStats.LatestLoginTime != null) ? (playerStats.LatestLoginTime ?? startTime) : startTime;
-                        DateTime sessionEndTime = (player.LatestLogoutTime ?? nowUtc); // (playerStats.LatestLogoutTime != null) ? (playerStats.LatestLogoutTime ?? nowUtc) : nowUtc;
+                        DateTime sessionStartTime = (player.LatestLoginTime ?? startTime);
+                        DateTime sessionEndTime = (player.LatestLogoutTime ?? nowUtc);
 
                         if (sessionEndTime <= sessionStartTime)
                         {

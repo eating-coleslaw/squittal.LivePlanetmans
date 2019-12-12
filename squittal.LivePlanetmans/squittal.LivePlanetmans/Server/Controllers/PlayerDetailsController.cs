@@ -273,6 +273,10 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                 var playerStats = await query.AsNoTracking().FirstOrDefaultAsync();
 
+                var resolveLoginTimeTask = ResolvePlayerLastLoginTime(playerStats.PlayerId, playerStats.LatestLoginTime);
+
+                playerStats.LatestLoginTime = await resolveLoginTimeTask;
+                
                 if (playerStats.LatestLoginTime != null)
                 {
 
@@ -292,7 +296,29 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                 return playerStats;
             }
+        }
 
+        private async Task<DateTime?> ResolvePlayerLastLoginTime(string characterId, DateTime? storeLoginTime)
+        {
+            var censusTimes = await _characterService.GetCharacterTimesAsync(characterId);
+
+            if (censusTimes == null)
+            {
+                return storeLoginTime;
+            }
+
+            var censusLoginTime = censusTimes.LastLoginDate;
+
+            if (censusLoginTime == default)
+            {
+                return storeLoginTime;
+            }
+            if (storeLoginTime == null)
+            {
+                return censusLoginTime;
+            }
+
+            return (censusLoginTime > storeLoginTime) ? censusLoginTime : storeLoginTime;
         }
     }
 }
