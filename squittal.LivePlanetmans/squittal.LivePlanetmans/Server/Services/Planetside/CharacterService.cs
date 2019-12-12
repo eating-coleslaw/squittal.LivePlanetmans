@@ -89,18 +89,6 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
             {
                 var dbContext = factory.GetDbContext();
 
-                //from login in dbContext.PlayerLogins
-                //where login.CharacterId == playerGroup.Key
-                //orderby login.Timestamp descending
-                //select login.Timestamp).FirstOrDefault()
-
-                //var storeLoginTime = await dbContext.PlayerLogins
-                //                                .AsNoTracking()
-                //                                .Where(l => l.CharacterId == characterId)
-                //                                .OrderByDescending(l => l.Timestamp)
-                //                                .Select(l => l.Timestamp)
-                //                                .FirstOrDefaultAsync();
-
                 var censusCharacterTimes = await _censusCharacter.GetCharacterTimes(characterId);
 
                 if (censusCharacterTimes == null)
