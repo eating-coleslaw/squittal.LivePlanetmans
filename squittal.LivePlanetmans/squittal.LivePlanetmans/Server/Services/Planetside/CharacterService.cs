@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using squittal.LivePlanetmans.Server.CensusServices;
@@ -29,7 +30,7 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
 
                 //IQueryable<Character> characterQuery = dbContext.Characters.Where(e => e.Id == characterId);
 
-                var storeCharacter =  await dbContext.Characters
+                var storeCharacter = await dbContext.Characters
                                                 .AsNoTracking()
                                                 .FirstOrDefaultAsync(e => e.Id == characterId);
 
@@ -80,6 +81,42 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
                 CertsEarned = censusModel.Certs.EarnedPoints,
                 PrestigeLevel = censusModel.PrestigeLevel
             };
+        }
+
+        public async Task<CharacterTime> GetCharacterTimesAsync(string characterId)
+        {
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                //from login in dbContext.PlayerLogins
+                //where login.CharacterId == playerGroup.Key
+                //orderby login.Timestamp descending
+                //select login.Timestamp).FirstOrDefault()
+
+                //var storeLoginTime = await dbContext.PlayerLogins
+                //                                .AsNoTracking()
+                //                                .Where(l => l.CharacterId == characterId)
+                //                                .OrderByDescending(l => l.Timestamp)
+                //                                .Select(l => l.Timestamp)
+                //                                .FirstOrDefaultAsync();
+
+                var censusCharacterTimes = await _censusCharacter.GetCharacterTimes(characterId);
+
+                if (censusCharacterTimes == null)
+                {
+                    return null;
+                }
+
+                return new CharacterTime
+                {
+                    CharacterId = characterId,
+                    CreatedDate = censusCharacterTimes.CreationDate,
+                    LastSaveDate = censusCharacterTimes.LastSaveDate,
+                    LastLoginDate = censusCharacterTimes.LastLoginDate,
+                    MinutesPlayed = censusCharacterTimes.MinutesPlayed
+                };
+            }
         }
     }
 }
