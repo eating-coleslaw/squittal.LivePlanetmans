@@ -46,5 +46,17 @@ namespace squittal.LivePlanetmans.Server.CensusServices
 
             return await query.GetAsync<CensusOutfitMemberModel>();
         }
+
+        public async Task<CensusCharacterModel.CharacterTimes> GetCharacterTimes(string characterId)
+        {
+            var query = _queryFactory.Create("character");
+
+            query.ShowFields("character_id", "times.creation_date", "times.last_save_date", "times.last_login_date", "times.minutes_played");
+            query.Where("character_id").Equals(characterId);
+
+            var result = await query.GetAsync<CensusCharacterModel>();
+
+            return result?.Times;
+        }
     }
 }
