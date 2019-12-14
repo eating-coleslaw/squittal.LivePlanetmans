@@ -55,7 +55,6 @@ else
                                     {
                                         <tr class="@GetRowBgClass(kill.VictimId, kill.VictimFactionId) @GetKillboardRowTextClass(kill.AttackerId, kill.AttackerFactionId, kill.VictimFactionId)">
                                             <td class="timestamp">
-                                                @*@((kill.KillTimestamp - TimeSpan.FromHours(5)).ToLongTimeString())*@
                                                 @GetKillfeedTimestampDisplay(kill.KillTimestamp)
                                             </td>
 

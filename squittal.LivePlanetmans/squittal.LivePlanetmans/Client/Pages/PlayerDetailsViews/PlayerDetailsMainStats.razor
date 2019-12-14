@@ -201,20 +201,15 @@
 
         bool endIsNow = (endTime == stats.QueryNowUtc);
         bool sameDates = (startTime.Date == endTime.Date);
-        var fiveHours = TimeSpan.FromHours(6);
 
         startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
         endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
 
         if (sameDates == true)
         {
-            //return endIsNow
-            //    ? $"{(startTime - fiveHours).ToShortTimeString()} - Now"
-            //    : $"{(startTime - fiveHours).ToShortTimeString()} - {(endTime - fiveHours).ToShortTimeString()}";
-
             return endIsNow
-                ? $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - Now" // ({startTime.Kind} | {TimeZoneInfo.Local.ToString()} | {TimeZoneInfo.Local.BaseUtcOffset.ToString()} | {TimeZoneInfo.Local.IsDaylightSavingTime(startTime)})"
-                : $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToShortTimeString()}"; // ({startTime.Kind} | {TimeZoneInfo.Local.ToString()} | {TimeZoneInfo.Local.BaseUtcOffset.ToString()} | {TimeZoneInfo.Local.IsDaylightSavingTime(startTime)})";
+                ? $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - Now"
+                : $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToShortTimeString()}";
         }
         else
         {
@@ -231,7 +226,7 @@
 
     DateTime GetSessionEndTime()
     {
-        var sessionEndTime = (stats.LatestLogoutTime ?? stats.QueryNowUtc); // (playerStats.LatestLogoutTime != null) ? (playerStats.LatestLogoutTime ?? nowUtc) : nowUtc;
+        var sessionEndTime = (stats.LatestLogoutTime ?? stats.QueryNowUtc);
 
         if (sessionEndTime <= GetSessionStartTime())
         {
