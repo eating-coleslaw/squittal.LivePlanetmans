@@ -48,10 +48,10 @@ namespace squittal.LivePlanetmans.Server.Controllers
             var mappingTask = _profileService.GetLoadoutMapping();
             _loadoutMapping = await mappingTask;
 
-            foreach (var keyValuePair in _loadoutMapping)
-            {
-                Debug.WriteLine($"{keyValuePair.Key} :: {keyValuePair.Value.Name} [{keyValuePair.Value.Id}]");
-            }
+            //foreach (var keyValuePair in _loadoutMapping)
+            //{
+            //    Debug.WriteLine($"{keyValuePair.Key} :: {keyValuePair.Value.Name} [{keyValuePair.Value.Id}]");
+            //}
 
             return _loadoutMapping.ToDictionary(m => m.Key, m => m.Value.ProfileTypeId);
 
@@ -242,51 +242,51 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                     .AsNoTracking()
                                                     .ToArrayAsync();
 
-                Debug.WriteLine("===============================");
-                foreach (var row in loadoutVsLoadoutRows)
-                {
-                    Debug.WriteLine($"{row.DebugInfoString}");
-                }
+                //Debug.WriteLine("===============================");
+                //foreach (var row in loadoutVsLoadoutRows)
+                //{
+                //    Debug.WriteLine($"{row.DebugInfoString}");
+                //}
 
                 var groupedLoadouts = loadoutVsLoadoutRows
                                                 .GroupBy(vsRow => new { vsRow.AttackerLoadoutId, vsRow.VictimLoadoutId })
                                                 .Select(grp => grp.First())
                                                 .ToArray();
 
-                Debug.WriteLine("===============================");
-                foreach (var row in groupedLoadouts)
-                {
-                    Debug.WriteLine($"{row.DebugInfoString}");
-                }
+                //Debug.WriteLine("===============================");
+                //foreach (var row in groupedLoadouts)
+                //{
+                //    Debug.WriteLine($"{row.DebugInfoString}");
+                //}
 
                 var activePlayerLoadouts = GetActivePlayerLoadouts(loadoutVsLoadoutRows, playerFactionId);
                 var activeEnemyLoadouts = GetActiveEnemyLoadouts(loadoutVsLoadoutRows, playerFactionId);
                 var activeFactions = GetActiveFactions(loadoutVsLoadoutRows, playerFactionId);
                 var activeFactionLoadouts = GetActiveFactionLoadouts(loadoutVsLoadoutRows, activeFactions, playerFactionId);
 
-                foreach (var l in activePlayerLoadouts)
-                {
-                    Debug.WriteLine($"Active Player Loadout: {l}");
-                }
+                //foreach (var l in activePlayerLoadouts)
+                //{
+                //    Debug.WriteLine($"Active Player Loadout: {l}");
+                //}
 
-                foreach (var l in activeEnemyLoadouts)
-                {
-                    Debug.WriteLine($"Active Enemy Loadout: {l}");
-                }
+                //foreach (var l in activeEnemyLoadouts)
+                //{
+                //    Debug.WriteLine($"Active Enemy Loadout: {l}");
+                //}
 
-                foreach (var l in activeFactions)
-                {
-                    Debug.WriteLine($"Active Faction: {l}");
-                }
+                //foreach (var l in activeFactions)
+                //{
+                //    Debug.WriteLine($"Active Faction: {l}");
+                //}
 
-                foreach (var fl in activeFactionLoadouts)
-                {
-                    Debug.WriteLine($"Active Faction: {fl.FactionId}");
-                    foreach (var l in fl.Loadouts)
-                    {
-                        Debug.WriteLine($"    Active Faction Loadout: {l}");
-                    }
-                }
+                //foreach (var fl in activeFactionLoadouts)
+                //{
+                //    Debug.WriteLine($"Active Faction: {fl.FactionId}");
+                //    foreach (var l in fl.Loadouts)
+                //    {
+                //        Debug.WriteLine($"    Active Faction Loadout: {l}");
+                //    }
+                //}
 
                 var allFactionsLoadoutSummaries = new List<FactionLoadoutsSummary>();
                 

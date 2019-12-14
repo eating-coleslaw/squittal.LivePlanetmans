@@ -184,11 +184,11 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                             .Union(victimPlayerH2HSummaries)
                                             .ToArray();
 
-                Debug.WriteLine("-----------------------------------");
-                foreach (var row in allPlayerH2HSummaries)
-                {
-                    Debug.WriteLine($"{row.DebugString}");
-                }
+                //Debug.WriteLine("-----------------------------------");
+                //foreach (var row in allPlayerH2HSummaries)
+                //{
+                //    Debug.WriteLine($"{row.DebugString}");
+                //}
 
                 var playerDetails = allHeadToHeadPlayers.Any(h2h => h2h.AttackerDetails.PlayerId == characterId)
                                         ? allHeadToHeadPlayers
