@@ -13,6 +13,7 @@ if %ERRORLEVEL% NEQ 0 (
     pause
     exit
 )
+pause
 
 :StopSqlService
 SC query MSSQL$SQLEXPRESS | FIND "STATE" | FIND "STOPPED" 2>&1 > nul
