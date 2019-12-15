@@ -52,7 +52,7 @@ Using a registered Service ID permits unthrottled querying of the Census API. Wi
 
 ## Running the App
 
-The `squittal.LivePlanetmans\commands` folder contains files for starting the app and managing various related services.
+The `commands` folder contains files for starting the app and managing various related services.
 
 Several of these must be run as administrator (`Right Click > Run as administrator`) to work correctly. For the files you'll run more often, I'd suggest creating a shortcut set to always run as administrator:  
 
@@ -82,9 +82,12 @@ Run this as administrator to stop the SQL Server service. You should do this aft
 __StartSqlServer.bat__  
 Run this as administrator to start the SQL Server service. You shouldn't ever need to run this file if you're only running the app (i.e. not doing development), as RuntBat.bat automatically starts the SQL Server service if it's not already running.
 
+__DeleteOldSqlData.bat__  
+_See Maintenance section below._
+
 ## Maintenance
 
-Any given database instance of SQL Server 2017 Express is limited to 10gb in size. If running the app fairly frequently, you'll occasionally need to delete old data. Run `squittal.LivePlanetmans\Server\Data\SQL\RemoveOldData.sql` on your databse to delete event data (deaths, logins, logouts) more than 2 days old and rebuild the associated indexes.
+Any given database instance of SQL Server 2017 Express is limited to 10gb in size. If running the app fairly frequently, you'll occasionally need to delete old data. Run `commands\DeleteOldSqlData.bat` as administrator to delete event data (deaths, logins, logouts) more than 2 days old and rebuild the associated indexes.
 
 ## Troubleshooting
 
