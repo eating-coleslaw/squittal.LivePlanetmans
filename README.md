@@ -52,18 +52,35 @@ Using a registered Service ID permits unthrottled querying of the Census API. Wi
 
 ## Running the App
 
-1. Open the folder `squittal.LivePlanetmans\squittal.LivePlanetmans\squittal.LivePlanetmans\Server` in a command prompt window.
+The `squittal.LivePlanetmans\commands` folder contains files for starting the app and managing various related services.
 
-   * `Shift + Right Click > Open command window here`, or
-   * `Shift + Right Click > Open PowerShell window here`
+Several of these must be run as administrator (`Right Click > Run as administrator`) to work correctly. For the files you'll run more often, I'd suggest creating a shortcut set to always run as administrator:  
 
-2. If it's the first time running the app, or you just synced changes from the repository, enter `dotnet build` to build the app.
+  1. __Create the shortcut__  
+     `Right Click on .bat file > Create shortcut`. You can put move shortcut wherever you'd like.
 
-3. Enter `dotnet run` to start the app.
+  2. __Set the shortcut to run as administrator__  
+     `Right Click on the shortcut > Shortcut tab > Click the Advanced... button at the bottom > Check the _Run as administrator_ box`.
 
-   Note: The app will continue to collect Planetside 2 activity data while the app is running, regardless of whether you have the site open in a browser.
+### What to Do
 
-4. In your web browser navigate to the site displayed after the `Now listening on: ...` console message (e.g. <http://localhost:55572>).
+__BuildApp.bat__  
+Run this if it's the first time running the app, or you just synced changes from the repository.
+
+After a successful build, you'll be prompted to run the app. While the build itself does not require being run as administrator, if you want to run the app from this prompt you must run BuildApp.bat as administrator.
+
+__RunApp.bat__  
+Run this as administrator to start the app. In a web browser navigate to the URL displayed after the `Now listening on: ...` console message (e.g. <http://localhost:55574>).
+
+Note: The app will continue to collect Planetside 2 activity data while the app is running, regardless of whether you have the site open in a browser.
+
+To stop the app _gracefully_, press `Ctrl+C` in the Command Prompt. Enter `Y` at the `Cancel batch job?` prompt.
+
+__StopSqlServer.bat__  
+Run this as administrator to stop the SQL Server service. You should do this after stopping the app.
+
+__StartSqlServer.bat__  
+Run this as administrator to start the SQL Server service. You shouldn't ever need to run this file if you're only running the app (i.e. not doing development), as RuntBat.bat automatically starts the SQL Server service if it's not already running.
 
 ## Maintenance
 
@@ -79,7 +96,13 @@ When attempting to run the app, you get an error message like this:
 `An error occured initializing the DB.
 Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)`
 
-This means that the SQL Database service has been stopped for some reason. Manually start the service, then try running the again.
+This means that the SQL Database service has been stopped for some reason. Manually start the service, then try running the app again.
+
+#### Start Service via StopSqlServer.bat
+
+1. `Run squittal.LivePlanetmans\commands\StartSqlServer.bat` (or your `StopSqlServer.bat` shortcut) as administrator.
+
+#### Start Service via Services App
 
 1. Open the __Services__ Windows app.
 
@@ -92,6 +115,10 @@ This means that the SQL Database service has been stopped for some reason. Manua
 The SQL Server Windows NT process started suddenly taking up a large amount of CPU, Memory, or Disk resources even though you're not currently running the app.
 
 The SQL database & associated service are independant of the leaderboard app itself, and so they'll continue to run after the app is stopped. Manually stop the SQL Server service after closing the app, and restart it before running the app again.
+
+#### Stop Service via StopSqlServer.bat
+
+1. `Run squittal.LivePlanetmans\commands\StopSqlServer.bat` (or your `StopSqlServer.bat` shortcut) as administrator.
 
 #### Stop Service via Services App
 
@@ -109,7 +136,7 @@ The SQL database & associated service are independant of the leaderboard app its
 
 1. If the __SQL Server (SQLEXPRESS)__ service is set to start with your computer, it will show _Automatic_ under the Startup Type column. If you don't want this behavior, right-click and select `Properties`.
 
-2. Set Startup type to _Manual_. 
+2. Set Startup type to _Manual_.
 
    You will need to ensure the service is running each time before starting the leaderboard app: select `Start` from the right-click menu.
 
