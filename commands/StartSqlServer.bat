@@ -18,5 +18,5 @@ pause
 
 :StartSqlService
 SC query MSSQL$SQLEXPRESS | FIND "STATE" | FIND "RUNNING" 2>&1 > nul
-if errorlevel 1 (net start MSSQL$SQLEXPRESS) else (echo The SQL Server service is already running... & echo.)
+if errorlevel 1 (net start MSSQL$SQLEXPRESS) else (echo The SQL Server service is already running...)
 exit /B
