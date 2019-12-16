@@ -22,8 +22,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
         private readonly IZoneService _zoneService;
         private readonly ILogger<PlayerLeaderboardController> _logger;
 
-        private MemoryCache _loginCache;
-        private static readonly string LoginKey = "_LoginKey";
+        private readonly MemoryCache _loginCache;
 
         public IList<PlayerHourlyStatsData> Players { get; private set; }
 
@@ -197,11 +196,11 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                 _loginCache.Set(loginKey, cacheEntry, cacheEntryOptions);
 
-                Debug.WriteLine($"Cached login for player ID {characterId} @ {cacheEntry.ToString()}");
+                //Debug.WriteLine($"Cached login for player ID {characterId} @ {cacheEntry.ToString()}");
             }
             else
             {
-                Debug.WriteLine($"Found cached login for player ID {characterId} @ {cacheEntry.ToString()}");
+                //Debug.WriteLine($"Found cached login for player ID {characterId} @ {cacheEntry.ToString()}");
             }
 
             return cacheEntry;
