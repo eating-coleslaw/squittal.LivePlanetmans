@@ -233,6 +233,8 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                     //Ignore
                 }
             }
+
+            await _characterService.UpdateCharacterAsync(payload.CharacterId);
         }
 
         public void Dispose()

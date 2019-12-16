@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using DaybreakGames.Census.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using squittal.LivePlanetmans.Server.CensusServices;
 using squittal.LivePlanetmans.Server.CensusServices.Models;
@@ -28,8 +30,6 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
             {
                 var dbContext = factory.GetDbContext();
 
-                //IQueryable<Character> characterQuery = dbContext.Characters.Where(e => e.Id == characterId);
-
                 var storeCharacter = await dbContext.Characters
                                                 .AsNoTracking()
                                                 .FirstOrDefaultAsync(e => e.Id == characterId);
@@ -54,6 +54,59 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
                 return censusEntity;
 
             }
+        }
+
+        public async Task<Character> UpdateCharacterAsync(string characterId)
+        {
+            // Update Character Details
+            CensusCharacterModel censusCharacter;
+
+            try
+            {
+                censusCharacter = await _censusCharacter.GetCharacter(characterId);
+            }
+            catch (CensusConnectionException)
+            {
+                return null;
+            }
+
+            if (censusCharacter == null)
+            {
+                return null;
+            }
+
+            var character = await UpsertCharacterAsync(ConvertToDbModel(censusCharacter));
+            Debug.WriteLine($"Updated character {character.Name} [{character.Id}]");
+
+
+            // Update Outfit Membership
+            await _outfitService.UpdateCharacterOutfitMembership(character);
+
+            return character;
+        }
+
+        private async Task<Character> UpsertCharacterAsync(Character newEntity)
+        {
+            using (var factory = _dbContextHelper.GetFactory())
+            {
+                var dbContext = factory.GetDbContext();
+
+                var storeEntity = await dbContext.Characters
+                                            .AsNoTracking()
+                                            .FirstOrDefaultAsync(o => o.Id == newEntity.Id);
+
+                if (storeEntity == null)
+                {
+                    await dbContext.AddAsync(newEntity);
+                }
+                else
+                {
+                    storeEntity = newEntity;
+                    dbContext.Update(storeEntity);
+                }
+                await dbContext.SaveChangesAsync();
+            }
+            return newEntity;
         }
 
         public async Task<OutfitMember> GetCharactersOutfitAsync(string characterId)
