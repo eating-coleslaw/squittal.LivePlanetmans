@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace squittal.LivePlanetmans.Server.Controllers
 {
@@ -21,22 +22,28 @@ namespace squittal.LivePlanetmans.Server.Controllers
         private readonly IZoneService _zoneService;
         private readonly ILogger<PlayerLeaderboardController> _logger;
 
+        private MemoryCache _loginCache;
+        private static readonly string LoginKey = "_LoginKey";
+
         public IList<PlayerHourlyStatsData> Players { get; private set; }
 
-        public PlayerLeaderboardController(IDbContextHelper dbContextHelper, ICharacterService characterService, IZoneService zoneService, ILogger<PlayerLeaderboardController> logger)
+        public PlayerLeaderboardController(IDbContextHelper dbContextHelper, ICharacterService characterService, IZoneService zoneService, ILogger<PlayerLeaderboardController> logger, PlayerLoginMemoryCache loginCache)
         {
             _dbContextHelper = dbContextHelper;
             _characterService = characterService;
             _zoneService = zoneService;
             _logger = logger;
+
+            _loginCache = loginCache.Cache;
+
         }
 
         [HttpGet("{worldId}")]
         public async Task<ActionResult<IEnumerable<PlayerHourlyStatsData>>> GetPlayerLeaderboardAsync(int worldId)
         {
-            
+
             int rows = 20;
-            
+
             DateTime nowUtc = DateTime.UtcNow;
             DateTime startTime = nowUtc - TimeSpan.FromHours(1);
 
@@ -95,9 +102,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                            select login.Timestamp).FirstOrDefault(),
 
                         LatestLogoutTime = (from logout in dbContext.PlayerLogouts
-                                           where logout.CharacterId == playerGroup.Key
-                                           orderby logout.Timestamp descending
-                                           select logout.Timestamp).FirstOrDefault(),
+                                            where logout.CharacterId == playerGroup.Key
+                                            orderby logout.Timestamp descending
+                                            select logout.Timestamp).FirstOrDefault(),
 
                         LatestDeathEventTime = (from death in dbContext.Deaths
                                                 where (death.AttackerCharacterId == playerGroup.Key
@@ -143,9 +150,9 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 // Get Latest Zone Name
                 foreach (var player in topPlayers)
                 {
-                    var resolveLoginTimeTask = ResolvePlayerLastLoginTime(player.PlayerId, player.LatestLoginTime);
+                    var resolveLoginTimeTask = TryGetPlayerLastLoginTime(player.PlayerId, player.LatestLoginTime);
                     player.LatestLoginTime = await resolveLoginTimeTask;
-                    
+
                     if (player.LatestLoginTime != null)
                     {
 
@@ -164,8 +171,40 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     }
                 }
 
-            return topPlayers;
+                return topPlayers;
             }
+        }
+
+        private async Task<DateTime?> TryGetPlayerLastLoginTime(string characterId, DateTime? storeLoginTime)
+        {
+            var loginKey = PlayerLoginMemoryCache.GetPlayerLoginKey(characterId);
+            
+            //if (!_loginCache.TryGetValue(loginKey, out PlayerLoginCacheEntry cacheEntry))
+            if (!_loginCache.TryGetValue(loginKey, out DateTime cacheEntry))
+            {
+                var resolvedLoginTime = await ResolvePlayerLastLoginTime(characterId, storeLoginTime);
+
+                if (resolvedLoginTime == null)
+                {
+                    return null;
+                }
+
+                cacheEntry = (DateTime)resolvedLoginTime; // new PlayerLoginCacheEntry(characterId, resolvedLoginTime);
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSize(1)
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(15));
+
+                _loginCache.Set(loginKey, cacheEntry, cacheEntryOptions);
+
+                Debug.WriteLine($"Cached login for player ID {characterId} @ {cacheEntry.ToString()}");
+            }
+            else
+            {
+                Debug.WriteLine($"Found cached login for player ID {characterId} @ {cacheEntry.ToString()}");
+            }
+
+            return cacheEntry;
         }
 
         private async Task<DateTime?> ResolvePlayerLastLoginTime(string characterId, DateTime? storeLoginTime)

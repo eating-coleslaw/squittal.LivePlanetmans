@@ -11,6 +11,7 @@ using squittal.LivePlanetmans.Server.CensusStream;
 using squittal.LivePlanetmans.Server.Data;
 using squittal.LivePlanetmans.Server.Services;
 using squittal.LivePlanetmans.Server.Services.Planetside;
+using squittal.LivePlanetmans.Shared.Models;
 using System;
 using System.Linq;
 
@@ -46,6 +47,7 @@ namespace squittal.LivePlanetmans.Server
 
             //services.AddTransient<IUpdateable, WorldService>();
             services.AddSingleton<IDbContextHelper, DbContextHelper>();
+            services.AddSingleton<PlayerLoginMemoryCache>();
 
             services.AddTransient<IFactionService, FactionService>();
             services.AddTransient<IItemService, ItemService>();
