@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace squittal.LivePlanetmans.Shared.Models
 {
     public class PlayerHourlyStatsData
     {
-        //public string Faction { get; set; }
         public int FactionId { get; set; }
         public string FactionName { get; set; }
         public string OutfitAlias { get; set; }
@@ -97,16 +94,6 @@ namespace squittal.LivePlanetmans.Shared.Models
             get
             {
                 return GetSessionDuration();
-                //if (LatestLoginTime != null)
-                //{
-
-                //}
-                //if (LatestLogoutTime == null)
-                //{
-                //    return (LatestLoginTime == null) ? null : (QueryStartTime - LatestLoginTime);
-                //}
-
-                //return (LatestLoginTime != null && LatestLogoutTime >= LatestLoginTime) ? (LatestLogoutTime - LatestLoginTime) : (QueryStartTime - LatestLoginTime);
             }
         }
 
@@ -130,11 +117,6 @@ namespace squittal.LivePlanetmans.Shared.Models
             get
             {
                 return GetIsOnline();
-                //if ((LatestDeathEventTime > LatestLogoutTime) && LatestDeathEventTime != null && LatestLogoutTime != null)
-                //{
-                //    return true;
-                //}
-                //return ((LatestLogoutTime >= LatestLoginTime && LatestLogoutTime != null) || (LatestLogoutTime != null && LatestLoginTime == null)) ? false : true;
             }
         }
 
@@ -145,8 +127,6 @@ namespace squittal.LivePlanetmans.Shared.Models
 
             // Whether we have a Logout event that's more recent than the latest Login event
             bool IsLoggedOut = IsLoggedIn ? false : (LatestLogoutTime != null);
-
-            bool NoInOutEvent = (IsLoggedIn == false && IsLoggedOut == false);
 
             DateTime? LatestInOutTime;
 
@@ -162,8 +142,6 @@ namespace squittal.LivePlanetmans.Shared.Models
             {
                 LatestInOutTime = null;
             }
-
-            //bool IsLatestInOutWithinHour = (LatestInOutTime != null && LatestInOutTime >= QueryStartTime);
 
             bool SeenInLastHour = (LatestDeathEventTime != null && LatestDeathEventTime >= QueryStartTime);
 
@@ -188,8 +166,8 @@ namespace squittal.LivePlanetmans.Shared.Models
         {
             if (LatestLoginTime != null)
             {
-                DateTime sessionStartTime = (LatestLoginTime ?? QueryStartTime); //(playerStats.LatestLoginTime != null) ? (playerStats.LatestLoginTime ?? startTime) : startTime;
-                DateTime sessionEndTime = (LatestLogoutTime ?? QueryNowUtc); // (playerStats.LatestLogoutTime != null) ? (playerStats.LatestLogoutTime ?? nowUtc) : nowUtc;
+                DateTime sessionStartTime = (LatestLoginTime ?? QueryStartTime);
+                DateTime sessionEndTime = (LatestLogoutTime ?? QueryNowUtc);
 
                 if (sessionEndTime <= sessionStartTime)
                 {

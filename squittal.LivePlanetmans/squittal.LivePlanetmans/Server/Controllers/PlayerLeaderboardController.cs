@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using squittal.LivePlanetmans.Server.Data;
 using squittal.LivePlanetmans.Server.Services.Planetside;
 using squittal.LivePlanetmans.Shared.Models;
@@ -19,19 +18,15 @@ namespace squittal.LivePlanetmans.Server.Controllers
     {
         private readonly IDbContextHelper _dbContextHelper;
         private readonly ICharacterService _characterService;
-        private readonly IZoneService _zoneService;
-        private readonly ILogger<PlayerLeaderboardController> _logger;
 
         private readonly MemoryCache _loginCache;
 
         public IList<PlayerHourlyStatsData> Players { get; private set; }
 
-        public PlayerLeaderboardController(IDbContextHelper dbContextHelper, ICharacterService characterService, IZoneService zoneService, ILogger<PlayerLeaderboardController> logger, PlayerLoginMemoryCache loginCache)
+        public PlayerLeaderboardController(IDbContextHelper dbContextHelper, ICharacterService characterService, PlayerLoginMemoryCache loginCache)
         {
             _dbContextHelper = dbContextHelper;
             _characterService = characterService;
-            _zoneService = zoneService;
-            _logger = logger;
 
             _loginCache = loginCache.Cache;
 
@@ -40,7 +35,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         [HttpGet("{worldId}")]
         public async Task<ActionResult<IEnumerable<PlayerHourlyStatsData>>> GetPlayerLeaderboardAsync(int worldId)
         {
-
             int rows = 20;
 
             DateTime nowUtc = DateTime.UtcNow;
@@ -58,7 +52,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                     where death.Timestamp >= startTime
                        && death.WorldId == worldId
-                    //&& death.AttackerCharacterId != "0"
 
                     group death by death.AttackerCharacterId into playerGroup
 
@@ -178,7 +171,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         {
             var loginKey = PlayerLoginMemoryCache.GetPlayerLoginKey(characterId);
             
-            //if (!_loginCache.TryGetValue(loginKey, out PlayerLoginCacheEntry cacheEntry))
             if (!_loginCache.TryGetValue(loginKey, out DateTime cacheEntry))
             {
                 var resolvedLoginTime = await ResolvePlayerLastLoginTime(characterId, storeLoginTime);
@@ -188,19 +180,13 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     return null;
                 }
 
-                cacheEntry = (DateTime)resolvedLoginTime; // new PlayerLoginCacheEntry(characterId, resolvedLoginTime);
+                cacheEntry = (DateTime)resolvedLoginTime;
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetSize(1)
                     .SetSlidingExpiration(TimeSpan.FromMinutes(15));
 
                 _loginCache.Set(loginKey, cacheEntry, cacheEntryOptions);
-
-                //Debug.WriteLine($"Cached login for player ID {characterId} @ {cacheEntry.ToString()}");
-            }
-            else
-            {
-                //Debug.WriteLine($"Found cached login for player ID {characterId} @ {cacheEntry.ToString()}");
             }
 
             return cacheEntry;

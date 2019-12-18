@@ -152,7 +152,6 @@
                                                             }
                                                         </sup>
                                                     </div>
-                                                    @*</td>*@
                                                 }
                                             </button>
                                         </td>
@@ -184,7 +183,7 @@
         </div>
 
         <div id="player-details" class="sq-card col-lg-6 @GetPlayerDetailsPanelClass() @GetFactionClassFromId(_selectedPlayerFactionId)">
-            <PlayerDetailsPanel playerId="@playerId" playerFactionId=@_selectedPlayerFactionId OnKillboardPlayerSelected="KillboardPlayerSelected"/> @*worldId="@worldId" OnCharacterIdChanged="KillboardPlayerSelected"/>*@
+            <PlayerDetailsPanel playerId="@playerId" playerFactionId=@_selectedPlayerFactionId OnKillboardPlayerSelected="KillboardPlayerSelected"/>
         </div>
     </div>
         
@@ -204,12 +203,9 @@
 
     CancellationTokenSource cts;
 
-
     PlayerHourlyStatsData[] players;
     bool isLoading = false;
     bool isChangingWorld = false;
-    bool isFetchingLeaderboard = false;
-    bool isLeaderboardReady = false;
     bool isInitialized = false;
     bool isInitializedAsync = false;
 
@@ -224,11 +220,8 @@
     private int _selectedPlayerFactionId;
 
 
-
     protected override void OnInitialized()
     {
-        Debug.WriteLine($"IsInitialized={isInitialized}");
-
         if (isInitialized == true) { return; }
         isInitialized = true;
 
@@ -247,26 +240,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Debug.WriteLine($"IsInitialized Async={isInitializedAsync}");
-
         if (isInitializedAsync == true) { return; }
         isInitializedAsync = true;
-
-        Debug.WriteLine($"=== Start Initializing: {worldId}");
-
-
-        //var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-
-        //if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("worldId", out var qWorldId))
-        //{
-        //    worldId = Int32.Parse(qWorldId.First());
-        //}
-
-        //if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("playerId", out var qPlayerId))
-        //{
-        //    playerId = qPlayerId.First();
-        //}
-
 
         var InitTaskList = new List<Task>();
 
@@ -276,36 +251,17 @@
         InitTaskList.Add(zonesTask);
 
         await Task.WhenAll(InitTaskList);
-
-        Debug.WriteLine($" = End Initialization: {worldId} =");
-
-        //StateHasChanged();
-
-        //if (!string.IsNullOrWhiteSpace(playerId))
-        //{
-        //    OnSelectPlayer(playerId);
-        //}
-
-        //await RefreshTable();
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        Debug.WriteLine($" == Start Parameters Set: {worldId} ==");
-
         await ChangeSelectedWorld(worldId);
         if (!string.IsNullOrWhiteSpace(playerId))
         {
             OnSelectPlayer(playerId);
         }
 
-        Debug.WriteLine($" == End Parameters Set: {worldId} ==");
         StateHasChanged();
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        Debug.WriteLine($"* Render Complete *");
     }
 
     async Task SetUpWorlds()
@@ -313,7 +269,7 @@
         worlds = await Http.GetJsonAsync<World[]>("api/Worlds");
         if (worlds.Any() == true)
         {
-            selectedWorldName = worlds.Where(w => w.Id == worldId).Select(w => w.Name).FirstOrDefault(); //"success1"; //= worlds.FirstOrDefault(w => w.Id == worldId).Name;
+            selectedWorldName = worlds.Where(w => w.Id == worldId).Select(w => w.Name).FirstOrDefault();
         }
     }
 
@@ -329,12 +285,11 @@
         if (worlds.Any() == true)
         {
             isChangingWorld = true;
-            isLeaderboardReady = false;
             if (autoRefreshTimer != null)
             {
-                autoRefreshTimer.Stop(); // Dispose(); // Close(); Stop();
+                autoRefreshTimer.Stop();
             }
-            selectedWorldName = worlds.Where(w => w.Id == worldId).Select(w => w.Name).FirstOrDefault(); //worlds.Where(w => w.Id == worldId).FirstOrDefault().Name; // "success2"; // worlds.FirstOrDefault(w => w.Id == worldId).Name;
+            selectedWorldName = worlds.Where(w => w.Id == worldId).Select(w => w.Name).FirstOrDefault();
             if (!string.IsNullOrWhiteSpace(playerId))
             {
                 NavigationManager.NavigateTo($"/activity?worldId={worldId}&playerId={playerId}");
@@ -354,7 +309,7 @@
         await RefreshTable("Manual");
     }
 
-    async Task RefreshTable(string source) //, CancellationToken cancellationToken)
+    async Task RefreshTable(string source)
     {
         if (isLoading != true || isChangingWorld == true)
         {
@@ -363,7 +318,7 @@
 
             if (autoRefreshTimer != null)
             {
-                autoRefreshTimer.Stop(); // Dispose(); //Stop();
+                autoRefreshTimer.Stop();
                 Debug.WriteLine("Stopped AutoRefresh Timer");
             }
 
@@ -380,7 +335,6 @@
             try
             {
                 isLoading = true;
-                isFetchingLeaderboard = true;
 
                 DateTime start = DateTime.UtcNow;
                 Debug.WriteLine($"Fetching leaderboard data for world {worldId}");
@@ -407,9 +361,6 @@
                 DateTime end = DateTime.UtcNow;
                 var elapsed = (int)(end - start).TotalMilliseconds;
                 Debug.WriteLine($"Finished fetching leaderboard data for world {worldId} in {elapsed}ms");
-
-                isFetchingLeaderboard = false;
-                isLeaderboardReady = true;
 
                 lastRefreshTime = (DateTime.Now);
 
