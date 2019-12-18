@@ -28,11 +28,11 @@ namespace squittal.LivePlanetmans.Shared.Models
 
         public int? SessionKills { get; set; }
 
-        public PlanetsideStatsSession SessionStats { get; private set; }
+        public PlanetsideSessionTimes SessionTimes { get; private set; }
 
-        public void SetSessionStats()
+        public void SetSessionTimes()
         {
-            SessionStats = new PlanetsideStatsSession(this);
+            SessionTimes = new PlanetsideSessionTimes(this);
         }
 
         public int Kills { get; set; }
