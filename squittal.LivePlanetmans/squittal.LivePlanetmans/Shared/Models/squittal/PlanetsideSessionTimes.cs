@@ -6,77 +6,20 @@ namespace squittal.LivePlanetmans.Shared.Models
 {
     public class PlanetsideSessionTimes
     {
-        public DateTime StartTime
-        {
-            get
-            {
-                return GetResolvedStartTime();
-            }
-        }
-        public DateTime EndTime
-        {
-            get
-            {
-                return GetResolvedEndTime();
-            }
-        }
-        public string DisplayTimeBookends
-        {
-            get
-            {
-                return GetDisplayBookendTimes();
-            }
-        }
+        public DateTime StartTime => GetResolvedStartTime();
+        public DateTime EndTime => GetResolvedEndTime();
+        public string DisplayTimeBookends => GetDisplayBookendTimes();
 
-        public TimeSpan DurationRaw
-        {
-            get
-            {
-                return GetDurationRaw();
-            }
-        }
+        public TimeSpan DurationRaw => GetDurationRaw();
+        public int DurationMinutes => GetDurationMinutes();
+        public string DurationDisplay => GetDurationDisplay();
 
-        public string DurationDisplay
-        {
-            get
-            {
-                return GetDurationDisplay();
-            }
-        }
-
-        public int DurationMinutes
-        {
-            get
-            {
-                return GetDurationMinutes();
-            }
-        }
-
-        public DeathEventAggregate Stats { get; }
-
-        public double? KillsPerMinute
-        {
-            get
-            {
-                if (DurationMinutes > 0)
-                {
-                    return Math.Round((double)(Stats.Kills / DurationMinutes), 2);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
 
         private readonly PlayerHourlyStatsData _inputStats;
-
 
         public PlanetsideSessionTimes(PlayerHourlyStatsData inputStats)
         {
             _inputStats = inputStats;
-
-            Stats.Kills = _inputStats.SessionKills ?? 0;
         }
 
 
