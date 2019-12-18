@@ -4,7 +4,7 @@ using System.Text;
 
 namespace squittal.LivePlanetmans.Shared.Models
 {
-    public class PlanetsideStatsSession
+    public class PlanetsideSessionTimes
     {
         public DateTime StartTime
         {
@@ -72,7 +72,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         private readonly PlayerHourlyStatsData _inputStats;
 
 
-        public PlanetsideStatsSession(PlayerHourlyStatsData inputStats)
+        public PlanetsideSessionTimes(PlayerHourlyStatsData inputStats)
         {
             _inputStats = inputStats;
 
