@@ -19,12 +19,22 @@ namespace squittal.LivePlanetmans.Shared.Models
         public int PrestigeLevel { get; set; }
         public int LatestZoneId { get; set; }
         public string LatestZoneName { get; set; }
+
         public DateTime? LatestLoginTime { get; set; }
         public DateTime? LatestLogoutTime { get; set; }
         public DateTime? LatestDeathEventTime { get; set; }
         public DateTime QueryStartTime { get; set; }
         public DateTime QueryNowUtc { get; set; }
+
         public int? SessionKills { get; set; }
+
+        public PlanetsideStatsSession SessionStats { get; private set; }
+
+        public void SetSessionStats()
+        {
+            SessionStats = new PlanetsideStatsSession(this);
+        }
+
         public int Kills { get; set; }
         public int Deaths { get; set; }
         public int Headshots { get; set; }
