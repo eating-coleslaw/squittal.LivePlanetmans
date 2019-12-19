@@ -5,7 +5,7 @@
 
 @if (details != null)
 {
-    <div id="details-header" class="player-header @GetFactionClassFromId(_playerFactionId)">
+    <div id="details-header" class="player-header @SqCssHelper.GetFactionClassFromId(_playerFactionId)">
         <div class="name">
             <a href="@GetUrlFromCharacterName(details.PlayerName)" title="Open fisu player profile" target="_blank">
                 @details.PlayerName
@@ -55,7 +55,6 @@
 
     PlayerDetails details;
 
-    bool isLoadingDetails = false;
     CancellationTokenSource cts;
 
     string renderedPlayerId;
@@ -95,7 +94,6 @@
 
             try
             {
-                isLoadingDetails = true;
                 HttpResponseMessage response = await Http.GetAsync($"api/PlayerDetails/details/{playerId}", cts.Token);
 
                 if (response != null)
@@ -116,10 +114,6 @@
             {
                 //Ignore
             }
-            finally
-            {
-                isLoadingDetails = false;
-            }
 
             // When the process is complete, signal that another process can proceed
             if (cts == newCTS)
@@ -134,33 +128,33 @@
         return $"https:/ps2.fisu.pw/player/?name={characterName.ToLower()}";
     }
 
-    string GetFactionClassFromId(int? factionId)
-    {
-        string cssClass;
+    //string GetFactionClassFromId(int? factionId)
+    //{
+    //    string cssClass;
 
-        switch (factionId)
-        {
-            case 1:
-                cssClass = "vs";
-                break;
+    //    switch (factionId)
+    //    {
+    //        case 1:
+    //            cssClass = "vs";
+    //            break;
 
-            case 2:
-                cssClass = "nc";
-                break;
+    //        case 2:
+    //            cssClass = "nc";
+    //            break;
 
-            case 3:
-                cssClass = "tr";
-                break;
+    //        case 3:
+    //            cssClass = "tr";
+    //            break;
 
-            case 4:
-                cssClass = "ns";
-                break;
+    //        case 4:
+    //            cssClass = "ns";
+    //            break;
 
-            default:
-                cssClass = "ns";
-                break;
-        }
+    //        default:
+    //            cssClass = "ns";
+    //            break;
+    //    }
 
-        return cssClass;
-    }
+    //    return cssClass;
+    //}
 }

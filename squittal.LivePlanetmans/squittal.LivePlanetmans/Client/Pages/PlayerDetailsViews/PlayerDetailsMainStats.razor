@@ -5,7 +5,7 @@
 
 @if (stats != null)
 {
-    <div class="row @GetFactionClassFromId(_playerFactionId)" style="margin: initial;">
+    <div class="row @SqCssHelper.GetFactionClassFromId(_playerFactionId)" style="margin: initial;">
         <div class="sq-mini-card-9" id="details-hourly-stats">
 
             <h5>Hourly Stats</h5>
@@ -106,7 +106,6 @@
 
     PlayerHourlyStatsData stats;
 
-    bool isLoadingStats = false;
     CancellationTokenSource cts;
 
     string renderedPlayerId;
@@ -155,7 +154,6 @@
 
             try
             {
-                isLoadingStats = true;
                 _dataClass = _dataClassLoading;
 
                 HttpResponseMessage response = await Http.GetAsync($"api/PlayerDetails/stats/{playerId}", cts.Token);
@@ -179,10 +177,6 @@
             {
                 //Ignore
             }
-            finally
-            {
-                isLoadingStats = false;
-            }
 
             // When the process is complete, signal that another process can proceed
             if (cts == newCTS)
@@ -192,33 +186,33 @@
         }
     }
 
-    string GetFactionClassFromId(int? factionId)
-    {
-        string cssClass;
+    //string GetFactionClassFromId(int? factionId)
+    //{
+    //    string cssClass;
 
-        switch (factionId)
-        {
-            case 1:
-                cssClass = "vs";
-                break;
+    //    switch (factionId)
+    //    {
+    //        case 1:
+    //            cssClass = "vs";
+    //            break;
 
-            case 2:
-                cssClass = "nc";
-                break;
+    //        case 2:
+    //            cssClass = "nc";
+    //            break;
 
-            case 3:
-                cssClass = "tr";
-                break;
+    //        case 3:
+    //            cssClass = "tr";
+    //            break;
 
-            case 4:
-                cssClass = "ns";
-                break;
+    //        case 4:
+    //            cssClass = "ns";
+    //            break;
 
-            default:
-                cssClass = "ns";
-                break;
-        }
+    //        default:
+    //            cssClass = "ns";
+    //            break;
+    //    }
 
-        return cssClass;
-    }
+    //    return cssClass;
+    //}
 }

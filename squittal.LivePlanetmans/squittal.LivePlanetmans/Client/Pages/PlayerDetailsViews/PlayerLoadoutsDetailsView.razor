@@ -18,7 +18,7 @@ else if (isSelectedView == true)
             @if (isLoadingLoadouts != true && loadoutsReport != null)
             {
                 <div class="sq-content">
-                    <table class="sq-table-fit-content table-striped-light table-stat-grids @GetFactionClassFromId(loadoutsReport.PlayerFactionId)">
+                    <table class="sq-table-fit-content table-striped-light table-stat-grids @SqCssHelper.GetFactionClassFromId(loadoutsReport.PlayerFactionId)">
                         <thead class="fit-stacked-labels">
                             <tr>
                                 <th></th>
@@ -26,7 +26,7 @@ else if (isSelectedView == true)
                                 @foreach (var loadout in loadoutsReport.PlayerLoadouts)
                                 {
                                     <th title="Head-to-Head Kill-Death Ratio">
-                                        <LoadoutDetailsColumnHeader loadoutIconClass=@GetLoadoutIconClass(loadout.Details.Id) factionClass=@GetFactionClassFromId(loadout.Details.FactionId) loadoutName=@loadout.Details.Name />
+                                        <LoadoutDetailsColumnHeader loadoutIconClass=@GetLoadoutIconClass(loadout.Details.Id) factionClass=@SqCssHelper.GetFactionClassFromId(loadout.Details.FactionId) loadoutName=@loadout.Details.Name />
                                     </th>
                                 }
 
@@ -36,7 +36,7 @@ else if (isSelectedView == true)
 
                         <tbody>
 
-                            <tr class="@GetFactionClassFromId(loadoutsReport.PlayerFactionId)">
+                            <tr class="@SqCssHelper.GetFactionClassFromId(loadoutsReport.PlayerFactionId)">
                                 <td>Total</td>
 
                                 @foreach (var loadout in loadoutsReport.PlayerLoadouts)
@@ -56,7 +56,7 @@ else if (isSelectedView == true)
                             {
                                 <tr class="empty-row"></tr>
 
-                                <tr class="stat-group-total @GetFactionClassFromId(faction.Summary.Details.Id)">
+                                <tr class="stat-group-total @SqCssHelper.GetFactionClassFromId(faction.Summary.Details.Id)">
 
                                     <td title="@faction.Summary.Details.Name">@GetFactionAbbrevFromId(faction.Summary.Details.Id)</td>
 
@@ -74,10 +74,10 @@ else if (isSelectedView == true)
 
                                 @foreach (var factionLoadout in faction.FactionLoadouts)
                                 {
-                                    <tr class="@GetFactionClassFromId(faction.Summary.Details.Id)">
+                                    <tr class="@SqCssHelper.GetFactionClassFromId(faction.Summary.Details.Id)">
 
                                         <td>
-                                            <div class="@GetLoadoutIconClass(factionLoadout.Summary.Details.Id) @GetFactionClassFromId(factionLoadout.Summary.Details.FactionId)" title="@factionLoadout.Summary.Details.Name"></div>
+                                            <div class="@GetLoadoutIconClass(factionLoadout.Summary.Details.Id) @SqCssHelper.GetFactionClassFromId(factionLoadout.Summary.Details.FactionId)" title="@factionLoadout.Summary.Details.Name"></div>
                                         </td>
 
                                         @foreach (var playerLoadout in factionLoadout.PlayerLoadouts)
@@ -263,35 +263,35 @@ else if (isSelectedView == true)
         }
     }
 
-    string GetFactionClassFromId(int? factionId)
-    {
-        string cssClass;
+    //string GetFactionClassFromId(int? factionId)
+    //{
+    //    string cssClass;
 
-        switch (factionId)
-        {
-            case 1:
-                cssClass = "vs";
-                break;
+    //    switch (factionId)
+    //    {
+    //        case 1:
+    //            cssClass = "vs";
+    //            break;
 
-            case 2:
-                cssClass = "nc";
-                break;
+    //        case 2:
+    //            cssClass = "nc";
+    //            break;
 
-            case 3:
-                cssClass = "tr";
-                break;
+    //        case 3:
+    //            cssClass = "tr";
+    //            break;
 
-            case 4:
-                cssClass = "ns";
-                break;
+    //        case 4:
+    //            cssClass = "ns";
+    //            break;
 
-            default:
-                cssClass = "ns";
-                break;
-        }
+    //        default:
+    //            cssClass = "ns";
+    //            break;
+    //    }
 
-        return cssClass;
-    }
+    //    return cssClass;
+    //}
 
     string GetFactionAbbrevFromId(int factionId)
     {

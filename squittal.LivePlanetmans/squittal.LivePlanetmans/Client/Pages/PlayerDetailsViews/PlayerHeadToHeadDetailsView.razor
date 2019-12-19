@@ -12,14 +12,14 @@
 }
 else if (isSelectedView == true)
 {
-    <div class="row sq-view @GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)">
+    <div class="row sq-view @SqCssHelper.GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)">
         <div class="sq-mini-card-12">
             <h5>Enemies this Hour</h5>
             @if (headToHeadReport != null && headToHeadReport.HeadToHeadSummaries.Any() == true && isLoadingHeadToHead != true)
             {
 
                 <div class="sq-content">
-                    <table class="table-responsive-sm table-striped-light @GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)">
+                    <table class="table-responsive-sm table-striped-light @SqCssHelper.GetFactionClassFromId(headToHeadReport.PlayerDetails.FactionId)">
                         <thead class="fit-stacked-labels">
                             <tr>
                                 <th class="p-name sortable @GetSortClass(SortColumn.Player)">
@@ -67,7 +67,7 @@ else if (isSelectedView == true)
                         <tbody>
                             @foreach (var player in headToHeadReport.HeadToHeadSummaries)
                             {
-                                <tr class="@GetFactionClassFromId(player.EnemyDetails.FactionId)">
+                                <tr class="@SqCssHelper.GetFactionClassFromId(player.EnemyDetails.FactionId)">
                                     <td class="inline-player-br">
                                         @if (string.IsNullOrWhiteSpace(player.EnemyDetails.PlayerName))
                                         {
@@ -222,33 +222,33 @@ else if (isSelectedView == true)
         }
     }
 
-    string GetFactionClassFromId(int? factionId)
-    {
-        string cssClass = "ns";
+    //string GetFactionClassFromId(int? factionId)
+    //{
+    //    string cssClass = "ns";
 
-        switch (factionId)
-        {
-            case 1:
-                cssClass = "vs";
-                break;
+    //    switch (factionId)
+    //    {
+    //        case 1:
+    //            cssClass = "vs";
+    //            break;
 
-            case 2:
-                cssClass = "nc";
-                break;
+    //        case 2:
+    //            cssClass = "nc";
+    //            break;
 
-            case 3:
-                cssClass = "tr";
-                break;
+    //        case 3:
+    //            cssClass = "tr";
+    //            break;
 
-            case 4:
-                cssClass = "ns";
-                break;
+    //        case 4:
+    //            cssClass = "ns";
+    //            break;
 
-            default:
-                cssClass = "ns";
-                break;
-        }
+    //        default:
+    //            cssClass = "ns";
+    //            break;
+    //    }
 
-        return cssClass;
-    }
+    //    return cssClass;
+    //}
 }
