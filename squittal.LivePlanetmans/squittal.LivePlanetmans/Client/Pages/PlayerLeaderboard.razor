@@ -121,7 +121,7 @@
                                     @if (player.IsOnline == true)
                                     {
                                         <td class="emoji-container">
-                                            <div title="Online: @player.LatestZoneName" class="emoji">@GetZoneDisplayEmoji(player.LatestZoneName)</div>
+                                            <div title="Online: @player.LatestZoneName" class="emoji">@SqCssHelper.GetZoneDisplayEmojiFromName(player.LatestZoneName)</div>
                                         </td>
                                     }
                                     else
@@ -512,26 +512,26 @@
         return cssClass;
     }
 
-    string GetZoneDisplayEmoji(string zoneName)
-    {
-        switch (zoneName)
-        {
-            case "Amerish":
-                return "🗻";
+    //string GetZoneDisplayEmoji(string zoneName)
+    //{
+    //    switch (zoneName)
+    //    {
+    //        case "Amerish":
+    //            return "🗻";
 
-            case "Esamir":
-                return "❄️";
+    //        case "Esamir":
+    //            return "❄️";
 
-            case "Hossin":
-                return "🌳";
+    //        case "Hossin":
+    //            return "🌳";
 
-            case "Indar":
-                return "☀️";
+    //        case "Indar":
+    //            return "☀️";
 
-            default:
-                return "❔";
-        }
-    }
+    //        default:
+    //            return "❔";
+    //    }
+    //}
 
     string GetFactionColorFromId(int factionId)
     {
