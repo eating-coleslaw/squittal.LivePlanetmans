@@ -104,14 +104,6 @@ namespace squittal.LivePlanetmans.Shared.Models
             }
         }
 
-        //public TimeSpan? SessionDurationRaw
-        //{
-        //    get
-        //    {
-        //        return GetSessionDuration();
-        //    }
-        //}
-
         public int SessionDurationMinutes
         {
             get
@@ -120,26 +112,11 @@ namespace squittal.LivePlanetmans.Shared.Models
             }
         }
 
-        //public int? SessionDurationMinutes
-        //{
-        //    get
-        //    {
-        //        if (SessionDurationRaw == null)
-        //        {
-        //            return null;
-        //        }
-        //        else
-        //        {
-        //            return (int)SessionDurationRaw?.TotalMinutes;
-        //        }
-        //    }
-        //}
-
         public double? SessionKillsPerMinute
         {
             get
             {
-                if (SessionKills != null && /*SessionDurationMinutes != null &&*/ SessionDurationMinutes > 0)
+                if (SessionKills != null && SessionDurationMinutes > 0)
                 {
                     return (double?)Math.Round(((decimal)SessionKills / (decimal)SessionDurationMinutes), 2);
                 }
@@ -216,7 +193,6 @@ namespace squittal.LivePlanetmans.Shared.Models
             }
         }
 
-
         private DateTime GetResolvedEndTime()
         {
             var sessionEndTime = (LatestLogoutTime ?? QueryNowUtc);
@@ -228,30 +204,10 @@ namespace squittal.LivePlanetmans.Shared.Models
             return sessionEndTime;
         }
 
-
         private TimeSpan GetSessionDurationRaw()
         {
             return SessionEndTime - SessionStartTime;
         }
-
-        /*
-        private TimeSpan? GetSessionDuration()
-        {
-            if (LatestLoginTime != null)
-            {
-                DateTime sessionStartTime = (LatestLoginTime ?? QueryStartTime);
-                DateTime sessionEndTime = (LatestLogoutTime ?? QueryNowUtc);
-
-                if (sessionEndTime <= sessionStartTime)
-                {
-                    sessionEndTime = QueryNowUtc;
-                }
-
-                return (sessionEndTime - sessionStartTime);
-            }
-            else return null;
-        }
-        */
 
         private string GetSessionDurationDisplay()
         {
@@ -273,7 +229,6 @@ namespace squittal.LivePlanetmans.Shared.Models
             var startTime = SessionStartTime;
             var endTime = SessionEndTime;
 
-            //bool endIsNow = (endTime == _inputStats.QueryNowUtc);
             bool endIsNow = (endTime == QueryNowUtc);
             bool sameDates = (startTime.Date == endTime.Date);
 
