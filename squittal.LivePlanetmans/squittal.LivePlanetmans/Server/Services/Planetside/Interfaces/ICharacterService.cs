@@ -12,8 +12,5 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
         Task<OutfitMember> GetCharactersOutfitAsync(string characterId);
         Task<CharacterTime> GetCharacterTimesAsync(string characterId);
         Task<Character> UpdateCharacterAsync(string characterId);
-        //Task<Character> GetOrAddCharacterAsync(string characterId);
-        //Task<string> GetCharacterNameFromIdAsync(string characterId);
-        //Task RefreshCharacterStore(string characterId)
     }
 }
