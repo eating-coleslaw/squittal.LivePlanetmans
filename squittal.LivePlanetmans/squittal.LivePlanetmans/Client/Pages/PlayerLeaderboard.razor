@@ -477,65 +477,6 @@
         OnSelectPlayer(characterId);
     }
 
-    DateTime GetSessionStartTime(PlayerHourlyStatsData player)
-    {
-        return (player.LatestLoginTime ?? player.QueryStartTime);
-    }
-
-    DateTime GetSessionEndTime(PlayerHourlyStatsData player)
-    {
-        var sessionEndTime = (player.LatestLogoutTime ?? player.QueryNowUtc);
-
-        if (sessionEndTime <= GetSessionStartTime(player))
-        {
-            sessionEndTime = player.QueryNowUtc;
-        }
-
-        return sessionEndTime;
-    }
-
-    string GetSessionDurationDisplay(PlayerHourlyStatsData player)
-    {
-        var duration = (GetSessionEndTime(player) - GetSessionStartTime(player));
-
-        var totalMinutes = (int)Math.Round(duration.TotalMinutes, 0);
-
-        int hours = (totalMinutes / 60);
-
-        var remainder = totalMinutes - (hours * 60);
-
-        string hoursDisplay = (hours > 0) ? $"{hours}h" : string.Empty;
-        string minutesDisplay = (remainder > 0) ? $"{remainder}m" : string.Empty;
-        string space = (hours > 0 && remainder > 0) ? " " : string.Empty;
-
-        return $"{hoursDisplay}{space}{minutesDisplay}";
-    }
-
-    string GetSessionDisplayTimes(PlayerHourlyStatsData player)
-    {
-        var startTime = GetSessionStartTime(player);
-        var endTime = GetSessionEndTime(player);
-
-        bool endIsNow = (endTime == player.QueryNowUtc);
-        bool sameDates = (startTime.Date == endTime.Date);
-
-        startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
-        endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
-
-        if (sameDates == true)
-        {
-            return endIsNow
-                ? $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - Now"
-                : $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToShortTimeString()}";
-        }
-        else
-        {
-            return endIsNow
-                ? $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - Now"
-                : $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToShortTimeString()}";
-        }
-    }
-
     string GetPlayerDetailsPanelClass()
     {
         return (!string.IsNullOrWhiteSpace(playerId)) ? "details" : "pre-text";
