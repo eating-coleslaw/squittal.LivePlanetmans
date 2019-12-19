@@ -286,14 +286,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     DateTime sessionStartTime = playerStats.SessionStartTime;
                     DateTime sessionEndTime = playerStats.SessionEndTime;
 
-                    //DateTime sessionStartTime = (playerStats.LatestLoginTime ?? startTime);
-                    //DateTime sessionEndTime = (playerStats.LatestLogoutTime ?? nowUtc);
-
-                    //if (sessionEndTime <= sessionStartTime)
-                    //{
-                    //    sessionEndTime = nowUtc;
-                    //}
-
                     playerStats.SessionKills = await dbContext.Deaths.CountAsync(death => death.AttackerCharacterId == characterId
                                                                                        && death.DeathEventType == DeathEventType.Kill
                                                                                        && death.Timestamp >= sessionStartTime
@@ -308,7 +300,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         {
             var loginKey = PlayerLoginMemoryCache.GetPlayerLoginKey(characterId);
 
-            //if (!_loginCache.TryGetValue(loginKey, out PlayerLoginCacheEntry cacheEntry))
             if (!_loginCache.TryGetValue(loginKey, out DateTime cacheEntry))
             {
                 var resolvedLoginTime = await ResolvePlayerLastLoginTime(characterId, storeLoginTime);
@@ -318,19 +309,13 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     return null;
                 }
 
-                cacheEntry = (DateTime)resolvedLoginTime; // new PlayerLoginCacheEntry(characterId, resolvedLoginTime);
+                cacheEntry = (DateTime)resolvedLoginTime;
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetSize(1)
                     .SetSlidingExpiration(TimeSpan.FromMinutes(15));
 
                 _loginCache.Set(loginKey, cacheEntry, cacheEntryOptions);
-
-                Debug.WriteLine($"Cached login for player ID {characterId} @ {cacheEntry.ToString()}");
-            }
-            else
-            {
-                Debug.WriteLine($"Found cached login for player ID {characterId} @ {cacheEntry.ToString()}");
             }
 
             return cacheEntry;
