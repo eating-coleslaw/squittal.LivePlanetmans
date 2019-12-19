@@ -145,22 +145,10 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     var resolveLoginTimeTask = TryGetPlayerLastLoginTime(player.PlayerId, player.LatestLoginTime);
                     player.LatestLoginTime = await resolveLoginTimeTask;
 
-                    //player.SetSessionTimes();
-                    //player.SetSessionTimes(player);
-                    //player.SessionTimes = new PlanetsideSessionTimes(player);
-
                     if (player.LatestLoginTime != null)
                     {
                         DateTime sessionStartTime = player.SessionStartTime;
                         DateTime sessionEndTime = player.SessionEndTime;
-
-                        //DateTime sessionStartTime = (player.LatestLoginTime ?? startTime);
-                        //DateTime sessionEndTime = (player.LatestLogoutTime ?? nowUtc);
-
-                        //if (sessionEndTime <= sessionStartTime)
-                        //{
-                        //    sessionEndTime = nowUtc;
-                        //}
 
                         player.SessionKills = await dbContext.Deaths.CountAsync(death => death.AttackerCharacterId == player.PlayerId
                                                                                       && death.DeathEventType == DeathEventType.Kill
