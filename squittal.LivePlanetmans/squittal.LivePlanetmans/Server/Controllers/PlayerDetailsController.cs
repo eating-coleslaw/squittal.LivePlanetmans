@@ -278,19 +278,21 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 var playerStats = await query.AsNoTracking().FirstOrDefaultAsync();
 
                 var resolvedLoginTime = await TryGetPlayerLastLoginTime(playerStats.PlayerId, playerStats.LatestLoginTime);
-
                 playerStats.LatestLoginTime = resolvedLoginTime;
                 
                 if (playerStats.LatestLoginTime != null)
                 {
 
-                    DateTime sessionStartTime = (playerStats.LatestLoginTime ?? startTime);
-                    DateTime sessionEndTime = (playerStats.LatestLogoutTime ?? nowUtc);
+                    DateTime sessionStartTime = playerStats.SessionStartTime;
+                    DateTime sessionEndTime = playerStats.SessionEndTime;
 
-                    if (sessionEndTime <= sessionStartTime)
-                    {
-                        sessionEndTime = nowUtc;
-                    }
+                    //DateTime sessionStartTime = (playerStats.LatestLoginTime ?? startTime);
+                    //DateTime sessionEndTime = (playerStats.LatestLogoutTime ?? nowUtc);
+
+                    //if (sessionEndTime <= sessionStartTime)
+                    //{
+                    //    sessionEndTime = nowUtc;
+                    //}
 
                     playerStats.SessionKills = await dbContext.Deaths.CountAsync(death => death.AttackerCharacterId == characterId
                                                                                        && death.DeathEventType == DeathEventType.Kill
