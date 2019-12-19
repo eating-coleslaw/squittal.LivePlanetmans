@@ -151,8 +151,8 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                     if (player.LatestLoginTime != null)
                     {
-                        var sessionStartTime = player.SessionStartTime;
-                        var sessionEndTime = player.SessionEndTime;
+                        DateTime sessionStartTime = player.SessionStartTime;
+                        DateTime sessionEndTime = player.SessionEndTime;
 
                         //DateTime sessionStartTime = (player.LatestLoginTime ?? startTime);
                         //DateTime sessionEndTime = (player.LatestLogoutTime ?? nowUtc);
