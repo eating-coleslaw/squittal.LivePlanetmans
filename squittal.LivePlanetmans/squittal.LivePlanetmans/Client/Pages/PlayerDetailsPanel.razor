@@ -22,7 +22,7 @@ else
     {
         <PlayerDetailsPanelHeader playerId=@playerId playerFactionId=@_playerFactionId />
 
-        <div id="details-body" class="details-body @GetFactionClassFromId(_playerFactionId)">
+        <div id="details-body" class="details-body @SqCssHelper.GetFactionClassFromId(_playerFactionId)">
             
             <PlayerDetailsMainStats playerId=@playerId playerFactionId=@_playerFactionId/>
             
@@ -61,11 +61,11 @@ else
                                             <td class="loadout-enemy">
                                                 @if (kill.VictimId == playerId)
                                                 {
-                                                    <div class="@GetLoadoutIconClass((int)kill.AttackerLoadoutId) @GetFactionClassFromId(kill.AttackerFactionId)" title="Killed by @loadoutModels.Where(m => m.Id == (int)kill.AttackerLoadoutId).Select(m => m.CodeName).FirstOrDefault()"></div>
+                                                    <div class="@GetLoadoutIconClass((int)kill.AttackerLoadoutId) @SqCssHelper.GetFactionClassFromId(kill.AttackerFactionId)" title="Killed by @loadoutModels.Where(m => m.Id == (int)kill.AttackerLoadoutId).Select(m => m.CodeName).FirstOrDefault()"></div>
                                                 }
                                                 else
                                                 {
-                                                    <div class="@GetLoadoutIconClass((int)kill.VictimLoadoutId) @GetFactionClassFromId(kill.VictimFactionId)" title="Killed @loadoutModels.Where(m => m.Id == (int)kill.VictimLoadoutId).Select(m => m.CodeName).FirstOrDefault()"></div>
+                                                    <div class="@GetLoadoutIconClass((int)kill.VictimLoadoutId) @SqCssHelper.GetFactionClassFromId(kill.VictimFactionId)" title="Killed @loadoutModels.Where(m => m.Id == (int)kill.VictimLoadoutId).Select(m => m.CodeName).FirstOrDefault()"></div>
                                                 }
                                             </td>
 
@@ -118,11 +118,11 @@ else
                                                 {
                                                     @if (kill.VictimId == playerId)
                                                     {
-                                                        <div class="ps2-icon headshot @GetFactionClassFromId(kill.AttackerFactionId)" title="Headshot"></div>
+                                                        <div class="ps2-icon headshot @SqCssHelper.GetFactionClassFromId(kill.AttackerFactionId)" title="Headshot"></div>
                                                     }
                                                     else
                                                     {
-                                                        <div class="ps2-icon headshot  @GetFactionClassFromId(kill.VictimFactionId)" title="Headshot"></div>
+                                                        <div class="ps2-icon headshot  @SqCssHelper.GetFactionClassFromId(kill.VictimFactionId)" title="Headshot"></div>
                                                     }
                                                 }
                                             </td>
@@ -134,11 +134,11 @@ else
                                             <td class="loadout-player">
                                                 @if (kill.VictimId == playerId)
                                                 {
-                                                    <div class="@GetLoadoutIconClass((int)kill.VictimLoadoutId) @GetFactionClassFromId(kill.VictimFactionId)" title="Playing as @loadoutModels.Where(m => m.Id == (int)kill.VictimLoadoutId).Select(m => m.CodeName).FirstOrDefault()"></div>
+                                                    <div class="@GetLoadoutIconClass((int)kill.VictimLoadoutId) @SqCssHelper.GetFactionClassFromId(kill.VictimFactionId)" title="Playing as @loadoutModels.Where(m => m.Id == (int)kill.VictimLoadoutId).Select(m => m.CodeName).FirstOrDefault()"></div>
                                                 }
                                                 else
                                                 {
-                                                    <div class="@GetLoadoutIconClass((int)kill.AttackerLoadoutId) @GetFactionClassFromId(kill.AttackerFactionId)" title="Playing as @loadoutModels.Where(m => m.Id == (int)kill.AttackerLoadoutId).Select(m => m.CodeName).FirstOrDefault()"></div>
+                                                    <div class="@GetLoadoutIconClass((int)kill.AttackerLoadoutId) @SqCssHelper.GetFactionClassFromId(kill.AttackerFactionId)" title="Playing as @loadoutModels.Where(m => m.Id == (int)kill.AttackerLoadoutId).Select(m => m.CodeName).FirstOrDefault()"></div>
                                                 }
                                             </td>
 
@@ -517,38 +517,38 @@ else
     {
         int? factionId = (attackerId == player.Id) ? victimFactionId : attackerFactionId;
 
-        return GetFactionClassFromId(factionId);
+        return SqCssHelper.GetFactionClassFromId(factionId);
     }
 
-    string GetFactionClassFromId(int? factionId)
-    {
-        string cssClass;
+    //string GetFactionClassFromId(int? factionId)
+    //{
+    //    string cssClass;
 
-        switch (factionId)
-        {
-            case 1:
-                cssClass = "vs";
-                break;
+    //    switch (factionId)
+    //    {
+    //        case 1:
+    //            cssClass = "vs";
+    //            break;
 
-            case 2:
-                cssClass = "nc";
-                break;
+    //        case 2:
+    //            cssClass = "nc";
+    //            break;
 
-            case 3:
-                cssClass = "tr";
-                break;
+    //        case 3:
+    //            cssClass = "tr";
+    //            break;
 
-            case 4:
-                cssClass = "ns";
-                break;
+    //        case 4:
+    //            cssClass = "ns";
+    //            break;
 
-            default:
-                cssClass = "ns";
-                break;
-        }
+    //        default:
+    //            cssClass = "ns";
+    //            break;
+    //    }
 
-        return cssClass;
-    }
+    //    return cssClass;
+    //}
 
     string GetViewTabStyle(PlayerDetailsView thisView)
     {
@@ -568,7 +568,6 @@ else
     {
         view = viewTranslator[newView];
         SetSelectedViewBools(newView);
-        //StateHasChanged();
     }
 
     private static Dictionary<PlayerDetailsView, string> GetViewTranslator()
