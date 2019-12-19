@@ -145,12 +145,14 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     var resolveLoginTimeTask = TryGetPlayerLastLoginTime(player.PlayerId, player.LatestLoginTime);
                     player.LatestLoginTime = await resolveLoginTimeTask;
 
-                    player.SetSessionTimes();
+                    //player.SetSessionTimes();
+                    //player.SetSessionTimes(player);
+                    //player.SessionTimes = new PlanetsideSessionTimes(player);
 
                     if (player.LatestLoginTime != null)
                     {
-                        var sessionStartTime = player.SessionTimes.StartTime;
-                        var sessionEndTime = player.SessionTimes.EndTime;
+                        var sessionStartTime = player.SessionStartTime;
+                        var sessionEndTime = player.SessionEndTime;
 
                         //DateTime sessionStartTime = (player.LatestLoginTime ?? startTime);
                         //DateTime sessionEndTime = (player.LatestLogoutTime ?? nowUtc);

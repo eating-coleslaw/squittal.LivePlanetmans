@@ -28,13 +28,6 @@ namespace squittal.LivePlanetmans.Shared.Models
 
         public int? SessionKills { get; set; }
 
-        public PlanetsideSessionTimes SessionTimes { get; private set; }
-
-        public void SetSessionTimes()
-        {
-            SessionTimes = new PlanetsideSessionTimes(this);
-        }
-
         public int Kills { get; set; }
         public int Deaths { get; set; }
         public int Headshots { get; set; }
@@ -69,21 +62,6 @@ namespace squittal.LivePlanetmans.Shared.Models
             }
         }
 
-        public double? SessionKillsPerMinute
-        {
-            get
-            {
-                if (SessionKills != null && SessionDurationMinutes != null && SessionDurationMinutes > 0)
-                {
-                    return (double?)Math.Round(((decimal)SessionKills / (decimal)SessionDurationMinutes), 2);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-
         public double HeadshotRatio
         {
             get
@@ -99,26 +77,92 @@ namespace squittal.LivePlanetmans.Shared.Models
             }
         }
 
-        public TimeSpan? SessionDurationRaw
+        /*
+           === Session Stats ===
+        */
+        public DateTime SessionStartTime
         {
             get
             {
-                return GetSessionDuration();
+                return LatestLoginTime ?? QueryStartTime;
             }
         }
 
-        public int? SessionDurationMinutes
+        public DateTime SessionEndTime
         {
             get
             {
-                if (SessionDurationRaw == null)
+                return GetResolvedEndTime();
+            }
+        }
+
+        public TimeSpan SessionDurationRaw
+        {
+            get
+            {
+                return GetSessionDurationRaw();
+            }
+        }
+
+        //public TimeSpan? SessionDurationRaw
+        //{
+        //    get
+        //    {
+        //        return GetSessionDuration();
+        //    }
+        //}
+
+        public int SessionDurationMinutes
+        {
+            get
+            {
+                return (int)SessionDurationRaw.TotalMinutes;
+            }
+        }
+
+        //public int? SessionDurationMinutes
+        //{
+        //    get
+        //    {
+        //        if (SessionDurationRaw == null)
+        //        {
+        //            return null;
+        //        }
+        //        else
+        //        {
+        //            return (int)SessionDurationRaw?.TotalMinutes;
+        //        }
+        //    }
+        //}
+
+        public double? SessionKillsPerMinute
+        {
+            get
+            {
+                if (SessionKills != null && /*SessionDurationMinutes != null &&*/ SessionDurationMinutes > 0)
                 {
-                    return null;
+                    return (double?)Math.Round(((decimal)SessionKills / (decimal)SessionDurationMinutes), 2);
                 }
                 else
                 {
-                    return (int)SessionDurationRaw?.TotalMinutes;
+                    return null;
                 }
+            }
+        }
+        
+        public string SessionDurationDisplay
+        {
+            get
+            {
+                return GetSessionDurationDisplay();
+            }
+        }
+
+        public string SessionBookendTimesDisplay
+        {
+            get
+            {
+                return GetDisplayBookendTimes();
             }
         }
 
@@ -172,6 +216,25 @@ namespace squittal.LivePlanetmans.Shared.Models
             }
         }
 
+
+        private DateTime GetResolvedEndTime()
+        {
+            var sessionEndTime = (LatestLogoutTime ?? QueryNowUtc);
+
+            if (sessionEndTime <= SessionStartTime)
+            {
+                sessionEndTime = QueryNowUtc;
+            }
+            return sessionEndTime;
+        }
+
+
+        private TimeSpan GetSessionDurationRaw()
+        {
+            return SessionEndTime - SessionStartTime;
+        }
+
+        /*
         private TimeSpan? GetSessionDuration()
         {
             if (LatestLoginTime != null)
@@ -187,6 +250,51 @@ namespace squittal.LivePlanetmans.Shared.Models
                 return (sessionEndTime - sessionStartTime);
             }
             else return null;
+        }
+        */
+
+        private string GetSessionDurationDisplay()
+        {
+            var totalMinutes = SessionDurationMinutes;
+
+            int hours = (totalMinutes / 60);
+
+            var remainder = totalMinutes - (hours * 60);
+
+            string hoursDisplay = (hours > 0) ? $"{hours}h" : string.Empty;
+            string minutesDisplay = (remainder > 0) ? $"{remainder}m" : string.Empty;
+            string space = (hours > 0 && remainder > 0) ? " " : string.Empty;
+
+            return $"{hoursDisplay}{space}{minutesDisplay}";
+        }
+
+        private string GetDisplayBookendTimes()
+        {
+            var startTime = SessionStartTime;
+            var endTime = SessionEndTime;
+
+            //bool endIsNow = (endTime == _inputStats.QueryNowUtc);
+            bool endIsNow = (endTime == QueryNowUtc);
+            bool sameDates = (startTime.Date == endTime.Date);
+
+            startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
+            endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
+
+            var startTimeLocal = TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local);
+            var endTimeLocal = TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local);
+
+            if (sameDates == true)
+            {
+                return endIsNow
+                    ? $"{startTimeLocal.ToShortTimeString()} - Now"
+                    : $"{startTimeLocal.ToShortTimeString()} - {endTimeLocal.ToShortTimeString()}";
+            }
+            else
+            {
+                return endIsNow
+                    ? $"{startTimeLocal.ToString("M")} {startTimeLocal.ToShortTimeString()} - Now"
+                    : $"{startTimeLocal.ToString("M")} {startTimeLocal.ToShortTimeString()} - {endTimeLocal.ToString("M")} {endTimeLocal.ToShortTimeString()}";
+            }
         }
     }
 }

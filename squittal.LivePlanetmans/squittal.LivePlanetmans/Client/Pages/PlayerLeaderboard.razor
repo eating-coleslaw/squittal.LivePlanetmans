@@ -130,42 +130,52 @@
                                             <span title="Offline" class="oi oi-moon small"></span>
                                         </td>
                                     }
-                                        <td class="alias">
-                                            @((string.IsNullOrWhiteSpace(player.OutfitAlias)) ? "" : $"[{player.OutfitAlias}]")
-                                        </td>
+                                    <td class="alias">
+                                        @((string.IsNullOrWhiteSpace(player.OutfitAlias)) ? "" : $"[{player.OutfitAlias}]")
+                                    </td>
 
-                                        <td>
-                                            <button class="btn btn-link inline-player-br" style="color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))" title="Open details for @player.PlayerName">
-                                                @if (string.IsNullOrWhiteSpace(player.PlayerName))
-                                                {
-                                                    @player.PlayerId
-                                                }
-                                                else
-                                                {
-                                                    <div class="player-name">@player.PlayerName </div>
-                                                    <div>
-                                                        <sup>
-                                                            @(player.BattleRank)
-                                                            @if (player.PrestigeLevel != 0)
-                                                            {
-                                                                <span class="oi oi-star small" aria-hidden="true"></span>
-                                                            }
-                                                        </sup>
-                                                    </div>
-                                                }
-                                            </button>
-                                        </td>
+                                    <td>
+                                        <button class="btn btn-link inline-player-br" style="color: @GetFactionColorFromId(player.FactionId);" @onclick="@(() => OnSelectPlayer(player.PlayerId))" title="Open details for @player.PlayerName">
+                                            @if (string.IsNullOrWhiteSpace(player.PlayerName))
+                                            {
+                                                @player.PlayerId
+                                            }
+                                            else
+                                            {
+                                                <div class="player-name">@player.PlayerName </div>
+                                                <div>
+                                                    <sup>
+                                                        @(player.BattleRank)
+                                                        @if (player.PrestigeLevel != 0)
+                                                        {
+                                                            <span class="oi oi-star small" aria-hidden="true"></span>
+                                                        }
+                                                    </sup>
+                                                </div>
+                                            }
+                                        </button>
+                                    </td>
 
-                                        <td>@player.Kills</td>
-                                        <td>@player.Deaths</td>
-                                        <td>@player.KillDeathRatio</td>
-                                        <td>@player.KillsPerMinute</td>
-                                        <td>@player.HeadshotRatio</td>
-                                        <td class="med">
-                                            @((player.SessionKillsPerMinute != null) ? player.SessionKillsPerMinute.ToString() : "-")
-                                        </td>
-                                        <td title="@GetSessionDisplayTimes(player)">@GetSessionDurationDisplay(player)</td>
-                                    </tr>
+                                    <td>@player.Kills</td>
+                                    <td>@player.Deaths</td>
+                                    <td>@player.KillDeathRatio</td>
+                                    <td>@player.KillsPerMinute</td>
+                                    <td>@player.HeadshotRatio</td>
+                                    <td class="med">
+                                        @((player.SessionKillsPerMinute != null) ? player.SessionKillsPerMinute.ToString() : "-")
+                                    </td>
+                                    @*<td title="@GetSessionDisplayTimes(player)">@GetSessionDurationDisplay(player)</td>*@
+                                    <td title="@player.SessionBookendTimesDisplay">@player.SessionDurationDisplay</td>
+                                    @*if (player.SessionTimes == null)
+                                    {
+                                        <td>"-"</td>
+                                    }
+                                    else
+                                    {
+                                        <td >@player.SessionTimes.DurationDisplay</td>
+                                        <td>"???</td>
+                                    }*@
+                                </tr>
                                 }
                             </tbody>
                         }
@@ -524,7 +534,6 @@
                 ? $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - Now"
                 : $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToShortTimeString()}";
         }
-
     }
 
     string GetPlayerDetailsPanelClass()
