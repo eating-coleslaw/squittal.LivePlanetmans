@@ -143,7 +143,8 @@ else
                                             </td>
 
                                             <td>
-                                                @kill.ZoneName
+                                                <div title="@kill.ZoneName" class="emoji">@SqCssHelper.GetZoneDisplayEmojiFromName(kill.ZoneName)</div>
+                                                @*@kill.ZoneName*@
                                             </td>
                                         </tr>
                                     }
@@ -194,8 +195,6 @@ else
 
     int fetchTries = 0;
     bool isLoadingKillboard = false;
-    bool isLoadingCharacter = false;
-    bool isLoadingStats = false;
     CancellationTokenSource cts;
 
     bool isSelectedViewKillboard = false;
