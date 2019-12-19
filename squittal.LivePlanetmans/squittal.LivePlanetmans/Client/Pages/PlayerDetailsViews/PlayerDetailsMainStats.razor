@@ -56,12 +56,14 @@
 
             <div class="sq-content">
 
-                <div class="sq-text-content @_dataClass">@GetSessionDisplayTimes()</div>
+                @*<div class="sq-text-content @_dataClass">@GetSessionDisplayTimes()</div>*@
+                <div class="sq-text-content @_dataClass">@stats.SessionBookendTimesDisplay</div>
 
                 <dl class="labeled-stats-grid @_dataClass">
-                    
+
                     <dt>Duration</dt>
-                    <dd>@GetSessionDurationDisplay()</dd>
+                    @*<dd>@GetSessionDurationDisplay()</dd>*@
+                    <dd>@stats.SessionDurationDisplay</dd>
 
                     <dt>Kills</dt>
                     <dd>
@@ -76,7 +78,8 @@
                     </dd>
 
                     <dt>KPM</dt>
-                    <dd>@if (stats.SessionKills == null)
+                    <dd>
+                        @if (stats.SessionKills == null)
                         {
                             <span>-</span>
                         }
@@ -84,7 +87,7 @@
                         {
                             <span>@stats.SessionKillsPerMinute</span>
                         }
-                    </dd>
+                </dd>
 
                 </dl>
 
@@ -189,69 +192,69 @@
         }
     }
 
-    string GetSessionDisplayTimes()
-    {
-        if (stats == null)
-        {
-            return string.Empty;
-        }
+    //string GetSessionDisplayTimes()
+    //{
+    //    if (stats == null)
+    //    {
+    //        return string.Empty;
+    //    }
 
-        var startTime = GetSessionStartTime();
-        var endTime = GetSessionEndTime();
+    //    var startTime = GetSessionStartTime();
+    //    var endTime = GetSessionEndTime();
 
-        bool endIsNow = (endTime == stats.QueryNowUtc);
-        bool sameDates = (startTime.Date == endTime.Date);
+    //    bool endIsNow = (endTime == stats.QueryNowUtc);
+    //    bool sameDates = (startTime.Date == endTime.Date);
 
-        startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
-        endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
+    //    startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
+    //    endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
 
-        if (sameDates == true)
-        {
-            return endIsNow
-                ? $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - Now"
-                : $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToShortTimeString()}";
-        }
-        else
-        {
-            return endIsNow
-                ? $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - Now"
-                : $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToShortTimeString()}";
-        }
-    }
+    //    if (sameDates == true)
+    //    {
+    //        return endIsNow
+    //            ? $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - Now"
+    //            : $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToShortTimeString()}";
+    //    }
+    //    else
+    //    {
+    //        return endIsNow
+    //            ? $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - Now"
+    //            : $"{(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(startTime, TimeZoneInfo.Local)).ToShortTimeString()} - {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToString("M")} {(TimeZoneInfo.ConvertTimeFromUtc(endTime, TimeZoneInfo.Local)).ToShortTimeString()}";
+    //    }
+    //}
 
-    DateTime GetSessionStartTime()
-    {
-        return (stats.LatestLoginTime ?? stats.QueryStartTime);
-    }
+    //DateTime GetSessionStartTime()
+    //{
+    //    return (stats.LatestLoginTime ?? stats.QueryStartTime);
+    //}
 
-    DateTime GetSessionEndTime()
-    {
-        var sessionEndTime = (stats.LatestLogoutTime ?? stats.QueryNowUtc);
+    //DateTime GetSessionEndTime()
+    //{
+    //    var sessionEndTime = (stats.LatestLogoutTime ?? stats.QueryNowUtc);
 
-        if (sessionEndTime <= GetSessionStartTime())
-        {
-            sessionEndTime = stats.QueryNowUtc;
-        }
+    //    if (sessionEndTime <= GetSessionStartTime())
+    //    {
+    //        sessionEndTime = stats.QueryNowUtc;
+    //    }
 
-        return sessionEndTime;
-    }
+    //    return sessionEndTime;
+    //}
 
-    string GetSessionDurationDisplay()
-    {
-        var duration = (GetSessionEndTime() - GetSessionStartTime());
+    //string GetSessionDurationDisplay()
+    //{
+    //    var duration = (GetSessionEndTime() - GetSessionStartTime());
 
-        var totalMinutes = (int)Math.Round(duration.TotalMinutes, 0);
+    //    var totalMinutes = (int)Math.Round(duration.TotalMinutes, 0);
 
-        int hours = (totalMinutes / 60);
+    //    int hours = (totalMinutes / 60);
 
-        var remainder = totalMinutes - (hours * 60);
+    //    var remainder = totalMinutes - (hours * 60);
 
-        string hoursDisplay = (hours > 0) ? $"{hours}h" : string.Empty;
-        string minutesDisplay = (remainder > 0) ? $"{remainder}m" : string.Empty;
-        string space = (hours > 0 && remainder > 0) ? " " : string.Empty;
+    //    string hoursDisplay = (hours > 0) ? $"{hours}h" : string.Empty;
+    //    string minutesDisplay = (remainder > 0) ? $"{remainder}m" : string.Empty;
+    //    string space = (hours > 0 && remainder > 0) ? " " : string.Empty;
 
-        return $"{hoursDisplay}{space}{minutesDisplay}";
-    }
+    //    return $"{hoursDisplay}{space}{minutesDisplay}";
+    //}
 
     string GetFactionClassFromId(int? factionId)
     {
