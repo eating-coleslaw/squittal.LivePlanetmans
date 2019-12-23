@@ -212,6 +212,8 @@ namespace squittal.LivePlanetmans.Server.CensusStream
         [CensusEventHandler("PlayerLogout", typeof(PlayerLogoutPayload))]
         private async Task Process(PlayerLogoutPayload payload)
         {
+            bool updateCharacter;
+
             using (var factory = _dbContextHelper.GetFactory())
             {
                 var dbContext = factory.GetDbContext();
@@ -232,9 +234,20 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                 {
                     //Ignore
                 }
+
+                var lastLoginTime = dbContext.PlayerLogins
+                                                .Where(l => l.CharacterId == payload.CharacterId)
+                                                .OrderByDescending(l => l.Timestamp)
+                                                .Select(l => l.Timestamp)
+                                                .FirstOrDefault();
+
+                updateCharacter = (lastLoginTime != default && (payload.Timestamp - lastLoginTime) > TimeSpan.FromMinutes(5));
             }
 
-            await _characterService.UpdateCharacterAsync(payload.CharacterId);
+            if (updateCharacter)
+            {
+                await _characterService.UpdateCharacterAsync(payload.CharacterId);
+            }
         }
 
         public void Dispose()
