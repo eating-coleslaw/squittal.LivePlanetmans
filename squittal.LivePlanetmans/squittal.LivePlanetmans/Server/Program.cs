@@ -41,8 +41,6 @@ namespace squittal.LivePlanetmans.Server
                 .UseStartup<Startup>()
             .ConfigureLogging((context, builder) =>
             {
-                //builder.ClearProviders();
-
                 builder.SetMinimumLevel(LogLevel.Information);
 
                 builder.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);

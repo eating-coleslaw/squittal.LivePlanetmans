@@ -74,8 +74,6 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
             }
 
             var character = await UpsertCharacterAsync(ConvertToDbModel(censusCharacter));
-            Debug.WriteLine($"Updated character {character.Name} [{character.Id}]");
-
 
             // Update Outfit Membership
             await _outfitService.UpdateCharacterOutfitMembership(character);

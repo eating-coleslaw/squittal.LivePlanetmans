@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace squittal.LivePlanetmans.Server.Services.Planetside
 {
-    public interface IWorldService // : IUpdateable
+    public interface IWorldService
     {
         Task<IEnumerable<World>> GetAllWorldsAsync();
         Task<World> GetWorldAsync(int worldId);
