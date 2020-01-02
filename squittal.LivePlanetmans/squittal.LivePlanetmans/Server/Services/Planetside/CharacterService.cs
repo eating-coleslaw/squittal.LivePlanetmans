@@ -140,7 +140,16 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
             {
                 var dbContext = factory.GetDbContext();
 
-                var censusCharacterTimes = await _censusCharacter.GetCharacterTimes(characterId);
+                CensusCharacterModel.CharacterTimes censusCharacterTimes;
+
+                try
+                {
+                    censusCharacterTimes = await _censusCharacter.GetCharacterTimes(characterId);
+                }
+                catch (CensusConnectionException)
+                {
+                    return null;
+                }
 
                 if (censusCharacterTimes == null)
                 {
