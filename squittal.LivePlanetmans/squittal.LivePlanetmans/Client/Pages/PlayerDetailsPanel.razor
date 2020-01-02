@@ -144,7 +144,6 @@ else
 
                                             <td>
                                                 <div title="@kill.ZoneName" class="emoji">@SqCssHelper.GetZoneDisplayEmojiFromName(kill.ZoneName)</div>
-                                                @*@kill.ZoneName*@
                                             </td>
                                         </tr>
                                     }
@@ -283,8 +282,6 @@ else
     private void SetUpLoadoutMapping()
     {
         profileTypeIdMapping = loadoutModels.ToDictionary(l => l.Id, l => profileModels.Where(p => p.Id == l.ProfileId).Select(p => p.ProfileTypeId).FirstOrDefault());
-
-        Debug.WriteLine($"loadout mapping == null? {(profileTypeIdMapping == null).ToString()}");
     }
 
     protected override async Task OnParametersSetAsync()
