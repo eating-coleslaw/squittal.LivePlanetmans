@@ -58,15 +58,10 @@ namespace squittal.LivePlanetmans.Shared.Models
 
         public HourlyPlayerHeadToHeadReport()
         {
-            //_sortColumn = _defaultSortColumn;
-            //_sortDirection = _defaultSortDirection;
         }
 
         public HourlyPlayerHeadToHeadReport(PlayerDetails playerDetails, IEnumerable<PlayerHeadToHeadSummaryRow> summaries, DbQueryTimes dbQueryTimes)
         {
-            //_sortColumn = _defaultSortColumn;
-            //_sortDirection = _defaultSortDirection;
-
             PlayerDetails = playerDetails;
             HeadToHeadSummaries = summaries;
             QueryTimes = dbQueryTimes;
@@ -266,7 +261,7 @@ namespace squittal.LivePlanetmans.Shared.Models
 
         public override int GetHashCode()
         {
-            return EnemyDetails.PlayerId.GetHashCode(); // base.GetHashCode();
+            return EnemyDetails.PlayerId.GetHashCode();
         }
     }
 

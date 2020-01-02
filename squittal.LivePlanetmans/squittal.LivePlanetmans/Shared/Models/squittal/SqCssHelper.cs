@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace squittal.LivePlanetmans.Shared.Models
+﻿namespace squittal.LivePlanetmans.Shared.Models
 {
     public static class SqCssHelper
     {
