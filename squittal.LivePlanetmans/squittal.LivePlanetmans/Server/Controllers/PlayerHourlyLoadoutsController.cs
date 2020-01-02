@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using squittal.LivePlanetmans.Server.Data;
 using squittal.LivePlanetmans.Server.Services.Planetside;
 using squittal.LivePlanetmans.Shared.Models;
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,15 +45,7 @@ namespace squittal.LivePlanetmans.Server.Controllers
         {
             var mappingTask = _profileService.GetLoadoutMapping();
             _loadoutMapping = await mappingTask;
-
-            //foreach (var keyValuePair in _loadoutMapping)
-            //{
-            //    Debug.WriteLine($"{keyValuePair.Key} :: {keyValuePair.Value.Name} [{keyValuePair.Value.Id}]");
-            //}
-
             return _loadoutMapping.ToDictionary(m => m.Key, m => m.Value.ProfileTypeId);
-
-            //return _loadoutMapping;
         }
         
         [HttpGet("models/profiles")]
@@ -93,7 +83,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     where death.Timestamp >= startTime
                        && (death.AttackerCharacterId == characterId
                             || death.CharacterId == characterId)
-                       //&& death.DeathEventType == DeathEventType.Kill
 
                     join loadout in dbContext.Loadouts
                       on death.CharacterLoadoutId equals loadout.Id into victimLoadoutsQ
@@ -144,7 +133,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                             Deaths = (from kill in dbContext.Deaths
                                       where kill.CharacterId == characterId
-                                         //&& kill.DeathEventType == DeathEventType.Kill
                                          && kill.CharacterLoadoutId == attackerLoadouts.Id
                                          && kill.AttackerLoadoutId == victimLoadouts.Id
                                          && kill.Timestamp >= startTime
@@ -168,7 +156,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                             HeadshotDeaths = (from kill in dbContext.Deaths
                                               where kill.CharacterId == characterId
-                                                 //&& kill.DeathEventType == DeathEventType.Kill
                                                  && kill.CharacterLoadoutId == attackerLoadouts.Id
                                                  && kill.AttackerLoadoutId == victimLoadouts.Id
                                                  && kill.Timestamp >= startTime
@@ -205,7 +192,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                             Deaths = (from kill in dbContext.Deaths
                                       where kill.CharacterId == characterId
-                                         //&& kill.DeathEventType == DeathEventType.Kill
                                          && kill.CharacterLoadoutId == victimLoadouts.Id
                                          && kill.AttackerLoadoutId == attackerLoadouts.Id
                                          && kill.Timestamp >= startTime
@@ -229,7 +215,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
 
                             HeadshotDeaths = (from kill in dbContext.Deaths
                                               where kill.CharacterId == characterId
-                                                 //&& kill.DeathEventType == DeathEventType.Kill
                                                  && kill.CharacterLoadoutId == victimLoadouts.Id
                                                  && kill.AttackerLoadoutId == attackerLoadouts.Id
                                                  && kill.Timestamp >= startTime
@@ -242,51 +227,15 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                     .AsNoTracking()
                                                     .ToArrayAsync();
 
-                //Debug.WriteLine("===============================");
-                //foreach (var row in loadoutVsLoadoutRows)
-                //{
-                //    Debug.WriteLine($"{row.DebugInfoString}");
-                //}
-
                 var groupedLoadouts = loadoutVsLoadoutRows
                                                 .GroupBy(vsRow => new { vsRow.AttackerLoadoutId, vsRow.VictimLoadoutId })
                                                 .Select(grp => grp.First())
                                                 .ToArray();
 
-                //Debug.WriteLine("===============================");
-                //foreach (var row in groupedLoadouts)
-                //{
-                //    Debug.WriteLine($"{row.DebugInfoString}");
-                //}
-
                 var activePlayerLoadouts = GetActivePlayerLoadouts(loadoutVsLoadoutRows, playerFactionId);
                 var activeEnemyLoadouts = GetActiveEnemyLoadouts(loadoutVsLoadoutRows, playerFactionId);
                 var activeFactions = GetActiveFactions(loadoutVsLoadoutRows, playerFactionId);
                 var activeFactionLoadouts = GetActiveFactionLoadouts(loadoutVsLoadoutRows, activeFactions, playerFactionId);
-
-                //foreach (var l in activePlayerLoadouts)
-                //{
-                //    Debug.WriteLine($"Active Player Loadout: {l}");
-                //}
-
-                //foreach (var l in activeEnemyLoadouts)
-                //{
-                //    Debug.WriteLine($"Active Enemy Loadout: {l}");
-                //}
-
-                //foreach (var l in activeFactions)
-                //{
-                //    Debug.WriteLine($"Active Faction: {l}");
-                //}
-
-                //foreach (var fl in activeFactionLoadouts)
-                //{
-                //    Debug.WriteLine($"Active Faction: {fl.FactionId}");
-                //    foreach (var l in fl.Loadouts)
-                //    {
-                //        Debug.WriteLine($"    Active Faction Loadout: {l}");
-                //    }
-                //}
 
                 var allFactionsLoadoutSummaries = new List<FactionLoadoutsSummary>();
                 
@@ -338,10 +287,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         };
 
                         factionLoadoutSummaries.Add(enemyH2HSummary);
-                        //if (enemyH2HSummary.Summary.Stats.HasEvents == true)
-                        //{
-                            //factionLoadoutSummaries.Add(enemyH2HSummary);
-                        //}
                     }
 
                     var factionVsPlayerLoadoutSummaries = new List<LoadoutSummary>();
@@ -363,10 +308,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         };
 
                         factionVsPlayerLoadoutSummaries.Add(playerLoadoutSummary);
-                        //if (playerLoadoutSummary.Stats.HasEvents)
-                        //{
-                        //    factionVsPlayerLoadoutSummaries.Add(playerLoadoutSummary);
-                        //}
                     }
 
                     var factionEntity = await _factionService.GetFactionAsync(factionId);
@@ -388,10 +329,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     };
 
                     allFactionsLoadoutSummaries.Add(factionLoadoutsSummary);
-                    //if (factionLoadoutsSummary.Summary.Stats.HasEvents)
-                    //{
-                    //    allFactionsLoadoutSummaries.Add(factionLoadoutsSummary);
-                    //}
                 }
 
                 var playerLoadouts = new List<LoadoutSummary>();
@@ -413,11 +350,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                     };
 
                     playerLoadouts.Add(playerLoadoutSummary);
-                    //if (playerLoadoutSummary.Stats.HasEvents == true)
-                    //{
-                        //playerLoadouts.Add(playerLoadoutSummary);
-                    //}
-
                 }
 
                 var playerStats = GetSummedLoadoutSummaryStats(playerLoadouts);
@@ -452,7 +384,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         private IEnumerable<int> GetActivePlayerAttackerLoadouts(IEnumerable<LoadoutVsLoadoutSummaryRow> loadoutVsLoadoutRows, int playerFactionId)
         {
             return loadoutVsLoadoutRows
-                    //.Where(l => l.AttackerFactionId == playerFactionId)
                     .Where(l => l.AttackerFactionId == playerFactionId
                              && ( ( l.VictimFactionId == playerFactionId && l.AttackerStats.Teamkills > 0 )
                                   || (l.VictimFactionId != playerFactionId ) ) )
@@ -464,7 +395,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         private IEnumerable<int> GetActivePlayerVictimLoadouts(IEnumerable<LoadoutVsLoadoutSummaryRow> loadoutVsLoadoutRows, int playerFactionId)
         {
             return loadoutVsLoadoutRows
-                    //.Where(l => l.VictimFactionId == playerFactionId)
                     .Where(l => l.VictimFactionId == playerFactionId
                              && ( ( l.AttackerFactionId == playerFactionId && l.VictimStats.TeamkillDeaths > 0 )
                                 || (l.AttackerFactionId != playerFactionId ) ) )
@@ -489,9 +419,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         {
             return loadoutVsLoadoutRows
                     .Where(l => l.AttackerFactionId == playerFactionId)
-                    //.Where(l => l.AttackerFactionId == playerFactionId
-                    //         && ( ( l.VictimFactionId == playerFactionId && (l.AttackerStats.TeamkillDeaths > 0 || l.AttackerStats.Teamkills > 0 ) )
-                    //            || ( l.VictimFactionId != playerFactionId ) ) )
                     .Select(l => l.AttackerLoadoutId)
                     .Distinct()
                     .ToList();
@@ -501,9 +428,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
         {
             return loadoutVsLoadoutRows
                     .Where(l => l.VictimFactionId == playerFactionId)
-                    //.Where(l => l.VictimFactionId == playerFactionId
-                    //         && ( ( l.AttackerFactionId == playerFactionId && ( l.VictimStats.Teamkills > 0 || l.VictimStats.TeamkillDeaths > 0 ) )
-                    //            || ( l.AttackerFactionId != playerFactionId ) ) )
                     .Select(l => l.VictimLoadoutId)
                     .Distinct()
                     .ToList();

@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using squittal.LivePlanetmans.Server.Data;
 using squittal.LivePlanetmans.Server.Services.Planetside;
 using squittal.LivePlanetmans.Shared.Models;
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,18 +57,13 @@ namespace squittal.LivePlanetmans.Server.Controllers
                             || death.CharacterId == characterId)
                        && death.DeathEventType != DeathEventType.Suicide
 
-                    //group death by new { death.AttackerCharacterId, death.CharacterId } into charactersGroup
-
                     join character in dbContext.Characters
-                      //on charactersGroup.Key.CharacterId equals character.Id into victimCharactersQ
                       on death.CharacterId equals character.Id into victimCharactersQ
                     from victimCharacters in victimCharactersQ.DefaultIfEmpty()
 
                     join character in dbContext.Characters
-                      //on charactersGroup.Key.AttackerCharacterId equals character.Id into attackerCharactersQ
                       on death.AttackerCharacterId equals character.Id into attackerCharactersQ
                     from attackerCharacters in attackerCharactersQ.DefaultIfEmpty()
-
 
                     select new HeadToHeadSummaryRow()
                     {
@@ -95,16 +88,12 @@ namespace squittal.LivePlanetmans.Server.Controllers
                         AttackerStats = new DeathEventAggregate()
                         {
                             Kills = (from kill in dbContext.Deaths
-                                                 //where kill.AttackerCharacterId == charactersGroup.Key.AttackerCharacterId
-                                                 //   && kill.CharacterId == charactersGroup.Key.CharacterId
                                              where kill.AttackerCharacterId == attackerCharacters.Id
                                                 && kill.CharacterId == victimCharacters.Id
                                                 && kill.Timestamp >= startTime
                                              select kill).Count(),
 
                             Headshots = (from kill in dbContext.Deaths
-                                                     //where kill.AttackerCharacterId == charactersGroup.Key.AttackerCharacterId
-                                                     //&& kill.CharacterId == charactersGroup.Key.CharacterId
                                                  where kill.AttackerCharacterId == attackerCharacters.Id
                                                     && kill.CharacterId == victimCharacters.Id
                                                     && kill.Timestamp >= startTime
@@ -112,16 +101,12 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                  select kill).Count(),
 
                             Deaths = (from kill in dbContext.Deaths
-                                          //where kill.AttackerCharacterId == charactersGroup.Key.CharacterId
-                                          //&& kill.CharacterId == charactersGroup.Key.AttackerCharacterId
                                       where kill.CharacterId == attackerCharacters.Id
                                          && kill.AttackerCharacterId == victimCharacters.Id
                                          && kill.Timestamp >= startTime
                                       select kill).Count(),
 
                             HeadshotDeaths = (from kill in dbContext.Deaths
-                                                  //where kill.AttackerCharacterId == charactersGroup.Key.CharacterId
-                                                  //&& kill.CharacterId == charactersGroup.Key.AttackerCharacterId
                                               where kill.CharacterId == attackerCharacters.Id
                                                  && kill.AttackerCharacterId == victimCharacters.Id
                                                  && kill.Timestamp >= startTime
@@ -135,7 +120,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                                                     .Where(h2h => h2h.AttackerDetails.PlayerId == characterId
                                                                   || h2h.VictimDetails.PlayerId == characterId)
                                                     .Distinct()
-                                                    //.GroupBy(row => new { AttackerCharacterId = row.AttackerDetails.PlayerId, VictimCharacterId = row.VictimDetails.PlayerId })
                                                     .ToArrayAsync();
 
                 var allPlayerIsAttackerH2H = allHeadToHeadPlayers
@@ -183,12 +167,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 var allPlayerH2HSummaries = attackerPlayerH2HSummaries
                                             .Union(victimPlayerH2HSummaries)
                                             .ToArray();
-
-                //Debug.WriteLine("-----------------------------------");
-                //foreach (var row in allPlayerH2HSummaries)
-                //{
-                //    Debug.WriteLine($"{row.DebugString}");
-                //}
 
                 var playerDetails = allHeadToHeadPlayers.Any(h2h => h2h.AttackerDetails.PlayerId == characterId)
                                         ? allHeadToHeadPlayers

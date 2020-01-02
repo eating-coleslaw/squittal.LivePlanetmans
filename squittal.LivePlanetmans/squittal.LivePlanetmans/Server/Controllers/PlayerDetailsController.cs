@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using squittal.LivePlanetmans.Server.Data;
 using squittal.LivePlanetmans.Server.Services.Planetside;
 using squittal.LivePlanetmans.Shared.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,15 +17,12 @@ namespace squittal.LivePlanetmans.Server.Controllers
     {
         private readonly ICharacterService _characterService;
         private readonly IDbContextHelper _dbContextHelper;
-        private readonly ILogger<PlayerDetailsController> _logger;
-
         private readonly MemoryCache _loginCache;
 
-        public PlayerDetailsController(ICharacterService characterService, IDbContextHelper dbContextHelper, ILogger<PlayerDetailsController> logger, PlayerLoginMemoryCache loginCache)
+        public PlayerDetailsController(ICharacterService characterService, IDbContextHelper dbContextHelper, PlayerLoginMemoryCache loginCache)
         {
             _characterService = characterService;
             _dbContextHelper = dbContextHelper;
-            _logger = logger;
 
             _loginCache = loginCache.Cache;
         }
@@ -168,7 +163,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
                 return await query
                     .AsNoTracking()
                     .OrderByDescending(k => k.KillTimestamp)
-                    //.Take(rows)
                     .ToArrayAsync();
             }
         }

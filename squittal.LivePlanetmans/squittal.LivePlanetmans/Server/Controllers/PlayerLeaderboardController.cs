@@ -40,8 +40,6 @@ namespace squittal.LivePlanetmans.Server.Controllers
             DateTime nowUtc = DateTime.UtcNow;
             DateTime startTime = nowUtc - TimeSpan.FromHours(1);
 
-            Debug.WriteLine($"Getting Player Leaderboard: worldId={worldId}, {startTime.ToShortTimeString()} - {nowUtc.ToShortTimeString()}");
-
             using (var factory = _dbContextHelper.GetFactory())
             {
                 var dbContext = factory.GetDbContext();
