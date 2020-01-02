@@ -164,17 +164,7 @@
                                     <td class="med">
                                         @((player.SessionKillsPerMinute != null) ? player.SessionKillsPerMinute.ToString() : "-")
                                     </td>
-                                    @*<td title="@GetSessionDisplayTimes(player)">@GetSessionDurationDisplay(player)</td>*@
                                     <td title="@player.SessionBookendTimesDisplay">@player.SessionDurationDisplay</td>
-                                    @*if (player.SessionTimes == null)
-                                    {
-                                        <td>"-"</td>
-                                    }
-                                    else
-                                    {
-                                        <td >@player.SessionTimes.DurationDisplay</td>
-                                        <td>"???</td>
-                                    }*@
                                 </tr>
                                 }
                             </tbody>
@@ -329,7 +319,6 @@
             if (autoRefreshTimer != null)
             {
                 autoRefreshTimer.Stop();
-                Debug.WriteLine("Stopped AutoRefresh Timer");
             }
 
             // If a process is already underway, cancel it
@@ -360,7 +349,6 @@
 
                     var jsonString = await response.Content.ReadAsStringAsync();
                     cts.Token.ThrowIfCancellationRequested();
-                    Debug.WriteLine($"Deserializing players object");
                     players = JsonConvert.DeserializeObject<PlayerHourlyStatsData[]>(jsonString);
 
                     ResolveLatestZoneNames();
@@ -377,7 +365,6 @@
                 isLoading = false;
                 isChangingWorld = false;
                 StateHasChanged();
-                Debug.WriteLine("Refreshed Table StateHasChanged!");
                 GetNewAutoRefreshTimer();
             }
             catch (OperationCanceledException)
@@ -412,18 +399,14 @@
 
     void GetNewAutoRefreshTimer()
     {
-        Debug.WriteLine($"Getting new AutoRefresh Timer (isLoading={isLoading}, isChangingWorld={isChangingWorld})");
         autoRefreshTimer = new System.Timers.Timer(10000);
         autoRefreshTimer.Elapsed += async (sender, e) => await OnAutoRefreshTimeElapsed(worldId);
         autoRefreshTimer.AutoReset = true; //TODO: should this be false?
         autoRefreshTimer.Enabled = true;
-        Debug.WriteLine($"Finished getting new AutoRefresh Timer (isLoading={isLoading}, isChangingWorld={isChangingWorld})");
     }
 
     async Task OnAutoRefreshTimeElapsed(int initWorldId)
     {
-        Debug.WriteLine($"AutoRefreshTimerElapsed ({initWorldId} / {worldId})");
-
         if (isLoading != true && isChangingWorld != true && (autoRefreshTimer != null && autoRefreshTimer.Enabled == true))
         {
             try
