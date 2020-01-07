@@ -81,7 +81,6 @@ app {
 }
 
 .content {
-    /*padding-top: 1.1rem;*/
     padding-top: 0.2rem;
 }
 
@@ -161,11 +160,11 @@ dt {
 */
 .nolink-header {
     width: 100%;
-
     background-color: transparent !important;
     padding: 0.2rem 1.5rem 0.2rem 2rem;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 0.25rem;
 }
 
     .nolink-header img {
