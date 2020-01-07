@@ -306,7 +306,7 @@
 
     async Task RefreshTableManual()
     {
-        await RefreshTable("Manual");
+        await RefreshTable("RefreshTableManual");
     }
 
     async Task RefreshTable(string source)
@@ -314,7 +314,7 @@
         if (isLoading != true || isChangingWorld == true)
         {
             isLoading = true;
-            Debug.WriteLine($"Table Refresh requested by {source} with worldId={worldId} & playerId={playerId}");
+            Debug.WriteLine($"Table Refresh requested by {source} for world {worldId}");
 
             if (autoRefreshTimer != null)
             {
@@ -336,7 +336,7 @@
                 isLoading = true;
 
                 DateTime start = DateTime.UtcNow;
-                Debug.WriteLine($"Fetching leaderboard data for world {worldId}");
+                Debug.WriteLine($"Fetching leaderboard data for world {worldId}...");
 
                 HttpResponseMessage response = await Http.GetAsync($"api/PlayerLeaderboard/{worldId}", cts.Token);
 
@@ -345,15 +345,15 @@
                     DateTime end1 = DateTime.UtcNow;
                     var elapsed1 = (int)(end1 - start).TotalMilliseconds;
 
-                    Debug.WriteLine($"Elapsed1 = {elapsed1}ms");
-
                     var jsonString = await response.Content.ReadAsStringAsync();
                     cts.Token.ThrowIfCancellationRequested();
                     players = JsonConvert.DeserializeObject<PlayerHourlyStatsData[]>(jsonString);
 
-                    ResolveLatestZoneNames();
-
-                    _selectedPlayerFactionId = players.Where(p => p.PlayerId == playerId).Select(p => p.FactionId).FirstOrDefault();
+                    if (players.Any() == true)
+                    {
+                        ResolveLatestZoneNames();
+                        _selectedPlayerFactionId = players.Where(p => p.PlayerId == playerId).Select(p => p.FactionId).FirstOrDefault();
+                    }
                 }
 
                 DateTime end = DateTime.UtcNow;
@@ -369,7 +369,7 @@
             }
             catch (OperationCanceledException)
             {
-                Debug.WriteLine($"Operation cancelled ({worldId})");
+                Debug.WriteLine($"Operation cancelled: fetch leaderboard data");
             }
 
             catch (Exception ex)
@@ -411,7 +411,7 @@
         {
             try
             {
-                await RefreshTable($"AutoRefreshTimerElapsed ({initWorldId} / {worldId})");
+                await RefreshTable($"AutoRefreshTimerElapsed");
             }
             catch (Exception)
             {
@@ -445,7 +445,7 @@
     {
         var newWorldId = eventArgs.Value.ToString();
 
-        Debug.WriteLine($"ChangedSelectedWorld: {worldId} => {newWorldId}");
+        Debug.WriteLine($"Changing selected world from {worldId} to {newWorldId}");
 
         if (!string.IsNullOrWhiteSpace(newWorldId) && newWorldId != "Server")
         {
