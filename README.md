@@ -87,7 +87,11 @@ _See Maintenance section below._
 
 ## Maintenance
 
+__Free SQL Database Space__  
 Any given database instance of SQL Server 2017 Express is limited to 10gb in size. If running the app fairly frequently, you'll occasionally need to delete old data. Run `commands\DeleteOldSqlData.bat` as administrator to delete event data (deaths, logins, logouts) more than 2 days old and rebuild the associated indexes.
+
+__Update Weapon & Item Data__  
+New weapons or items added to the game won't automatically be picked up by the app. Instead, stop the app, run `commands\DeleteItemSqlData.bat` as administrator, then restart the app. When the app restarts, these tables will be repopulated with the new weapons and items.
 
 ## Troubleshooting
 
