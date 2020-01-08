@@ -2,7 +2,7 @@
 
 Planetside 2 live activity stats and leaderboard.
 
-![Leaderboard and Player Details Preview](https://github.com/eating-coleslaw/squittal.LivePlanetmans/blob/master/images/FullPreview.gif)
+![Leaderboard and Player Details Preview](https://github.com/eating-coleslaw/squittal.LivePlanetmans/blob/master/images/FullPreview2.gif)
 
 ## Requirements
 
