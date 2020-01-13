@@ -8,7 +8,7 @@ Planetside 2 live activity stats and leaderboard.
 
 ### .NET Core 3.1 SDK
 
-The .NET Core 3.1 SDK and Runtime (the runtime is included with the SDK) is required to build and run the app. [Download the latest version of the .NET Core 3.1 SDK from the downloads page.](https://dotnet.microsoft.com/download/dotnet-core/3.0 "Download .NET Core 3.0")
+The .NET Core 3.1 SDK and Runtime (the runtime is included with the SDK) is required to build and run the app. [Download the latest version of the .NET Core 3.1 SDK from the downloads page.](https://dotnet.microsoft.com/download "Download .NET Core 3.0")
 
 ### SQL Server 2017 Express edition
 
