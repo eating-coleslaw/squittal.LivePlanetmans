@@ -162,7 +162,7 @@ namespace squittal.LivePlanetmans.Server.Services.Planetside
             {
                 var leader = await _censusCharacter.GetCharacter(outfit.LeaderCharacterId);
                 outfit.WorldId = leader.WorldId;
-                outfit.FactionId = member.FactionId;
+                outfit.FactionId = leader.FactionId;
             }
 
             return outfit;
