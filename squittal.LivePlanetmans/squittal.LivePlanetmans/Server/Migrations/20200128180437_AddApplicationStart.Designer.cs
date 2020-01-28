@@ -10,8 +10,8 @@ using squittal.LivePlanetmans.Server.Data;
 namespace squittal.LivePlanetmans.Server.Migrations
 {
     [DbContext(typeof(PlanetmansDbContext))]
-    [Migration("20200128173322_RenameApplicationStartIdColumn")]
-    partial class RenameApplicationStartIdColumn
+    [Migration("20200128180437_AddApplicationStart")]
+    partial class AddApplicationStart
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,12 +24,14 @@ namespace squittal.LivePlanetmans.Server.Migrations
             modelBuilder.Entity("squittal.LivePlanetmans.Shared.Models.ApplicationStart", b =>
                 {
                     b.Property<int>("ApplicationStartId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("StartTimeUtc")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ApplicationStartId", "StartTimeUtc");
+                    b.HasKey("ApplicationStartId");
 
                     b.ToTable("ApplicationStart");
                 });

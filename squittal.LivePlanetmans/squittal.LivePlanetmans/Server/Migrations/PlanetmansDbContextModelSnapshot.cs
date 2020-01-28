@@ -22,12 +22,14 @@ namespace squittal.LivePlanetmans.Server.Migrations
             modelBuilder.Entity("squittal.LivePlanetmans.Shared.Models.ApplicationStart", b =>
                 {
                     b.Property<int>("ApplicationStartId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("StartTimeUtc")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ApplicationStartId", "StartTimeUtc");
+                    b.HasKey("ApplicationStartId");
 
                     b.ToTable("ApplicationStart");
                 });

@@ -11,12 +11,13 @@ namespace squittal.LivePlanetmans.Server.Migrations
                 name: "ApplicationStart",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
+                    ApplicationStartId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     StartTimeUtc = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationStart", x => new { x.Id, x.StartTimeUtc });
+                    table.PrimaryKey("PK_ApplicationStart", x => x.ApplicationStartId);
                 });
         }
 
