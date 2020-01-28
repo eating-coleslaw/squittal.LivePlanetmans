@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20191010151558_AddProfilesAndLoadouts.cs" />
     <Compile Remove="Migrations\20191010151558_AddProfilesAndLoadouts.Designer.cs" />
+    <Compile Remove="Migrations\20200128173726_OnlyUseIdForAppStartPrimaryKey.cs" />
+    <Compile Remove="Migrations\20200128173726_OnlyUseIdForAppStartPrimaryKey.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

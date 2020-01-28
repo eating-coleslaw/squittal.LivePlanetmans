@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using squittal.LivePlanetmans.Server.CensusServices;
 using squittal.LivePlanetmans.Server.CensusStream;
 using squittal.LivePlanetmans.Server.Data;
+using squittal.LivePlanetmans.Server.Services;
 using squittal.LivePlanetmans.Server.Services.Planetside;
 using squittal.LivePlanetmans.Shared.Models;
 using System;
@@ -58,6 +59,7 @@ namespace squittal.LivePlanetmans.Server
             services.AddSingleton<IProfileService, ProfileService>();
 
             services.AddSingleton<IDbSeeder, DbSeeder>();
+            services.AddSingleton<IApplicationMetaDataService, ApplicationMetaDataService>();
 
             services.AddSingleton<IWebsocketEventHandler, WebsocketEventHandler>();
             services.AddSingleton<IWebsocketMonitor, WebsocketMonitor>();

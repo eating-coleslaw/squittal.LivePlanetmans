@@ -32,7 +32,7 @@ namespace squittal.LivePlanetmans.Shared.Models
 
             bool sameDates = (QueryStartTimeUtc.Date == QueryNowUtc.Date);
             
-            var offsetHours = TimeSpan.FromHours(5);
+            var offsetHours = TimeSpan.FromHours(5); //TODO: use actual localization
 
             return sameDates
                     ? $"{GetOffsetShortTimeString(QueryStartTimeUtc, offsetHours)} - {GetOffsetShortTimeString(QueryNowUtc, offsetHours)}"

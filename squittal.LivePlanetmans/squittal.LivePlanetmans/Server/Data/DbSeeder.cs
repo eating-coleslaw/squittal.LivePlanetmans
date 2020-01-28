@@ -1,7 +1,9 @@
 ﻿using squittal.LivePlanetmans.Server.Services.Planetside;
+using squittal.LivePlanetmans.Server.Services;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
 
 namespace squittal.LivePlanetmans.Server.Data
 {
@@ -13,6 +15,7 @@ namespace squittal.LivePlanetmans.Server.Data
         private readonly IZoneService _zoneService;
         private readonly ITitleService _titleService;
         private readonly IProfileService _profileService;
+        private readonly IApplicationMetaDataService _appService;
 
         public DbSeeder(
             IWorldService worldService,
@@ -20,7 +23,8 @@ namespace squittal.LivePlanetmans.Server.Data
             IItemService itemService,
             IZoneService zoneService,
             ITitleService titleService,
-            IProfileService profileService
+            IProfileService profileService,
+            IApplicationMetaDataService appService
         )
         {
             _worldService = worldService;
@@ -29,10 +33,13 @@ namespace squittal.LivePlanetmans.Server.Data
             _zoneService = zoneService;
             _titleService = titleService;
             _profileService = profileService;
+            _appService = appService;
         }
 
         public async Task OnApplicationStartup(CancellationToken cancellationToken)
         {
+            await AddNewAppStartEntry();
+
             List<Task> TaskList = new List<Task>();
             
             Task worldsTask = _worldService.RefreshStore();
@@ -61,6 +68,12 @@ namespace squittal.LivePlanetmans.Server.Data
         public async Task OnApplicationShutdown(CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
+        }
+
+        private async Task AddNewAppStartEntry()
+        {
+            var startTime = DateTime.UtcNow;
+            await _appService.AddNewStartup(startTime);
         }
     }
 }

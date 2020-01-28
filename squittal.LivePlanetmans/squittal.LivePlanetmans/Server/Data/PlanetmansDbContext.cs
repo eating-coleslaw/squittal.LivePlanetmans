@@ -33,6 +33,10 @@ namespace squittal.LivePlanetmans.Server.Data
         public DbSet<PlayerLogout> PlayerLogouts { get; set; }
         #endregion
 
+        #region Misc DbSets
+        public DbSet<ApplicationStart> ApplicationStarts {get; set;}
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -58,6 +62,10 @@ namespace squittal.LivePlanetmans.Server.Data
             builder.ApplyConfiguration(new PlayerLoginConfiguration());
             builder.ApplyConfiguration(new PlayerLogoutConfiguration());
             #endregion
-        }
+
+            #region Misc DbSets
+            builder.ApplyConfiguration(new ApplicationStartConfiguration());
+            #endregion
     }
+}
 }
