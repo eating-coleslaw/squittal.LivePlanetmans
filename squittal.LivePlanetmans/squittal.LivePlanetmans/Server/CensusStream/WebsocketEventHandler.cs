@@ -83,7 +83,27 @@ namespace squittal.LivePlanetmans.Server.CensusStream
                 var inputType = _processMethods[eventName].GetCustomAttribute<CensusEventHandlerAttribute>().PayloadType;
                 var inputParam = jPayload.ToObject(inputType, _payloadDeserializer);
 
-                await (Task)_processMethods[eventName].Invoke(this, new[] { inputParam });
+                //var methodInfo = _processMethods[eventName];
+
+                //var method = typeof(Task).GetMethod(nameof(methodInfo));
+
+                //var task = (Task)methodInfo.Invoke(this, new[] { inputParam });
+
+                //await task.ConfigureAwait(false);
+
+                //await ((Task)methodInfo.Invoke(this, new[] { inputParam })).ConfigureAwait(false);
+
+                //await (Task)_processMethods[eventName].Invoke(this, new[] { inputParam });
+
+                //await ((Task)_processMethods[eventName].Invoke(this, new[] { inputParam })).ConfigureAwait(false);
+
+                Task.Run(async () =>
+                {
+                    await (Task)_processMethods[eventName].Invoke(this, new[] { inputParam });
+                });
+
+                await Task.CompletedTask;
+
             }
             catch (Exception ex)
             {
