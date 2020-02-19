@@ -331,6 +331,8 @@
             CancellationTokenSource newCTS = new CancellationTokenSource();
             cts = newCTS;
 
+            string responseString = string.Empty;
+
             try
             {
                 isLoading = true;
@@ -346,6 +348,9 @@
                     var elapsed1 = (int)(end1 - start).TotalMilliseconds;
 
                     var jsonString = await response.Content.ReadAsStringAsync();
+
+                    responseString = jsonString;
+
                     cts.Token.ThrowIfCancellationRequested();
                     players = JsonConvert.DeserializeObject<PlayerHourlyStatsData[]>(jsonString);
 
@@ -374,6 +379,8 @@
 
             catch (Exception ex)
             {
+                if (!string.IsNullOrWhiteSpace(responseString)) { Debug.WriteLine($"error with string: {responseString}"); }
+                
                 errorMessage = $"error: {ex}";
                 errorCount += 1;
             }

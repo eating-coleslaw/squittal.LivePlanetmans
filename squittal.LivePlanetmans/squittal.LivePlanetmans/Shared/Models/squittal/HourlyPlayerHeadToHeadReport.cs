@@ -111,6 +111,10 @@ namespace squittal.LivePlanetmans.Shared.Models
                     HeadToHeadSummaries = SortByEnemyHeadshotRatio();
                     break;
 
+                case SortColumn.OutfitAlias:
+                    HeadToHeadSummaries = SortByOutfitAlias();
+                    break;
+
                 default:
                     HeadToHeadSummaries = SortByKills();
                     break;
@@ -120,8 +124,15 @@ namespace squittal.LivePlanetmans.Shared.Models
         private IEnumerable<PlayerHeadToHeadSummaryRow> SortByPlayerName()
         {
             return (_sortDirection == SortDirection.Ascending)
-                ? HeadToHeadSummaries.OrderBy(h2h => h2h.EnemyDetails.PlayerName).AsEnumerable()
-                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.EnemyDetails.PlayerName).AsEnumerable();
+                ? HeadToHeadSummaries.OrderBy(h2h => h2h.EnemyDetails.PlayerName?.ToUpper()).AsEnumerable()
+                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.EnemyDetails.PlayerName?.ToUpper()).AsEnumerable();
+        }
+
+        private IEnumerable<PlayerHeadToHeadSummaryRow> SortByOutfitAlias()
+        {
+            return (_sortDirection == SortDirection.Ascending)
+                ? HeadToHeadSummaries.OrderBy(h2h => h2h.EnemyDetails.OutfitAlias?.ToUpper()).AsEnumerable()
+                : HeadToHeadSummaries.OrderByDescending(h2h => h2h.EnemyDetails.OutfitAlias?.ToUpper()).AsEnumerable();
         }
 
         private IEnumerable<PlayerHeadToHeadSummaryRow> SortByKills()
@@ -346,6 +357,7 @@ namespace squittal.LivePlanetmans.Shared.Models
         KillDeathRatio,
         HeadshotRatio,
         EnemyKillDeathRatio,
-        EnemyHeadshotRatio
+        EnemyHeadshotRatio,
+        OutfitAlias
     }
 }

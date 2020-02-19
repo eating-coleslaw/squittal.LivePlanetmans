@@ -82,7 +82,12 @@ namespace squittal.LivePlanetmans.Server.Controllers
                             PlayerName = victimCharacters.Name,
                             FactionId = victimCharacters.FactionId,
                             BattleRank = victimCharacters.BattleRank,
-                            PrestigeLevel = victimCharacters.PrestigeLevel
+                            PrestigeLevel = victimCharacters.PrestigeLevel,
+
+                            OutfitAlias = (from m in dbContext.OutfitMembers
+                                           join o in dbContext.Outfits on m.OutfitId equals o.Id
+                                           where m.CharacterId == victimCharacters.Id
+                                           select o.Alias).FirstOrDefault(),
                         },
 
                         AttackerStats = new DeathEventAggregate()
