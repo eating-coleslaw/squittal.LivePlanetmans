@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
+using squittal.LivePlanetmans.Server.Services;
 
 namespace squittal.LivePlanetmans.Server.Controllers
 {
@@ -18,18 +19,19 @@ namespace squittal.LivePlanetmans.Server.Controllers
     {
         private readonly IDbContextHelper _dbContextHelper;
         private readonly ICharacterService _characterService;
+        private readonly IApplicationMetaDataService _appMetaDataService;
 
         private readonly MemoryCache _loginCache;
 
         public IList<PlayerHourlyStatsData> Players { get; private set; }
 
-        public PlayerLeaderboardController(IDbContextHelper dbContextHelper, ICharacterService characterService, PlayerLoginMemoryCache loginCache)
+        public PlayerLeaderboardController(IDbContextHelper dbContextHelper, ICharacterService characterService, IApplicationMetaDataService appMetaDataService, PlayerLoginMemoryCache loginCache)
         {
             _dbContextHelper = dbContextHelper;
             _characterService = characterService;
+            _appMetaDataService = appMetaDataService;
 
             _loginCache = loginCache.Cache;
-
         }
 
         [HttpGet("{worldId}")]
